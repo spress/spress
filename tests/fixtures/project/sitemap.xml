@@ -1,0 +1,22 @@
+---
+layout:
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for post in site.pages %}
+    <url>
+        <loc>{{ post.url }}</loc>
+        <lastmod>{{ post.date | date() }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    {% endfor %}
+    {% for post in site.posts %}
+    <url>
+        <loc>{{ post.url }}</loc>
+        <lastmod>{{ post.date | date('d-m-Y H:i:s') }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    {% endfor %}
+</urlset>

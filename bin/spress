@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+date_default_timezone_set('UTC');
+
+set_time_limit(0);
+
+include_once __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+use Yosymfony\Spress\Command\BuildCommand;
+use Yosymfony\Spress\Command\NewCommand;
+use Yosymfony\Spress\Command\ServeCommand;
+use Yosymfony\Spress\Command\MeCommand;
+
+$app = new Application('Spress - The static site generator', Yosymfony\Spress\Application::VERSION);
+$app->add(new BuildCommand());
+$app->add(new NewCommand());
+
+$app->run();

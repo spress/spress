@@ -2,6 +2,10 @@ Spress - Static site generator
 ==============================
 Spress is a static site generator building on Silex and Twig.
 
+Require
+-------
+* PHP >= 5.4
+
 Unit tests
 ----------
 

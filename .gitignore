@@ -1,3 +1,4 @@
 vendor/
+tests/fixtures/project/_site/
 composer.lock
 phpunit.xml

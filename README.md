@@ -33,7 +33,7 @@ Build your site in your configured destination, typically `_site`.
 
 `site:build [-s|--source[="./"]] [--timezone[="..."]] [--drafts] [--safe]`
 
-By default, --source param is `./`. E.g `$ spress site:build -s /your-site-dir`
+E.g `$ spress site:build -s /your-site-dir`
 
 
 Unit tests

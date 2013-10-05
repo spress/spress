@@ -181,13 +181,18 @@ class Renderizer
     private function buildTwig($twigFactory, array $layouts)
     {
         $templates = $this->processLayouts($layouts);
+        $includesDir = $this->contentLocator->getIncludesDir();
+        $extraDirs = [];
+        
+        if($includesDir)
+        {
+            $extraDirs[] = $includesDir;
+        }
         
         $this->twig = $twigFactory
             ->withAutoescape(false)
             ->withCache(false)
-            ->addLoaderFilesystem(array(
-                $this->contentLocator->getIncludesDir(),
-            ))
+            ->addLoaderFilesystem($extraDirs)
             ->addLoaderArray($templates)
             ->addLoaderString()
             ->create();

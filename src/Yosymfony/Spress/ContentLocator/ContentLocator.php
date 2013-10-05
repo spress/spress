@@ -50,7 +50,7 @@ class ContentLocator
      */
     public function getPosts()
     {
-        $posts = array();
+        $posts = [];
         $markdownExt = $this->configuration->getRepository()->get('markdown_ext');
 
         if(0 == count($markdownExt))
@@ -58,13 +58,16 @@ class ContentLocator
             return $posts;
         }
 
-        $finder = new Finder();
-        $finder->in($this->getPostsDir())->files();
-        $finder->name($this->fileExtToRegExpr($markdownExt));
-        
-        foreach($finder as $file)
+        if($this->getPostsDir())
         {
-            $posts[] = new FileItem($file, FileItem::TYPE_POST);
+            $finder = new Finder();
+            $finder->in($this->getPostsDir())->files();
+            $finder->name($this->fileExtToRegExpr($markdownExt));
+            
+            foreach($finder as $file)
+            {
+                $posts[] = new FileItem($file, FileItem::TYPE_POST);
+            }
         }
         
         return $posts;
@@ -149,12 +152,16 @@ class ContentLocator
     public function getLayouts()
     {
         $result = [];
-        $finder = new Finder();
-        $finder->in($this->getLayoutsDir())->files();
         
-        foreach($finder as $file)
+        if($this->getLayoutsDir())
         {
-            $result[$file->getRelativePathname()] = new FileItem($file, FileItem::TYPE_PAGE);
+            $finder = new Finder();
+            $finder->in($this->getLayoutsDir())->files();
+            
+            foreach($finder as $file)
+            {
+                $result[$file->getRelativePathname()] = new FileItem($file, FileItem::TYPE_PAGE);
+            }
         }
         
         return $result;
@@ -362,13 +369,17 @@ class ContentLocator
         }
     }
     
+    /**
+     * @return string
+     */
     private function resolvePath($path)
     {
         $realPath = realpath($path);
         
         if(false === $realPath)
         {
-            throw new \InvalidArgumentException(sprintf('Invalid path "%s"', $path));
+            return '';
+            //throw new \InvalidArgumentException(sprintf('Invalid path "%s"', $path));
         }
         
         return $realPath;

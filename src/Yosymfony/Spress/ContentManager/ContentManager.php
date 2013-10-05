@@ -146,7 +146,7 @@ class ContentManager
     }
     
     private function processPost()
-    {
+    { 
         $postFiles = $this->contentLocator->getPosts();
         $this->dataResult['total_post'] = count($postFiles);
         $enableDrafts = $this->configuration->getRepository()->get('drafts');
@@ -214,6 +214,11 @@ class ContentManager
     
     private function renderPosts()
     {
+        if(0 == count($this->posts))
+        {
+            return;    
+        }
+        
         $fileItemTemplate = null;
         
         $this->sortPost();

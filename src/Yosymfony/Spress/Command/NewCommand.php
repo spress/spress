@@ -27,8 +27,9 @@ class NewCommand extends Command
             ->setDescription('Create a new site scaffold')
             ->addArgument(
                 'path',
-                InputArgument::REQUIRED,
-                'Path of the new site'
+                InputArgument::OPTIONAL,
+                'Path of the new site',
+                './'
             )
             ->addArgument(
                 'template',
@@ -41,6 +42,12 @@ class NewCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'Force creation event if path already exists'
+            )
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'Complete scaffold'
             );
     }
     
@@ -49,9 +56,10 @@ class NewCommand extends Command
         $path = $input->getArgument('path');
         $template = $input->getArgument('template');
         $force = $input->getOption('force');
+        $completeScaffold = $input->getOption('all');
         
         $app = new Application();
-        $app['spress.operation.new']->newSite($path, $template, $force);
+        $app['spress.operation.new']->newSite($path, $template, $force, $completeScaffold);
         
         $output->writeln(sprintf('<comment>New site created at %s</comment>', $path));
     }

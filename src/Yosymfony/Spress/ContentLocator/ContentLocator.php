@@ -141,23 +141,6 @@ class ContentLocator
     }
     
     /**
-     * Exists layout filename?
-     * 
-     * @param string $name
-     * 
-     * @return bool
-     */
-    public function existsLayout($name)
-    {   
-        if(false == $this->layoutItems)
-        {
-            $this->processLayoutData();
-        }
-        
-        return in_array($name, $this->layoutItems);
-    }
-    
-    /**
      * Get the site layouts
      * 
      * @return array of FileItem

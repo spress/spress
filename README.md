@@ -24,7 +24,7 @@ Create a new site.
 `site:new [path[="./"]] [template[="blank"]] [--force] [--all]`
 
 `--force` option force to use the path even though exists and it's not empty.
-`--all` In blank template, create the complete scaffold.
+`--all` In blank template, creates the complete scaffold.
 
 E.g `$ spress site:new /your-site-dir`
 

@@ -31,7 +31,7 @@ E.g `$ spress site:new /your-site-dir`
 #### site:build
 Build your site in your configured destination, typically `_site`. 
 
-`site:build [-s|--source[="..."]] [--timezone[="..."]] [--drafts] [--safe]`
+`site:build [-s|--source[="./"]] [--timezone[="..."]] [--drafts] [--safe]`
 
 By default, --source param is `./`. E.g `$ spress site:build -s /your-site-dir`
 

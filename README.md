@@ -2,7 +2,7 @@ Spress - Static site generator
 ==============================
 [![Build Status](https://travis-ci.org/yosymfony/Spress.png?branch=master)](https://travis-ci.org/yosymfony/Spress)
 
-Spress is a static site generator building on Silex and Twig and inspirated by [Jekyll](https://github.com/mojombo/jekyll).
+Spress is a static site generator building on Silex and Twig and inspired by [Jekyll](https://github.com/mojombo/jekyll).
 
 Require
 -------

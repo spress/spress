@@ -40,6 +40,7 @@ class ContentLocator
         
         $this->configuration = $configuration;
         $this->setCurrentDir($this->getSourceDir());
+        $this->createDestinationDirIfNotExists();
     }
     
     /**
@@ -277,9 +278,12 @@ class ContentLocator
     
     /**
      * Get the absolute paths of destination directory
+     * 
+     * @return string
      */
-    public function getDestinationDir()
+    public function getDestinationDir($createIfNotExists = true)
     {
+        
         return $this->resolvePath($this->configuration->getRepository()->get('destination'));
     }
     
@@ -388,5 +392,16 @@ class ContentLocator
         $excludesDir[] = $this->makePathRelative($this->getPluginDir(), $this->getSourceDir());
         
         return $excludesDir;
+    }
+    
+    private function createDestinationDirIfNotExists()
+    {
+        $fs = new Filesystem();
+        $destination = $this->configuration->getRepository()->get('destination');
+        
+        if(false == $fs->exists($destination))
+        {
+            $fs->mkdir($destination);
+        }
     }
 }

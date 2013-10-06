@@ -16,7 +16,7 @@ Getting Started
 * Build your site.
 
 ### Get vendors
-Use composer to get vendors:
+Use Composer to get vendors:
 ```
 $ cd your-path
 $ composer.phar update

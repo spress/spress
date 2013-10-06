@@ -17,8 +17,10 @@ Getting Started
 
 ### Get vendors
 Use composer to get vendors:
-    $ cd your-path
-    $ composer.phar update
+```
+$ cd your-path
+$ composer.phar update
+```
 
 ### spress command
 Spress command are located in `bin/spress` and you can use this command to create a new site or process your
@@ -46,7 +48,8 @@ Unit tests
 ----------
 
 You can run the unit tests with the following command:
-
-    $ cd your-path
-    $ composer.phar install --dev
-    $ phpunit
+```
+$ cd your-path
+$ composer.phar install --dev
+$ phpunit
+```

@@ -150,7 +150,7 @@ class PostItem implements ContentItemInterface
         
         $repository = $this->configuration->createBlankRepository();
         $repository->set('title', $this->getTitle());
-        $repository->set('date', $this->getDate());
+        $repository->set('date', $this->getDate()->format(\DateTime::ISO8601));
         $repository->set('categories', $this->getCategories());
         $repository->set('tags', $this->getTags());
         $repository->set('url', $this->getUrl());

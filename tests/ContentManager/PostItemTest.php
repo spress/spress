@@ -61,7 +61,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($post->getId(), $payload['id']);
         $this->assertEquals($post->getCategories(), $payload['categories']);
         $this->assertEquals($post->getTags(), $payload['tags']);
-        $this->assertEquals($post->getDate(), $payload['date']);
+        $this->assertEquals($post->getDate()->format(\Datetime::ISO8601), $payload['date']);
         $this->assertEquals('/category-1/category-2/2020/01/01/new-post-example/index.html', $payload['path']);
     }
     
@@ -148,7 +148,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($post->getId(), $payload['id']);
         $this->assertEquals($post->getCategories(), $payload['categories']);
         $this->assertEquals($post->getTags(), $payload['tags']);
-        $this->assertEquals($post->getDate(), $payload['date']);
+        $this->assertEquals($post->getDate()->format(\Datetime::ISO8601), $payload['date']);
         $this->assertEquals('/books/2013/08/11/best-book/index.html', $payload['path']);
     }
     
@@ -195,7 +195,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($post->getId(), $payload['id']);
         $this->assertEquals($post->getCategories(), $payload['categories']);
         $this->assertEquals($post->getTags(), $payload['tags']);
-        $this->assertEquals($post->getDate(), $payload['date']);
+        $this->assertEquals($post->getDate()->format(\Datetime::ISO8601), $payload['date']);
         $this->assertEquals('/2013/08/12/post-example-2/2013-08-12-post-example-2.mkd', $payload['path']);
     }
     

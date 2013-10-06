@@ -314,12 +314,16 @@ class ContentManager
     {
         uasort($this->posts, function($a, $b)
         {
-            if($a['date'] == $b['date'])
+           
+            $dateA = new \Datetime($a['date']);
+            $dateB = new \Datetime($b['date']);
+            
+            if($dateA == $dateB)
             {
                 return 0;
             }
-            
-            return ($a['date'] < $b['date']) ? -1 : 1;
+
+            return ($dateA < $dateB) ? 1 : -1;
         });
     }
 

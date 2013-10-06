@@ -11,8 +11,14 @@ Require
 Getting Started
 --------------
 * Download the last [release](https://github.com/yosymfony/Spress/releases).
+* Get vendors
 * Create a blank site.
 * Build your site.
+
+### Get vendors
+Use composer to get vendors:
+    $ cd your-path
+    $ composer.phar update
 
 ### spress command
 Spress command are located in `bin/spress` and you can use this command to create a new site or process your

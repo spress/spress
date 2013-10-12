@@ -10,7 +10,7 @@ Require
 
 Getting Started
 --------------
-* Download the last [release](https://github.com/yosymfony/Spress/releases).
+* Download the last [release](https://github.com/yosymfony/Spress/releases) or clone repository `git clone https://github.com/yosymfony/Spress.git`.
 * Get vendors
 * Create a blank site.
 * Build your site.

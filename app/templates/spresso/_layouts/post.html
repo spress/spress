@@ -1,0 +1,17 @@
+---
+layout: default
+---
+{% set isPostLayout = true %}
+
+{% block content %}
+    {% include 'post.html' %}
+{% endblock %}
+
+{% block javascript %}
+    {% if isPostLayout and page.disqus_comments %}
+        <script type="text/javascript">
+            window.disqus_identifier = "{{ page.id }}";
+        </script>
+        <script async src="http://hunch.disqus.com/embed.js"></script>
+    {% endif %}
+{% endblock %}

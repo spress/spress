@@ -1,0 +1,36 @@
+---
+layout: page
+---
+{% for post in paginator.posts %}
+    {% include "post.html" %}
+{% endfor %}
+
+{% if paginator.posts | length < 1 %}
+<div class="page-header">
+  <h1>Welcome to Spress <small>a static site generator</small></h1>
+</div>
+{% endif %}
+
+{% if paginator.total_pages > 1 %}
+    <ul class="pagination">
+		{% if paginator.previous_page %}
+			<li>
+                <a class="prev" href="/{%if paginator.previous_page > 1 %}page{{ paginator.previous_page }}/{% endif %}">
+                    &laquo; Newer
+                </a>
+            </li>
+		{% endif %}
+
+		{% for page in (1..paginator.total_pages) %}
+			{% if page == paginator.page %}
+				<li><span class="active">{{ page }}</span></li>
+			{% else %}
+				<li><a href="/{%if page > 1 %}page{{ page }}/{% endif %}">{{ page }}</a></li>
+			{% endif %}
+		{% endfor %}
+
+		{% if paginator.next_page %}
+			<li><a href="/page{{ paginator.next_page }}/">Older &raquo;</a></li>
+		{% endif %}
+	</ul>
+{% endif %}

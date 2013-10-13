@@ -1,0 +1,25 @@
+<article class="post">
+    <header>
+        <h1>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+        </h1>
+    </header>
+    
+    {{ post.content | default(page.content) }}
+    
+    <footer>    
+        <p>
+        	Posted by {{ site.author.name }} on <time pubdate="pubdate">{{ post.date | date('Y-m-d') }}</time>
+        </p>
+    </footer>
+    
+    {% if isPostLayout and page.disqus_comments %}
+        <section>
+            <h3>Comments</h3>
+            <div id="disqus_thread"></div>
+            <noscript>Please enable JavaScript to view the
+                <a href="http://disqus.com/?ref_noscript=hunch">comments powered by Disqus.</a>
+            </noscript>
+        </section>
+    {% endif %}
+</article>

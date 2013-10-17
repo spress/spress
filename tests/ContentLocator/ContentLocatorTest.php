@@ -147,6 +147,17 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $fileItem = $this->contentLocator->getItem('index.html');
         
         $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $fileItem);
+        $this->assertEquals($fileItem->getRelativePath(), '');
+        $this->assertEquals($fileItem->getRelativePathFilename(), 'index.html');
+    }
+    
+    public function testGetItemNotRelativePath()
+    {
+        $fileItem = $this->contentLocator->getItem('../extra_pages/extra-page1.html');
+        
+        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $fileItem);
+        $this->assertEquals($fileItem->getRelativePath(), '');
+        $this->assertEquals($fileItem->getRelativePathFilename(), 'extra-page1.html');
     }
     
     public function testGetItemNotExists()

@@ -129,18 +129,23 @@ class ContentLocator
      * 
      * @return FileItem
      */
-    public function getItem($relativePath)
+    public function getItem($path)
     {
-        $finder = new Finder();
-        $finder->in($this->getSourceDir())->exclude($this->getSpecialDir())->files();
-        $finder->path($relativePath);
+        $fs = new Filesystem();
         
-        $iterator = $finder->getIterator();
-        $iterator->next();
-        
-        if($iterator->valid())
+        if($fs->exists($path))
         {
-            return new FileItem($iterator->current(), FileItem::TYPE_PAGE);
+            $relativePath = $fs->makePathRelative($path, $this->getSourceDir());
+            $filename = pathinfo($path, PATHINFO_BASENAME);
+            
+            if(false !== strpos($relativePath, '..'))
+            {
+                $relativePath = "";
+            }
+            
+            $fileInfo = new SplFileInfo($path, $relativePath, $relativePath . $filename);
+            
+            return new FileItem($fileInfo, FileItem::TYPE_PAGE);
         }
     }
     

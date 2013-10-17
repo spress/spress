@@ -67,7 +67,7 @@ class Renderizer
 
             return $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
         }
-        
+
         return $rendered;
     }
     

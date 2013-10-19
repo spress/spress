@@ -1,4 +1,6 @@
 {
+    "name": "yosymfony/spress",
+    "description": "Static site generator with blogs support",
     "require": {
         "twig/twig": ">=1.8,<2.0-dev",
         "symfony/console": "2.2.*@dev",

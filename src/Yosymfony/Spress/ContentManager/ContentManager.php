@@ -10,6 +10,10 @@
  */
  
 namespace Yosymfony\Spress\ContentManager;
+
+use Yosymfony\Spress\Configuration;
+use Yosymfony\Spress\ContentLocator\ContentLocator;
+use Yosymfony\Spress\MarkdownWrapper;
  
 /**
  * Content manager
@@ -35,11 +39,12 @@ class ContentManager
     /**
      * Constructor
      * 
+     * @param Renderizer $renderizer
      * @param MarkdownWrapper $markdown
      * @param Configuration $configuration Configuration manager
      * @param ContentLocator $contentLocator Locate the site content
      */
-    public function __construct($renderizer, $markdown, $configuration, $contentLocator)
+    public function __construct(Renderizer $renderizer, MarkdownWrapper $markdown, Configuration $configuration, ContentLocator $contentLocator)
     {
         $this->markdown = $markdown;
         $this->configuration = $configuration;

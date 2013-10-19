@@ -15,6 +15,7 @@ use Yosymfony\Spress\TwigFactory;
 use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Exception\FrontmatterValueException;
+use Yosymfony\Spress\ContentManager\ContentItemInterface;
 
 /**
  * Content renderizer
@@ -121,9 +122,11 @@ class Renderizer
     }
     
     /**
+     * @param ContentItemInterface $item
+     * 
      * @return string
      */
-    private function getItemLayoutName($item)
+    private function getItemLayoutName(ContentItemInterface $item)
     {
         $layoutName = $item->getFrontmatter()->get('layout');
         
@@ -178,7 +181,7 @@ class Renderizer
         return $result;
     }
     
-    private function buildTwig($twigFactory, array $layouts)
+    private function buildTwig(TwigFactory $twigFactory, array $layouts)
     {
         $templates = $this->processLayouts($layouts);
         $includesDir = $this->contentLocator->getIncludesDir();

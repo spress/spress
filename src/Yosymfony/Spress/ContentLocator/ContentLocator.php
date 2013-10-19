@@ -384,7 +384,6 @@ class ContentLocator
         if(false === $realPath)
         {
             return '';
-            //throw new \InvalidArgumentException(sprintf('Invalid path "%s"', $path));
         }
         
         return $realPath;

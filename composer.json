@@ -1,6 +1,15 @@
 {
     "name": "yosymfony/spress",
     "description": "Static site generator with blogs support",
+    "keywords": ["cms","blog","web"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Victor Puertas",
+            "email": "vpgugr@gmail.com",
+            "homepage": "http://yosymfony.com"
+        }
+    ],
     "require": {
         "twig/twig": ">=1.8,<2.0-dev",
         "symfony/console": "2.2.*@dev",

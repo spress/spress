@@ -10,8 +10,7 @@
  */
  
 namespace Yosymfony\Spress;
- 
-use Silex\Provider\TwigServiceProvider;
+
 use Yosymfony\Silex\ConfigServiceProvider\ConfigServiceProvider;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\ContentManager;

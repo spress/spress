@@ -4,11 +4,11 @@ layout: default
 {% set isPostLayout = true %}
 
 {% block content %}
-    {% include 'post.html' %}
+    {% include 'post.html' with { 'post': page } %}
 {% endblock %}
 
 {% block javascript %}
-    {% if isPostLayout and page.disqus_comments %}
+    {% if page.disqus_comments %}
         <script type="text/javascript">
             window.disqus_identifier = "{{ page.id }}";
         </script>

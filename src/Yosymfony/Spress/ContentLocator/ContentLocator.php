@@ -24,7 +24,6 @@ use Yosymfony\Spress\Configuration;
 class ContentLocator
 {
     private $configuration;
-    private $layoutItems;
     
     /**
      * Constructor

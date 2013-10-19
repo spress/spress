@@ -258,7 +258,6 @@ class ContentLocator
     public function cleanupDestination()
     {
         $fs = new FileSystem();
-        $removed = array();
         $destinationDir = $this->configuration->getRepository()->get('destination');
         
         $finder = new Finder();
@@ -332,19 +331,6 @@ class ContentLocator
     private function getPluginDir()
     {
         return $this->configuration->getRepository()->get('plugins');
-    }
-    
-    private function processLayoutData()
-    {
-        $this->layoutItems = [];
-        
-        $finder = new Finder();
-        $finder->in($this->getLayoutsDir())->files();
-        
-        foreach($finder as $file)
-        {
-            $this->layoutItems[] = $file->getRelativePathname();
-        }
     }
     
     private function fileExtToRegExpr(array $extensions)

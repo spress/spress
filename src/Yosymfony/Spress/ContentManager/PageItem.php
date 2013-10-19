@@ -21,7 +21,6 @@ use Yosymfony\Spress\ContentLocator\FileItem;
 class PageItem implements ContentItemInterface
 {
     private $fileItem;
-    private $markdownExt;
     private $frontmatter;
     private $configuration;
     private $content;

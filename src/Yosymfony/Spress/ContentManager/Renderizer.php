@@ -25,7 +25,7 @@ class Renderizer
 {
     private $twig;
     private $contentLocator;
-    private $config;
+    private $configuration;
     private $layoutNamespace = 'layout';
     
     private $layoutItems;

@@ -10,8 +10,6 @@
  */
  
 namespace Yosymfony\Spress\ContentManager;
-
-use Yosymfony\Spress\Exception\FrontmatterValueException;
  
 /**
  * Content manager
@@ -32,11 +30,6 @@ class ContentManager
     private $categories;
     private $tags;
     private $time;
-    private $paginationTotalPost;
-    private $paginationTotal;
-    private $paginationPerPage;
-    private $paginationTo;
-    private $layoutNamespace = 'layout';
     private $dataResult;
     
     /**

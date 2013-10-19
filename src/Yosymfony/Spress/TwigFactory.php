@@ -31,13 +31,12 @@ namespace Yosymfony\Spress;
  */
 class TwigFactory
 {
-    private $loader;
-    private $enviromentOpt = array();
+    private $loader = [];
+    private $enviromentOpt = [];
     
     public function __construct()
     {
         \Twig_Autoloader::register();
-        $loader = new \Twig_Loader_Chain();
     }
     
     /**

@@ -320,14 +320,12 @@ class ContentLocator
     
     /**
      * Get the processable file's extension
-     * See the keys processable_ext and markdown_ext of config.yml
      * 
      * @return array
      */
     public function getProcessableExtention()
     {
         $processableExt = $this->configuration->getRepository()->get('processable_ext');
-        //$markdownExt = $this->configuration->getRepository()->get('markdown_ext');
         
         return array_unique(array_merge($processableExt, $this->convertersExtension));
     }

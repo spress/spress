@@ -184,7 +184,7 @@ class ContentLocator
      */
     public function saveItem(FileItem $item)
     {
-        $fs = new FileSystem();
+        $fs = new Filesystem();
         $paths = $item->getDestinationPaths();
         
         if(0 == count($paths))
@@ -205,7 +205,7 @@ class ContentLocator
      */
     public function copyRestToDestination()
     {
-        $fs = new FileSystem();
+        $fs = new Filesystem();
         $result = array();
         $includedFiles = array();
         $dir = $this->getSourceDir();
@@ -262,7 +262,7 @@ class ContentLocator
      */
     public function cleanupDestination()
     {
-        $fs = new FileSystem();
+        $fs = new Filesystem();
         $destinationDir = $this->configuration->getRepository()->get('destination');
         
         $finder = new Finder();
@@ -357,7 +357,7 @@ class ContentLocator
     
     private function mkDirIfNotExists($path)
     {
-        $fs = new FileSystem();
+        $fs = new Filesystem();
         
         if(!$fs->exists($path))
         {
@@ -382,7 +382,7 @@ class ContentLocator
     
     private function makePathRelative($path1, $path2, $normalize = true)
     {
-        $fs = new FileSystem();
+        $fs = new Filesystem();
         $result = $fs->makePathRelative($path1, $path2);
         
         return !$normalize ?: preg_replace('/\/$/', '', $result);

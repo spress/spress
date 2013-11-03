@@ -13,7 +13,6 @@ namespace Yosymfony\Spress\ContentManager;
 
 use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
-use Yosymfony\Spress\MarkdownWrapper;
  
 /**
  * Content manager

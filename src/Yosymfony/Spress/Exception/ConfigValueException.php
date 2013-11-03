@@ -31,7 +31,7 @@ class ConfigValueException extends \DomainException
      * @param string $filename
      * @param Exception $previous
      */
-    public function __construct($message, $key = null, $filename = null, Exception $previous = null)
+    public function __construct($message, $key = null, $filename = null, \Exception $previous = null)
     {
         $this->rawMessage = $message;
         $this->filename = $filename;

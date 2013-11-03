@@ -364,7 +364,7 @@ class PostItem implements ContentItemInterface
         {
             $this->date->setDate($parts[0], $parts[1], $parts[2]);
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             throw new \InvalidArgumentException(sprintf('Invalid post filename: "%s". Does not have a valid date.', $this->fileItem->getFilename()));
         }

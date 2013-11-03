@@ -56,7 +56,6 @@ class ContentLocator
     public function getPosts()
     {
         $posts = [];
-        //$markdownExt = $this->configuration->getRepository()->get('markdown_ext');
 
         if(0 == count($this->convertersExtension))
         {

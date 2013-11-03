@@ -17,13 +17,14 @@ use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Configuration;
 
 /**
- * @author Victor Puertas <vpgugr@gmail.com>
- * 
  * Locate the content of a site
+ * 
+ * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentLocator
 {
     private $configuration;
+    private $convertersExtension = [];
     
     /**
      * Constructor
@@ -42,6 +43,11 @@ class ContentLocator
         $this->createDestinationDirIfNotExists();
     }
     
+    public function setConvertersExtension(array $extensions)
+    {
+        $this->convertersExtension = $extensions;
+    }
+    
     /**
      * Get the site posts
      * 
@@ -50,9 +56,9 @@ class ContentLocator
     public function getPosts()
     {
         $posts = [];
-        $markdownExt = $this->configuration->getRepository()->get('markdown_ext');
+        //$markdownExt = $this->configuration->getRepository()->get('markdown_ext');
 
-        if(0 == count($markdownExt))
+        if(0 == count($this->convertersExtension))
         {
             return $posts;
         }
@@ -61,7 +67,7 @@ class ContentLocator
         {
             $finder = new Finder();
             $finder->in($this->getPostsDir())->files();
-            $finder->name($this->fileExtToRegExpr($markdownExt));
+            $finder->name($this->fileExtToRegExpr($this->convertersExtension));
             
             foreach($finder as $file)
             {
@@ -322,9 +328,9 @@ class ContentLocator
     public function getProcessableExtention()
     {
         $processableExt = $this->configuration->getRepository()->get('processable_ext');
-        $markdownExt = $this->configuration->getRepository()->get('markdown_ext');
+        //$markdownExt = $this->configuration->getRepository()->get('markdown_ext');
         
-        return array_unique(array_merge($processableExt, $markdownExt));
+        return array_unique(array_merge($processableExt, $this->convertersExtension));
     }
     
     private function getPluginDir()

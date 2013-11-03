@@ -29,13 +29,14 @@ class PageItemTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $this->configuration = $app['spress.config'];
     }
-    
+
     public function testPageItemSubDirMarkdown()
     {
         $path = $this->pagesDir . '/projects/index.md';
         $fileInfo = new SplFileInfo($path, 'projects', 'projects/index.md');
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_PAGE);
         $item = new PageItem($fileItem, $this->configuration);
+        $item->setOutExtension('html');
         
         $this->assertEquals('projects-index-md', $item->getId());
         $this->assertEquals('/projects/', $item->getUrl());

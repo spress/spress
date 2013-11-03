@@ -36,7 +36,8 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
+        $post->setOutExtension('html');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
         $this->assertGreaterThan(0, strlen($post->getContent()));
@@ -72,7 +73,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'ordinal');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
         
         $this->assertEquals('/category-1/category-2/2020/1/new-post-example.html/', $post->getUrl());
         
@@ -89,7 +90,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'date');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
         
         $this->assertEquals('/2020/01/01/new-post-example.html/', $post->getUrl());
         
@@ -106,7 +107,8 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', '/blog/:year-:month-:day/:title');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
+        $post->setOutExtension('html');
         
         $this->assertEquals('/blog/2020-01-01/new-post-example/', $post->getUrl());
         
@@ -123,7 +125,8 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
+        $post->setOutExtension('html');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
         $this->assertGreaterThan(0, strlen($post->getContent()));
@@ -172,7 +175,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setDestinationContent('Test content');
+        $post->setConvertedContent('Test content');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
         $this->assertGreaterThan(0, strlen($post->getContent()));

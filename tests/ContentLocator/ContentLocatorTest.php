@@ -19,14 +19,16 @@ use Yosymfony\Spress\ContenLocator\ContenLocator;
 class ContentLocatorTest extends \PHPUnit_Framework_TestCase
 {
     protected $app;
+    protected $config;
     protected $contentLocator;
     
     public function setUp()
     {
         $this->app = new Application();
-        $config = $this->app['spress.config'];
-        $config->loadLocal('./tests/fixtures/project');
+        $this->config = $this->app['spress.config'];
+        $this->config->loadLocal('./tests/fixtures/project');
         $this->contentLocator = $this->app['spress.content_locator'];
+        $this->contentLocator->setConvertersExtension($this->config->getRepository()->get('markdown_ext'));
     }
     
     public function testGetPosts()
@@ -39,8 +41,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPostsWithEmptyMarkdownExtesion()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('markdown_ext', array());
+        $this->contentLocator->setConvertersExtension([]);
         $posts = $this->contentLocator->getPosts();
         
         $this->assertCount(0, $posts);
@@ -56,9 +57,8 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesWithEmptyProcessableExtesion()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('processable_ext', array());
-        $config->getRepository()->set('markdown_ext', array());
+        $this->config->getRepository()->set('processable_ext', array());
+        $this->contentLocator->setConvertersExtension([]);
         $items = $this->contentLocator->getPages();
         
         $this->assertCount(0, $items);
@@ -66,8 +66,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesWithIncludeFile()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('include', array('../extra_pages/extra-page1.html'));
+        $this->config->getRepository()->set('include', array('../extra_pages/extra-page1.html'));
         $pages = $this->contentLocator->getPages();
         
         $filenames = array();
@@ -81,8 +80,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesWithIncludeDir()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('include', array('../extra_pages'));
+        $this->config->getRepository()->set('include', array('../extra_pages'));
         $pages = $this->contentLocator->getPages();
         
         $filenames = array();
@@ -97,8 +95,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesWithExcludeFile()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('exclude', array('about/me/index.html'));
+        $this->config->getRepository()->set('exclude', array('about/me/index.html'));
         $pages = $this->contentLocator->getPages();
         
         $filenames = array();
@@ -112,8 +109,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesWithExcludeDir()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('exclude', array('about'));
+        $this->config->getRepository()->set('exclude', array('about'));
         $pages = $this->contentLocator->getPages();
         
         $filenames = array();
@@ -127,9 +123,8 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testGetPagesIncludeExclude()
     {
-        $config = $this->app['spress.config'];
-        $config->getRepository()->set('include', array('../extra_pages'));
-        $config->getRepository()->set('exclude', array('extra-page2.html'));
+        $this->config->getRepository()->set('include', array('../extra_pages'));
+        $this->config->getRepository()->set('exclude', array('extra-page2.html'));
         $pages = $this->contentLocator->getPages();
         
         $filenames = array();
@@ -175,24 +170,9 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $layouts);
     }
     
-    /*public function testExistsLayout()
-    {
-        $result = $this->contentLocator->existsLayout('default.html');
-        
-        $this->assertTrue($result);
-    }
-    
-    public function testNotExistsLayout()
-    {
-        $result = $this->contentLocator->existsLayout('default-not-exists.html');
-        
-        $this->assertFalse($result);
-    }*/
-    
     public function testCleanupDestination()
     {
-        $config = $this->app['spress.config'];
-        $destination = $config->getRepository()->get('destination');
+        $destination = $this->config->getRepository()->get('destination');
         $path = sprintf('%s/%s.html', $destination, microtime());
         $dir = sprintf('%s/test-dir', $destination);
         
@@ -226,8 +206,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testSaveItem()
     {
-        $config = $this->app['spress.config'];
-        $destination = $config->getRepository()->get('destination');
+        $destination = $this->config->getRepository()->get('destination');
         $this->contentLocator->cleanupDestination();
         $pages = $this->contentLocator->getPages();
         
@@ -256,8 +235,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveItemFailWithoutDestinations()
     {
-        $config = $this->app['spress.config'];
-        $destination = $config->getRepository()->get('destination');
+        $destination = $this->config->getRepository()->get('destination');
         $this->contentLocator->cleanupDestination();
         $pages = $this->contentLocator->getPages();
         

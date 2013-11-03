@@ -14,6 +14,7 @@ namespace Yosymfony\Spress;
 use Yosymfony\Silex\ConfigServiceProvider\ConfigServiceProvider;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\ContentManager;
+use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
 use Yosymfony\Spress\Operation\NewOperation;
 
@@ -24,7 +25,7 @@ use Yosymfony\Spress\Operation\NewOperation;
  */
 class Application extends \Silex\Application
 {
-    const VERSION = "0.1.0";
+    const VERSION = "0.2-alpha";
     
     public function __construct()
     {
@@ -52,13 +53,18 @@ class Application extends \Silex\Application
         $this['spress.content_locator'] = $this->share(function($app){
             return new ContentLocator($app['spress.config']);
         });
-        
-        $this['spress.markdown'] = $this->share(function(){
-            return new MarkdownWrapper();
-        });
-        
+
         $this['spress.twig_factory'] = $this->share(function(){
             return new TwigFactory();
+        });
+        
+        $this['spress.cms.converter'] = $this->share(function($app){
+            return new ConverterManager(
+            $app['spress.config'],
+            [
+                new \Yosymfony\Spress\ContentManager\Converter\Markdown(),
+                new \Yosymfony\Spress\ContentManager\Converter\Mirror(),
+            ]);
         });
         
         $this['spress.cms.renderizer'] = $this->share(function($app){
@@ -70,10 +76,10 @@ class Application extends \Silex\Application
         
         $this['spress.cms'] = $this->share(function($app){
             return new ContentManager(
-                $app['spress.cms.renderizer'], 
-                $app['spress.markdown'], 
-                $app['spress.config'], 
-                $app['spress.content_locator']);
+                $app['spress.cms.renderizer'],
+                $app['spress.config'],
+                $app['spress.content_locator'],
+                $app['spress.cms.converter']);
         });
         
         $this['spress.operation.new'] = $this->share(function($app){

@@ -24,6 +24,7 @@ class PageItem implements ContentItemInterface
     private $frontmatter;
     private $configuration;
     private $content;
+    private $extension;
     
     /**
      * Constructor
@@ -40,9 +41,10 @@ class PageItem implements ContentItemInterface
         
         $this->configuration = $configuration;
         $this->fileItem = $fileItem;
+        $this->extension = $fileItem->getExtension();
         $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
         $this->content = $this->frontmatter->getContentNotFrontmatter();
-        $this->setDestinationContent($this->content);
+        $this->setRenderedContent($this->content);
         $this->setUpDestinationPath();
     }
     
@@ -104,11 +106,21 @@ class PageItem implements ContentItemInterface
     }
     
     /**
-     * Set the destination (transformed) content.
+     * Set converted content
      * 
      * @param string $content
      */
-    public function setDestinationContent($content)
+    public function setConvertedContent($content)
+    {
+        $this->fileItem->setDestinationContent($content);
+    }
+    
+    /**
+     * Set rendered content
+     * 
+     * @param string $content
+     */
+    public function setRenderedContent($content)
     {
         $this->fileItem->setDestinationContent($content);
     }
@@ -141,6 +153,17 @@ class PageItem implements ContentItemInterface
     }
     
     /**
+     * Set out extension
+     * 
+     * @param string $extension
+     */
+    public function setOutExtension($extension)
+    {
+        $this->extension = $extension;
+        $this->setUpDestinationPath();
+    }
+    
+    /**
      * Get the FileItem associated (from ContentItemInterface)
      * 
      * @return FileItem
@@ -157,7 +180,7 @@ class PageItem implements ContentItemInterface
     {
         $template = '/:path/:basename.:extension';
         $filename = $this->fileItem->getFileName(false);
-        $extension = $this->getOutExtension();
+        $extension = $this->extension;
         $permalinkStyle = $this->configuration->getRepository()->get('permalink');
         
         if('pretty' == $permalinkStyle)
@@ -183,27 +206,8 @@ class PageItem implements ContentItemInterface
         return [
             ':path'         => $this->fileItem->getRelativePath(),
             ':basename'     => $this->fileItem->getFileName(false),
-            ':extension'    => $this->getOutExtension(),
+            ':extension'    => $this->extension,
         ];
-    }
-    
-    /**
-     * @return bool
-     */
-    private function isMarkdown()
-    {
-        return in_array($this->fileItem->getExtension(), $this->configuration->getRepository()->get('markdown_ext'));
-    }
-    
-    /**
-     * @return string
-     */
-    private function getOutExtension()
-    {
-        $extension = $this->fileItem->getExtension();
-        $isTransformedMarkdown = $this->isMarkdown() && $this->hasFrontmatter();
-        
-        return 'html' === $extension || $isTransformedMarkdown ? 'html' : $extension;
     }
     
     /**
@@ -211,7 +215,7 @@ class PageItem implements ContentItemInterface
      */
     private function getFilename()
     {
-       return $this->fileItem->getFileName(false) . '.' . $this->getOutExtension(); 
+       return $this->fileItem->getFileName(false) . '.' . $this->extension; 
     }
     
     /**

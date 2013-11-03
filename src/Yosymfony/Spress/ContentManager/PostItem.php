@@ -24,6 +24,7 @@ class PostItem implements ContentItemInterface
     private $frontmatter;
     private $title;
     private $date;
+    private $extension;
     
     /**
      * Constructor
@@ -115,17 +116,23 @@ class PostItem implements ContentItemInterface
     }
     
     /**
-     * Set the destination (transformed) content.
+     * Set converted content
      * 
      * @param string $content
      */
-    public function setDestinationContent($content, $fromMarkdown = false)
+    public function setConvertedContent($content)
     {
-        if($fromMarkdown)
-        {
-            $this->contentNotMarkdown = $content;
-        }
-        
+        $this->contentNotMarkdown = $content;
+        $this->fileItem->setDestinationContent($content);
+    }
+    
+    /**
+     * Set rendered content
+     * 
+     * @param string $content
+     */
+    public function setRenderedContent($content)
+    { 
         $this->fileItem->setDestinationContent($content);
     }
     
@@ -252,6 +259,17 @@ class PostItem implements ContentItemInterface
         return $draft;
     }
     
+    /**
+     * Set out extension
+     * 
+     * @param string $extension
+     */
+    public function setOutExtension($extension)
+    {
+        $this->extension = $extension;
+        $this->setUpDestinationPath();
+    }
+    
     public function getFileItem()
     {
         return $this->fileItem;
@@ -365,7 +383,7 @@ class PostItem implements ContentItemInterface
         {
             if($this->hasFrontmatter())
             {
-                $path .= '/index.html';
+                $path .= '/index.' . $this->extension;
             }
             else
             {

@@ -23,7 +23,7 @@ use Yosymfony\Spress\MarkdownWrapper;
 class ContentManager
 {
     private $renderizer;
-    private $markdown;
+    private $converter;
     private $markdownExt;
     private $configuration;
     private $contentLocator;
@@ -40,17 +40,17 @@ class ContentManager
      * Constructor
      * 
      * @param Renderizer $renderizer
-     * @param MarkdownWrapper $markdown
      * @param Configuration $configuration Configuration manager
      * @param ContentLocator $contentLocator Locate the site content
+     * @param array $default Default values
      */
-    public function __construct(Renderizer $renderizer, MarkdownWrapper $markdown, Configuration $configuration, ContentLocator $contentLocator)
+    public function __construct(Renderizer $renderizer, Configuration $configuration, ContentLocator $contentLocator, ConverterManager $converter)
     {
-        $this->markdown = $markdown;
         $this->configuration = $configuration;
         $this->contentLocator = $contentLocator;
         $this->markdownExt = $configuration->getRepository()->get('markdown_ext');
         $this->renderizer = $renderizer;
+        $this->converter = $converter;
     }
     
     /**
@@ -73,6 +73,10 @@ class ContentManager
     
     private function reset()
     {
+        
+        $this->converter->initialize();
+        $this->contentLocator->setConvertersExtension($this->converter->getExtensions());
+        
         $this->pageItems = [];
         $this->pages = [];
         $this->postItems = [];
@@ -124,12 +128,9 @@ class ContentManager
 
             if($pageItem->hasFrontmatter())
             {
-                if($this->isExtensionMarkdown($pageItem))
-                {
-                    $content = $pageItem->getContent();
-                    $contentMd = $this->markdown->parse($content);
-                    $pageItem->setDestinationContent($contentMd);
-                }
+                $rc = $this->converter->convertItem($pageItem);
+                $pageItem->setConvertedContent($rc->getResult());
+                $pageItem->setOutExtension($rc->getExtension());
                 
                 $this->pages[$pageItem->getId()] = $pageItem->getPayload();
                 $this->pageItems[$pageItem->getId()] = $pageItem;
@@ -161,9 +162,9 @@ class ContentManager
                     continue;
                 }
                 
-                $content = $postItem->getContent();
-                $contentMd = $this->markdown->parse($content);
-                $postItem->setDestinationContent($contentMd, true);
+                $rc = $this->converter->convertItem($postItem);
+                $postItem->setConvertedContent($rc->getResult());
+                $postItem->setOutExtension($rc->getExtension());
                 
                 $payload = $postItem->getPayload();
                 $this->posts[$postItem->getId()] = $payload;
@@ -205,7 +206,7 @@ class ContentManager
             $payload['page'] = $page;
             
             $rendered = $this->renderizer->renderItem($item, $payload);
-            $item->setDestinationContent($rendered);
+            $item->setRenderedContent($rendered);
             $this->saveItem($item);
         }
     }
@@ -232,7 +233,6 @@ class ContentManager
         foreach($this->posts as $key => $post)
         {
             $item = $this->postItems[$key];
-            
             $payload['page'] = $post;
             
             if($paginator->getItemsPerPage() > 0)
@@ -252,7 +252,7 @@ class ContentManager
                     if($paginator->pageChanged() && $paginatorItemTemplate)
                     {
                         $renderedPaginator = $this->renderizer->renderItem($paginatorItemTemplate, $payload);
-                        $paginatorItemTemplate->setDestinationContent($renderedPaginator);
+                        $paginatorItemTemplate->setRenderedContent($renderedPaginator);
                         
                         $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
                         $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);
@@ -264,7 +264,7 @@ class ContentManager
             }
             
             $rendered = $this->renderizer->renderItem($item, $payload);
-            $item->setDestinationContent($rendered);
+            $item->setRenderedContent($rendered);
             $this->saveItem($item);
         }
     }
@@ -286,7 +286,6 @@ class ContentManager
         $result['site']['time'] = $this->time;
         $result['site']['categories'] = $this->categories;
         $result['site']['tags'] = $this->tags;
-        
         $result['site']['url'] = $repository->get('url') . $repository->get('baseurl');
 
         return $result;
@@ -312,7 +311,6 @@ class ContentManager
     {
         uasort($this->posts, function($a, $b)
         {
-           
             $dateA = new \Datetime($a['date']);
             $dateB = new \Datetime($b['date']);
             
@@ -363,6 +361,7 @@ class ContentManager
     
     /**
      * Get relative path of paginator template e.g blog/index.html
+     * 
      * @return string
      */
     private function getRelativePathPaginatorTemplate()
@@ -387,11 +386,6 @@ class ContentManager
         }
         
         return $result;
-    }
-    
-    private function isExtensionMarkdown(ContentItemInterface $contentItem)
-    {
-        return in_array($contentItem->getFileItem()->getExtension(), $this->markdownExt);
     }
     
     private function saveItem(ContentItemInterface $contentItem)

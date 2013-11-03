@@ -40,7 +40,7 @@ interface ContentItemInterface
     public function hasFrontmatter();
     
     /**
-     * Get content without metadate like Front-matter
+     * Get source content without metadate like Front-matter
      * 
      * @return string
      */
@@ -54,11 +54,25 @@ interface ContentItemInterface
     public function getDestinationContent();
     
     /**
-     * Set the destination (transformed) content.
+     * Set converted content
      * 
      * @param string $content
      */
-    public function setDestinationContent($content);
+    public function setConvertedContent($content);
+    
+    /**
+     * Set rendered content
+     * 
+     * @param string $content
+     */
+    public function setRenderedContent($content);
+    
+    /**
+     * Set out extension
+     * 
+     * @param string $extension
+     */
+    public function setOutExtension($extension);
     
     /**
      * Get the FileItem associated

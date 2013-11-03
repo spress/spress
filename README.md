@@ -6,9 +6,12 @@ Spress - Static site generator
 Spress is a static site generator building on Silex and Twig and inspired by 
 [Jekyll](https://github.com/mojombo/jekyll). See [demo](http://yosymfony.github.io/Spress-example/).
 
+License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE)
+
 Require
 -------
 * PHP >= 5.4
+* [Composer](http://getcomposer.org/)
 
 Getting Started
 --------------

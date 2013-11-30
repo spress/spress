@@ -28,6 +28,7 @@ class RenderEventTest extends \PHPUnit_Framework_TestCase
         
         $app = new Application();
         $config = $app['spress.config'];
+        $config->loadLocal('./tests/fixtures/project');
         
         $fileInfo = new SplFileInfo($path, '', '2013-08-12-post-example-1.md');
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);

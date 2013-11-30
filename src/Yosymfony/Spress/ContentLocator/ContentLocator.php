@@ -298,7 +298,6 @@ class ContentLocator
      */
     public function getDestinationDir()
     {
-        
         return $this->resolvePath($this->configuration->getRepository()->get('destination'));
     }
     

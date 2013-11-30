@@ -11,8 +11,6 @@
  
 namespace Yosymfony\Spress\Plugin\Event;
 
-use Yosymfony\Spress\ContentManager\ContentItemInterface;
-
 class ConvertEvent extends ContentEvent
 {   
     /**

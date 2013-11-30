@@ -72,6 +72,21 @@ EOT;
         $this->assertEquals('Your post content', $fm->getContentNotFrontmatter());
     }
     
+    public function testSetFrontmatter()
+    {
+        $content = "Your post content";
+        $fm = new Frontmatter($content, $this->configuration);
+        $fm->setFrontmatter(['key1' => 1, 'key2' => 'value']);
+        
+        $this->assertTrue($fm->hasFrontmatter());
+        $this->assertNotNull($fm->getFrontmatter());
+        $this->assertCount(2, $fm->getFrontmatterArray());
+        $this->assertStringStartsWith('---', $fm->getFrontmatterWithDashedLines());
+        $this->assertStringEndsWith('---', $fm->getFrontmatterWithDashedLines());
+        $this->assertEquals('', $fm->getFrontmatterString());
+        $this->assertEquals('Your post content', $fm->getContentNotFrontmatter());
+    }
+    
     public function testMoreLineDashed()
     {
         $content = "---\nlayout: default\n---\nYour post content-----------------";

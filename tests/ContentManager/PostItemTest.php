@@ -36,7 +36,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         $post->setOutExtension('html');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
@@ -44,9 +44,9 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('New Post Example', $post->getTitle());
         $this->assertEquals('/category-1/category-2/2020/01/01/new-post-example/', $post->getUrl());
         $this->assertTrue($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $post->getFrontmatter());
-        $this->assertEquals('default', $post->getFrontmatter()->get('layout'));
-        $this->assertEquals('Test content', $post->getDestinationContent());
+        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertEquals('default', $post->getFrontmatter()->getFrontmatter()->get('layout'));
+        $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('New Post Example', $post->getTitle());
         $this->assertContains('category 1', $post->getCategories());
         $this->assertContains('tag2', $post->getTags());
@@ -73,7 +73,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'ordinal');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         
         $this->assertEquals('/category-1/category-2/2020/1/new-post-example.html/', $post->getUrl());
         
@@ -90,7 +90,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'date');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         
         $this->assertEquals('/2020/01/01/new-post-example.html/', $post->getUrl());
         
@@ -107,7 +107,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', '/blog/:year-:month-:day/:title');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         $post->setOutExtension('html');
         
         $this->assertEquals('/blog/2020-01-01/new-post-example/', $post->getUrl());
@@ -125,7 +125,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         $post->setOutExtension('html');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
@@ -133,9 +133,9 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('best book', $post->getTitle());
         $this->assertEquals('/books/2013/08/11/best-book/', $post->getUrl());
         $this->assertTrue($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $post->getFrontmatter());
-        $this->assertEquals('default', $post->getFrontmatter()->get('layout'));
-        $this->assertEquals('Test content', $post->getDestinationContent());
+        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertEquals('default', $post->getFrontmatter()->getFrontmatter()->get('layout'));
+        $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('best book', $post->getTitle());
         $this->assertContains('books', $post->getCategories());
         $this->assertCount(0, $post->getTags());
@@ -175,15 +175,15 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         $this->configuration->getRepository()->set('permalink', 'pretty');
         $post = new PostItem($fileItem, $this->configuration);
-        $post->setConvertedContent('Test content');
+        $post->setContent('Test content');
         
         $this->assertGreaterThan(0, strlen($post->getId()));
         $this->assertGreaterThan(0, strlen($post->getContent()));
         $this->assertEquals('post example 2', $post->getTitle());
         $this->assertEquals('/2013/08/12/post-example-2/', $post->getUrl());
         $this->assertFalse($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $post->getFrontmatter());
-        $this->assertEquals('Test content', $post->getDestinationContent());
+        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('post example 2', $post->getTitle());
         $this->assertCount(0, $post->getCategories());
         $this->assertCount(0, $post->getTags());

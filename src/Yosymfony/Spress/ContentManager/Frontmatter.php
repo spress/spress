@@ -25,7 +25,7 @@ class Frontmatter
     private $configuration;
     private $repository;
     private $pattern = '/^---\n(.*)\n?---\n?/isU';
-    private $matches = array();
+    private $fm;
     private $result = false;
     
     /**
@@ -42,16 +42,31 @@ class Frontmatter
     }
     
     /**
+     * Set a new Front-matter
+     * 
+     * @param array Front-matter key-value set
+     */
+    public function setFrontmatter(array $frontmatter)
+    {
+        $this->repository = $this->configuration->createBlankRepository();
+        $this->repository->load($frontmatter);
+        $this->fm = '';
+        $this->result = true;
+    }
+    
+    /**
      * The content has Front-matter?
      * 
      * @return bool
      */
     public function hasFrontmatter()
     {   
-        return 1 === $this->result;
+        return $this->result;
     }
     
     /**
+     * Get the Front-matter as string (no parsed)
+     * 
      * @return string FALSE if any problem occurs
      */
     public function getFrontmatterString()
@@ -60,13 +75,15 @@ class Frontmatter
         
         if($this->hasFrontmatter())
         {
-            $result = $this->matches[1];
+            $result = $this->fm;
         }
         
         return $result;
     }
     
     /**
+     * Get Front-matter as array
+     * 
      * @return array
      */
     public function getFrontmatterArray()
@@ -75,6 +92,8 @@ class Frontmatter
     }
     
     /**
+     * Get Front-matter as repository
+     * 
      * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getFrontmatter()
@@ -91,7 +110,7 @@ class Frontmatter
         
         if ($this->hasFrontmatter())
         {
-            $result = $this->matches[0];
+            $result = sprintf("---\n%s\n---", $this->fm);
         }
         
         return $result;
@@ -110,7 +129,14 @@ class Frontmatter
     
     private function process()
     {
-        $this->result = preg_match($this->pattern, $this->content, $this->matches);
+        $result = preg_match($this->pattern, $this->content, $matches);
+        
+        if(1 === $result)
+        {
+            $this->fm = $matches[1];
+            $this->result = true;
+        }
+        
         $this->repository = $this->configuration->getRepositoryInline($this->getFrontmatterString());
     }
 }

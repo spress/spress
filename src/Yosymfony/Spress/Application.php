@@ -16,6 +16,7 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\ContentManager;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
+use Yosymfony\Spress\Plugin\PluginManager;
 use Yosymfony\Spress\Operation\NewOperation;
 
 /**
@@ -67,6 +68,13 @@ class Application extends \Silex\Application
             ]);
         });
         
+        $this['spress.cms.plugin'] = $this->share(function($app){
+            return new PluginManager(
+                $app['spress.content_locator'],
+                new \Composer\Autoload\ClassLoader()
+            );
+        });
+        
         $this['spress.cms.renderizer'] = $this->share(function($app){
             return new Renderizer(
                 $app['spress.twig_factory'],
@@ -79,7 +87,8 @@ class Application extends \Silex\Application
                 $app['spress.cms.renderizer'],
                 $app['spress.config'],
                 $app['spress.content_locator'],
-                $app['spress.cms.converter']);
+                $app['spress.cms.converter'],
+                $app['spress.cms.plugin']);
         });
         
         $this['spress.operation.new'] = $this->share(function($app){

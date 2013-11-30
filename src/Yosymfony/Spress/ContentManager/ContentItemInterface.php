@@ -28,7 +28,7 @@ interface ContentItemInterface
     /**
      * Get Front-matter
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\Spress\ContentManager\Frontmatter
      */
     public function getFrontmatter();
     
@@ -40,32 +40,25 @@ interface ContentItemInterface
     public function hasFrontmatter();
     
     /**
-     * Get source content without metadate like Front-matter
+     * Get content without Front-matter
      * 
      * @return string
      */
     public function getContent();
     
     /**
+     * Set content
+     * 
+     * @param string $content
+     */
+    public function setContent($content);
+    
+    /**
      * Get the destination (transformed) content.
      * 
      * return string
      */
-    public function getDestinationContent();
-    
-    /**
-     * Set converted content
-     * 
-     * @param string $content
-     */
-    public function setConvertedContent($content);
-    
-    /**
-     * Set rendered content
-     * 
-     * @param string $content
-     */
-    public function setRenderedContent($content);
+    //public function getDestinationContent();
     
     /**
      * Set out extension

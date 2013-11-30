@@ -319,7 +319,19 @@ class ContentLocator
     }
     
     /**
-     * Get the processable file's extension
+     * Get the absolute path of plugins directory
+     * 
+     * @return string
+     */
+    public function getPluginDir()
+    {
+        return $this->resolvePath($this->configuration->getRepository()->get('plugins'));
+    }
+    
+    /**
+     * Get the processable file's extension. It's a union result
+     * between 'processable_ext' key and extensions registered by
+     * converters
      * 
      * @return array
      */
@@ -328,11 +340,6 @@ class ContentLocator
         $processableExt = $this->configuration->getRepository()->get('processable_ext');
         
         return array_unique(array_merge($processableExt, $this->convertersExtension));
-    }
-    
-    private function getPluginDir()
-    {
-        return $this->configuration->getRepository()->get('plugins');
     }
     
     private function fileExtToRegExpr(array $extensions)

@@ -42,7 +42,7 @@ class PostItem implements ContentItemInterface
         $this->fileItem = $fileItem;
         $this->configuration = $configuration;
         $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
-        $this->content = $this->frontmatter->getContentNotFrontmatter();
+        $this->setContent($this->frontmatter->getContentNotFrontmatter());
         $this->extractDataFromFilename();
         $this->setUpDestinationPath();
     }
@@ -54,7 +54,17 @@ class PostItem implements ContentItemInterface
      */
     public function getContent()
     {
-        return $this->content;
+        return $this->fileItem->getDestinationContent();
+    }
+    
+    /**
+     * Set content
+     * 
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->fileItem->setDestinationContent($content);
     }
     
     /**
@@ -108,42 +118,11 @@ class PostItem implements ContentItemInterface
     /**
      * Get Front-matter
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\Spress\ContentManager\Frontmatter
      */
     public function getFrontmatter()
     {   
-        return $this->frontmatter->getFrontmatter();
-    }
-    
-    /**
-     * Set converted content
-     * 
-     * @param string $content
-     */
-    public function setConvertedContent($content)
-    {
-        $this->contentNotMarkdown = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Set rendered content
-     * 
-     * @param string $content
-     */
-    public function setRenderedContent($content)
-    { 
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Get the destination (transformed) content.
-     * 
-     * return string
-     */
-    public function getDestinationContent()
-    {
-        return $this->fileItem->getDestinationContent();
+        return $this->frontmatter;
     }
     
     /**
@@ -153,7 +132,7 @@ class PostItem implements ContentItemInterface
      */
     public function getPayload()
     {
-        $fm = $this->getFrontmatter();
+        $fm = $this->frontmatter->getFrontmatter();
         
         $repository = $this->configuration->createBlankRepository();
         $repository->set('title', $this->getTitle());
@@ -161,7 +140,7 @@ class PostItem implements ContentItemInterface
         $repository->set('categories', $this->getCategories());
         $repository->set('tags', $this->getTags());
         $repository->set('url', $this->getUrl());
-        $repository->set('content', $this->contentNotMarkdown);
+        $repository->set('content', $this->getContent());
         $repository->set('id', $this->getId());
         $repository->set('path', $this->getRelativePath());
         
@@ -176,7 +155,7 @@ class PostItem implements ContentItemInterface
     public function getDate()
     {
         $result = $this->date;
-        $dateStr = $this->getFrontmatter()->get('date');
+        $dateStr = $this->frontmatter->getFrontmatter()->get('date');
         
         if($dateStr)
         {
@@ -200,7 +179,7 @@ class PostItem implements ContentItemInterface
      */
     public function getTitle()
     {
-        $title = $this->getFrontmatter()->get('title');
+        $title = $this->frontmatter->getFrontmatter()->get('title');
         
         return $title ?: $this->title;
     }
@@ -212,7 +191,7 @@ class PostItem implements ContentItemInterface
      */
     public function getCategories()
     {
-        $categories = $this->getFrontmatter()->get('categories', []);
+        $categories = $this->frontmatter->getFrontmatter()->get('categories', []);
         $categoriesFromPath = $this->fileItem->getRelativePathExplode();
         
         if(false == is_array($categories))
@@ -232,7 +211,7 @@ class PostItem implements ContentItemInterface
      */
     public function getTags()
     {
-        $tags = $this->getFrontmatter()->get('tags', []);
+        $tags = $this->frontmatter->getFrontmatter()->get('tags', []);
         
         if(false == is_array($tags))
         {
@@ -249,7 +228,7 @@ class PostItem implements ContentItemInterface
      */
     public function isDraft()
     {
-        $draft = $this->getFrontmatter()->get('draft', false);
+        $draft = $this->frontmatter->getFrontmatter()->get('draft', false);
         
         if(false == is_bool($draft))
         {

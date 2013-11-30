@@ -23,7 +23,6 @@ class PageItem implements ContentItemInterface
     private $fileItem;
     private $frontmatter;
     private $configuration;
-    private $content;
     private $extension;
     
     /**
@@ -43,19 +42,28 @@ class PageItem implements ContentItemInterface
         $this->fileItem = $fileItem;
         $this->extension = $fileItem->getExtension();
         $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
-        $this->content = $this->frontmatter->getContentNotFrontmatter();
-        $this->setRenderedContent($this->content);
+        $this->setContent($this->frontmatter->getContentNotFrontmatter());
         $this->setUpDestinationPath();
     }
     
     /**
-     * Get source content without Frontmatter
+     * Get content without Frontmatter
      * 
      * @return string
      */
     public function getContent()
     {
-        return $this->content;
+        return $this->fileItem->getDestinationContent();
+    }
+    
+    /**
+     * Set content
+     * 
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->fileItem->setDestinationContent($content);
     }
     
     /**
@@ -98,41 +106,11 @@ class PageItem implements ContentItemInterface
     /**
      * Get Front-matter
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\Spress\ContentManager\Frontmatter
      */
     public function getFrontmatter()
     {   
-        return $this->frontmatter->getFrontmatter();
-    }
-    
-    /**
-     * Set converted content
-     * 
-     * @param string $content
-     */
-    public function setConvertedContent($content)
-    {
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Set rendered content
-     * 
-     * @param string $content
-     */
-    public function setRenderedContent($content)
-    {
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Get the destination (transformed) content.
-     * 
-     * return string
-     */
-    public function getDestinationContent()
-    {
-        return $this->fileItem->getDestinationContent();
+        return $this->frontmatter;
     }
     
     /**
@@ -142,7 +120,7 @@ class PageItem implements ContentItemInterface
      */
     public function getPayload()
     {
-        $fm = $this->getFrontmatter();
+        $fm = $this->frontmatter->getFrontmatter();
         $repository = $this->configuration->createBlankRepository();
         $repository->set('url', $this->getUrl());
         $repository->set('content', $this->getContent());

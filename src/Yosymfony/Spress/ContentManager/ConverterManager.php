@@ -100,13 +100,18 @@ class ConverterManager
      */
     public function convertItem(ContentItemInterface $item)
     {
-        $content = $item->getContent();
-        $converter = $this->getConverter($item->getFileItem()->getExtension());
         $extension = $item->getFileItem()->getExtension();
+        $converter = $this->getConverter($extension);
+        
+        $outExtension = $converter->getOutExtension($extension);
+        $content = $converter->convert($item->getContent());
+        
+        $item->setContent($content);
+        $item->setOutExtension($outExtension);
         
         return new ConverterResult(
-            $converter->convert($content),
-            $converter->getOutExtension($extension),
+            $content,
+            $outExtension,
             get_class($converter)
         );
     }

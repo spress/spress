@@ -12,9 +12,10 @@
     ],
     "require": {
         "twig/twig": ">=1.8,<2.0-dev",
-        "symfony/console": "2.2.*@dev",
+        "symfony/console": "2.3.*@dev",
         "symfony/finder": "2.3.*@dev",
         "symfony/filesystem": "2.3.*@dev",
+        "symfony/event-dispatcher": "2.3.*@dev",
         "silex/silex": "1.0.*@dev",
         "michelf/php-markdown": "1.3.*@dev",
         "yosymfony/config-serviceprovider": "1.0.*@dev",

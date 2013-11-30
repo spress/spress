@@ -170,9 +170,34 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $layouts);
     }
     
+    public function testGetSourceDir()
+    { 
+        $this->assertTrue(strlen($this->contentLocator->getSourceDir()) > 0);
+    }
+    
+    public function testGetPostsDir()
+    { 
+        $this->assertTrue(strlen($this->contentLocator->getPostsDir()) > 0);
+    }
+    
+    public function testGetLayoutsDir()
+    { 
+        $this->assertTrue(strlen($this->contentLocator->getLayoutsDir()) > 0);
+    }
+    
+    public function testGetDestinationDir()
+    { 
+        $this->assertTrue(strlen($this->contentLocator->getDestinationDir()) > 0);
+    }
+    
+    public function testGetIncludesDir()
+    { 
+        $this->assertTrue(strlen($this->contentLocator->getIncludesDir()) > 0);
+    }
+    
     public function testCleanupDestination()
     {
-        $destination = $this->config->getRepository()->get('destination');
+        $destination = $this->contentLocator->getDestinationDir();
         $path = sprintf('%s/%s.html', $destination, microtime());
         $dir = sprintf('%s/test-dir', $destination);
         
@@ -206,7 +231,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testSaveItem()
     {
-        $destination = $this->config->getRepository()->get('destination');
+        $destination = $this->contentLocator->getDestinationDir();
         $this->contentLocator->cleanupDestination();
         $pages = $this->contentLocator->getPages();
         
@@ -235,7 +260,6 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveItemFailWithoutDestinations()
     {
-        $destination = $this->config->getRepository()->get('destination');
         $this->contentLocator->cleanupDestination();
         $pages = $this->contentLocator->getPages();
         

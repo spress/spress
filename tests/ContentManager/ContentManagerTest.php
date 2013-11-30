@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Tests;
 
 use Yosymfony\Spress\Application;
+use Yosymfony\Spress\Plugin\Event\SpressEvents;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -74,5 +75,21 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->cms->processSite();
         
         $this->assertFileExists($this->destination . '/page2/index.html');
+    }
+    
+    public function testEventsDispatched()
+    {
+        $this->cms->processSite();
+        
+        $plugin = $this->app['spress.cms.plugin'];
+        $dispatchedEvents = $plugin->getHistoryEventsDispatched();
+        
+        $this->assertContains(SpressEvents::SPRESS_START, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_BEFORE_CONVERT, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_AFTER_CONVERT, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_AFTER_CONVERT_POSTS, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_BEFORE_RENDER, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_AFTER_RENDER, $dispatchedEvents);
+        $this->assertContains(SpressEvents::SPRESS_FINISH, $dispatchedEvents);
     }
 }

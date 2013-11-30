@@ -13,6 +13,8 @@ namespace Yosymfony\Spress\ContentManager;
 
 use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
+use Yosymfony\Spress\Plugin\PluginManager;
+use Yosymfony\Spress\Plugin\Event;
  
 /**
  * Content manager
@@ -23,7 +25,6 @@ class ContentManager
 {
     private $renderizer;
     private $converter;
-    private $markdownExt;
     private $configuration;
     private $contentLocator;
     private $pageItems;
@@ -34,6 +35,8 @@ class ContentManager
     private $tags;
     private $time;
     private $dataResult;
+    private $plugin;
+    private $events;
     
     /**
      * Constructor
@@ -43,13 +46,14 @@ class ContentManager
      * @param ContentLocator $contentLocator Locate the site content
      * @param array $default Default values
      */
-    public function __construct(Renderizer $renderizer, Configuration $configuration, ContentLocator $contentLocator, ConverterManager $converter)
+    public function __construct(Renderizer $renderizer, Configuration $configuration, ContentLocator $contentLocator, ConverterManager $converter, PluginManager $plugin)
     {
         $this->configuration = $configuration;
         $this->contentLocator = $contentLocator;
-        $this->markdownExt = $configuration->getRepository()->get('markdown_ext');
         $this->renderizer = $renderizer;
         $this->converter = $converter;
+        $this->plugin = $plugin;
+        $this->events = $this->plugin->getDispatcherShortcut();
     }
     
     /**
@@ -61,21 +65,19 @@ class ContentManager
     {
         $this->reset();
         $this->cleanup();
+        $this->processExtensible();
         $this->processPages();
         $this->processPost();
         $this->renderPages();
         $this->renderPosts();
         $this->processOthers();
+        $this->finish();
         
         return $this->dataResult;
     }
     
     private function reset()
-    {
-        
-        $this->converter->initialize();
-        $this->contentLocator->setConvertersExtension($this->converter->getExtensions());
-        
+    {   
         $this->pageItems = [];
         $this->pages = [];
         $this->postItems = [];
@@ -105,6 +107,28 @@ class ContentManager
         ];
     }
     
+    private function processExtensible()
+    {
+        if(false === $this->configuration->getRepository()->get('safe'))
+        {
+            $this->plugin->initialize();
+            
+            $this->events->dispatchStartEvent(
+                $this->configuration,
+                $this->converter,
+                $this->renderizer,
+                $this->contentLocator);
+        }
+        
+        $this->converter->initialize();
+        $this->contentLocator->setConvertersExtension($this->converter->getExtensions());
+    }
+    
+    private function finish()
+    {
+        $this->events->dispatchFinish($this->dataResult);
+    }
+    
     private function cleanup()
     {
         $this->contentLocator->cleanupDestination();
@@ -124,17 +148,19 @@ class ContentManager
         foreach($pageFiles as $page)
         {
             $pageItem = new PageItem($page, $this->configuration);
+            
+            $this->events->dispatchBeforeConvertEvent($pageItem);
 
             if($pageItem->hasFrontmatter())
             {
-                $rc = $this->converter->convertItem($pageItem);
-                $pageItem->setConvertedContent($rc->getResult());
-                $pageItem->setOutExtension($rc->getExtension());
+                $this->converter->convertItem($pageItem);
                 
                 $this->pages[$pageItem->getId()] = $pageItem->getPayload();
                 $this->pageItems[$pageItem->getId()] = $pageItem;
                 
                 $this->dataResult['processed_pages']++;
+                
+                $this->events->dispatchAfterConvertEvent($pageItem);
             }
             else
             {
@@ -153,6 +179,8 @@ class ContentManager
         {
             $postItem = new PostItem($post, $this->configuration);
             
+            $this->events->dispatchBeforeConvertEvent($postItem, true);
+            
             if($postItem->hasFrontmatter() )
             {
                 if($postItem->isDraft() && false === $enableDrafts)
@@ -161,9 +189,7 @@ class ContentManager
                     continue;
                 }
                 
-                $rc = $this->converter->convertItem($postItem);
-                $postItem->setConvertedContent($rc->getResult());
-                $postItem->setOutExtension($rc->getExtension());
+                $this->converter->convertItem($postItem);
                 
                 $payload = $postItem->getPayload();
                 $this->posts[$postItem->getId()] = $payload;
@@ -190,8 +216,14 @@ class ContentManager
                 }
                 
                 $this->dataResult['processed_post']++;
+                
+                $this->events->dispatchAfterConvertEvent($postItem, true);
             }
         }
+        
+        $this->events->dispatchAfterConvertPosts(
+            array_keys($this->categories),
+            array_keys($this->tags));
     }
     
     private function renderPages()
@@ -199,13 +231,15 @@ class ContentManager
         $payload = $this->getPayload();
         
         foreach($this->pages as $key => $page)
-        {
+        {   
             $item = $this->pageItems[$key];
             
             $payload['page'] = $page;
+         
+            $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item);
+            $rendered = $this->renderizer->renderItem($item, $event->getPayload());
+            $this->events->dispatchAfterRender($this->renderizer, $payload, $item);
             
-            $rendered = $this->renderizer->renderItem($item, $payload);
-            $item->setRenderedContent($rendered);
             $this->saveItem($item);
         }
     }
@@ -250,9 +284,8 @@ class ContentManager
                     
                     if($paginator->pageChanged() && $paginatorItemTemplate)
                     {
-                        $renderedPaginator = $this->renderizer->renderItem($paginatorItemTemplate, $payload);
-                        $paginatorItemTemplate->setRenderedContent($renderedPaginator);
-                        
+                        $this->renderizer->renderItem($paginatorItemTemplate, $payload);
+
                         $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
                         $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);
                         $this->saveItem($paginatorItemTemplate);
@@ -262,8 +295,10 @@ class ContentManager
                 $paginator->nextItem();
             }
             
-            $rendered = $this->renderizer->renderItem($item, $payload);
-            $item->setRenderedContent($rendered);
+            $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item, true);
+            $this->renderizer->renderItem($item, $event->getPayload());
+            $this->events->dispatchAfterRender($this->renderizer, $payload, $item, true);
+            
             $this->saveItem($item);
         }
     }

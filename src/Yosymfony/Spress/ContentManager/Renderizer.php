@@ -48,16 +48,14 @@ class Renderizer
     }
     
     /**
-     * Render a content items
+     * Render the content of a item
      * 
      * @param ContentItemInterface $item
      * @param array $payload
-     * 
-     * @return string
      */
     public function renderItem(ContentItemInterface $item, array $payload = [])
     {
-        $content = $item->getDestinationContent();
+        $content = $item->getContent();
         $rendered = $this->renderString($content, $payload);
         
         $layoutName = $this->getItemLayoutName($item);
@@ -66,10 +64,10 @@ class Renderizer
         {
             $payload['content'] = $rendered;
 
-            return $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
+            $rendered = $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
         }
 
-        return $rendered;
+        $item->setContent($rendered);
     }
     
     /**
@@ -95,6 +93,51 @@ class Renderizer
     public function existsLayout($name)
     {
         return isset($this->layoutItems[$name . '.html']);
+    }
+    
+    /**
+     * Add a new Twig filter
+     * 
+     * @see http://twig.sensiolabs.org/doc/advanced.html#filters Twig documentation.
+     * 
+     * @param string $name Name of filter
+     * @param callable $filter Filter implementation
+     * @param array $options
+     */
+    public function addTwigFilter($name, callable $filter, array $options = [])
+    {
+        $twigFilter = new \Twig_SimpleFilter($name, $filter, $options);
+        $this->twig->addFilter($twigFilter);
+    }
+    
+    /**
+     * Add a new Twig function
+     * 
+     * @see http://twig.sensiolabs.org/doc/advanced.html#functions Twig documentation.
+     * 
+     * @param string $name Name of filter
+     * @param callable $function Filter implementation
+     * @param array $options
+     */
+    public function addTwigFunction($name, callable $function, array $options = [])
+    {
+        $twigfunction = new \Twig_SimpleFunction($name, $function, $options);
+        $this->twig->addFunction($twigfunction);
+    }
+    
+    /**
+     * Add a new Twig test
+     * 
+     * @see http://twig.sensiolabs.org/doc/advanced.html#tests Twig documentation.
+     * 
+     * @param string $name Name of test
+     * @param callable $function Test implementation
+     * @param array $options
+     */
+    public function addTwigTest($name, callable $test, array $options = [])
+    {
+        $twigTest = new \Twig_SimpleTest($name, $test, $options);
+        $this->twig->addTest($twigTest);
     }
     
     /**
@@ -128,7 +171,7 @@ class Renderizer
      */
     private function getItemLayoutName(ContentItemInterface $item)
     {
-        $layoutName = $item->getFrontmatter()->get('layout');
+        $layoutName = $item->getFrontmatter()->getFrontmatter()->get('layout');
         
         if($layoutName)
         {

@@ -296,7 +296,7 @@ class ContentLocator
      * 
      * @return string
      */
-    public function getDestinationDir($createIfNotExists = true)
+    public function getDestinationDir()
     {
         
         return $this->resolvePath($this->configuration->getRepository()->get('destination'));

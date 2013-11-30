@@ -19,6 +19,5 @@ class Plugin implements PluginInterface
     
     public function initialize(EventSubscriber $subscriber)
     {
-        
     }
 }

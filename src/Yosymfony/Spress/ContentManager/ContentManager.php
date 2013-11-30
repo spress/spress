@@ -237,7 +237,7 @@ class ContentManager
             $payload['page'] = $page;
          
             $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item);
-            $rendered = $this->renderizer->renderItem($item, $event->getPayload());
+            $this->renderizer->renderItem($item, $event->getPayload());
             $this->events->dispatchAfterRender($this->renderizer, $payload, $item);
             
             $this->saveItem($item);

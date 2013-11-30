@@ -18,8 +18,6 @@ use Yosymfony\Spress\Exception\FrontmatterValueException;
 class PostItem implements ContentItemInterface
 {
     private $fileItem;
-    private $content;
-    private $contentNotMarkdown;
     private $configuration;
     private $frontmatter;
     private $title;

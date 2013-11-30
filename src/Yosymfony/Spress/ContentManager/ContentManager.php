@@ -14,7 +14,6 @@ namespace Yosymfony\Spress\ContentManager;
 use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Plugin\PluginManager;
-use Yosymfony\Spress\Plugin\Event;
  
 /**
  * Content manager

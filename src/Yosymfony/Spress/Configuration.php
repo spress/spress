@@ -13,6 +13,7 @@ namespace Yosymfony\Spress;
 
 use Yosymfony\Silex\ConfigServiceProvider\Config;
 use Yosymfony\Silex\ConfigServiceProvider\ConfigRepository;
+use Yosymfony\Spress\Definition\ConfigDefinition;
 
  /**
   * Configuration manager
@@ -182,6 +183,7 @@ class Configuration
      */
     private function checkDefinitions($repository)
     {
-        // todo: Check the $repository definitions.
+        $intersection = $repository->intersection($this->globalRepository);
+        $intersection->validateWith(new ConfigDefinition());
     }
 }

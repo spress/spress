@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
- * Definition for config.toml
+ * Definition for config.yml
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -31,16 +31,37 @@ class ConfigDefinition implements ConfigurationInterface
             ->end()
             ->scalarNode('destination')
             ->end()
-            ->ArrayNode('include')
+            ->scalarNode('posts')
             ->end()
-            ->ArrayNode('exclude')
+            ->scalarNode('includes')
             ->end()
-            ->scalarNode('template')
+            ->scalarNode('layouts')
             ->end()
-            ->ArrayNode('markdown_ext')
+            ->scalarNode('plugins')
+            ->end()
+            ->arrayNode('include')
                 ->prototype('scalar')
+                ->end()
+            ->end()
+            ->arrayNode('exclude')
+                ->prototype('scalar')
+                ->end()
+            ->end()
+            ->arrayNode('markdown_ext')
+                ->prototype('scalar')
+                ->end()
+            ->end()
+            ->arrayNode('processable_ext')
+                ->prototype('scalar')
+                ->end()
             ->end()
             ->scalarNode('permalink')
+            ->end()
+            ->booleanNode('relative_permalinks')
+            ->end()
+            ->booleanNode('drafts')
+            ->end()
+            ->variableNode('timezone')
             ->end()
             ->integerNode('paginate')
                 ->min(0)

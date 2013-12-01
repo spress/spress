@@ -34,6 +34,7 @@ class Configuration
      * 
      * @param Config $configService Config service
      * @param array $paths Spress paths and filenames standard
+     * @param string $version App version
      */
     public function __construct(Config $configService, array $paths, $version)
     {
@@ -143,6 +144,9 @@ class Configuration
         $this->checkDefinitions($this->globalRepository);
     }
     
+    /**
+     * @param string $localPath
+     */
     private function loadLocalRepository($localPath)
     {
         $localConfigPath = $this->resolveConfigLocalPath($localPath);
@@ -152,6 +156,11 @@ class Configuration
         $this->repository = $this->localRepository->mergeWith($this->globalRepository);
     }
     
+    /**
+     * @param string $localPath
+     * 
+     * @return string
+     */
     private function resolveConfigLocalPath($localPath)
     {
         if($localPath)
@@ -166,6 +175,11 @@ class Configuration
         return $this->resolvePath($localPath);
     }
     
+    /**
+     * @param string $path
+     * 
+     * @return string
+     */
     private function resolvePath($path)
     {
         $realPath = realpath($path);
@@ -179,9 +193,9 @@ class Configuration
     }
     
     /**
-     * Check the definition of standard configuration keys
+     * @param ConfigRepository $repository
      */
-    private function checkDefinitions($repository)
+    private function checkDefinitions(ConfigRepository $repository)
     {
         $intersection = $repository->intersection($this->globalRepository);
         $intersection->validateWith(new ConfigDefinition());

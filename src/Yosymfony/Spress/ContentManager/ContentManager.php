@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\ContentManager;
 
 use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
+use Yosymfony\Spress\ContentLocator\FileItem;
 use Yosymfony\Spress\Plugin\PluginManager;
  
 /**
@@ -250,17 +251,11 @@ class ContentManager
             return;    
         }
         
-        $fileItemTemplate = null;
-        
         $this->sortPost();
         
         $payload = $this->getPayload();
         $paginator = new Paginator($this->posts, $this->configuration->getRepository()->get('paginate'));
-        
-        if($paginator->getItemsPerPage() > 0)
-        {
-            $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
-        }
+        $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
         
         foreach($this->posts as $key => $post)
         {
@@ -269,29 +264,7 @@ class ContentManager
             
             if($paginator->getItemsPerPage() > 0)
             {
-                $payload['paginator'] = $this->getPaginatorPayload($paginator);
-                
-                
-                foreach($payload['paginator']['posts'] as $index => $postPage)
-                {
-                    $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString($postPage['content'], $payload);
-                }
-
-                if($fileItemTemplate)
-                {
-                    $paginatorItemTemplate = new PageItem($fileItemTemplate, $this->configuration);
-                    
-                    if($paginator->pageChanged() && $paginatorItemTemplate)
-                    {
-                        $this->renderizer->renderItem($paginatorItemTemplate, $payload);
-
-                        $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
-                        $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);
-                        $this->saveItem($paginatorItemTemplate);
-                    }
-                }
-                
-                $paginator->nextItem();
+                $this->renderPagination($payload, $paginator, $fileItemTemplate);
             }
             
             $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item, true);
@@ -300,6 +273,32 @@ class ContentManager
             
             $this->saveItem($item);
         }
+    }
+    
+    private function renderPagination(array $payload, Paginator $paginator, FileItem $template)
+    {
+        $payload['paginator'] = $this->getPaginatorPayload($paginator);
+
+        foreach($payload['paginator']['posts'] as $index => $postPage)
+        {
+            $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString($postPage['content'], $payload);
+        }
+
+        if($template)
+        {
+            $paginatorItemTemplate = new PageItem($template, $this->configuration);
+            
+            if($paginator->pageChanged() && $paginatorItemTemplate)
+            {
+                $this->renderizer->renderItem($paginatorItemTemplate, $payload);
+
+                $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
+                $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);
+                $this->saveItem($paginatorItemTemplate);
+            }
+        }
+        
+        $paginator->nextItem();
     }
     
     /**

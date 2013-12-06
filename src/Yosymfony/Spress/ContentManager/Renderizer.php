@@ -62,8 +62,8 @@ class Renderizer
         
         if($layoutName)
         {
-            $payload['content'] = $rendered;
-
+            $payload['page']['content'] = $rendered;
+            
             $rendered = $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
         }
 

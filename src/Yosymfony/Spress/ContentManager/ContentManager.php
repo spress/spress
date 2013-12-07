@@ -44,9 +44,15 @@ class ContentManager
      * @param Renderizer $renderizer
      * @param Configuration $configuration Configuration manager
      * @param ContentLocator $contentLocator Locate the site content
-     * @param array $default Default values
+     * @param ConverterManager $converter
+     * @param PluginManager $plugin
      */
-    public function __construct(Renderizer $renderizer, Configuration $configuration, ContentLocator $contentLocator, ConverterManager $converter, PluginManager $plugin)
+    public function __construct(
+        Renderizer $renderizer,
+        Configuration $configuration,
+        ContentLocator $contentLocator,
+        ConverterManager $converter,
+        PluginManager $plugin)
     {
         $this->configuration = $configuration;
         $this->contentLocator = $contentLocator;
@@ -287,6 +293,7 @@ class ContentManager
         if($template)
         {
             $paginatorItemTemplate = new PageItem($template, $this->configuration);
+            $payload['page'] = $paginatorItemTemplate->getPayload();
             
             if($paginator->pageChanged() && $paginatorItemTemplate)
             {

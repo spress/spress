@@ -82,19 +82,23 @@ class PluginManager
     public function getPlugins()
     {
         $result = [];
+        $dir = $this->contentLocator->getPluginDir();
         
-        $finder = new Finder();
-        $finder->files()
-            ->in($this->contentLocator->getPluginDir())
-            ->name('*.php');
-            
-        foreach($finder as $file)
+        if($dir)
         {
-            $className = $file->getBasename('.php');
-            
-            if($this->isValidClassName($className))
+            $finder = new Finder();
+            $finder->files()
+                ->in($dir)
+                ->name('*.php');
+                
+            foreach($finder as $file)
             {
-                $result[] = new PluginItem(new $className);
+                $className = $file->getBasename('.php');
+                
+                if($this->isValidClassName($className))
+                {
+                    $result[] = new PluginItem(new $className);
+                }
             }
         }
         

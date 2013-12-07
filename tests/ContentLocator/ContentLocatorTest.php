@@ -51,7 +51,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $pages = $this->contentLocator->getPages();
 
-        $this->assertCount(5, $pages);
+        $this->assertCount(6, $pages);
         $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $pages);
     }
     

@@ -70,11 +70,13 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testProcessSiteWithPaginator()
     {
+        $this->app['spress.config']->getRepository()->set('paginate_path', 'pages/page:num');
         $this->app['spress.config']->getRepository()->set('paginate', 1);
         
         $this->cms->processSite();
         
-        $this->assertFileExists($this->destination . '/page2/index.html');
+        $this->assertFileExists($this->destination . '/pages/index.html');
+        $this->assertFileExists($this->destination . '/pages/page2/index.html');
     }
     
     public function testEventsDispatched()

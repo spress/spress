@@ -30,8 +30,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(2, $result['processed_post']);
         $this->assertEquals(1, $result['drafts_post']);
-        $this->assertEquals(5, $result['total_pages']);
-        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(6, $result['total_pages']);
+        $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
     }
     
@@ -47,8 +47,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(2, $result['processed_post']);
         $this->assertEquals(1, $result['drafts_post']);
-        $this->assertEquals(5, $result['total_pages']);
-        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(6, $result['total_pages']);
+        $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
     }
     
@@ -60,8 +60,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(3, $result['processed_post']);
         $this->assertEquals(0, $result['drafts_post']);
-        $this->assertEquals(5, $result['total_pages']);
-        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(6, $result['total_pages']);
+        $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
     }
     

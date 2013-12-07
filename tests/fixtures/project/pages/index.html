@@ -1,0 +1,38 @@
+---
+layout: default
+---
+{% if paginator %}
+    <div class="entry">
+        <h2>
+            <a href="{{ page.url }}">{{ page.title }}</a>
+    	</h2>
+    	
+    	<div class="entry-date">{{ page.date | date() }}</div>
+    	
+    	<div class="entry-contents">
+    		{{ page.content }}
+    	</div>
+    </div>
+    
+    {% if paginator.total_pages > 1 %}
+        <div id="pagination">
+    		{% if paginator.previous_page %}
+    			<a class="prev" href="/{% if paginator.previous_page > 1 %}page{{ paginator.previous_page }}/{% endif %}">&laquo; Newer</a>
+    		{% endif %}
+    		
+    		{% for page in (1..paginator.total_pages) %}
+    			{% if page == paginator.page %}
+    				<span class="num">{{ page }}</span>
+    			{% else %}
+    				<a class="num" href="/{% if page > 1 %}page{{ page }}/{% endif %}">{{ page }}</a>
+    			{% endif %}
+    		{% endfor %}
+    		
+    		{% if paginator.next_page %}
+    			<a class="next" href="/page{{ paginator.next_page }}/">Older &raquo;</a>
+    		{% endif %}
+    	</div>
+    {% endif %}
+{% else %}
+    <p>No pages available.</p>
+{% endif %}

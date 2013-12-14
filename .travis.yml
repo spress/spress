@@ -6,4 +6,4 @@ php:
 
 before_script:
   - composer self-update
-  - composer.phar install --dev
+  - composer install --dev --no-interaction

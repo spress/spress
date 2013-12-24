@@ -55,6 +55,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testParseDraft()
     {
         $result = $this->app->parse('./tests/fixtures/project', null, true);
+        $repository = $this->app['spress.config']->getRepository();
+        
+        $this->assertTrue(true, $repository->get('drafts'));
         
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
@@ -63,6 +66,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['total_pages']);
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
+    }
+    
+    public function testParseSafe()
+    {
+        $result = $this->app->parse('./tests/fixtures/project', null, null, true);
+        $repository = $this->app['spress.config']->getRepository();
+
+        $this->assertTrue(true, $repository->get('safe'));
     }
     
     /**

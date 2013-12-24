@@ -54,4 +54,23 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/With posts drafts active/', $output);
         $this->assertRegExp('/Total post/', $output);
     }
+    
+    public function testBuildCommandSafe()
+    {
+        $app = new Application();
+        $app->add(new BuildCommand());
+        
+        $command = $app->find('site:build');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            '--source' => './tests/fixtures/project',
+            '--safe' => true
+        ]);
+        
+        $output = $commandTester->getDisplay();
+        
+        $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Plugins disabled/', $output);
+    }
 }

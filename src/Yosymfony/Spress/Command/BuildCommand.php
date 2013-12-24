@@ -52,6 +52,7 @@ class BuildCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $timezone = $input->getOption('timezone');
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
         
@@ -59,12 +60,19 @@ class BuildCommand extends Command
         
         if($drafts)
         {
-            $output->writeln('<comment>With posts drafts active</comment>');
+            $output->writeln('<comment>With posts drafts active.</comment>');
+        }
+        
+        if($safe)
+        {
+            $output->writeln('<comment>Plugins disabled.</comment>');
         }
         
         $app = new Application();
+        
         $resultData = $app->parse(
-            $input->getOption('source'), 
+            $input->getOption('source'),
+            $timezone,
             $drafts,
             $safe
         );

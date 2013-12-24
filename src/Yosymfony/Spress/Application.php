@@ -26,7 +26,7 @@ use Yosymfony\Spress\Operation\NewOperation;
  */
 class Application extends \Silex\Application
 {
-    const VERSION = "0.2-alpha";
+    const VERSION = "1.0.0-rc.1";
     
     public function __construct()
     {
@@ -102,7 +102,7 @@ class Application extends \Silex\Application
      * @param string $localConfigPath Path of the local configuration
      * @param string $timezone Set the timezone
      * @param bool $drafts Include draft
-     * @param bool $safe
+     * @param bool $safe Plugins disabled
      * 
      * @return array Key-value result
      */
@@ -119,7 +119,7 @@ class Application extends \Silex\Application
         {
             $this['spress.config']->getRepository()->set('timezone', $timezone);
         }
-        
+
         if(null !== $safe && is_bool($safe))
         {
             $this['spress.config']->getRepository()->set('safe', $safe);

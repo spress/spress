@@ -77,8 +77,8 @@ class BuildCommand extends Command
             $safe
         );
         
-        $output->writeln(sprintf('Total post: %d', $resultData['total_post']));
-        $output->writeln(sprintf('Processed post: %d', $resultData['processed_post']));
+        $output->writeln(sprintf('Total posts: %d', $resultData['total_post']));
+        $output->writeln(sprintf('Processed posts: %d', $resultData['processed_post']));
         $output->writeln(sprintf('Drafts post: %d', $resultData['drafts_post']));
         $output->writeln(sprintf('Total pages: %d', $resultData['total_pages']));
         $output->writeln(sprintf('Processed pages: %d', $resultData['processed_pages']));

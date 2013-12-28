@@ -325,7 +325,6 @@ class ContentManager
         $result['site']['time'] = $this->time;
         $result['site']['categories'] = $this->categories;
         $result['site']['tags'] = $this->tags;
-        $result['site']['url'] = $repository->get('url') . $repository->get('baseurl');
 
         return $result;
     }

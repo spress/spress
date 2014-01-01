@@ -32,7 +32,7 @@ final class SpressEvents
      * The spress.before_convert is thrown before convert the content.
      * 
      * The event listener receiver an 
-     *  Yosymfony\Spress\Plugin\Event\BeforeConvertEvent instance.
+     *  Yosymfony\Spress\Plugin\Event\ConvertEvent instance.
      * 
      * @var string
      */
@@ -44,7 +44,7 @@ final class SpressEvents
      * dispatcher.
      * 
      * The event listener receiver an 
-     *  Yosymfony\Spress\Plugin\Event\AfterConvertEvent instance.
+     *  Yosymfony\Spress\Plugin\Event\ConvertEvent instance.
      * 
      * @var string
      */

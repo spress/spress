@@ -15,7 +15,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Yosymfony\Spress\ContentManager\ContentItemInterface;
 
 /**
- * Event base for events related to content
+ * Event base for events related with the content
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */

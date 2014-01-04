@@ -29,7 +29,7 @@ final class SpressEvents
     const SPRESS_START = 'spress.start';
     
     /**
-     * The spress.before_convert is thrown before convert the content.
+     * The spress.before_convert is thrown before convert the content of each page.
      * 
      * The event listener receiver an 
      *  Yosymfony\Spress\Plugin\Event\ConvertEvent instance.
@@ -39,7 +39,7 @@ final class SpressEvents
     const SPRESS_BEFORE_CONVERT = 'spress.before_convert';
     
     /**
-     * The spress.after_convert is thrown after convert the content.
+     * The spress.after_convert is thrown after convert the content of each page.
      * If the content don't have Front-matter this event never be
      * dispatcher.
      * 
@@ -51,7 +51,7 @@ final class SpressEvents
     const SPRESS_AFTER_CONVERT = 'spress.after_convert';
     
     /**
-     * The spress.after_convert_posts is thrown after convert all post.
+     * The spress.after_convert_posts is thrown after convert all posts.
      * 
      * The event listener receiver an 
      *  Yosymfony\Spress\Plugin\Event\AfterConvertPostsEvent instance.
@@ -61,7 +61,9 @@ final class SpressEvents
     const SPRESS_AFTER_CONVERT_POSTS = 'spress.after_convert_posts';
     
     /**
-     * The spress.before_render is thrown before render content.
+     * The spress.before_render is thrown before render the content of each page.
+     * If the content don't have Front-matter this event never be
+     * dispatcher.
      * 
      * The event listener receiver an 
      *  Yosymfony\Spress\Plugin\Event\RenderEvent instance.
@@ -71,7 +73,9 @@ final class SpressEvents
     const SPRESS_BEFORE_RENDER = 'spress.before_render';
     
     /**
-     * The spress.after_render is thrown after render content.
+     * The spress.after_render is thrown after render the content of each page.
+     * If the content don't have Front-matter this event never be
+     * dispatcher.
      * 
      * The event listener receiver an 
      *  Yosymfony\Spress\Plugin\Event\RenderEvent instance.
@@ -81,8 +85,8 @@ final class SpressEvents
     const SPRESS_AFTER_RENDER = 'spress.after_render';
     
     /**
-     * The spress.finish is thrown when project is generated. All files are
-     * saved in _site dir.
+     * The spress.finish is thrown when the site was generated. All files are
+     * saved in _site folder.
      * 
      * The event listener receiver an
      *  Yosymfony\Spress\Plugin\Event\FinishEvent instance.

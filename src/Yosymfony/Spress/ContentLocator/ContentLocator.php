@@ -393,14 +393,23 @@ class ContentLocator
     
     private function getSpecialDir()
     {
-        $excludesDir = array();
-        $excludesDir[] = $this->makePathRelative($this->getPostsDir(), $this->getSourceDir());
-        $excludesDir[] = $this->makePathRelative($this->getLayoutsDir(), $this->getSourceDir());
-        $excludesDir[] = $this->makePathRelative($this->getIncludesDir(), $this->getSourceDir());
-        $excludesDir[] = $this->makePathRelative($this->getDestinationDir(), $this->getSourceDir());
-        $excludesDir[] = $this->makePathRelative($this->getPluginDir(), $this->getSourceDir());
-        
-        return $excludesDir;
+        if (false == isset($this->specialDirs))
+        {
+            $this->specialDirs = [];
+            
+            $finder = new Finder();
+            $finder->in($this->getSourceDir())
+                ->directories()
+                ->path('/^_/')
+                ->depth('== 0');
+    
+            foreach($finder as $file)
+            {
+                $this->specialDirs[] = $file->getRelativePathname();
+            }
+        }
+
+        return $this->specialDirs;
     }
     
     private function createDestinationDirIfNotExists()

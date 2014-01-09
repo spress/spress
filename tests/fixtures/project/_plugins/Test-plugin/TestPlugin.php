@@ -1,5 +1,7 @@
 <?php
 
+namespace SpressPlugins\Test;
+
 use Symfony\Component\EventDispatcher\Event;
 use Yosymfony\Spress\Plugin\Plugin;
 use Yosymfony\Spress\Plugin\EventSubscriber;

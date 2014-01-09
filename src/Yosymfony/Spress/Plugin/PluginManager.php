@@ -14,6 +14,7 @@ namespace Yosymfony\Spress\Plugin;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Finder\SplFileInfo;
 use Composer\Autoload\ClassLoader;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 
@@ -24,6 +25,8 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
  */
 class PluginManager
 {
+    const VENDORS_DIR = "vendors";
+    
     private $contentLocator;
     private $loader;
     private $dispatcher;
@@ -52,7 +55,7 @@ class PluginManager
     {
         $this->eventsDispatched = [];
         
-        $this->registerClassLoader();
+        $this->updateClassLoader();
         
         $this->plugins = $this->getPlugins();
         
@@ -89,15 +92,21 @@ class PluginManager
             $finder = new Finder();
             $finder->files()
                 ->in($dir)
-                ->name('*.php');
+                ->exclude(self::VENDORS_DIR)
+                ->name('composer.json');
                 
             foreach($finder as $file)
             {
-                $className = $file->getBasename('.php');
+                $pluginConf = $this->getPluginConfigData($file);
                 
-                if($this->isValidClassName($className))
+                if($pluginConf->isValidPlugin())
                 {
-                    $result[] = new PluginItem(new $className);
+                    $className = $pluginConf->getSpressClass();
+       
+                    if($this->isValidClassName($className))
+                    {
+                        $result[] = new PluginItem(new $className);
+                    }
                 }
             }
         }
@@ -125,10 +134,31 @@ class PluginManager
         return $this->dispatcherShortcut;
     }
     
-    private function registerClassLoader()
+    private function updateClassLoader()
     {
-        $this->loader->add('', $this->contentLocator->getPluginDir());
-        $this->loader->register();
+        $baseDir = $this->contentLocator->getPluginDir();
+        $vendorDir = $baseDir . '/' . self::VENDORS_DIR;
+        $vendorComposer = $vendorDir . '/composer';
+        
+        if(false == file_exists($vendorDir))
+        {
+            return;
+        }
+
+        $map = require $vendorComposer . '/autoload_namespaces.php';
+        foreach ($map as $namespace => $path) {
+            $this->loader->set($namespace, $path);
+        }
+
+        $map = require $vendorComposer . '/autoload_psr4.php';
+        foreach ($map as $namespace => $path) {
+            $this->loader->setPsr4($namespace, $path);
+        }
+
+        $classMap = require $vendorComposer . '/autoload_classmap.php';
+        if ($classMap) {
+            $this->loader->addClassMap($classMap);
+        }
     }
     
     private function processPlugins()
@@ -159,7 +189,7 @@ class PluginManager
     private function isValidClassName($name)
     {
         $result = false;
-        
+
         if(class_exists($name))
         {
             $implements = class_implements($name);
@@ -171,5 +201,13 @@ class PluginManager
         }
         
         return $result;
+    }
+    
+    private function getPluginConfigData(SplFileInfo $item)
+    {
+        $json = $item->getContents();
+        $data = json_decode($json, true);
+        
+        return new PluginConfigData($data);
     }
 }

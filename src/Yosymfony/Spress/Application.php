@@ -71,9 +71,16 @@ class Application extends \Silex\Application
         $this['spress.cms.plugin'] = $this->share(function($app){
             return new PluginManager(
                 $app['spress.content_locator'],
-                new \Composer\Autoload\ClassLoader()
+                $app['spress.cms.plugin.classLoader']
             );
         });
+        
+        $this['spress.cms.plugin.classLoader'] = function()
+        {
+            $autoloaders = spl_autoload_functions();
+            
+            return $autoloaders[0][0];
+        };
         
         $this['spress.cms.renderizer'] = $this->share(function($app){
             return new Renderizer(

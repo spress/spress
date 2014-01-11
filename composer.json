@@ -19,6 +19,7 @@
         "silex/silex": "1.1.*@dev",
         "michelf/php-markdown": "1.4.*@dev",
         "yosymfony/config-serviceprovider": "1.0.*@dev",
+        "yosymfony/spress-theme-spresso": "1.0.*@dev",
         "php": ">=5.4"
     },
     "autoload": {

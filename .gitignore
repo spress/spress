@@ -1,4 +1,5 @@
 vendor/
+app/templates/
 tests/out/
 tests/fixtures/project/_site/
 composer.lock

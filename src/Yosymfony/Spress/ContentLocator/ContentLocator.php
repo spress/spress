@@ -383,14 +383,6 @@ class ContentLocator
         return $realPath;
     }
     
-    private function makePathRelative($path1, $path2, $normalize = true)
-    {
-        $fs = new Filesystem();
-        $result = $fs->makePathRelative($path1, $path2);
-        
-        return !$normalize ?: preg_replace('/\/$/', '', $result);
-    }
-    
     private function getSpecialDir()
     {
         if (false == isset($this->specialDirs))

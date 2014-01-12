@@ -61,6 +61,15 @@ class NewCommand extends Command
         $app = new Application();
         $app['spress.operation.new']->newSite($path, $template, $force, $completeScaffold);
         
-        $output->writeln(sprintf('<comment>New site created at %s</comment>', $path));
+        $output->writeln(sprintf('<comment>New site created at %s.</comment>', $path));
+        
+        if('./' == $path)
+        {
+            $output->writeln('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
+        }
+        else
+        {
+            $output->writeln(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
+        }    
     }
 }

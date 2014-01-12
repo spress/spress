@@ -79,6 +79,7 @@ class NewOperation
         
         $this->fs->mkdir(['_layouts', '_posts']);
         $this->fs->dumpFile('config.yml', '# Site configuration');
+        $this->fs->dumpFile('composer.json', $this->getContentComposerJsonFile());
         $this->fs->dumpFile('index.html', '');
         
         if(true === $completeScaffold)
@@ -140,5 +141,28 @@ class NewOperation
     private function getTemplatePath($templateName)
     {
         return $this->templatePath . '/' . $templateName;
+    }
+    
+    /**
+     * @return string
+     */
+    private function getContentComposerJsonFile()
+    {
+        $result = <<<eot
+{
+    "name": "vendor/your-theme-name",
+    "description": "The description for your theme",
+    "license": "MIT",
+    "type": "spress-theme",
+    "require": {
+            "yosymfony/spress-installer": ">=1.0,<2.0"
+        },
+    "extra": {
+        "spress_name": "your-theme-name"
+    }
+}
+eot;
+    
+    return $result;
     }
 }

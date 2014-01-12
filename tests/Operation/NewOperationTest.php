@@ -50,6 +50,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
         $operation->newSite($this->base, 'blank');
         
         $this->assertFileExists($this->base . '/config.yml');
+        $this->assertFileExists($this->base . '/composer.json');
         $this->assertFileExists($this->base . '/index.html');
         $this->assertFileExists($this->base . '/_posts');
         $this->assertFileExists($this->base . '/_layouts');
@@ -62,6 +63,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
         $operation->newSite($this->base, 'blank', true);
         
         $this->assertFileExists($this->base . '/config.yml');
+        $this->assertFileExists($this->base . '/composer.json');
         $this->assertFileExists($this->base . '/index.html');
         $this->assertFileExists($this->base . '/_posts');
         $this->assertFileExists($this->base . '/_layouts');
@@ -73,6 +75,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
         $operation->newSite($this->base, 'blank', false, true);
         
         $this->assertFileExists($this->base . '/config.yml');
+        $this->assertFileExists($this->base . '/composer.json');
         $this->assertFileExists($this->base . '/index.html');
         $this->assertFileExists($this->base . '/_posts');
         $this->assertFileExists($this->base . '/_layouts');

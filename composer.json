@@ -1,7 +1,7 @@
 {
     "name": "yosymfony/spress",
     "description": "Static site generator with blogs support",
-    "keywords": ["cms","blog","web","markdown","twig","silex"],
+    "keywords": ["cms","blog","web","markdown","twig","silex","html"],
     "license": "MIT",
     "authors": [
         {

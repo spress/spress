@@ -156,7 +156,10 @@ class NewOperation
     "type": "spress-theme",
     "require": {
             "yosymfony/spress-installer": ">=1.0,<2.0"
-        },
+    },
+    "config": {
+        "vendor-dir": "_plugins/vendors"
+    },
     "extra": {
         "spress_name": "your-theme-name"
     }

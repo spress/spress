@@ -313,8 +313,6 @@ class ContentManager
      */
     private function getPayload()
     {
-        $repository = $this->configuration->getRepository();
-        
         $result = [];
         $result['spress']  = [];
         $result['spress']['version'] = $this->configuration->getAppVersion();

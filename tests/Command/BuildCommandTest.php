@@ -12,11 +12,18 @@
 namespace Yosymfony\Spress\Tests;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Tester\CommandTester;
 use Yosymfony\Spress\Command\BuildCommand;
 
 class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        $fs = new Filesystem();
+        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+    }
+    
     public function testBuildCommand()
     {
         $app = new Application();

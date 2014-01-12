@@ -11,6 +11,7 @@
  
 namespace Yosymfony\Spress\Tests;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Application;
 use Yosymfony\Spress\Plugin\Event\SpressEvents;
 
@@ -27,6 +28,12 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->app['spress.config']->loadLocal('./tests/fixtures/project');
         $this->cms = $this->app['spress.cms'];
         $this->destination = $this->app['spress.content_locator']->getDestinationDir();
+    }
+    
+    public function tearDown()
+    {
+        $fs = new Filesystem();
+        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
     }
     
     public function testProcessSite()

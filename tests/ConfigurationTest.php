@@ -11,6 +11,7 @@
  
 namespace Yosymfony\Spress\Tests;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Application;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
@@ -23,6 +24,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->config = $this->app['spress.config'];
         $this->config->loadLocal('./tests/fixtures/project');
+    }
+    
+    public function tearDown()
+    {
+        $fs = new Filesystem();
+        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
     }
     
     public function testConfiguration()

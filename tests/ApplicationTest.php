@@ -11,6 +11,7 @@
  
 namespace Yosymfony\Spress\Tests;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Application;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +21,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
+    }
+    
+    public function tearDown()
+    {
+        $fs = new Filesystem();
+        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
     }
     
     public function testParse()

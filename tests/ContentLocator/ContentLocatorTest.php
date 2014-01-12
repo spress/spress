@@ -31,6 +31,12 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $this->contentLocator->setConvertersExtension($this->config->getRepository()->get('markdown_ext'));
     }
     
+    public function tearDown()
+    {
+        $fs = new Filesystem();
+        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+    }
+    
     public function testGetPosts()
     {
         $posts = $this->contentLocator->getPosts();

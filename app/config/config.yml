@@ -7,7 +7,7 @@ includes: ./_includes
 layouts: ./_layouts
 plugins: ./_plugins
 include: [.htaccess]
-exclude: []
+exclude: [composer.json]
 markdown_ext: [markdown,mkd,mkdn,md]
 processable_ext: [html,htm,xml,js,css]
 permalink: pretty

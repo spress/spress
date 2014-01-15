@@ -5,7 +5,11 @@ date_default_timezone_set('UTC');
 
 set_time_limit(0);
 
-include_once __DIR__ . '/../vendor/autoload.php';
+if(!$classloader = @include_once __DIR__ . '/../vendor/autoload.php')
+{
+    die("You must set up the Spress dependencies with Composer.\n"
+    ."Run the following command at the Spress root folder:\n\n composer update\n\n");
+}
 
 use Symfony\Component\Console\Application;
 

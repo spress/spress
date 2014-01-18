@@ -18,6 +18,8 @@
         "symfony/event-dispatcher": "2.4.*@dev",
         "silex/silex": "1.1.*@dev",
         "michelf/php-markdown": "1.4.*@dev",
+        "composer/composer": "1.*@dev",
+        "dflydev/embedded-composer-core": "1.0.*@dev",
         "yosymfony/config-serviceprovider": "1.0.*@dev",
         "yosymfony/spress-theme-spresso": "1.0.*@dev",
         "php": ">=5.4"

@@ -29,9 +29,7 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetPlugins()
     {
         $plugins = $this->pluginManager->getPlugins();
-        
         $this->assertTrue(is_array($plugins));
-        $this->assertInstanceOf('Yosymfony\Spress\Plugin\PluginItem', $plugins[0]);
     }
     
     public function testGetHistoryEventsDispatched()

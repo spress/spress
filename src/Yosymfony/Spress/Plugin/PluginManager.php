@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\SplFileInfo;
 use Composer\Autoload\ClassLoader;
+use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 
 /**
@@ -26,9 +27,10 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
 class PluginManager
 {
     const VENDORS_DIR = "vendors";
+    const COMPOSER_FILENAME = "composer.json";
     
     private $contentLocator;
-    private $loader;
+    private $classLoader;
     private $dispatcher;
     private $plugins = [];
     private $eventsDispatched = [];
@@ -43,7 +45,7 @@ class PluginManager
     public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader)
     {
         $this->contentLocator = $contentLocator;
-        $this->loader = $classLoader;
+        $this->classLoader = $classLoader;
         $this->dispatcher = new EventDispatcher();
         $this->dispatcherShortcut = new DispatcherShortcut($this);
     }
@@ -93,16 +95,16 @@ class PluginManager
             $finder->files()
                 ->in($dir)
                 ->exclude(self::VENDORS_DIR)
-                ->name('composer.json');
+                ->name(self::COMPOSER_FILENAME);
                 
             foreach($finder as $file)
             {
                 $pluginConf = $this->getPluginConfigData($file);
-                
+
                 if($pluginConf->isValidPlugin())
                 {
                     $className = $pluginConf->getSpressClass();
-       
+
                     if($this->isValidClassName($className))
                     {
                         $result[] = new PluginItem(new $className);
@@ -138,27 +140,23 @@ class PluginManager
     {
         $baseDir = $this->contentLocator->getPluginDir();
         $vendorDir = $baseDir . '/' . self::VENDORS_DIR;
-        $vendorComposer = $vendorDir . '/composer';
         
         if(false == file_exists($vendorDir))
         {
             return;
         }
-
-        $map = require $vendorComposer . '/autoload_namespaces.php';
-        foreach ($map as $namespace => $path) {
-            $this->loader->set($namespace, $path);
-        }
-
-        $map = require $vendorComposer . '/autoload_psr4.php';
-        foreach ($map as $namespace => $path) {
-            $this->loader->setPsr4($namespace, $path);
-        }
-
-        $classMap = require $vendorComposer . '/autoload_classmap.php';
-        if ($classMap) {
-            $this->loader->addClassMap($classMap);
-        }
+        
+        $embeddedComposerBuilder = new EmbeddedComposerBuilder(
+            $this->classLoader,
+            $this->contentLocator->getSourceDir()
+        );
+        
+        $embeddedComposer = $embeddedComposerBuilder
+            ->setComposerFilename(self::COMPOSER_FILENAME)
+            ->setVendorDirectory($vendorDir)
+            ->build();
+        
+        $embeddedComposer->processAdditionalAutoloads();
     }
     
     private function processPlugins()
@@ -194,7 +192,7 @@ class PluginManager
         {
             $implements = class_implements($name);
             
-            if(isset($implements['Yosymfony\Spress\Plugin\PluginInterface']))
+            if(isset($implements['Yosymfony\\Spress\\Plugin\\PluginInterface']))
             {
                 $result = true;
             }

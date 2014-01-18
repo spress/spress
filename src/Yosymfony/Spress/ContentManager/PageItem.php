@@ -177,7 +177,7 @@ class PageItem implements ContentItemInterface
     }
     
     /**
-     * @return @array
+     * @return array
      */
     private function getUrlPlaceholders()
     {

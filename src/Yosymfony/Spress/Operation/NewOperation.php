@@ -17,7 +17,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * Create a new site.
  * 
- * @auhor Victor Puertas <vpgugr@gmail.com>
+ * @author Victor Puertas <vpgugr@gmail.com>
  */
 class NewOperation
 {

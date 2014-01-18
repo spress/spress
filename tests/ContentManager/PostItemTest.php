@@ -44,14 +44,14 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('New Post Example', $post->getTitle());
         $this->assertEquals('/category-1/category-2/2020/01/01/new-post-example/', $post->getUrl());
         $this->assertTrue($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentManager\\Frontmatter', $post->getFrontmatter());
         $this->assertEquals('default', $post->getFrontmatter()->getFrontmatter()->get('layout'));
         $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('New Post Example', $post->getTitle());
         $this->assertContains('category 1', $post->getCategories());
         $this->assertContains('tag2', $post->getTags());
         $this->assertFalse($post->isDraft());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $post->getFileItem());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $post->getFileItem());
         $this->assertEquals('2020-01-01', $post->getDate()->format('Y-m-d'));
         
         $payload = $post->getPayload();
@@ -133,14 +133,14 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('best book', $post->getTitle());
         $this->assertEquals('/books/2013/08/11/best-book/', $post->getUrl());
         $this->assertTrue($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentManager\\Frontmatter', $post->getFrontmatter());
         $this->assertEquals('default', $post->getFrontmatter()->getFrontmatter()->get('layout'));
         $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('best book', $post->getTitle());
         $this->assertContains('books', $post->getCategories());
         $this->assertCount(0, $post->getTags());
         $this->assertFalse($post->isDraft());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $post->getFileItem());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $post->getFileItem());
         $this->assertEquals('2013-08-11', $post->getDate()->format('Y-m-d'));
         
         $payload = $post->getPayload();
@@ -182,12 +182,12 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('post example 2', $post->getTitle());
         $this->assertEquals('/2013/08/12/post-example-2/', $post->getUrl());
         $this->assertFalse($post->hasFrontmatter());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentManager\Frontmatter', $post->getFrontmatter());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentManager\\Frontmatter', $post->getFrontmatter());
         $this->assertEquals('Test content', $post->getContent());
         $this->assertEquals('post example 2', $post->getTitle());
         $this->assertCount(0, $post->getCategories());
         $this->assertCount(0, $post->getTags());
-        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $post->getFileItem());
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $post->getFileItem());
         $this->assertEquals('2013-08-12', $post->getDate()->format('Y-m-d'));
         
         $payload = $post->getPayload();

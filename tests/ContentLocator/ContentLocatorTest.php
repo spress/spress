@@ -42,7 +42,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $posts = $this->contentLocator->getPosts();
         
         $this->assertCount(4, $posts);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $posts);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $posts);
     }
     
     public function testGetPostsWithEmptyMarkdownExtesion()
@@ -58,7 +58,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $pages = $this->contentLocator->getPages();
 
         $this->assertCount(6, $pages);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $pages);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $pages);
     }
     
     public function testGetPagesWithEmptyProcessableExtesion()
@@ -156,7 +156,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $fileItem = $this->contentLocator->getItem('../extra_pages/extra-page1.html');
         
-        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $fileItem);
+        $this->assertInstanceOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $fileItem);
         $this->assertEquals($fileItem->getRelativePath(), '');
         $this->assertEquals($fileItem->getRelativePathFilename(), 'extra-page1.html');
     }
@@ -173,7 +173,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $layouts = $this->contentLocator->getLayouts();
         
         $this->assertCount(1, $layouts);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\ContentLocator\FileItem', $layouts);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\ContentLocator\\FileItem', $layouts);
     }
     
     public function testGetSourceDir()

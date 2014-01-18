@@ -34,7 +34,7 @@ class EnviromentEventTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigRepository()
     {
         $this->assertInstanceOf(
-            'Yosymfony\Silex\ConfigServiceProvider\ConfigRepository',
+            'Yosymfony\\Silex\\ConfigServiceProvider\\ConfigRepository',
             $this->event->getConfigRepository());
     }
     

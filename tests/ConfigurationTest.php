@@ -34,7 +34,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     
     public function testConfiguration()
     {   
-        $this->assertInstanceOf('Yosymfony\Spress\Configuration', $this->app['spress.config']);
+        $this->assertInstanceOf('Yosymfony\\Spress\\Configuration', $this->app['spress.config']);
     }
     
     public function testLoadConfigurations()
@@ -73,7 +73,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $repository = $this->config->createBlankRepository();
         
-        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $repository);
+        $this->assertInstanceOf('Yosymfony\\Silex\\ConfigServiceProvider\\ConfigRepository', $repository);
         $this->assertCount(0, $repository);
     }
     

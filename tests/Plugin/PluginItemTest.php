@@ -20,10 +20,10 @@ class PluginItemTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->pluginMock = $this->getMockBuilder('Yosymfony\Spress\Plugin\Plugin')
+        $this->pluginMock = $this->getMockBuilder('Yosymfony\\Spress\\Plugin\\Plugin')
             ->getMock();
         
-        $this->pluginMockNoMetas = $this->getMockBuilder('Yosymfony\Spress\Plugin\Plugin')
+        $this->pluginMockNoMetas = $this->getMockBuilder('Yosymfony\\Spress\\Plugin\\Plugin')
             ->getMock();
         
         $this->pluginMock->expects($this->any())
@@ -38,7 +38,7 @@ class PluginItemTest extends \PHPUnit_Framework_TestCase
     {
         $pluginItem = new PluginItem($this->pluginMock);
         
-        $this->assertInstanceOf('Yosymfony\Spress\Plugin\PluginInterface', $pluginItem->getPlugin());
+        $this->assertInstanceOf('Yosymfony\\Spress\\Plugin\\PluginInterface', $pluginItem->getPlugin());
     }
     
     public function testGetName()

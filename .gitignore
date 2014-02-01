@@ -1,4 +1,5 @@
 vendor/
+build/
 app/templates/
 tests/out/
 tests/fixtures/project/_site/

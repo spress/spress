@@ -17,6 +17,7 @@ use Yosymfony\Spress\ContentManager\ConverterInterface;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
+use Yosymfony\Spress\Plugin\Api\TemplateManager;
 
 class EnviromentEvent extends Event
 {
@@ -45,6 +46,16 @@ class EnviromentEvent extends Event
     public function getConfigRepository()
     {
         return $this->configuration->getRepository();
+    }
+    
+    /**
+     * Get the template TemplateManager
+     * 
+     * @return Yosymfony\Spress\Plugin\Api\TemplateManager
+     */
+    public function getTemplateManager()
+    {
+        return new TemplateManager($this->renderizer);
     }
     
     /**

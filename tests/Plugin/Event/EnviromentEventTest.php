@@ -38,6 +38,13 @@ class EnviromentEventTest extends \PHPUnit_Framework_TestCase
             $this->event->getConfigRepository());
     }
     
+    public function testTemplateManager()
+    {
+        $this->assertInstanceOf(
+            'Yosymfony\\Spress\\Plugin\\Api\\TemplateManager',
+            $this->event->getTemplateManager());
+    }
+    
     public function testGetSourceDir()
     { 
         $this->assertTrue(strlen($this->event->getSourceDir()) > 0);

@@ -3,11 +3,11 @@
     "description": "Static site generator with blogs support",
     "keywords": ["cms","blog","web","markdown","twig","silex","html"],
     "license": "MIT",
+    "homepage": "http://spress.yosymfony.com",
     "authors": [
         {
             "name": "Victor Puertas",
-            "email": "vpgugr@gmail.com",
-            "homepage": "http://yosymfony.com"
+            "email": "vpgugr@gmail.com"
         }
     ],
     "require": {
@@ -24,6 +24,9 @@
         "yosymfony/spress-theme-spresso": "1.0.*@dev",
         "php": ">=5.4"
     },
+    "bin": [
+        "bin/spress"
+    ],
     "autoload": {
         "psr-0": {
             "Yosymfony\\Spress": "src/"

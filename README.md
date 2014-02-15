@@ -12,8 +12,9 @@ License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE)
 Require
 -------
 
-* PHP >= 5.4
-* [Composer](http://getcomposer.org/)
+* Linux, Unix or Mac OS X.
+* PHP >= 5.4.
+* [Composer](http://getcomposer.org/).
 
 Getting Started
 --------------

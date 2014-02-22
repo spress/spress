@@ -147,7 +147,7 @@ class Application extends \Silex\Application
         }
         else
         {
-            return realpath($spressPath . '/../spress-themes');
+            return realpath($spressPath . '/../spress-templates');
         }
     }
 }

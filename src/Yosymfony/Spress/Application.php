@@ -33,13 +33,14 @@ class Application extends \Silex\Application
         parent::__construct();
         
         $spressPath = realpath(dirname(__FILE__) . '/../../../');
+        $templatesPath = $this->getTemplatesPath($spressPath);
         
         // Paths and filenames standard
         $this['spress.paths'] = array(
             'root'          => $spressPath,
             'config'        => $spressPath  . '/app/config',
             'config.file'   => 'config.yml',
-            'templates'     => $spressPath  . '/app/templates',
+            'templates'     => $templatesPath,
             'web'           => $spressPath  . '/web',
             'web.index'     => $spressPath  . '/web/index.php',
         );
@@ -133,5 +134,20 @@ class Application extends \Silex\Application
         }
         
         return $this['spress.cms']->processSite();
+    }
+    
+    /**
+     * @return string
+     */
+    private function getTemplatesPath($spressPath)
+    {
+        if(file_exists($spressPath . '/app/templates/'))
+        {
+            return $spressPath . '/app/templates';
+        }
+        else
+        {
+            return realpath($spressPath . '/../spress-themes');
+        }
     }
 }

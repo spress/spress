@@ -33,7 +33,7 @@ class TemplateManager
      * @param string $content The template
      * @param array $payload Data available in the template
      */
-    public function render($content, array $payload)
+    public function render($content, array $payload = [])
     {
         return $this->render->renderString($content, $payload);
     }

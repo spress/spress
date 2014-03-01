@@ -389,7 +389,7 @@ class ContentManager
             }
             else
             {
-                return $this->getPageRelativeUrl($page) . 'index.html';  
+                return $this->getPageRelativeUrl($page) . '/index.html';  
             }
         }
         return false;

@@ -75,7 +75,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $post = new PostItem($fileItem, $this->configuration);
         $post->setContent('Test content');
         
-        $this->assertEquals('/category-1/category-2/2020/1/new-post-example.html/', $post->getUrl());
+        $this->assertEquals('/category-1/category-2/2020/1/new-post-example.html', $post->getUrl());
         
         $payload = $post->getPayload();
         
@@ -92,7 +92,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $post = new PostItem($fileItem, $this->configuration);
         $post->setContent('Test content');
         
-        $this->assertEquals('/2020/01/01/new-post-example.html/', $post->getUrl());
+        $this->assertEquals('/2020/01/01/new-post-example.html', $post->getUrl());
         
         $payload = $post->getPayload();
         
@@ -105,7 +105,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         $path = $this->postDir . '/2013-08-12-post-example-1.md';
         $fileInfo = new SplFileInfo($path, '', '2013-08-12-post-example-1.md');
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
-        $this->configuration->getRepository()->set('permalink', '/blog/:year-:month-:day/:title');
+        $this->configuration->getRepository()->set('permalink', '/blog/:year-:month-:day/:title/');
         $post = new PostItem($fileItem, $this->configuration);
         $post->setContent('Test content');
         $post->setOutExtension('html');

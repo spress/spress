@@ -173,6 +173,7 @@ class Paginator
             {
                 $this->currentPage--;
                 $this->pageChanged = false;
+                
                 return false;
             }
         }

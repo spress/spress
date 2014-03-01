@@ -165,11 +165,11 @@ class PageItem implements ContentItemInterface
         {
             if('index' == $filename && 'html' == $extension)
             {
-                $template = '/:path';
+                $template = '/:path/';
             }
             else if('html' == $extension)
             {
-                $template = '/:path/:basename';
+                $template = '/:path/:basename/';
             }
         }
         

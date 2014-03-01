@@ -55,6 +55,7 @@ class UrlGenerator
     private function sanitize($url)
     {
         $count = 0;
+        $urlEnd = '/\.[a-z0-9#\?&\$-_~:/]+$/i';
         $result = preg_replace('/\/\/+/','/', $url);
         $result = str_replace(':/', '://', $result, $count);
         
@@ -66,11 +67,6 @@ class UrlGenerator
         if(false !== strpos($result, ' '))
         {
             throw new \UnexpectedValueException(sprintf('Bad URL "%s". Contain white space/s', $result));
-        }
-        
-        if(0 === preg_match('/\/$/', $result))
-        {
-            $result .= '/';
         }
         
         return $result;

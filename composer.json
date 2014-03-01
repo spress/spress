@@ -31,5 +31,10 @@
         "psr-0": {
             "Yosymfony\\Spress": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }

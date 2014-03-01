@@ -18,7 +18,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlTemplate()
     {
         $generator = new UrlGenerator();
-        $template = '/:categories/:title';
+        $template = '/:categories/:title/';
         $placeholders = [
             ':categories' => 'tech/news',
             ':title' => 'new-gadget',
@@ -32,7 +32,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new UrlGenerator();
         $template = 'http://my-site.com/blog';
         
-        $this->assertEquals('http://my-site.com/blog/', $generator->getUrl($template));
+        $this->assertEquals('http://my-site.com/blog', $generator->getUrl($template));
     }
     
     /**

@@ -55,7 +55,6 @@ class UrlGenerator
     private function sanitize($url)
     {
         $count = 0;
-        $urlEnd = '/\.[a-z0-9#\?&\$-_~:/]+$/i';
         $result = preg_replace('/\/\/+/','/', $url);
         $result = str_replace(':/', '://', $result, $count);
         

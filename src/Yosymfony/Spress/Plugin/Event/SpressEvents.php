@@ -85,6 +85,32 @@ final class SpressEvents
     const SPRESS_AFTER_RENDER = 'spress.after_render';
     
     /**
+     * The spress.before_render_pagination is thrown before render the content of each item
+     * in pagination phase.
+     * If the content don't have Front-matter this event never be
+     * dispatcher.
+     * 
+     * The event listener receiver an 
+     *  Yosymfony\Spress\Plugin\Event\RenderEvent instance.
+     * 
+     * @var string
+     */
+    const SPRESS_BEFORE_RENDER_PAGINATION = 'spress.before_render_pagination';
+    
+    /**
+     * The spress.after_render_pagination is thrown after render the content of each item
+     * in pagination phase.
+     * If the content don't have Front-matter this event never be
+     * dispatcher.
+     * 
+     * The event listener receiver an 
+     *  Yosymfony\Spress\Plugin\Event\RenderEvent instance.
+     * 
+     * @var string
+     */
+    const SPRESS_AFTER_RENDER_PAGINATION = 'spress.after_render_pagination';
+    
+    /**
      * The spress.finish is thrown when the site was generated. All files are
      * saved in _site folder.
      * 

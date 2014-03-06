@@ -307,17 +307,14 @@ class ContentManager
 
                 foreach($payload['paginator']['posts'] as $index => $postPage)
                 {
-                    $postId = $postPage['id'];
-                    $item = $this->postItems[$postId];
-                    
-                    $event = $this->events->dispatchBeforeRenderPagination($this->renderizer, $payload, $item);
                     $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString(
                         $postPage['content'],
-                        $event->getPayload());
-                    $this->events->dispatchAfterRenderPagination($this->renderizer, $payload, $item);
+                        $payload);
                 }
                 
-                $this->renderizer->renderItem($paginatorItemTemplate, $payload);
+                $event = $this->events->dispatchBeforeRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
+                $this->renderizer->renderItem($paginatorItemTemplate, $event->getPayload());
+                $this->events->dispatchAfterRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
 
                 $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
                 $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);

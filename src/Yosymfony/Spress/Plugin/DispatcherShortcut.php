@@ -85,6 +85,20 @@ class DispatcherShortcut
         return $this->pm->dispatchEvent(Event\SpressEvents::SPRESS_AFTER_RENDER, $event);
     }
     
+    public function dispatchBeforeRenderPagination(Renderizer $render, array $payload, ContentItemInterface $item)
+    {
+        $event = new Event\RenderEvent($render, $payload, $item, true);
+        
+        return $this->pm->dispatchEvent(Event\SpressEvents::SPRESS_BEFORE_RENDER_PAGINATION, $event);
+    }
+    
+    public function dispatchAfterRenderPagination(Renderizer $render, array $payload, ContentItemInterface $item)
+    {
+        $event = new Event\RenderEvent($render, $payload, $item, true);
+        
+        return $this->pm->dispatchEvent(Event\SpressEvents::SPRESS_AFTER_RENDER_PAGINATION, $event);
+    }
+    
     public function dispatchFinish(array $result)
     {
         $event = new Event\FinishEvent($result);

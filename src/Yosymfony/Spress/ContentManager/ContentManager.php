@@ -76,6 +76,7 @@ class ContentManager
         $this->processPost();
         $this->renderPages();
         $this->renderPosts();
+        $this->renderPostsPagination();
         $this->processOthers();
         $this->finish();
         
@@ -260,18 +261,11 @@ class ContentManager
         $this->sortPost();
         
         $payload = $this->getPayload();
-        $paginator = new Paginator($this->posts, $this->configuration->getRepository()->get('paginate'));
-        $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
-        
+
         foreach($this->posts as $key => $post)
         {
             $item = $this->postItems[$key];
             $payload['page'] = $post;
-            
-            if($paginator->getItemsPerPage() > 0)
-            {
-                $this->renderPagination($payload, $paginator, $fileItemTemplate);
-            }
             
             $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item, true);
             $this->renderizer->renderItem($item, $event->getPayload());
@@ -281,23 +275,46 @@ class ContentManager
         }
     }
     
+    private function renderPostsPagination()
+    {
+        $paginator = new Paginator($this->posts, $this->configuration->getRepository()->get('paginate'));
+        
+        if(0 == $paginator->getItemsPerPage())
+        {
+           return;
+        }
+        
+        $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
+        $payload = $this->getPayload();
+        
+        foreach($this->posts as $key => $post)
+        {
+            $payload['page'] = $post;
+            $this->renderPagination($payload, $paginator, $fileItemTemplate);
+        }
+    }
+    
     private function renderPagination(array $payload, Paginator $paginator, FileItem $template)
     {
-        $payload['paginator'] = $this->getPaginatorPayload($paginator);
-
-        foreach($payload['paginator']['posts'] as $index => $postPage)
-        {
-            $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString($postPage['content'], $payload);
-        }
-
         if($template)
         {
             $paginatorItemTemplate = new PageItem($template, $this->configuration);
-            $payload['page'] = $paginatorItemTemplate->getPayload();
             
             if($paginator->pageChanged() && $paginatorItemTemplate)
             {
-                $this->renderizer->renderItem($paginatorItemTemplate, $payload);
+                $payload['page'] = $paginatorItemTemplate->getPayload();
+                $payload['paginator'] = $this->getPaginatorPayload($paginator);
+
+                foreach($payload['paginator']['posts'] as $index => $postPage)
+                {
+                    $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString(
+                        $postPage['content'],
+                        $payload);
+                }
+                
+                $event = $this->events->dispatchBeforeRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
+                $this->renderizer->renderItem($paginatorItemTemplate, $event->getPayload());
+                $this->events->dispatchAfterRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
 
                 $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
                 $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);

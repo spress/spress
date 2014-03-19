@@ -54,13 +54,6 @@ interface ContentItemInterface
     public function setContent($content);
     
     /**
-     * Get the destination (transformed) content.
-     * 
-     * return string
-     */
-    //public function getDestinationContent();
-    
-    /**
      * Set out extension
      * 
      * @param string $extension

@@ -40,18 +40,62 @@ interface ContentItemInterface
     public function hasFrontmatter();
     
     /**
-     * Get content without Front-matter
+     * Get original content without Front-matter
      * 
      * @return string
      */
-    public function getContent();
+    public function getPreConverterContent();
     
     /**
-     * Set content
+     * Set the original content
      * 
      * @param string $content
      */
-    public function setContent($content);
+    public function setPreConverterContent($content);
+    
+    /**
+     * Get the content after converter applied
+     * 
+     * @return string
+     */
+    public function getPostConverterContent();
+    
+    /**
+     * Set the content with the converter applied.
+     * In this phase Twig tags don't have been resolved.
+     * 
+     * @param string $content
+     */
+    public function setPostConverterContent($content);
+    
+    /**
+     * Get the content without layout.
+     * The Twig tags of the content have been resolved.
+     * 
+     * @return string
+     */
+    public function getPreLayoutContent();
+    
+    /**
+     * Set the content with the the Twig tag resolved
+     * 
+     * @param string $content
+     */
+    public function setPreLayoutContent($content);
+    
+    /**
+     * Get content with the layout applied
+     * 
+     * @return string
+     */
+    public function getPostLayoutContent();
+    
+    /**
+     * Set the content with the layout applied
+     * 
+     * @param string $content
+     */
+    public function setPostLayoutContent($content);
     
     /**
      * Set out extension

@@ -36,10 +36,16 @@ class PageItemTest extends \PHPUnit_Framework_TestCase
         $fileInfo = new SplFileInfo($path, 'projects', 'projects/index.md');
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_PAGE);
         $item = new PageItem($fileItem, $this->configuration);
+        $item->setPostConverterContent('Test post-converter');
+        $item->setPreLayoutContent('Test pre-layout');
+        $item->setPostLayoutContent('Test post-layout');
         $item->setOutExtension('html');
         
         $this->assertEquals('projects-index-md', $item->getId());
         $this->assertEquals('/projects/', $item->getUrl());
+        $this->assertEquals('Test post-converter', $item->getPostConverterContent());
+        $this->assertEquals('Test pre-layout', $item->getPreLayoutContent());
+        $this->assertEquals('Test post-layout', $item->getPostLayoutContent());
         $this->assertTrue($item->hasFrontmatter());
         
         $payload = $item->getPayload();

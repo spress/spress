@@ -72,10 +72,10 @@ class ContentManager
         $this->reset();
         $this->cleanup();
         $this->processExtensible();
-        $this->processPages();
         $this->processPost();
-        $this->renderPages();
+        $this->processPages();
         $this->renderPosts();
+        $this->renderPages();
         $this->renderPostsPagination();
         $this->processOthers();
         $this->finish();
@@ -209,7 +209,7 @@ class ContentManager
                         $this->categories[$category] = [];
                     }
                     
-                    $this->categories[$category][] = $payload;
+                    $this->categories[$category][$postItem->getId()] = $payload;
                 }
                 
                 foreach($postItem->getTags() as $tag)
@@ -219,7 +219,7 @@ class ContentManager
                         $this->tags[$tag] = [];
                     }
                     
-                    $this->tags[$tag][] = $payload;
+                    $this->tags[$tag][$postItem->getId()] = $payload;
                 }
                 
                 $this->dataResult['processed_post']++;
@@ -245,6 +245,7 @@ class ContentManager
          
             $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item);
             $this->renderizer->renderItem($item, $event->getPayload());
+            $payload['page']['content'] = $item->getPreLayoutContent();
             $this->events->dispatchAfterRender($this->renderizer, $payload, $item);
             
             $this->saveItem($item);
@@ -262,13 +263,16 @@ class ContentManager
         
         $payload = $this->getPayload();
 
-        foreach($this->posts as $key => $post)
+        foreach($this->posts as $id => $post)
         {
-            $item = $this->postItems[$key];
+            $item = $this->postItems[$id];
             $payload['page'] = $post;
             
             $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item, true);
             $this->renderizer->renderItem($item, $event->getPayload());
+            $this->posts[$id]['content'] = $item->getPreLayoutContent();
+            $payload['page']['content'] = $item->getPreLayoutContent();
+            $this->updateContentCategoriesAndTags($item);
             $this->events->dispatchAfterRender($this->renderizer, $payload, $item, true);
             
             $this->saveItem($item);
@@ -278,7 +282,7 @@ class ContentManager
     private function renderPostsPagination()
     {
         $paginator = new Paginator($this->posts, $this->configuration->getRepository()->get('paginate'));
-        
+
         if(0 == $paginator->getItemsPerPage())
         {
            return;
@@ -287,9 +291,8 @@ class ContentManager
         $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
         $payload = $this->getPayload();
         
-        foreach($this->posts as $key => $post)
+        foreach($this->posts as $post)
         {
-            $payload['page'] = $post;
             $this->renderPagination($payload, $paginator, $fileItemTemplate);
         }
     }
@@ -299,18 +302,12 @@ class ContentManager
         if($template)
         {
             $paginatorItemTemplate = new PageItem($template, $this->configuration);
+            $paginatorItemTemplate->setPostConverterContent($paginatorItemTemplate->getPreConverterContent());
             
             if($paginator->pageChanged() && $paginatorItemTemplate)
             {
                 $payload['page'] = $paginatorItemTemplate->getPayload();
                 $payload['paginator'] = $this->getPaginatorPayload($paginator);
-
-                foreach($payload['paginator']['posts'] as $index => $postPage)
-                {
-                    $payload['paginator']['posts'][$index]['content'] = $this->renderizer->renderString(
-                        $postPage['content'],
-                        $payload);
-                }
                 
                 $event = $this->events->dispatchBeforeRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
                 $this->renderizer->renderItem($paginatorItemTemplate, $event->getPayload());
@@ -374,6 +371,19 @@ class ContentManager
 
             return ($dateA < $dateB) ? 1 : -1;
         });
+    }
+    
+    private function updateContentCategoriesAndTags(ContentItemInterface $item)
+    {
+        foreach($item->getCategories() as $category)
+        {
+            $this->categories[$category][$item->getId()]['content'] = $item->getPreLayoutContent();
+        }
+        
+        foreach($item->getTags() as $tag)
+        {
+            $this->tags[$tag][$item->getId()]['content'] = $item->getPreLayoutContent();
+        }
     }
 
     /**

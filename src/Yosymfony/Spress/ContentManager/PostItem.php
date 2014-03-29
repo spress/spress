@@ -18,6 +18,10 @@ use Yosymfony\Spress\Exception\FrontmatterValueException;
 class PostItem implements ContentItemInterface
 {
     private $fileItem;
+    private $preConverterContent;
+    private $postConverterContent;
+    private $preLayoutContent;
+    private $postLayoutContent;
     private $configuration;
     private $frontmatter;
     private $title;
@@ -40,28 +44,76 @@ class PostItem implements ContentItemInterface
         $this->fileItem = $fileItem;
         $this->configuration = $configuration;
         $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
-        $this->setContent($this->frontmatter->getContentNotFrontmatter());
+        $this->setPreConverterContent($this->frontmatter->getContentNotFrontmatter());
         $this->extractDataFromFilename();
         $this->setUpDestinationPath();
     }
     
     /**
-     * Get content without metadate like Front-matter
-     * 
-     * @return string
+     * @inheritDoc
      */
-    public function getContent()
+    public function getPreConverterContent()
     {
-        return $this->fileItem->getDestinationContent();
+        return $this->preConverterContent;
     }
     
     /**
-     * Set content
-     * 
-     * @param string $content
+     * @inheritDoc
      */
-    public function setContent($content)
+    public function setPreConverterContent($content)
     {
+        $this->preConverterContent = $content;
+        $this->fileItem->setDestinationContent($content);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getPostConverterContent()
+    {
+        return $this->postConverterContent;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function setPostConverterContent($content)
+    {
+        $this->postConverterContent = $content;
+        $this->fileItem->setDestinationContent($content);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getPreLayoutContent()
+    {
+        return $this->preLayoutContent;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function setPreLayoutContent($content)
+    {
+        $this->preLayoutContent = $content;
+        $this->fileItem->setDestinationContent($content);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getPostLayoutContent()
+    {
+        return $this->postLayoutContent;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function setPostLayoutContent($content)
+    {
+        $this->postLayoutContent = $content;
         $this->fileItem->setDestinationContent($content);
     }
     
@@ -124,7 +176,8 @@ class PostItem implements ContentItemInterface
     }
     
     /**
-     * Get item payload
+     * Get item payload. The 'content' var has been set
+     * with PostConverterContent
      * 
      * @return array
      */
@@ -138,11 +191,11 @@ class PostItem implements ContentItemInterface
         $repository->set('categories', $this->getCategories());
         $repository->set('tags', $this->getTags());
         $repository->set('url', $this->getUrl());
-        $repository->set('content', $this->getContent());
+        $repository->set('content', $this->getPostConverterContent());
         $repository->set('id', $this->getId());
         $repository->set('path', $this->getRelativePath());
         
-        return $repository->mergeWith($fm)->getRaw();
+        return $repository->union($fm)->getRaw();
     }
     
     /**
@@ -220,7 +273,7 @@ class PostItem implements ContentItemInterface
     }
     
     /**
-     * Is draft?
+     * Is a draft?
      * 
      * @return bool
      */

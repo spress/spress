@@ -55,8 +55,9 @@ class Renderizer
      */
     public function renderItem(ContentItemInterface $item, array $payload = [])
     {
-        $content = $item->getContent();
+        $content = $item->getPostConverterContent();
         $rendered = $this->renderString($content, $payload);
+        $item->setPreLayoutContent($rendered);
         
         $layoutName = $this->getItemLayoutName($item);
         
@@ -67,7 +68,7 @@ class Renderizer
             $rendered = $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
         }
 
-        $item->setContent($rendered);
+        $item->setPostLayoutContent($rendered);
     }
     
     /**
@@ -210,7 +211,7 @@ class Renderizer
             $pageItem = new PageItem($layout, $this->configuration);
             
             $layoutName = $this->getItemLayoutName($pageItem);
-            $content = $pageItem->getContent();
+            $content = $pageItem->getPreConverterContent();
             
             if($layoutName)
             {

@@ -47,9 +47,10 @@ class RenderizerTest extends \PHPUnit_Framework_TestCase
         $fileInfo = new SplFileInfo($path, '', 'index.html');
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_PAGE);
         $item = new PageItem($fileItem, $this->configuration);
+        $item->setPostConverterContent($item->getPreConverterContent());
         $this->renderizer->renderItem($item);
         
-        $this->assertStringStartsWith('<!DOCTYPE HTML>', $item->getContent());
+        $this->assertStringStartsWith('<!DOCTYPE HTML>', $item->getPostLayoutContent());
     }
     
     public function testExistsLayout()

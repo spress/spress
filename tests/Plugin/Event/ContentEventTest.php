@@ -32,7 +32,7 @@ class ContentEventTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         
         $this->item = new PostItem($fileItem, $config);
-        $this->item->setContent('Test content');
+        $this->item->setPostConverterContent($this->item->getPreConverterContent());
         $this->item->setOutExtension('html');
     }
     
@@ -54,7 +54,7 @@ class ContentEventTest extends \PHPUnit_Framework_TestCase
     {
         $event = new ConvertEvent($this->item);
         
-        $this->assertEquals($this->item->getContent(), $event->getContent());
+        $this->assertEquals($this->item->getPreConverterContent(), $event->getContent());
     }
     
     public function testSetContent()
@@ -62,7 +62,7 @@ class ContentEventTest extends \PHPUnit_Framework_TestCase
         $event = new ConvertEvent($this->item);
         $event->setContent('New content');
         
-        $this->assertEquals('New content', $this->item->getContent());
+        $this->assertEquals('New content', $this->item->getPreConverterContent());
     }
     
     public function testGetRelativePath()

@@ -57,7 +57,20 @@ class ContentEvent extends Event
      */
     public function getContent()
     {
-        return $this->item->getContent();
+        switch($this->getName())
+        {
+            case SpressEvents::SPRESS_BEFORE_CONVERT:
+                return $this->item->getPreConverterContent();
+            case SpressEvents::SPRESS_AFTER_CONVERT:
+            case SpressEvents::SPRESS_BEFORE_RENDER:
+            case SpressEvents::SPRESS_BEFORE_RENDER_PAGINATION:
+                return $this->item->getPostConverterContent();
+            case SpressEvents::SPRESS_AFTER_RENDER:
+            case SpressEvents::SPRESS_AFTER_RENDER_PAGINATION:
+                return $this->item->getPostLayoutContent();
+            default:
+                return $this->item->getPreConverterContent();
+        }
     }
     
     /**
@@ -67,7 +80,23 @@ class ContentEvent extends Event
      */
     public function setContent($content)
     {
-        $this->item->setContent($content);
+        switch($this->getName())
+        {
+            case SpressEvents::SPRESS_BEFORE_CONVERT:
+                $this->item->setPreConverterContent($content);
+                break;
+            case SpressEvents::SPRESS_AFTER_CONVERT:
+            case SpressEvents::SPRESS_BEFORE_RENDER:
+            case SpressEvents::SPRESS_BEFORE_RENDER_PAGINATION:
+                $this->item->setPostConverterContent($content);
+                break;
+            case SpressEvents::SPRESS_AFTER_RENDER:
+            case SpressEvents::SPRESS_AFTER_RENDER_PAGINATION:
+                $this->item->setPostLayoutContent($content);
+                break;
+            default:
+                $this->item->setPreConverterContent($content);
+        }
     }
     
     /**

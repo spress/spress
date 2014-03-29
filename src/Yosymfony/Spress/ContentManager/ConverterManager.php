@@ -104,9 +104,9 @@ class ConverterManager
         $converter = $this->getConverter($extension);
         
         $outExtension = $converter->getOutExtension($extension);
-        $content = $converter->convert($item->getContent());
+        $content = $converter->convert($item->getPreConverterContent());
         
-        $item->setContent($content);
+        $item->setPostConverterContent($content);
         $item->setOutExtension($outExtension);
         
         return new ConverterResult(

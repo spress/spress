@@ -34,7 +34,7 @@ class RenderEventTest extends \PHPUnit_Framework_TestCase
         $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
         
         $this->item = new PostItem($fileItem, $config);
-        $this->item->setContent('Test content');
+        $this->item->setPostConverterContent($this->item->getPreConverterContent());
         $this->item->setOutExtension('html');
         
         $this->renderizer = $app['spress.cms.renderizer'];

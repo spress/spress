@@ -209,7 +209,7 @@ class ContentManager
                         $this->categories[$category] = [];
                     }
                     
-                    $this->categories[$category][] = $payload;
+                    $this->categories[$category][$postItem->getId()] = $payload;
                 }
                 
                 foreach($postItem->getTags() as $tag)
@@ -219,7 +219,7 @@ class ContentManager
                         $this->tags[$tag] = [];
                     }
                     
-                    $this->tags[$tag][] = $payload;
+                    $this->tags[$tag][$postItem->getId()] = $payload;
                 }
                 
                 $this->dataResult['processed_post']++;

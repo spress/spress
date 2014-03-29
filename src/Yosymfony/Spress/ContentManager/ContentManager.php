@@ -272,6 +272,7 @@ class ContentManager
             $this->renderizer->renderItem($item, $event->getPayload());
             $this->posts[$id]['content'] = $item->getPreLayoutContent();
             $payload['page']['content'] = $item->getPreLayoutContent();
+            $this->updateContentCategoriesAndTags($item);
             $this->events->dispatchAfterRender($this->renderizer, $payload, $item, true);
             
             $this->saveItem($item);
@@ -370,6 +371,19 @@ class ContentManager
 
             return ($dateA < $dateB) ? 1 : -1;
         });
+    }
+    
+    private function updateContentCategoriesAndTags(ContentItemInterface $item)
+    {
+        foreach($item->getCategories() as $category)
+        {
+            $this->categories[$category][$item->getId()]['content'] = $item->getPreLayoutContent();
+        }
+        
+        foreach($item->getTags() as $tag)
+        {
+            $this->tags[$tag][$item->getId()]['content'] = $item->getPreLayoutContent();
+        }
     }
 
     /**

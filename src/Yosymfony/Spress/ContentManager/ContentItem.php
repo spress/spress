@@ -16,7 +16,7 @@ use Yosymfony\Spress\ContentLocator\FileItem;
 use Yosymfony\Spress\Exception\FrontmatterValueException;
 
 /**
- * Base implementations for content items
+ * Base implementation for content items
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */

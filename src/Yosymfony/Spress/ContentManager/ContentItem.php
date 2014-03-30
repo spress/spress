@@ -11,9 +11,7 @@
  
 namespace Yosymfony\Spress\ContentManager;
 
-use Yosymfony\Spress\Utils;
 use Yosymfony\Spress\ContentLocator\FileItem;
-use Yosymfony\Spress\Exception\FrontmatterValueException;
 
 /**
  * Base implementation for content items

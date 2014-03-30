@@ -14,21 +14,12 @@ namespace Yosymfony\Spress\ContentManager;
 use Yosymfony\Spress\ContentLocator\FileItem;
 
 /**
- * Page content
+ * Content of a page
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class PageItem implements ContentItemInterface
+class PageItem extends ContentItem
 {
-    private $fileItem;
-    private $preConverterContent;
-    private $postConverterContent;
-    private $preLayoutContent;
-    private $postLayoutContent;
-    private $frontmatter;
-    private $configuration;
-    private $extension;
-    
     /**
      * Constructor
      * 
@@ -42,94 +33,9 @@ class PageItem implements ContentItemInterface
             throw new \InvalidArgumentException(sprintf('Type item "%s" is invalid in page item.', $fileItem->getType()));
         }
         
-        $this->configuration = $configuration;
-        $this->fileItem = $fileItem;
-        $this->extension = $fileItem->getExtension();
-        $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
-        $this->setPreConverterContent($this->frontmatter->getContentNotFrontmatter());
-        $this->setUpDestinationPath();
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPreConverterContent()
-    {
-        return $this->preConverterContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPreConverterContent($content)
-    {
-        $this->preConverterContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPostConverterContent()
-    {
-        return $this->postConverterContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPostConverterContent($content)
-    {
-        $this->postConverterContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPreLayoutContent()
-    {
-        return $this->preLayoutContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPreLayoutContent($content)
-    {
-        $this->preLayoutContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPostLayoutContent()
-    {
-        return $this->postLayoutContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPostLayoutContent($content)
-    {
-        $this->postLayoutContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Get item identifier
-     * 
-     * @return string
-     */
-    public function getId()
-    {
-        $parts = $this->fileItem->getRelativePathExplode();
-        $parts[] = $this->fileItem->getFileName(false);
-        $parts[] = $this->fileItem->getExtension();
+        parent::__construct($fileItem, $configuration);
         
-        return implode('-', $parts);
+        $this->setUpDestinationPath();
     }
     
     /**
@@ -143,26 +49,6 @@ class PageItem implements ContentItemInterface
         $url = $generator->getUrl($this->getUrlTemplate(), $this->getUrlPlaceholders());
         
         return $url;
-    }
-    
-    /**
-     * Has Front-matter?
-     * 
-     * @return bool
-     */
-    public function hasFrontmatter()
-    {
-        return $this->frontmatter->hasFrontmatter();
-    }
-    
-    /**
-     * Get Front-matter
-     * 
-     * @return Yosymfony\Spress\ContentManager\Frontmatter
-     */
-    public function getFrontmatter()
-    {   
-        return $this->frontmatter;
     }
     
     /**
@@ -190,18 +76,9 @@ class PageItem implements ContentItemInterface
      */
     public function setOutExtension($extension)
     {
-        $this->extension = $extension;
+        parent::setOutExtension($extension);
+        
         $this->setUpDestinationPath();
-    }
-    
-    /**
-     * Get the FileItem associated (from ContentItemInterface)
-     * 
-     * @return FileItem
-     */
-    public function getFileItem()
-    {
-        return $this->fileItem;
     }
     
     /**

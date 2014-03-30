@@ -15,18 +15,15 @@ use Yosymfony\Spress\Utils;
 use Yosymfony\Spress\ContentLocator\FileItem;
 use Yosymfony\Spress\Exception\FrontmatterValueException;
 
-class PostItem implements ContentItemInterface
+/**
+ * Content of a post
+ * 
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
+class PostItem extends ContentItem
 {
-    private $fileItem;
-    private $preConverterContent;
-    private $postConverterContent;
-    private $preLayoutContent;
-    private $postLayoutContent;
-    private $configuration;
-    private $frontmatter;
     private $title;
     private $date;
-    private $extension;
     
     /**
      * Constructor
@@ -41,94 +38,10 @@ class PostItem implements ContentItemInterface
             throw new \InvalidArgumentException(sprintf('Type item "%s" is invalid in post item'));
         }
         
-        $this->fileItem = $fileItem;
-        $this->configuration = $configuration;
-        $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
-        $this->setPreConverterContent($this->frontmatter->getContentNotFrontmatter());
+        parent::__construct($fileItem, $configuration);
+        
         $this->extractDataFromFilename();
         $this->setUpDestinationPath();
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPreConverterContent()
-    {
-        return $this->preConverterContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPreConverterContent($content)
-    {
-        $this->preConverterContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPostConverterContent()
-    {
-        return $this->postConverterContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPostConverterContent($content)
-    {
-        $this->postConverterContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPreLayoutContent()
-    {
-        return $this->preLayoutContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPreLayoutContent($content)
-    {
-        $this->preLayoutContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function getPostLayoutContent()
-    {
-        return $this->postLayoutContent;
-    }
-    
-    /**
-     * @inheritDoc
-     */
-    public function setPostLayoutContent($content)
-    {
-        $this->postLayoutContent = $content;
-        $this->fileItem->setDestinationContent($content);
-    }
-    
-    /**
-     * Get item identifier
-     * 
-     * @return string
-     */
-    public function getId()
-    {
-        $parts = $this->fileItem->getRelativePathExplode();
-        $parts[] = $this->fileItem->getFileName(false);
-        $parts[] = $this->fileItem->getExtension();
-        
-        return implode('-', $parts);
     }
     
     /**
@@ -153,26 +66,6 @@ class PostItem implements ContentItemInterface
                 ':path' => $this->getRelativeURL(),
             ]);
         }
-    }
-    
-    /**
-     * Has Front-matter?
-     * 
-     * @return bool
-     */
-    public function hasFrontmatter()
-    {
-        return $this->frontmatter->hasFrontmatter();
-    }
-    
-    /**
-     * Get Front-matter
-     * 
-     * @return Yosymfony\Spress\ContentManager\Frontmatter
-     */
-    public function getFrontmatter()
-    {   
-        return $this->frontmatter;
     }
     
     /**
@@ -296,13 +189,9 @@ class PostItem implements ContentItemInterface
      */
     public function setOutExtension($extension)
     {
-        $this->extension = $extension;
+        parent::setOutExtension($extension);
+        
         $this->setUpDestinationPath();
-    }
-    
-    public function getFileItem()
-    {
-        return $this->fileItem;
     }
     
     /**

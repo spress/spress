@@ -63,15 +63,6 @@ interface IOInterface
     public function write($messages, $newline = true);
     
     /**
-     * Overwrites a previous message to the output.
-     *
-     * @param string|array $messages The message as an array of lines or a single string
-     * @param bool         $newline  Whether to add a newline or not
-     * @param integer      $size     The size of line
-     */
-    public function overwrite($messages, $newline = true, $size = null);
-    
-    /**
      * Asks a question to the user.
      *
      * @param string|array $question The question to ask

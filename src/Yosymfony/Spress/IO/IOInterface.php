@@ -104,7 +104,7 @@ interface IOInterface
      *
      * @throws \Exception When any of the validators return an error
      */
-    public function askAndValidate($question, $validator, $attempts = false, $default = null);
+    public function askAndValidate($question, callback $validator, $attempts = false, $default = null);
     
     /**
      * Asks a question to the user and hide the answer.

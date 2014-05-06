@@ -110,8 +110,27 @@ interface IOInterface
      * Asks a question to the user and hide the answer.
      *
      * @param string $question The question to ask
+     * @param bool $fallback In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
      * @return string The answer
      */
-    public function askAndHideAnswer($question);
+    public function askAndHideAnswer($question, $fallback);
+    
+    /**
+     * Asks for a value, hide and validates the response.
+     *
+     * The validator receives the data to validate. It must return the
+     * validated data when the data is valid and throw an exception
+     * otherwise.
+     *
+     * @param string|array $question  The question to ask
+     * @param callback     $validator A PHP callback
+     * @param bool|integer $attempts  Max number of times to ask before giving up (false by default, which means infinite)
+     * @param bool $fallback In case the response can not be hidden, whether to fallback on non-hidden question or not
+     *
+     * @return mixed
+     *
+     * @throws \Exception When any of the validators return an error
+     */
+    public function askAndValidateHideAnswer($question, callback $validator, $attempts = false, $fallback);
 }

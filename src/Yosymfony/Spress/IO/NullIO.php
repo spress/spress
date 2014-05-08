@@ -1,0 +1,106 @@
+<?php
+
+/*
+ * This file is part of the Yosymfony\Spress.
+ *
+ * (c) YoSymfony <http://github.com/yosymfony>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+ 
+namespace Yosymfony\Spress\Test;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\HelperSet;
+
+/**
+ * Null implementation. Do nothing.
+ * 
+ * @author Victor Puertas
+ */
+class NullIO implements IOInterface
+{
+    public function isInteractive()
+    {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function isVerbose()
+    {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function isVeryVerbose()
+    {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function isDebug()
+    {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function isDecorated()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function write($messages, $newline = true)
+    {
+        // do nothing
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function ask($question, $default = null)
+    {
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function askConfirmation($question, $default = true)
+    {
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function askAndValidate($question, $validator, $attempts = false, $default = null)
+    {
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function askAndHideAnswer($question, $fallback = true)
+    {
+        return null;
+    }
+    
+    public function askHiddenResponseAndValidate($question, callback $validator, $attempts = false, $fallback)
+    {
+        return null;
+    }
+}

@@ -44,7 +44,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVerbose()
     {
-        return OutputInterface::VERBOSITY_VERBOSE >= $this->output->getVerbosity();
+        return OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity();
     }
     
     /**
@@ -52,7 +52,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVeryVerbose()
     {
-        return OutputInterface::VERBOSITY_VERY_VERBOSE >= $this->output->getVerbosity();
+        return OutputInterface::VERBOSITY_VERY_VERBOSE <= $this->output->getVerbosity();
     }
     
     /**

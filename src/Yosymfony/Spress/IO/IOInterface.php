@@ -132,5 +132,5 @@ interface IOInterface
      *
      * @throws \Exception When any of the validators return an error
      */
-    public function askAndValidateHideAnswer($question, callback $validator, $attempts = false, $fallback);
+    public function askHiddenResponseAndValidate($question, callback $validator, $attempts = false, $fallback);
 }

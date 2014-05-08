@@ -98,7 +98,7 @@ class ConsoleIO implements IOInterface
     /**
      * {@inheritDoc}
      */
-    public function askAndValidate($question, $validator, $attempts = false, $default = null)
+    public function askAndValidate($question, callback $validator, $attempts = false, $default = null)
     {
         return $this->helperSet->get('dialog')->askAndValidate(
             $this->output,

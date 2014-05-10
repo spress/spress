@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Tests;
+namespace Yosymfony\Spress\Tests\Plugin\API;
 
 use Yosymfony\Spress\Application;
-use Yosymfony\Spress\Plugin\Api\TemplateManager;
+use Yosymfony\Spress\Plugin\API\TemplateManager;
 
 class TemplateManagerTest extends \PHPUnit_Framework_TestCase
 {

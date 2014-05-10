@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Plugin\Api;
+namespace Yosymfony\Spress\Plugin\API;
 
 use Yosymfony\Spress\ContentManager\Renderizer;
 

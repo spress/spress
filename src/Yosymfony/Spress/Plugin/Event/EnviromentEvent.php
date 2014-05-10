@@ -17,7 +17,7 @@ use Yosymfony\Spress\ContentManager\ConverterInterface;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Plugin\Api\TemplateManager;
+use Yosymfony\Spress\Plugin\API\TemplateManager;
 
 class EnviromentEvent extends Event
 {

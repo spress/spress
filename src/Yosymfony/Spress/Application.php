@@ -51,7 +51,7 @@ class Application extends \Silex\Application
         {
             $this['spress.io'] = $this->share(function($app){
                 return new NUllIO();
-            })   
+            });
         }
         
         $this->register(new ConfigServiceProvider(array($this['spress.paths']['config'])));

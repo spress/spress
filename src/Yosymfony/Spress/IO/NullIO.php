@@ -72,7 +72,7 @@ class NullIO implements IOInterface
      */
     public function ask($question, $default = null)
     {
-        return null;
+        return $default;
     }
     
     /**
@@ -80,7 +80,7 @@ class NullIO implements IOInterface
      */
     public function askConfirmation($question, $default = true)
     {
-        return null;
+        return $default;
     }
     
     /**
@@ -88,7 +88,7 @@ class NullIO implements IOInterface
      */
     public function askAndValidate($question, $validator, $attempts = false, $default = null)
     {
-        return null;
+        return $default;
     }
     
     /**

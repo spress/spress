@@ -16,7 +16,7 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\ContentManager;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
-use Yosymfony\Spress\IO\NUllIO;
+use Yosymfony\Spress\IO\NullIO;
 use Yosymfony\Spress\Plugin\PluginManager;
 use Yosymfony\Spress\Operation\NewOperation;
 
@@ -50,7 +50,7 @@ class Application extends \Silex\Application
         if(false == isset($this['spress.io']))
         {
             $this['spress.io'] = $this->share(function($app){
-                return new NUllIO();
+                return new NullIO();
             });
         }
         
@@ -80,8 +80,8 @@ class Application extends \Silex\Application
         $this['spress.cms.plugin'] = $this->share(function($app){
             return new PluginManager(
                 $app['spress.content_locator'],
-                $app['spress.cms.plugin.classLoader']
-            );
+                $app['spress.cms.plugin.classLoader'],
+                $app['spress.io']);
         });
         
         $this['spress.cms.plugin.classLoader'] = function()

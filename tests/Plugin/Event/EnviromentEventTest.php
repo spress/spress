@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Tests;
+namespace Yosymfony\Spress\Tests\Plugin\Event;
 
 use Yosymfony\Spress\Application;
 use Yosymfony\Spress\Plugin\Event\EnviromentEvent;
@@ -27,7 +27,8 @@ class EnviromentEventTest extends \PHPUnit_Framework_TestCase
             $this->app['spress.config'],
             $this->app['spress.cms.converter'],
             $this->app['spress.cms.renderizer'],
-            $this->app['spress.content_locator']
+            $this->app['spress.content_locator'],
+            $this->app['spress.io']
         );
     }
     
@@ -38,11 +39,18 @@ class EnviromentEventTest extends \PHPUnit_Framework_TestCase
             $this->event->getConfigRepository());
     }
     
-    public function testTemplateManager()
+    public function testGetTemplateManager()
     {
         $this->assertInstanceOf(
             'Yosymfony\\Spress\\Plugin\\Api\\TemplateManager',
             $this->event->getTemplateManager());
+    }
+    
+    public function testGetIO()
+    {
+        $this->assertInstanceOf(
+            'Yosymfony\\Spress\\IO\\IOInterface',
+            $this->event->getIO());
     }
     
     public function testGetSourceDir()

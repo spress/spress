@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Test;
+namespace Yosymfony\Spress\IO;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,7 +86,7 @@ class NullIO implements IOInterface
     /**
      * {@inheritDoc}
      */
-    public function askAndValidate($question, $validator, $attempts = false, $default = null)
+    public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
         return $default;
     }
@@ -99,7 +99,7 @@ class NullIO implements IOInterface
             return null;
     }
     
-    public function askHiddenResponseAndValidate($question, callback $validator, $attempts = false, $fallback)
+    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
     {
         return null;
     }

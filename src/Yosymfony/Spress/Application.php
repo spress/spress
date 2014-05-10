@@ -16,6 +16,7 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\ContentManager;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
+use Yosymfony\Spress\IO\NUllIO;
 use Yosymfony\Spress\Plugin\PluginManager;
 use Yosymfony\Spress\Operation\NewOperation;
 
@@ -28,9 +29,9 @@ class Application extends \Silex\Application
 {
     const VERSION = "1.0.2";
     
-    public function __construct()
+    public function __construct(array $values = array())
     {
-        parent::__construct();
+        parent::__construct($values);
         
         $spressPath = realpath(dirname(__FILE__) . '/../../../');
         $templatesPath = $this->getTemplatesPath($spressPath);
@@ -45,6 +46,13 @@ class Application extends \Silex\Application
             'web.index'     => $spressPath  . '/web/index.php',
         );
         $this['spress.version'] = self::VERSION;
+        
+        if(false == isset($this['spress.io']))
+        {
+            $this['spress.io'] = $this->share(function($app){
+                return new NUllIO();
+            })   
+        }
         
         $this->register(new ConfigServiceProvider(array($this['spress.paths']['config'])));
         

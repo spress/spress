@@ -31,7 +31,7 @@ class ConsoleIO implements IOInterface
     {
         $this->input = $input;
         $this->output = $output;
-        $this->HelperSet = $helperSet;
+        $this->helperSet = $helperSet;
     }
     
     public function isInteractive()
@@ -98,7 +98,7 @@ class ConsoleIO implements IOInterface
     /**
      * {@inheritDoc}
      */
-    public function askAndValidate($question, callback $validator, $attempts = false, $default = null)
+    public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
         return $this->helperSet->get('dialog')->askAndValidate(
             $this->output,
@@ -116,7 +116,7 @@ class ConsoleIO implements IOInterface
         return $this->helperSet->get('dialog')->askHiddenResponse($this->output, $question, $fallback);
     }
     
-    public function askHiddenResponseAndValidate($question, callback $validator, $attempts = false, $fallback)
+    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
     {
         return $this->helperSet->get('dialog')->askHiddenResponseAndValidate($this->output, $question, $validator, $attempts, $fallback);
     }

@@ -17,6 +17,7 @@ use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\ContentItemInterface;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentManager\Renderizer;
+use Yosymfony\Spress\IO\IOInterface;
 
 /**
  * Shortcut for dispatch events
@@ -39,13 +40,15 @@ class DispatcherShortcut
         Configuration $configuration, 
         ConverterManager $converter, 
         Renderizer $renderizer, 
-        ContentLocator $contentLocator)
+        ContentLocator $contentLocator,
+        IOInterface $io)
     {
         $event = new Event\EnviromentEvent(
             $configuration,
             $converter,
             $renderizer,
-            $contentLocator);
+            $contentLocator,
+            $io);
             
         return $this->pm->dispatchEvent(Event\SpressEvents::SPRESS_START, $event);
     }

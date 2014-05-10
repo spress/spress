@@ -15,6 +15,7 @@ use Yosymfony\Spress\Configuration;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 use Yosymfony\Spress\ContentLocator\FileItem;
 use Yosymfony\Spress\Plugin\PluginManager;
+use Yosymfony\Spress\IO\IOInterface;
  
 /**
  * Content manager
@@ -36,6 +37,7 @@ class ContentManager
     private $time;
     private $dataResult;
     private $plugin;
+    private $io;
     private $events;
     
     /**
@@ -52,13 +54,15 @@ class ContentManager
         Configuration $configuration,
         ContentLocator $contentLocator,
         ConverterManager $converter,
-        PluginManager $plugin)
+        PluginManager $plugin,
+        IOInterface $io)
     {
         $this->configuration = $configuration;
         $this->contentLocator = $contentLocator;
         $this->renderizer = $renderizer;
         $this->converter = $converter;
         $this->plugin = $plugin;
+        $this->io = $io;
         $this->events = $this->plugin->getDispatcherShortcut();
     }
     
@@ -124,7 +128,8 @@ class ContentManager
                 $this->configuration,
                 $this->converter,
                 $this->renderizer,
-                $this->contentLocator);
+                $this->contentLocator,
+                $this->io);
         }
         
         $this->converter->initialize();

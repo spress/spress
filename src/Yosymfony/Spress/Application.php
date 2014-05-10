@@ -80,8 +80,7 @@ class Application extends \Silex\Application
         $this['spress.cms.plugin'] = $this->share(function($app){
             return new PluginManager(
                 $app['spress.content_locator'],
-                $app['spress.cms.plugin.classLoader'],
-                $app['spress.io']);
+                $app['spress.cms.plugin.classLoader']);
         });
         
         $this['spress.cms.plugin.classLoader'] = function()
@@ -104,7 +103,8 @@ class Application extends \Silex\Application
                 $app['spress.config'],
                 $app['spress.content_locator'],
                 $app['spress.cms.converter'],
-                $app['spress.cms.plugin']);
+                $app['spress.cms.plugin'],
+                $app['spress.io']);
         });
         
         $this['spress.operation.new'] = $this->share(function($app){
@@ -153,9 +153,7 @@ class Application extends \Silex\Application
         {
             return $spressPath . '/app/templates';
         }
-        else
-        {
-            return realpath($spressPath . '/../spress-templates');
-        }
+        
+        return realpath($spressPath . '/../spress-templates');
     }
 }

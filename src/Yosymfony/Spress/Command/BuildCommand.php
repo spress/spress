@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\Application;
+use Yosymfony\Spress\IO\ConsoleIO;
 
 class BuildCommand extends Command
 {
@@ -55,20 +56,23 @@ class BuildCommand extends Command
         $timezone = $input->getOption('timezone');
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
+        $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
-        $output->writeln('<comment>Starting...</comment>');
+        $io->write('<comment>Starting...</comment>');
         
         if($drafts)
         {
-            $output->writeln('<comment>With posts drafts active.</comment>');
+            $io->write('<comment>With posts drafts active.</comment>');
         }
         
         if($safe)
         {
-            $output->writeln('<comment>Plugins disabled.</comment>');
+            $io->write('<comment>Plugins disabled.</comment>');
         }
         
-        $app = new Application();
+        $app = new Application([
+            'spress.io' => $io,
+        ]);
         
         $resultData = $app->parse(
             $input->getOption('source'),
@@ -77,11 +81,11 @@ class BuildCommand extends Command
             $safe
         );
         
-        $output->writeln(sprintf('Total posts: %d', $resultData['total_post']));
-        $output->writeln(sprintf('Processed posts: %d', $resultData['processed_post']));
-        $output->writeln(sprintf('Drafts post: %d', $resultData['drafts_post']));
-        $output->writeln(sprintf('Total pages: %d', $resultData['total_pages']));
-        $output->writeln(sprintf('Processed pages: %d', $resultData['processed_pages']));
-        $output->writeln(sprintf('Other resources: %d', $resultData['other_resources']));
+        $io->write(sprintf('Total posts: %d', $resultData['total_post']));
+        $io->write(sprintf('Processed posts: %d', $resultData['processed_post']));
+        $io->write(sprintf('Drafts post: %d', $resultData['drafts_post']));
+        $io->write(sprintf('Total pages: %d', $resultData['total_pages']));
+        $io->write(sprintf('Processed pages: %d', $resultData['processed_pages']));
+        $io->write(sprintf('Other resources: %d', $resultData['other_resources']));
     }
 }

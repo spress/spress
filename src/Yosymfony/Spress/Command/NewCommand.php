@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\Application;
+use Yosymfony\Spress\IO\ConsoleIO;  
 
 class NewCommand extends Command
 {
@@ -57,19 +58,23 @@ class NewCommand extends Command
         $template = $input->getArgument('template');
         $force = $input->getOption('force');
         $completeScaffold = $input->getOption('all');
+        $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
-        $app = new Application();
+        $app = new Application([
+            'spress.io' => $io,
+        ]);
+        
         $app['spress.operation.new']->newSite($path, $template, $force, $completeScaffold);
         
-        $output->writeln(sprintf('<comment>New site created at %s.</comment>', $path));
+        $io->write(sprintf('<comment>New site created at %s.</comment>', $path));
         
         if('./' == $path)
         {
-            $output->writeln('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
+            $io->write('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
         }
         else
         {
-            $output->writeln(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
+            $io->write(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
         }    
     }
 }

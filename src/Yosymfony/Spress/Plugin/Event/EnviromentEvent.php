@@ -17,7 +17,8 @@ use Yosymfony\Spress\ContentManager\ConverterInterface;
 use Yosymfony\Spress\ContentManager\ConverterManager;
 use Yosymfony\Spress\ContentManager\Renderizer;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Plugin\Api\TemplateManager;
+use Yosymfony\Spress\Plugin\API\TemplateManager;
+use Yosymfony\Spress\IO\IOInterface;
 
 class EnviromentEvent extends Event
 {
@@ -25,17 +26,20 @@ class EnviromentEvent extends Event
     private $converter;
     private $renderizer;
     private $contentLocator;
+    private $io;
     
     public function __construct(
         Configuration $configuration, 
         ConverterManager $converter, 
         Renderizer $renderizer, 
-        ContentLocator $contentLocator)
+        ContentLocator $contentLocator,
+        IOInterface $io)
     {
         $this->configuration = $configuration;
         $this->converter = $converter;
         $this->renderizer = $renderizer;
         $this->contentLocator = $contentLocator;
+        $this->io = $io;
     }
     
     /**
@@ -56,6 +60,16 @@ class EnviromentEvent extends Event
     public function getTemplateManager()
     {
         return new TemplateManager($this->renderizer);
+    }
+    
+    /**
+     * Access to IO API.
+     * 
+     * @return Yosymfony\Spress\IO\IOInterface
+     */
+    public function getIO()
+    {
+        return $this->io;
     }
     
     /**

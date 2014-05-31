@@ -28,11 +28,12 @@ class Configuration
     private $repository;
     private $globalRepository;
     private $localRepository;
+    private $envRepository;
     
     /**
      * Constructor
      * 
-     * @param Config $configService Config service
+     * @param Yosymfony\Silex\ConfigServiceProvider\ConfigRepository $configService Config service
      * @param array $paths Spress paths and filenames standard
      * @param string $version App version
      */
@@ -43,17 +44,23 @@ class Configuration
         $this->version = $version;
         $this->loadGlobalRepository();
         $this->repository = $this->globalRepository;
+        $this->envRepository = $this->createBlankRepository();
     }
     
     /**
-     * Load the local configuration
+     * Load the local configuration, environtment included
      * 
      * @param string $localPath File configuration of the site
      * @param string $env Environment name
      */
     public function loadLocal($localPath = null, $env = 'dev')
     {
-        $this->loadLocalRepository($localPath, $env);
+        $this->loadLocalRepository($localPath);
+        $this->loadEnvironmentRepository($localPath, $env);
+        
+        $tmpRepository = $this->localRepository->union($this->globalRepository);
+        $this->repository = $this->envRepository->union($tmpRepository);
+        
         $this->checkDefinitions($this->repository);
     }
     
@@ -62,7 +69,7 @@ class Configuration
      * 
      * @param string $config Configuration
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getRepositoryInline($config)
     {
@@ -150,42 +157,90 @@ class Configuration
      */
     private function loadLocalRepository($localPath)
     {
-        $localConfigPath = $this->resolveConfigLocalPath($localPath);
+        $filename = $this->paths['config.file'];
+        $localConfigPath = $this->resolveLocalPath($localPath, $filename);
         $this->localRepository = $this->configService->load($localConfigPath);
         $this->localRepository['source'] = $this->resolvePath($localPath);
-        
-        $this->repository = $this->localRepository->mergeWith($this->globalRepository);
     }
     
     /**
      * @param string $localPath
+     * @param string $env
+     */
+    private function loadEnvironmentRepository($localPath, $env)
+    {
+        $filename = $this->getConfigEnvironmentFilename($env);
+        
+        if($filename)
+        {
+            $localPath = $this->getLocalPathFilename($localPath, $filename);
+            $resolvedPath = $this->resolvePath($localPath, false);
+            
+            if($resolvedPath)
+            {
+                $this->envRepository = $this->configService->load($resolvedPath);
+            }
+        }
+    }
+    
+    /**
+     * @param string $env
+     */
+    private function getConfigEnvironmentFilename($env)
+    {
+        if('dev' === strtolower($env))
+        {
+            return;
+        }
+        
+        $filenameTemplate = $this->paths['config.file_env'];
+        $filename = str_replace(':env', $env, $filenameTemplate);
+        
+        return $filename;
+    }
+    
+    /**
+     * @param string $localPath
+     * @param string $filename
      * 
      * @return string
      */
-    private function resolveConfigLocalPath($localPath)
+    private function getLocalPathFilename($localPath, $filename)
     {
         if($localPath)
         {
-            $localPath = $localPath. '/' . $this->paths['config.file'];
+            return $localPath. '/' . $filename;
         }
         else
         {
-            $localPath = $this->globalRepository['source'] . '/' .$this->paths['config.file'];
+            return $this->globalRepository['source'] . '/' . $filename;
         }
+    }
+    
+    /**
+     * @param string $localPath
+     * @param string $filename
+     * 
+     * @return string
+     */
+    private function resolveLocalPath($localPath, $filename)
+    {
+        $path = $this->getLocalPathFilename($localPath, $filename);
         
-        return $this->resolvePath($localPath);
+        return $this->resolvePath($path);
     }
     
     /**
      * @param string $path
+     * @param boolean $throwException
      * 
      * @return string
      */
-    private function resolvePath($path)
+    private function resolvePath($path, $throwException = true)
     {
         $realPath = realpath($path);
         
-        if(false === $realPath)
+        if(false === $realPath && true === $throwException)
         {
             throw new \InvalidArgumentException(sprintf('Invalid path "%s"', $path));
         }

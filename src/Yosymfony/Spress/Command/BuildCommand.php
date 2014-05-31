@@ -38,6 +38,13 @@ class BuildCommand extends Command
                 'Timezone for the site generator'
             )
             ->addOption(
+                'env',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Name of the environment configuration',
+                'dev'
+            )
+            ->addOption(
                 'drafts',
                 null,
                 InputOption::VALUE_NONE,
@@ -56,18 +63,20 @@ class BuildCommand extends Command
         $timezone = $input->getOption('timezone');
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
+        $env = $input->getOption('env');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
         $io->write('<comment>Starting...</comment>');
+        $io->write(sprintf('<comment>Environment: %s</comment>', $env));
         
         if($drafts)
         {
-            $io->write('<comment>With posts drafts active.</comment>');
+            $io->write('<comment>Posts drafts activated</comment>');
         }
         
         if($safe)
         {
-            $io->write('<comment>Plugins disabled.</comment>');
+            $io->write('<comment>Plugins disabled</comment>');
         }
         
         $app = new Application([

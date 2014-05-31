@@ -89,7 +89,7 @@ class Configuration
     /**
      * Get the local repository merged with global repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getRepository()
     {
@@ -99,7 +99,7 @@ class Configuration
     /**
      * Get the global repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getGlobal()
     {
@@ -109,11 +109,21 @@ class Configuration
     /**
      * Get the local repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getLocal()
     {
         return $this->localRepository;
+    }
+    
+    /**
+     * Get the environment repository
+     * 
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     */
+    public function getEnvironment()
+    {
+        return $this->envRepository;
     }
     
     /**
@@ -185,6 +195,8 @@ class Configuration
     
     /**
      * @param string $env
+     * 
+     * @return string
      */
     private function getConfigEnvironmentFilename($env)
     {

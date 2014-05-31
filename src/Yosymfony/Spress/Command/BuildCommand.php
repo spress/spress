@@ -67,16 +67,16 @@ class BuildCommand extends Command
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
         $io->write('<comment>Starting...</comment>');
-        $io->write(sprintf('<comment>Environment: %s</comment>', $env));
+        $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
         
         if($drafts)
         {
-            $io->write('<comment>Posts drafts activated</comment>');
+            $io->write('<comment>Posts drafts activated.</comment>');
         }
         
         if($safe)
         {
-            $io->write('<comment>Plugins disabled</comment>');
+            $io->write('<comment>Plugins disabled.</comment>');
         }
         
         $app = new Application([
@@ -85,6 +85,7 @@ class BuildCommand extends Command
         
         $resultData = $app->parse(
             $input->getOption('source'),
+            $env,
             $timezone,
             $drafts,
             $safe

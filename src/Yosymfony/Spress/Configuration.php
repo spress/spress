@@ -48,11 +48,12 @@ class Configuration
     /**
      * Load the local configuration
      * 
-     * @param string $localPath
+     * @param string $localPath File configuration of the site
+     * @param string $env Environment name
      */
-    public function loadLocal($localPath = null)
+    public function loadLocal($localPath = null, $env = 'dev')
     {
-        $this->loadLocalRepository($localPath);
+        $this->loadLocalRepository($localPath, $env);
         $this->checkDefinitions($this->repository);
     }
     

@@ -38,12 +38,13 @@ class Application extends \Silex\Application
         
         // Paths and filenames standard
         $this['spress.paths'] = array(
-            'root'          => $spressPath,
-            'config'        => $spressPath  . '/app/config',
-            'config.file'   => 'config.yml',
-            'templates'     => $templatesPath,
-            'web'           => $spressPath  . '/web',
-            'web.index'     => $spressPath  . '/web/index.php',
+            'root'            => $spressPath,
+            'config'          => $spressPath  . '/app/config',
+            'config.file'     => 'config.yml',
+            'config.file_env' => 'config_:env.yml',
+            'templates'       => $templatesPath,
+            'web'             => $spressPath  . '/web',
+            'web.index'       => $spressPath  . '/web/index.php',
         );
         $this['spress.version'] = self::VERSION;
         
@@ -116,15 +117,16 @@ class Application extends \Silex\Application
      * Parse a site
      * 
      * @param string $localConfigPath Path of the local configuration
+     * @param string $env Environment name
      * @param string $timezone Set the timezone
      * @param bool $drafts Include draft
      * @param bool $safe Plugins disabled
      * 
      * @return array Key-value result
      */
-    public function parse($localConfigPath = null, $timezone = null, $drafts = null, $safe = null)
+    public function parse($localConfigPath = null, $env = 'dev', $timezone = null, $drafts = null, $safe = null)
     {
-        $this['spress.config']->loadLocal($localConfigPath);
+        $this['spress.config']->loadLocal($localConfigPath, $env);
         
         if(null !== $drafts && is_bool($drafts))
         {

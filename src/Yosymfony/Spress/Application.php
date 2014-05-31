@@ -27,7 +27,7 @@ use Yosymfony\Spress\Operation\NewOperation;
  */
 class Application extends \Silex\Application
 {
-    const VERSION = "1.0.3";
+    const VERSION = "1.1.0";
     
     public function __construct(array $values = array())
     {

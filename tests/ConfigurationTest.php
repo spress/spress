@@ -44,15 +44,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($this->config->getLocal()) > 0);
     }
     
-    /*public function testLoadLocalConfigurationWithDoubleSlash()
-    {
-        $this->config->loadLocal('./tests/fixtures/project/');
-        
-        $this->assertTrue(count($this->config->getRepository()) > 0);
-        $this->assertTrue(count($this->config->getGlobal()) > 0);
-        $this->assertTrue(count($this->config->getLocal()) > 0);
-    }*/
-    
     /**
      * @expectedException \InvalidArgumentException
      */

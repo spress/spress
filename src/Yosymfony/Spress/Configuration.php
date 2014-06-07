@@ -29,6 +29,7 @@ class Configuration
     private $globalRepository;
     private $localRepository;
     private $envRepository;
+    private $envName;
     
     /**
      * Constructor
@@ -42,6 +43,7 @@ class Configuration
         $this->configService = $configService;
         $this->paths = $paths;
         $this->version = $version;
+        $this->envName = 'dev';
         $this->loadGlobalRepository();
         $this->repository = $this->globalRepository;
         $this->envRepository = $this->createBlankRepository();
@@ -55,6 +57,7 @@ class Configuration
      */
     public function loadLocal($localPath = null, $env = 'dev')
     {
+        $this->envName = $env;
         $this->loadLocalRepository($localPath);
         $this->loadEnvironmentRepository($localPath, $env);
         
@@ -137,13 +140,23 @@ class Configuration
     }
     
     /**
-     * For internal: Get the standard paths and filenames of app.
+     * Get the config environment filename.
      * 
-     * @return array
+     * @return string Null if the environment is dev.
      */
-    public function getPaths()
+    public function getConfigEnvironmentFilename()
     {
-        return $this->paths;
+        return $this->getConfigEnvFilename($this->envName);
+    }
+    
+    /**
+     * Get the config environment filename with wildcard: "config_*.yml"
+     * 
+     * @return string
+     */
+    public function getConfigEnvironmentFilenameWildcard()
+    {
+        return str_replace(':env', '*', $this->paths['config.file_env']);
     }
     
     /**
@@ -154,6 +167,16 @@ class Configuration
     public function getAppVersion()
     {
         return $this->version;
+    }
+    
+    /**
+     * For internal purpose: get the standard paths and filenames of the app.
+     * 
+     * @return array
+     */
+    public function getPaths()
+    {
+        return $this->paths;
     }
     
     private function loadGlobalRepository()
@@ -179,7 +202,7 @@ class Configuration
      */
     private function loadEnvironmentRepository($localPath, $env)
     {
-        $filename = $this->getConfigEnvironmentFilename($env);
+        $filename = $this->getConfigEnvFilename($env);
         
         if($filename)
         {
@@ -198,7 +221,7 @@ class Configuration
      * 
      * @return string
      */
-    private function getConfigEnvironmentFilename($env)
+    private function getConfigEnvFilename($env)
     {
         if('dev' === strtolower($env))
         {

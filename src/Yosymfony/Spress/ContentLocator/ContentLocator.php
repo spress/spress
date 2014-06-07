@@ -43,6 +43,9 @@ class ContentLocator
         $this->createDestinationDirIfNotExists();
     }
     
+    /**
+     * @param array $extensions
+     */
     public function setConvertersExtension(array $extensions)
     {
         $this->convertersExtension = $extensions;
@@ -215,6 +218,7 @@ class ContentLocator
         $finder = new Finder();
         $finder->in($dir)->exclude($this->getSpecialDir());
         $finder->notName($this->configuration->getConfigFilename());
+        $finder->notName($this->configuration->getConfigEnvironmentFilenameWildcard());
         $finder->notName($this->fileExtToRegExpr($processableExt));
         
         foreach($include as $item)

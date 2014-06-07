@@ -20,7 +20,7 @@
         "michelf/php-markdown": "1.4.*@dev",
         "composer/composer": "1.*@dev",
         "dflydev/embedded-composer-core": "1.0.*@dev",
-        "yosymfony/config-serviceprovider": "1.2.0",
+        "yosymfony/config-serviceprovider": ">=1.2,<2.0-dev",
         "yosymfony/spress-theme-spresso": "1.0.*@dev",
         "php": ">=5.4"
     },

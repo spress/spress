@@ -46,6 +46,7 @@ class Configuration
         $this->envName = 'dev';
         $this->loadGlobalRepository();
         $this->repository = $this->globalRepository;
+        $this->localRepository = $this->createBlankRepository();
         $this->envRepository = $this->createBlankRepository();
     }
     
@@ -90,7 +91,7 @@ class Configuration
     }
     
     /**
-     * Get the local repository merged with global repository
+     * Get the environment repository merged with local repository and global repository
      * 
      * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
@@ -142,7 +143,7 @@ class Configuration
     /**
      * Get the config environment filename.
      * 
-     * @return string Null if the environment is dev.
+     * @return string Null if the environment is dev
      */
     public function getConfigEnvironmentFilename()
     {

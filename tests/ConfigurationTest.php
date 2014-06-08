@@ -23,7 +23,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = new Application();
         $this->config = $this->app['spress.config'];
-        $this->config->loadLocal('./tests/fixtures/project');
     }
     
     public function tearDown()
@@ -39,23 +38,29 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     
     public function testLoadConfigurations()
     {
-        $this->assertTrue(count($this->config->getRepository()) > 0);
-        $this->assertTrue(count($this->config->getGlobal()) > 0);
-        $this->assertTrue(count($this->config->getLocal()) > 0);
+        $this->config->loadLocal('./tests/fixtures/project');
+        
+        $this->assertGreaterThan(0, count($this->config->getRepository()));
+        $this->assertGreaterThan(0, count($this->config->getGlobal()));
+        $this->assertCount(1, $this->config->getLocal());
+        $this->assertCount(0, $this->config->getEnvironment());
     }
     
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testLoadLocalConfigurationFail()
+    public function testLoadProductionConfiguration()
     {
-        $this->config->loadLocal('/not/exists/directory/config.toml');
+        $this->config->loadLocal('./tests/fixtures/project', 'prod');
+        $environmentRepository = $this->config->getEnvironment();
+        $repository = $this->config->getRepository();
+        
+        $this->assertCount(1, $environmentRepository);
+        $this->assertEquals('http://spress.yosymfony.com', $environmentRepository['url']);
+        $this->assertEquals('http://spress.yosymfony.com', $repository['url']);
     }
     
     public function testConfigurationInline()
     {
         $repositoryA = $this->config->getRepositoryInline('template: template-inline-test');
-        $repositoryC = $repositoryA->mergeWith($this->config->getRepository());
+        $repositoryC = $repositoryA->union($this->config->getRepository());
         
         $this->assertEquals('template-inline-test', $repositoryC['template']);
     }
@@ -80,5 +85,44 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $repository = $this->config->getRepositoryInline(null);
         
         $this->assertCount(0, $repository);
+    }
+    
+    public function testGetConfigFilename()
+    {
+        $this->assertEquals('config.yml', $this->config->GetConfigFilename());
+    }
+    
+    public function testGetConfigEnvironmentDevFilename()
+    {
+        $this->config->loadLocal('./tests/fixtures/project');
+        
+        $this->assertNull($this->config->getConfigEnvironmentFilename());
+    }
+    
+    public function testGetConfigEnvironmentDevExplicitFilename()
+    {
+        $this->config->loadLocal('./tests/fixtures/project', 'dev');
+        
+        $this->assertNull($this->config->getConfigEnvironmentFilename());
+    }
+    
+    public function testGetConfigEnvironmentProdFilename()
+    {
+        $this->config->loadLocal('./tests/fixtures/project', 'prod');
+        
+        $this->assertEquals('config_prod.yml', $this->config->getConfigEnvironmentFilename());
+    }
+    
+    public function testGetConfigEnvironmentFilenameWildcard()
+    {
+        $this->assertEquals('config_*.yml', $this->config->GetConfigEnvironmentFilenameWildcard());
+    }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLoadLocalConfigurationFail()
+    {
+        $this->config->loadLocal('/not/exists/directory/config.yml');
     }
 }

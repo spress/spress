@@ -28,11 +28,13 @@ class Configuration
     private $repository;
     private $globalRepository;
     private $localRepository;
+    private $envRepository;
+    private $envName;
     
     /**
      * Constructor
      * 
-     * @param Config $configService Config service
+     * @param Yosymfony\Silex\ConfigServiceProvider\ConfigRepository $configService Config service
      * @param array $paths Spress paths and filenames standard
      * @param string $version App version
      */
@@ -41,18 +43,28 @@ class Configuration
         $this->configService = $configService;
         $this->paths = $paths;
         $this->version = $version;
+        $this->envName = 'dev';
         $this->loadGlobalRepository();
         $this->repository = $this->globalRepository;
+        $this->localRepository = $this->createBlankRepository();
+        $this->envRepository = $this->createBlankRepository();
     }
     
     /**
-     * Load the local configuration
+     * Load the local configuration, environtment included
      * 
-     * @param string $localPath
+     * @param string $localPath File configuration of the site
+     * @param string $env Environment name
      */
-    public function loadLocal($localPath = null)
+    public function loadLocal($localPath = null, $env = 'dev')
     {
+        $this->envName = $env;
         $this->loadLocalRepository($localPath);
+        $this->loadEnvironmentRepository($localPath, $env);
+        
+        $tmpRepository = $this->localRepository->union($this->globalRepository);
+        $this->repository = $this->envRepository->union($tmpRepository);
+        
         $this->checkDefinitions($this->repository);
     }
     
@@ -61,7 +73,7 @@ class Configuration
      * 
      * @param string $config Configuration
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getRepositoryInline($config)
     {
@@ -79,9 +91,9 @@ class Configuration
     }
     
     /**
-     * Get the local repository merged with global repository
+     * Get the environment repository merged with local repository and global repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getRepository()
     {
@@ -91,7 +103,7 @@ class Configuration
     /**
      * Get the global repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getGlobal()
     {
@@ -101,11 +113,21 @@ class Configuration
     /**
      * Get the local repository
      * 
-     * @return ConfigRepository
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
      */
     public function getLocal()
     {
         return $this->localRepository;
+    }
+    
+    /**
+     * Get the environment repository
+     * 
+     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     */
+    public function getEnvironment()
+    {
+        return $this->envRepository;
     }
     
     /**
@@ -119,13 +141,23 @@ class Configuration
     }
     
     /**
-     * For internal: Get the standard paths and filenames of app.
+     * Get the config environment filename.
      * 
-     * @return array
+     * @return string Null if the environment is dev
      */
-    public function getPaths()
+    public function getConfigEnvironmentFilename()
     {
-        return $this->paths;
+        return $this->getConfigEnvFilename($this->envName);
+    }
+    
+    /**
+     * Get the config environment filename with wildcard: "config_*.yml"
+     * 
+     * @return string
+     */
+    public function getConfigEnvironmentFilenameWildcard()
+    {
+        return str_replace(':env', '*', $this->paths['config.file_env']);
     }
     
     /**
@@ -136,6 +168,16 @@ class Configuration
     public function getAppVersion()
     {
         return $this->version;
+    }
+    
+    /**
+     * For internal purpose: get the standard paths and filenames of the app.
+     * 
+     * @return array
+     */
+    public function getPaths()
+    {
+        return $this->paths;
     }
     
     private function loadGlobalRepository()
@@ -149,42 +191,92 @@ class Configuration
      */
     private function loadLocalRepository($localPath)
     {
-        $localConfigPath = $this->resolveConfigLocalPath($localPath);
+        $filename = $this->paths['config.file'];
+        $localConfigPath = $this->resolveLocalPath($localPath, $filename);
         $this->localRepository = $this->configService->load($localConfigPath);
         $this->localRepository['source'] = $this->resolvePath($localPath);
-        
-        $this->repository = $this->localRepository->mergeWith($this->globalRepository);
     }
     
     /**
      * @param string $localPath
+     * @param string $env
+     */
+    private function loadEnvironmentRepository($localPath, $env)
+    {
+        $filename = $this->getConfigEnvFilename($env);
+        
+        if($filename)
+        {
+            $localPath = $this->getLocalPathFilename($localPath, $filename);
+            $resolvedPath = $this->resolvePath($localPath, false);
+            
+            if($resolvedPath)
+            {
+                $this->envRepository = $this->configService->load($resolvedPath);
+            }
+        }
+    }
+    
+    /**
+     * @param string $env
      * 
      * @return string
      */
-    private function resolveConfigLocalPath($localPath)
+    private function getConfigEnvFilename($env)
+    {
+        if('dev' === strtolower($env))
+        {
+            return;
+        }
+        
+        $filenameTemplate = $this->paths['config.file_env'];
+        $filename = str_replace(':env', $env, $filenameTemplate);
+        
+        return $filename;
+    }
+    
+    /**
+     * @param string $localPath
+     * @param string $filename
+     * 
+     * @return string
+     */
+    private function getLocalPathFilename($localPath, $filename)
     {
         if($localPath)
         {
-            $localPath = $localPath. '/' . $this->paths['config.file'];
+            return $localPath. '/' . $filename;
         }
         else
         {
-            $localPath = $this->globalRepository['source'] . '/' .$this->paths['config.file'];
+            return $this->globalRepository['source'] . '/' . $filename;
         }
+    }
+    
+    /**
+     * @param string $localPath
+     * @param string $filename
+     * 
+     * @return string
+     */
+    private function resolveLocalPath($localPath, $filename)
+    {
+        $path = $this->getLocalPathFilename($localPath, $filename);
         
-        return $this->resolvePath($localPath);
+        return $this->resolvePath($path);
     }
     
     /**
      * @param string $path
+     * @param boolean $throwException
      * 
      * @return string
      */
-    private function resolvePath($path)
+    private function resolvePath($path, $throwException = true)
     {
         $realPath = realpath($path);
         
-        if(false === $realPath)
+        if(false === $realPath && true === $throwException)
         {
             throw new \InvalidArgumentException(sprintf('Invalid path "%s"', $path));
         }

@@ -47,7 +47,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseTimezone()
     {
-        $result = $this->app->parse('./tests/fixtures/project', 'Europe/Madrid');
+        $result = $this->app->parse('./tests/fixtures/project', 'dev', 'Europe/Madrid');
         
         $this->assertEquals('Europe/Madrid', date_default_timezone_get()); 
         $this->assertTrue(is_array($result));
@@ -61,7 +61,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     
     public function testParseDraft()
     {
-        $result = $this->app->parse('./tests/fixtures/project', null, true);
+        $result = $this->app->parse('./tests/fixtures/project', 'dev', null, true);
         $repository = $this->app['spress.config']->getRepository();
         
         $this->assertTrue(true, $repository->get('drafts'));
@@ -77,7 +77,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     
     public function testParseSafe()
     {
-        $result = $this->app->parse('./tests/fixtures/project', null, null, true);
+        $result = $this->app->parse('./tests/fixtures/project', 'dev', null, null, true);
         $repository = $this->app['spress.config']->getRepository();
 
         $this->assertTrue(true, $repository->get('safe'));

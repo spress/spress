@@ -58,7 +58,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
         
         $this->assertRegExp('/Starting.../', $output);
-        $this->assertRegExp('/With posts drafts active/', $output);
+        $this->assertRegExp('/Posts drafts activated/', $output);
         $this->assertRegExp('/Total post/', $output);
     }
     
@@ -79,5 +79,24 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Plugins disabled/', $output);
+    }
+    
+    public function testBuildCommandEnv()
+    {
+        $app = new Application();
+        $app->add(new BuildCommand());
+        
+        $command = $app->find('site:build');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            '--source' => './tests/fixtures/project',
+            '--env' => 'prod'
+        ]);
+        
+        $output = $commandTester->getDisplay();
+        
+        $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Environment: prod/', $output);
     }
 }

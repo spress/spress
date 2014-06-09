@@ -73,6 +73,8 @@ class ConfigDefinition implements ConfigurationInterface
             ->end()
             ->booleanNode('safe')
             ->end()
+            ->variableNode('env')
+            ->end()
             ->scalarNode('host')
             ->end()
             ->integerNode('port')

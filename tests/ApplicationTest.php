@@ -32,6 +32,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $result = $this->app->parse('./tests/fixtures/project');
+        $config = $this->app['spress.config'];
         
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
@@ -40,6 +41,24 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['total_pages']);
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
+        
+        $this->assertEquals('dev', $config->getEnvironmentName());
+    }
+    
+    public function testParseProdEnvironment()
+    {
+        $result = $this->app->parse('./tests/fixtures/project', 'prod');
+        $config = $this->app['spress.config'];
+        
+        $this->assertTrue(is_array($result));
+        $this->assertEquals(4, $result['total_post']);
+        $this->assertEquals(2, $result['processed_post']);
+        $this->assertEquals(1, $result['drafts_post']);
+        $this->assertEquals(6, $result['total_pages']);
+        $this->assertEquals(6, $result['processed_pages']);
+        $this->assertEquals(3, $result['other_resources']);
+        
+        $this->assertEquals('prod', $config->getEnvironmentName());
     }
     
     /**

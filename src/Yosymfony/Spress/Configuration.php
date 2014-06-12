@@ -54,16 +54,25 @@ class Configuration
      * Load the local configuration, environtment included
      * 
      * @param string $localPath File configuration of the site
-     * @param string $env Environment name
+     * @param string $env Environment name. If null take the value from global config.yml
      */
-    public function loadLocal($localPath = null, $env = 'dev')
+    public function loadLocal($localPath = null, $env = null)
     {
-        $this->envName = $env;
+        if($env)
+        {
+            $this->envName = $env;
+        }
+
         $this->loadLocalRepository($localPath);
-        $this->loadEnvironmentRepository($localPath, $env);
+        $this->loadEnvironmentRepository($localPath, $this->envName);
         
         $tmpRepository = $this->localRepository->union($this->globalRepository);
         $this->repository = $this->envRepository->union($tmpRepository);
+        
+        if($env)
+        {
+            $this->repository['env'] = $this->envName;
+        }    
         
         $this->checkDefinitions($this->repository);
     }
@@ -131,6 +140,16 @@ class Configuration
     }
     
     /**
+     * Get the environment name
+     * 
+     * @return string
+     */
+    public function getEnvironmentName()
+    {
+        return $this->envName;
+    }
+    
+    /**
      * Get the config filename. Typically "config.yml"
      * 
      * @return string
@@ -184,6 +203,8 @@ class Configuration
     {
         $this->globalRepository = $this->configService->load($this->getConfigFilename());
         $this->checkDefinitions($this->globalRepository);
+        
+        $this->envName = $this->globalRepository['env'];
     }
     
     /**

@@ -28,21 +28,20 @@ class BuildCommand extends Command
             ->addOption(
                 'source',
                 's',
-                InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_REQUIRED,
                 'Directory where Spress will read your files'
             )
             ->addOption(
                 'timezone',
                 null,
-                InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_REQUIRED,
                 'Timezone for the site generator'
             )
             ->addOption(
                 'env',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Name of the environment configuration',
-                'dev'
+                'Name of the environment configuration'
             )
             ->addOption(
                 'drafts',
@@ -66,8 +65,15 @@ class BuildCommand extends Command
         $env = $input->getOption('env');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
+        $app = new Application([
+            'spress.io' => $io,
+        ]);
+        
+        $config = $app['spress.config'];
+        $envDefault = $config->getEnvironmentName();
+        
         $io->write('<comment>Starting...</comment>');
-        $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
+        $io->write(sprintf('<comment>Environment: %s.</comment>', $env ? $env : $envDefault));
         
         if($drafts)
         {
@@ -78,10 +84,6 @@ class BuildCommand extends Command
         {
             $io->write('<comment>Plugins disabled.</comment>');
         }
-        
-        $app = new Application([
-            'spress.io' => $io,
-        ]);
         
         $resultData = $app->parse(
             $input->getOption('source'),

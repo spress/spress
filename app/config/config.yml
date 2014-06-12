@@ -20,6 +20,7 @@ paginate_path: 'page:num'
 limit_posts: 0
 
 safe: false
+env: 'dev'
 
 host: '0.0.0.0'
 port: 4000

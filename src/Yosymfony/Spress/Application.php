@@ -114,7 +114,7 @@ class Application extends \Silex\Application
     }
     
     /**
-     * Parse a site
+     * Shortcut for parse a site
      * 
      * @param string $localConfigPath Path of the local configuration
      * @param string $env Environment name
@@ -124,7 +124,7 @@ class Application extends \Silex\Application
      * 
      * @return array Key-value result
      */
-    public function parse($localConfigPath = null, $env = 'dev', $timezone = null, $drafts = null, $safe = null)
+    public function parse($localConfigPath = null, $env = null, $timezone = null, $drafts = null, $safe = null)
     {
         $this['spress.config']->loadLocal($localConfigPath, $env);
         

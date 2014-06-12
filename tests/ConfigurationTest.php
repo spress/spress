@@ -111,11 +111,17 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->config->loadLocal('./tests/fixtures/project', 'prod');
         
         $this->assertEquals('config_prod.yml', $this->config->getConfigEnvironmentFilename());
+        $this->assertEquals('prod', $this->config->getEnvironmentName());
     }
     
     public function testGetConfigEnvironmentFilenameWildcard()
     {
-        $this->assertEquals('config_*.yml', $this->config->GetConfigEnvironmentFilenameWildcard());
+        $this->assertEquals('config_*.yml', $this->config->getConfigEnvironmentFilenameWildcard());
+    }
+    
+    public function testGetDefaultEnvironmentName()
+    {
+        $this->assertEquals('dev', $this->config->getEnvironmentName());
     }
     
     /**

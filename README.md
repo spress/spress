@@ -42,10 +42,10 @@ site.
 
 Create a new site.
 
-`site:new [path[="./"]] [template[="blank"]] [--force] [--all]`
+`site:new [path="./"] [template="blank"] [--force] [--all]`
 
-`--force` option force to use the path even though exists and it's not empty.
-`--all` In blank template, creates the complete scaffold.
+* `--force` option force to use the path even though exists and it's not empty.
+* `--all` In blank template, creates the complete scaffold.
 
 E.g `$ spress site:new /your-site-dir`
 
@@ -53,10 +53,17 @@ E.g `$ spress site:new /your-site-dir`
 
 Build your site in your configured destination, typically `_site`. 
 
-`site:build [-s|--source[="./"]] [--timezone[="..."]] [--drafts] [--safe]`
+`site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--drafts] [--safe]`
 
-E.g `$ spress site:build -s /your-site-dir`
+* `--drafts` To include draft posts in the generated site.
+* `--safe` Disable all plugins.
 
+E.g `$ spress site:build -s /your-site-dir` 
+
+##### How to load configuration for production environment:
+
+1. To create `config_prod.yml` with the options that will be overrided in `config.yml`.
+2. `$ spress site:build --env=prod`
 
 Unit tests
 ----------

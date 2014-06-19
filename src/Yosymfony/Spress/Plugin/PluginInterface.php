@@ -19,9 +19,11 @@ namespace Yosymfony\Spress\Plugin;
 interface PluginInterface
 {
     /**
-     * Get metadata of plugin.
+     * Metas of a PluginInterface
+     * 
      * Standard metas:
-     *   name: name of plugin.
+     *   name: name of plugin
+     *   author: author of plugin
      * 
      * @return null or array
      */

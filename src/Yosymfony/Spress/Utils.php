@@ -11,6 +11,9 @@
  
 namespace Yosymfony\Spress;
 
+/**
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class Utils
 {
     /**
@@ -25,20 +28,20 @@ class Utils
     static public function slugify($text)
     {
         // replace non letter or digits by -
-        $text = preg_replace('/[^\\pL\d]+/u', '-', $text);
+        $result = preg_replace('/[^\\pL\d]+/u', '-', $text);
         
         // trim
-        $text = trim($text, '-');
+        $result = trim($result, '-');
         
         // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $result = iconv('UTF-8', 'US-ASCII//TRANSLIT', $result);
         
         // lowercase
-        $text = strtolower($text);
+        $result = strtolower($result);
         
         // remove unwanted characters
-        $text = preg_replace('/[^-\w]+/', '', $text);
+        $result = preg_replace('/[^-\w]+/', '', $result);
         
-        return $text;
+        return $result;
     }
 }

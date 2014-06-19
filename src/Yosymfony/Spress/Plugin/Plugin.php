@@ -11,12 +11,23 @@
  
 namespace Yosymfony\Spress\Plugin;
 
+/**
+ * Basic implementation of PluginInterface
+ * 
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class Plugin implements PluginInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getMetas()
     {
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public function initialize(EventSubscriber $subscriber)
     {
     }

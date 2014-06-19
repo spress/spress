@@ -14,16 +14,16 @@ namespace Yosymfony\Spress\Plugin;
 /**
  * Plugin interface
  * 
- * @author Victor Puertas
+ * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface PluginInterface
 {
     /**
-     * Metas of a PluginInterface
+     * Metas of a plugin
      * 
      * Standard metas:
-     *   name: name of plugin
-     *   author: author of plugin
+     *   - name: name of plugin
+     *   - author: author of plugin
      * 
      * @return null or array
      */

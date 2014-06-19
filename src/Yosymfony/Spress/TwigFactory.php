@@ -32,7 +32,7 @@ namespace Yosymfony\Spress;
 class TwigFactory
 {
     private $loader = [];
-    private $enviromentOpt = [];
+    private $environmentOpt = [];
     
     public function __construct()
     {
@@ -48,7 +48,7 @@ class TwigFactory
      */
     public function withCache($value)
     {
-        $this->enviromentOpt['cache'] = $value;
+        $this->environmentOpt['cache'] = $value;
         
         return $this;
     }
@@ -62,7 +62,7 @@ class TwigFactory
      */
     public function withDebug($value)
     {
-        $this->enviromentOpt['debug'] = $value;
+        $this->environmentOpt['debug'] = $value;
         
         return $this;
     }
@@ -76,7 +76,7 @@ class TwigFactory
      */
     public function withAutoescape($value)
     {
-        $this->enviromentOpt['autoescape'] = $value;
+        $this->environmentOpt['autoescape'] = $value;
         
         return $this;
     }
@@ -163,7 +163,7 @@ class TwigFactory
     public function create()
     {
         $twigLoader = new \Twig_Loader_Chain($this->loader);
-        $twig = new \Twig_Environment($twigLoader, $this->enviromentOpt);
+        $twig = new \Twig_Environment($twigLoader, $this->environmentOpt);
         
         return $twig;
     }

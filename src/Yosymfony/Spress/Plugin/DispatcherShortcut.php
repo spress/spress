@@ -43,13 +43,13 @@ class DispatcherShortcut
         ContentLocator $contentLocator,
         IOInterface $io)
     {
-        $event = new Event\EnviromentEvent(
+        $event = new Event\EnvironmentEvent(
             $configuration,
             $converter,
             $renderizer,
             $contentLocator,
             $io);
-            
+        
         return $this->pm->dispatchEvent(Event\SpressEvents::SPRESS_START, $event);
     }
     

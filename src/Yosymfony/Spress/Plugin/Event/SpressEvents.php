@@ -22,7 +22,7 @@ final class SpressEvents
      * extends Twig.
      * 
      * The event listener receiver an 
-     *  Yosymfony\Spress\Plugin\Event\EnviromentEvent instance.
+     *  Yosymfony\Spress\Plugin\Event\EnvironmentEvent instance.
      * 
      * @var string
      */

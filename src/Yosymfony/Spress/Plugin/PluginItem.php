@@ -63,4 +63,9 @@ class PluginItem
     {
         return $this->metas && isset($this->metas['author']) ? $this->metas['author'] : '';
     }
+    
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

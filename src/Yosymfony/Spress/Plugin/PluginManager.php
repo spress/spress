@@ -20,7 +20,7 @@ use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 
 /**
- * Plugin manager
+ * Plugins manager
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -80,40 +80,23 @@ class PluginManager
     }
     
     /**
-     * Get plugins available
+     * Get plugins availables
      * 
      * @return array Array of PluginItem
      */
     public function getPlugins()
     {
-        $result = [];
+        $plugins = [];
+        $composerPlugins = [];
         $dir = $this->contentLocator->getPluginDir();
         
         if($dir)
         {
-            $finder = new Finder();
-            $finder->files()
-                ->in($dir)
-                ->exclude(self::VENDORS_DIR)
-                ->name(self::COMPOSER_FILENAME);
-                
-            foreach($finder as $file)
-            {
-                $pluginConf = $this->getPluginConfigData($file);
-
-                if($pluginConf->isValidPlugin())
-                {
-                    $className = $pluginConf->getSpressClass();
-
-                    if($this->isValidClassName($className))
-                    {
-                        $result[] = new PluginItem(new $className);
-                    }
-                }
-            }
+            $plugins = $this->getNotNamespacePlugins($dir);
+            $composerPlugins = $this->getComposerPlugins($dir);
         }
         
-        return $result;
+        return array_merge($plugins, $composerPlugins);
     }
     
     /**
@@ -134,6 +117,58 @@ class PluginManager
     public function getDispatcherShortcut()
     {
         return $this->dispatcherShortcut;
+    }
+    
+    private function getNotNamespacePlugins($dir)
+    {
+        $plugins = [];
+        
+        $finder = new Finder();
+        $finder->files()
+            ->in($dir)
+            ->exclude(self::VENDORS_DIR)
+            ->name('*.php');
+            
+        foreach($finder as $file)
+        {
+            $className = $file->getBasename('.php');
+            include_once($file->getRealPath());
+            
+            if($this->isValidClassName($className))
+            {
+                $plugins[$className] = new PluginItem(new $className);
+            }
+        }
+        
+        return $plugins;
+    }
+    
+    private function getComposerPlugins($dir)
+    {
+        $plugins = [];
+        
+        $finder = new Finder();
+        $finder->files()
+            ->in($dir)
+            ->exclude(self::VENDORS_DIR)
+            ->name(self::COMPOSER_FILENAME);
+            
+        foreach($finder as $file)
+        {
+            $pluginConf = $this->getPluginComposerData($file);
+
+            $className = $pluginConf->getSpressClass();
+            
+            if($className)
+            {
+                if($this->isValidClassName($className))
+                {
+                    $plugins[$className] = new PluginItem(new $className);
+                }
+            }
+        }
+        
+        return $plugins;
     }
     
     private function updateClassLoader()
@@ -201,11 +236,11 @@ class PluginManager
         return $result;
     }
     
-    private function getPluginConfigData(SplFileInfo $item)
+    private function getPluginComposerData(SplFileInfo $item)
     {
         $json = $item->getContents();
         $data = json_decode($json, true);
         
-        return new PluginConfigData($data);
+        return new PluginComposerData($data);
     }
 }

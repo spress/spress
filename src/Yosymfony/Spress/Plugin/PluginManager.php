@@ -26,9 +26,7 @@ use Yosymfony\Spress\ContentLocator\ContentLocator;
  */
 class PluginManager
 {
-    const VENDORS_DIR = "vendors";
-    const COMPOSER_FILENAME = "composer.json";
-    
+    private $options = [];
     private $contentLocator;
     private $classLoader;
     private $dispatcher;
@@ -40,10 +38,12 @@ class PluginManager
      * Constructor
      * 
      * @param ContentLocator $contentLocator
-     * @param $classLoader
+     * @param ClassLoader $classLoader
+     * @param array $options
      */
-    public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader)
+    public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader, array $options)
     {
+        $this->options = $options;
         $this->contentLocator = $contentLocator;
         $this->classLoader = $classLoader;
         $this->dispatcher = new EventDispatcher();
@@ -126,7 +126,7 @@ class PluginManager
         $finder = new Finder();
         $finder->files()
             ->in($dir)
-            ->exclude(self::VENDORS_DIR)
+            ->exclude($this->options['vendors_dir'])
             ->name('*.php');
             
         foreach($finder as $file)
@@ -150,8 +150,8 @@ class PluginManager
         $finder = new Finder();
         $finder->files()
             ->in($dir)
-            ->exclude(self::VENDORS_DIR)
-            ->name(self::COMPOSER_FILENAME);
+            ->exclude($this->options['vendors_dir'])
+            ->name($this->options['composer_filename']);
             
         foreach($finder as $file)
         {
@@ -174,7 +174,7 @@ class PluginManager
     private function updateClassLoader()
     {
         $baseDir = $this->contentLocator->getPluginDir();
-        $vendorDir = $baseDir . '/' . self::VENDORS_DIR;
+        $vendorDir = $baseDir . '/' . $this->options['vendors_dir'];
         
         if(false == file_exists($vendorDir))
         {
@@ -187,7 +187,7 @@ class PluginManager
         );
         
         $embeddedComposer = $embeddedComposerBuilder
-            ->setComposerFilename(self::COMPOSER_FILENAME)
+            ->setComposerFilename($this->options['composer_filename'])
             ->setVendorDirectory($vendorDir)
             ->build();
         

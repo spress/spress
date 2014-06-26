@@ -52,9 +52,13 @@ class PluginManager
     
     /**
      * Start the life clycle
+     * 
+     * @expectedException \RuntimeException If not there mandatory options
      */
     public function initialize()
     {
+        $this->checkOptions($this->options);
+        
         $this->eventsDispatched = [];
         
         $this->updateClassLoader();
@@ -242,5 +246,18 @@ class PluginManager
         $data = json_decode($json, true);
         
         return new PluginComposerData($data);
+    }
+    
+    private function checkOptions(array $options)
+    {
+        if(false == isset($options['vendors_dir']))
+        {
+            throw new \RuntimeException('vendors_dir option is necessary for Plugin Manager');
+        }
+        
+        if(false == isset($options['composer_filename']))
+        {
+            throw new \RuntimeException('composer_filename option is necessary for Plugin Manager');
+        }
     }
 }

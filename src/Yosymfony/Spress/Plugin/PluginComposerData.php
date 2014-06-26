@@ -48,7 +48,7 @@ class PluginComposerData
     }
     
     /**
-     * Get the Spress plugin entry point
+     * Get the Spress plugin entry-point
      * 
      * @return string
      */

@@ -37,7 +37,7 @@ class Application extends \Silex\Application
         $templatesPath = $this->getTemplatesPath($spressPath);
         
         // Paths and filenames standard
-        $this['spress.paths'] = array(
+        $this['spress.paths'] = [
             'root'            => $spressPath,
             'config'          => $spressPath  . '/app/config',
             'config.file'     => 'config.yml',
@@ -45,7 +45,7 @@ class Application extends \Silex\Application
             'templates'       => $templatesPath,
             'web'             => $spressPath  . '/web',
             'web.index'       => $spressPath  . '/web/index.php',
-        );
+        ];
         $this['spress.version'] = self::VERSION;
         
         if(false == isset($this['spress.io']))
@@ -78,18 +78,24 @@ class Application extends \Silex\Application
             ]);
         });
         
-        $this['spress.cms.plugin'] = $this->share(function($app){
-            return new PluginManager(
-                $app['spress.content_locator'],
-                $app['spress.cms.plugin.classLoader']);
-        });
-        
         $this['spress.cms.plugin.classLoader'] = function()
         {
             $autoloaders = spl_autoload_functions();
             
             return $autoloaders[0][0];
         };
+        
+        $this['spress.cms.plugin.options'] = [
+            'vendors_dir'       => 'vendors',
+            'composer_filename' => 'composer.json',
+        ];
+        
+        $this['spress.cms.plugin'] = $this->share(function($app){
+            return new PluginManager(
+                $app['spress.content_locator'],
+                $app['spress.cms.plugin.classLoader'],
+                $app['spress.cms.plugin.options']);
+        });
         
         $this['spress.cms.renderizer'] = $this->share(function($app){
             return new Renderizer(

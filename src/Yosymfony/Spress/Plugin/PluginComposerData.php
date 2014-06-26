@@ -12,11 +12,11 @@
 namespace Yosymfony\Spress\Plugin;
 
 /**
- * Configuration data of a plugin.
+ * Wrapper for Composer data of a plugin
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class PluginConfigData
+class PluginComposerData
 {
     private $data;
     
@@ -48,7 +48,7 @@ class PluginConfigData
     }
     
     /**
-     * Get the Spress plugin entry point
+     * Get the Spress plugin entry-point
      * 
      * @return string
      */
@@ -62,15 +62,5 @@ class PluginConfigData
         }
         
         return $result;
-    }
-    
-    /**
-     * Is a valid plugin?
-     * 
-     * @return boolean
-     */
-    public function isValidPlugin()
-    {
-        return isset($this->data['extra']['spress_class']);
     }
 }

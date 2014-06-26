@@ -20,15 +20,13 @@ use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Yosymfony\Spress\ContentLocator\ContentLocator;
 
 /**
- * Plugin manager
+ * Plugins manager
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class PluginManager
 {
-    const VENDORS_DIR = "vendors";
-    const COMPOSER_FILENAME = "composer.json";
-    
+    private $options = [];
     private $contentLocator;
     private $classLoader;
     private $dispatcher;
@@ -40,10 +38,12 @@ class PluginManager
      * Constructor
      * 
      * @param ContentLocator $contentLocator
-     * @param $classLoader
+     * @param ClassLoader $classLoader
+     * @param array $options
      */
-    public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader)
+    public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader, array $options)
     {
+        $this->options = $options;
         $this->contentLocator = $contentLocator;
         $this->classLoader = $classLoader;
         $this->dispatcher = new EventDispatcher();
@@ -52,9 +52,13 @@ class PluginManager
     
     /**
      * Start the life clycle
+     * 
+     * @expectedException \RuntimeException If not there mandatory options
      */
     public function initialize()
     {
+        $this->checkOptions($this->options);
+        
         $this->eventsDispatched = [];
         
         $this->updateClassLoader();
@@ -80,40 +84,23 @@ class PluginManager
     }
     
     /**
-     * Get plugins available
+     * Get plugins availables
      * 
      * @return array Array of PluginItem
      */
     public function getPlugins()
     {
-        $result = [];
+        $plugins = [];
+        $composerPlugins = [];
         $dir = $this->contentLocator->getPluginDir();
         
         if($dir)
         {
-            $finder = new Finder();
-            $finder->files()
-                ->in($dir)
-                ->exclude(self::VENDORS_DIR)
-                ->name(self::COMPOSER_FILENAME);
-                
-            foreach($finder as $file)
-            {
-                $pluginConf = $this->getPluginConfigData($file);
-
-                if($pluginConf->isValidPlugin())
-                {
-                    $className = $pluginConf->getSpressClass();
-
-                    if($this->isValidClassName($className))
-                    {
-                        $result[] = new PluginItem(new $className);
-                    }
-                }
-            }
+            $plugins = $this->getNotNamespacePlugins($dir);
+            $composerPlugins = $this->getComposerPlugins($dir);
         }
         
-        return $result;
+        return array_merge($plugins, $composerPlugins);
     }
     
     /**
@@ -136,10 +123,62 @@ class PluginManager
         return $this->dispatcherShortcut;
     }
     
+    private function getNotNamespacePlugins($dir)
+    {
+        $plugins = [];
+        
+        $finder = new Finder();
+        $finder->files()
+            ->in($dir)
+            ->exclude($this->options['vendors_dir'])
+            ->name('*.php');
+            
+        foreach($finder as $file)
+        {
+            $className = $file->getBasename('.php');
+            include_once($file->getRealPath());
+            
+            if($this->isValidClassName($className))
+            {
+                $plugins[$className] = new PluginItem(new $className);
+            }
+        }
+        
+        return $plugins;
+    }
+    
+    private function getComposerPlugins($dir)
+    {
+        $plugins = [];
+        
+        $finder = new Finder();
+        $finder->files()
+            ->in($dir)
+            ->exclude($this->options['vendors_dir'])
+            ->name($this->options['composer_filename']);
+            
+        foreach($finder as $file)
+        {
+            $pluginConf = $this->getPluginComposerData($file);
+
+            $className = $pluginConf->getSpressClass();
+            
+            if($className)
+            {
+                if($this->isValidClassName($className))
+                {
+                    $plugins[$className] = new PluginItem(new $className);
+                }
+            }
+        }
+        
+        return $plugins;
+    }
+    
     private function updateClassLoader()
     {
         $baseDir = $this->contentLocator->getPluginDir();
-        $vendorDir = $baseDir . '/' . self::VENDORS_DIR;
+        $vendorDir = $baseDir . '/' . $this->options['vendors_dir'];
         
         if(false == file_exists($vendorDir))
         {
@@ -152,7 +191,7 @@ class PluginManager
         );
         
         $embeddedComposer = $embeddedComposerBuilder
-            ->setComposerFilename(self::COMPOSER_FILENAME)
+            ->setComposerFilename($this->options['composer_filename'])
             ->setVendorDirectory($vendorDir)
             ->build();
         
@@ -201,11 +240,24 @@ class PluginManager
         return $result;
     }
     
-    private function getPluginConfigData(SplFileInfo $item)
+    private function getPluginComposerData(SplFileInfo $item)
     {
         $json = $item->getContents();
         $data = json_decode($json, true);
         
-        return new PluginConfigData($data);
+        return new PluginComposerData($data);
+    }
+    
+    private function checkOptions(array $options)
+    {
+        if(false == isset($options['vendors_dir']))
+        {
+            throw new \RuntimeException('vendors_dir option is necessary for Plugin Manager');
+        }
+        
+        if(false == isset($options['composer_filename']))
+        {
+            throw new \RuntimeException('composer_filename option is necessary for Plugin Manager');
+        }
     }
 }

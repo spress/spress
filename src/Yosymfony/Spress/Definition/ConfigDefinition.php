@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
  * Definition for config.yml
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConfigDefinition implements ConfigurationInterface
@@ -55,7 +55,10 @@ class ConfigDefinition implements ConfigurationInterface
                 ->prototype('scalar')
                 ->end()
             ->end()
-            ->scalarNode('permalink')
+            ->arrayNode('layout_ext')
+                ->prototype('scalar')
+                ->end()
+            ->end()            ->scalarNode('permalink')
             ->end()
             ->booleanNode('relative_permalinks')
             ->end()

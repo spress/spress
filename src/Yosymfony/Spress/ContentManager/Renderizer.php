@@ -64,8 +64,9 @@ class Renderizer
         if($layoutName)
         {
             $payload['page']['content'] = $rendered;
+            $layoutNameWithExt = $this->getFullLayoutName($layoutName);
 
-            $rendered = $this->renderString($this->getTwigEntryPoint($layoutName), $payload);
+            $rendered = $this->renderString($this->getTwigEntryPoint($layoutNameWithExt), $payload);
         }
 
         $item->setPostLayoutContent($rendered);
@@ -93,14 +94,12 @@ class Renderizer
      */
     public function existsLayout($name)
     {
-        $exists = false;
-
-        if($this->getFullLayoutName($name)){
-            $exists = true;
+        if($this->getFullLayoutName($name))
+        {
+            return true;
         }
-
-
-        return $exists;
+        
+        return false;
     }
 
     /**
@@ -112,17 +111,15 @@ class Renderizer
      */
     public function getFullLayoutName($name)
     {
-        $fullName = false;
-
-        foreach($this->configuration->getRepository()->get('layout_ext') as $ext){
-            if(false === $fullName){
-                if(isset($this->layoutItems[$name . '.' . $ext])){
-                    $fullName = $name . $ext;
-                }
+        foreach($this->configuration->getRepository()->get('layout_ext') as $ext)
+        {
+            if(isset($this->layoutItems[$name . '.' . $ext]))
+            {
+                return $name . '.' . $ext;
             }
         }
 
-        return $fullName;
+        return false;
     }
 
     /**
@@ -176,7 +173,7 @@ class Renderizer
     private function getTwigEntryPoint($layoutName)
     {
         $result = '';
-        $layout = $this->getLayoutName($layoutName);
+        $layout = $this->getLayoutNameWithNamespace($layoutName);
 
         if(strlen($layoutName) > 0)
         {
@@ -189,10 +186,9 @@ class Renderizer
     /**
      * @return string
      */
-    private function getLayoutName($name)
+    private function getLayoutNameWithNamespace($name)
     {
-        $fullName = $this->getFullLayoutName($name);
-        return sprintf('@%s/%s', $this->layoutNamespace, $fullName);
+        return sprintf('@%s/%s', $this->layoutNamespace, $name);
     }
 
     /**
@@ -224,7 +220,7 @@ class Renderizer
                 );
             }
 
-            return $this->getFullLayoutName($layoutName);
+            return $layoutName;
         }
         else
         {
@@ -245,10 +241,11 @@ class Renderizer
 
             if($layoutName)
             {
-                $content = $this->getTwigEntryPoint($layoutName) . $content;
+                $layoutNameWithExt = $this->getFullLayoutName($layoutName);
+                $content = $this->getTwigEntryPoint($layoutNameWithExt) . $content;
             }
 
-            $name = $this->getLayoutName($layout->getRelativePathFilename());
+            $name = $this->getLayoutNameWithNamespace($layout->getRelativePathFilename());
             $result[$name] = $content;
         }
 

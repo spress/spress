@@ -10,6 +10,7 @@ include: [.htaccess]
 exclude: [composer.json]
 markdown_ext: [markdown,mkd,mkdn,md]
 processable_ext: [html,htm,xml,js,css]
+layout_ext: [html.twig,twig,html]
 permalink: pretty
 relative_permalinks: true
 drafts: false

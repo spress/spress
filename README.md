@@ -19,7 +19,7 @@ Requirements
 Contributing
 ------------
 When Contributing code to Spress, you must follow its coding standards. Spress follows 
-[Symfony's coding style](http://symfony.com/doc/current/contributing/code/standards.html).
+[Symfony coding style](http://symfony.com/doc/current/contributing/code/standards.html).
 
 Keep in mind a golden rule: **Imitate the existing Spress code**.
 

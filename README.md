@@ -9,15 +9,31 @@ Spress is a static site generator building on Silex and Twig and inspired by
 
 License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE)
 
-Require
--------
+Requirements
+------------
 
 * Linux, Unix or Mac OS X.
 * PHP >= 5.4.
 * [Composer](http://getcomposer.org/).
 
+Contributing
+------------
+When Contributing code to Spress, you must follow its coding standards. Spress follows 
+[Symfony's coding style](http://symfony.com/doc/current/contributing/code/standards.html).
+
+Keep in mind a golden rule: **Imitate the existing Spress code**.
+
+### Pull Resquests
+* Folk the Spress repository.
+* Create a new branch for each feature or improvement.
+* Send a pull request from each feature branch to master branch.
+
+### Unit testing
+
+All pull requests must be accompanied by passing unit tests. Spress uses [phpunit](http://phpunit.de/) for testing.
+
 Getting Started
---------------
+---------------
 
 * Download the last [release](https://github.com/yosymfony/Spress/releases) or clone repository `git clone https://github.com/yosymfony/Spress.git`.
 * Get vendors

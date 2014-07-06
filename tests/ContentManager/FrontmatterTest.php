@@ -44,6 +44,21 @@ EOT;
         $this->assertStringEndsWith('---', $fm->getFrontmatterWithDashedLines());
     }
     
+    public function testFrontmatterWithCarriageReturn()
+    {
+        $conf = 'title: My firts post';
+        $content = "---\r\n" . $conf . "\r\n---\r\nYour post content";
+        $fm = new Frontmatter($content, $this->configuration);
+
+        $this->assertTrue($fm->hasFrontmatter());
+        $this->assertNotNull($fm->getFrontmatter());
+        $this->assertCount(1, $fm->getFrontmatterArray());
+        $this->assertGreaterThan(0, strlen($fm->getFrontmatterString()));
+        $this->assertEquals('Your post content', $fm->getContentNotFrontmatter());
+        $this->assertStringStartsWith('---', $fm->getFrontmatterWithDashedLines());
+        $this->assertStringEndsWith('---', $fm->getFrontmatterWithDashedLines());
+    }
+    
     public function testNotFrontmatter()
     {
         $conf = 'title: My firts post';

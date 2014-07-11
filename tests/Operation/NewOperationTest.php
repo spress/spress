@@ -11,8 +11,8 @@
  
 namespace Yosymfony\Spress\Tests;
 
-use Yosymfony\Spress\Operation\NewOperation;
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\Operation\NewOperation;
 
 class NewOperationTest extends \PHPUnit_Framework_TestCase
 {

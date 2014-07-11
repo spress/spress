@@ -9,15 +9,16 @@
  * file that was distributed with this source code.
  */
  
- namespace Yosymfony\Spress\Command;
+namespace Yosymfony\Spress\Command;
  
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yosymfony\Spress\Application;
-use Yosymfony\Spress\IO\ConsoleIO;  
+use Yosymfony\Spress\Core\Application;
+use Yosymfony\Spress\Core\IO\ConsoleIO;
+use Yosymfony\Spress\Operation\NewOperation;
 
 class NewCommand extends Command
 {
@@ -64,7 +65,8 @@ class NewCommand extends Command
             'spress.io' => $io,
         ]);
         
-        $app['spress.operation.new']->newSite($path, $template, $force, $completeScaffold);
+        $operation = new NewOperation($app['spress.paths']['templates']);
+        $operation->newSite($path, $template, $force, $completeScaffold);
         
         $io->write(sprintf('<comment>New site created at %s.</comment>', $path));
         

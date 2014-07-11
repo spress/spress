@@ -15,8 +15,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yosymfony\Spress\Application;
-use Yosymfony\Spress\IO\ConsoleIO;
+use Yosymfony\Spress\Core\Application;
+use Yosymfony\Spress\Core\IO\ConsoleIO;
 
 class BuildCommand extends Command
 {
@@ -59,6 +59,7 @@ class BuildCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $spressPath = realpath(dirname(__FILE__) . '/../../../../');
         $timezone = $input->getOption('timezone');
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
@@ -66,6 +67,11 @@ class BuildCommand extends Command
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
         $app = new Application([
+            'spress.paths' => [
+                'root'      => $spressPath,
+                'config'    => $spressPath . '/app/config/',
+                'templates' => $this->getTemplatesPath($spressPath),
+            ],
             'spress.io' => $io,
         ]);
         
@@ -99,5 +105,18 @@ class BuildCommand extends Command
         $io->write(sprintf('Total pages: %d', $resultData['total_pages']));
         $io->write(sprintf('Processed pages: %d', $resultData['processed_pages']));
         $io->write(sprintf('Other resources: %d', $resultData['other_resources']));
+    }
+    
+    /**
+     * @return string
+     */
+    private function getTemplatesPath($spressPath)
+    {
+        if(file_exists($spressPath . '/app/templates/'))
+        {
+            return $spressPath . '/app/templates';
+        }
+        
+        return realpath($spressPath . '/../spress-templates');
     }
 }

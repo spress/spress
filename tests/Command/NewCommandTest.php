@@ -21,7 +21,6 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {   
         $fs = new FileSystem();
-        //$fs->remove('./tests/out');
     }
     
     public function tearDown()

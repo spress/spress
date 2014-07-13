@@ -1,8 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    #<IfModule mod_vhost_alias.c>
-    #    RewriteBase /
-    #</IfModule>
-
-</IfModule>

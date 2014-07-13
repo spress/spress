@@ -21,7 +21,7 @@ class MarkdownTest extends \PHPUnit_Framework_TestCase
         $converter = new Markdown();
         $converter->initialize(['markdown_ext' => ['markdown','mkd','mkdn','md']]);
         
-        $this->assertInstanceOf('Yosymfony\\Spress\\ContentManager\\ConverterInterface', $converter);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\ConverterInterface', $converter);
         $this->assertEquals(1, $converter->getPriority());
         $this->assertTrue(is_array($converter->getSupportExtension()));
         $this->assertCount(4, $converter->getSupportExtension());

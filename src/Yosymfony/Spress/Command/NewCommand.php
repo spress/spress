@@ -61,9 +61,7 @@ class NewCommand extends Command
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
-        $app = new Application([
-            'spress.io' => $io,
-        ]);
+        $app = new SpressCLI($io);
         
         $operation = new NewOperation($app['spress.paths']['templates']);
         $operation->newSite($path, $template, $force, $completeScaffold);

@@ -28,17 +28,17 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove(__DIR__ . '/fixtures/project/_site');
     }
     
     public function testConfiguration()
     {   
-        $this->assertInstanceOf('Yosymfony\\Spress\\Configuration', $this->app['spress.config']);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\Configuration', $this->app['spress.config']);
     }
     
     public function testLoadConfigurations()
     {
-        $this->config->loadLocal('./tests/fixtures/project');
+        $this->config->loadLocal(__DIR__ . '/fixtures/project');
         
         $this->assertGreaterThan(0, count($this->config->getRepository()));
         $this->assertGreaterThan(0, count($this->config->getGlobal()));
@@ -48,7 +48,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     
     public function testLoadProductionConfiguration()
     {
-        $this->config->loadLocal('./tests/fixtures/project', 'prod');
+        $this->config->loadLocal(__DIR__ . '/fixtures/project', 'prod');
         $environmentRepository = $this->config->getEnvironment();
         $repository = $this->config->getRepository();
         
@@ -69,7 +69,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $repository = $this->config->createBlankRepository();
         
-        $this->assertInstanceOf('Yosymfony\\Silex\\ConfigServiceProvider\\ConfigRepository', $repository);
+        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $repository);
         $this->assertCount(0, $repository);
     }
     
@@ -94,21 +94,21 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     
     public function testGetConfigEnvironmentDevFilename()
     {
-        $this->config->loadLocal('./tests/fixtures/project');
+        $this->config->loadLocal(__DIR__ . '/fixtures/project');
         
         $this->assertNull($this->config->getConfigEnvironmentFilename());
     }
     
     public function testGetConfigEnvironmentDevExplicitFilename()
     {
-        $this->config->loadLocal('./tests/fixtures/project', 'dev');
+        $this->config->loadLocal(__DIR__ . '/fixtures/project', 'dev');
         
         $this->assertNull($this->config->getConfigEnvironmentFilename());
     }
     
     public function testGetConfigEnvironmentProdFilename()
     {
-        $this->config->loadLocal('./tests/fixtures/project', 'prod');
+        $this->config->loadLocal(__DIR__ . '/fixtures/project', 'prod');
         
         $this->assertEquals('config_prod.yml', $this->config->getConfigEnvironmentFilename());
         $this->assertEquals('prod', $this->config->getEnvironmentName());

@@ -23,7 +23,7 @@ class ContentEventTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $path = realpath(__DIR__ .'/../../fixtures/project/_posts/2013-08-12-post-example-1.md');
+        $path = realpath(__DIR__ .'/../../../fixtures/project/_posts/2013-08-12-post-example-1.md');
         
         $app = new Application();
         $config = $app['spress.config'];

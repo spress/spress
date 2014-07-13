@@ -19,13 +19,15 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected $app;
     protected $cms;
+    protected $projectDir;
     protected $config;
     protected $destination;
     
     public function setUp()
     {
-        $this->app = new Application(); 
-        $this->app['spress.config']->loadLocal('./tests/fixtures/project');
+        $this->app = new Application();
+        $this->projectDir = __DIR__ . '/../fixtures/project';
+        $this->app['spress.config']->loadLocal($this->projectDir);
         $this->cms = $this->app['spress.cms'];
         $this->destination = $this->app['spress.content_locator']->getDestinationDir();
     }
@@ -33,7 +35,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove($this->projectDir . '/_site');
     }
     
     public function testProcessSite()
@@ -66,7 +68,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Yosymfony\Spress\Exception\FrontmatterValueException
+     * @expectedException Yosymfony\Spress\Core\Exception\FrontmatterValueException
      */
     public function testProcessSiteWithNotExistsLayout()
     {

@@ -12,7 +12,7 @@
          bootstrap="vendor/autoload.php"
 >
     <testsuites>
-        <testsuite name="Yosymfony Spress Test Suite">
+        <testsuite name="Spress Test Suite">
             <directory>./src/Yosymfony/Spress/Core/tests/</directory>
             <directory>./tests/</directory>
         </testsuite>

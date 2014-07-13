@@ -22,7 +22,7 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
-        $this->app['spress.config']->loadLocal('./tests/fixtures/project');
+        $this->app['spress.config']->loadLocal(__DIR__ . '/../../../fixtures/project');
         $this->event = new EnvironmentEvent(
             $this->app['spress.config'],
             $this->app['spress.cms.converter'],
@@ -35,21 +35,21 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigRepository()
     {
         $this->assertInstanceOf(
-            'Yosymfony\\Silex\\ConfigServiceProvider\\ConfigRepository',
+            'Yosymfony\Silex\ConfigServiceProvider\ConfigRepository',
             $this->event->getConfigRepository());
     }
     
     public function testGetTemplateManager()
     {
         $this->assertInstanceOf(
-            'Yosymfony\\Spress\\Core\\Plugin\\Api\\TemplateManager',
+            'Yosymfony\Spress\Core\Plugin\Api\TemplateManager',
             $this->event->getTemplateManager());
     }
     
     public function testGetIO()
     {
         $this->assertInstanceOf(
-            'Yosymfony\\Spress\\Core\\IO\\IOInterface',
+            'Yosymfony\Spress\Core\IO\IOInterface',
             $this->event->getIO());
     }
     

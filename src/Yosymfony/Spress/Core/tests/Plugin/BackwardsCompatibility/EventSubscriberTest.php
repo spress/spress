@@ -18,7 +18,7 @@ class EventSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testGetEventListeners()
     {
         $eventSubscriber = new EventSubscriber();
-        $eventSubscriber->addEventListener('spress.test', function(){
+        $eventSubscriber->addEventListener('spress.test', function() {
             $a = 'event logic';
         });
         

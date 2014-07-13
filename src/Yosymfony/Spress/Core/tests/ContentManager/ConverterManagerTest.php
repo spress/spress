@@ -42,7 +42,7 @@ class ConverterManagerTest extends \PHPUnit_Framework_TestCase
         $item = new PageItem($fileItem, $this->configuration);
         $cr = $this->cm->convertItem($item);
 
-        $this->assertInstanceOf('Yosymfony\\Spress\\Core\\ContentManager\\ConverterResult', $cr);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\ConverterResult', $cr);
         $this->assertEquals('html', $cr->getExtension());
         $this->assertTrue(strlen($cr->getResult()) > 0);
     }

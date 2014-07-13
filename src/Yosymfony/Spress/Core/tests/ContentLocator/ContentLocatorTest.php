@@ -19,14 +19,16 @@ use Yosymfony\Spress\Core\ContenLocator\ContenLocator;
 class ContentLocatorTest extends \PHPUnit_Framework_TestCase
 {
     protected $app;
+    protected $projectDir;
     protected $config;
     protected $contentLocator;
     
     public function setUp()
     {
         $this->app = new Application();
+        $this->projectDir = (__DIR__ . '/../fixtures/project');
         $this->config = $this->app['spress.config'];
-        $this->config->loadLocal('./tests/fixtures/project');
+        $this->config->loadLocal($this->projectDir);
         $this->contentLocator = $this->app['spress.content_locator'];
         $this->contentLocator->setConvertersExtension($this->config->getRepository()->get('markdown_ext'));
     }
@@ -34,7 +36,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove($this->projectDir . '/_site');
     }
     
     public function testGetPosts()
@@ -42,7 +44,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $posts = $this->contentLocator->getPosts();
         
         $this->assertCount(4, $posts);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\Core\\ContentLocator\\FileItem', $posts);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\Core\ContentLocator\FileItem', $posts);
     }
     
     public function testGetPostsWithEmptyMarkdownExtesion()
@@ -58,7 +60,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $pages = $this->contentLocator->getPages();
 
         $this->assertCount(6, $pages);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\Core\\ContentLocator\\FileItem', $pages);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\Core\ContentLocator\FileItem', $pages);
     }
     
     public function testGetPagesWithEmptyProcessableExtesion()
@@ -147,7 +149,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $fileItem = $this->contentLocator->getItem('index.html');
         
-        $this->assertInstanceOf('Yosymfony\Spress\ContentLocator\FileItem', $fileItem);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentLocator\FileItem', $fileItem);
         $this->assertEquals($fileItem->getRelativePath(), '');
         $this->assertEquals($fileItem->getRelativePathFilename(), 'index.html');
     }
@@ -156,7 +158,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $fileItem = $this->contentLocator->getItem('../extra_pages/extra-page1.html');
         
-        $this->assertInstanceOf('Yosymfony\\Spress\\Core\\ContentLocator\\FileItem', $fileItem);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentLocator\FileItem', $fileItem);
         $this->assertEquals($fileItem->getRelativePath(), '');
         $this->assertEquals($fileItem->getRelativePathFilename(), 'extra-page1.html');
     }
@@ -173,7 +175,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $layouts = $this->contentLocator->getLayouts();
         
         $this->assertCount(1, $layouts);
-        $this->assertContainsOnlyInstancesOf('Yosymfony\\Spress\\Core\\ContentLocator\\FileItem', $layouts);
+        $this->assertContainsOnlyInstancesOf('Yosymfony\Spress\Core\ContentLocator\FileItem', $layouts);
     }
     
     public function testGetSourceDir()

@@ -27,9 +27,9 @@ class RenderizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = new Application();
         $this->configuration = $this->app['spress.config'];
-        $this->configuration->loadLocal('./tests/fixtures/project');
+        $this->configuration->loadLocal(__DIR__ . '/../fixtures/project');
         $this->renderizer = $this->app['spress.cms.renderizer'];
-        $this->pagesDir = realpath(__DIR__ .'/../fixtures/project/');
+        $this->pagesDir = $this->app['spress.content_locator']->getSourceDir();
     }
     
     public function testRenderString()

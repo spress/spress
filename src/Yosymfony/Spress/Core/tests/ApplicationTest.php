@@ -26,12 +26,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove(__DIR__ . '/fixtures/project/_site');
     }
     
     public function testParse()
     {
-        $result = $this->app->parse('./tests/fixtures/project');
+        $result = $this->app->parse(__DIR__ . '/fixtures/project');
         $config = $this->app['spress.config'];
         
         $this->assertTrue(is_array($result));
@@ -47,7 +47,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     
     public function testParseProdEnvironment()
     {
-        $result = $this->app->parse('./tests/fixtures/project', 'prod');
+        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'prod');
         $config = $this->app['spress.config'];
         
         $this->assertTrue(is_array($result));
@@ -66,7 +66,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseTimezone()
     {
-        $result = $this->app->parse('./tests/fixtures/project', 'dev', 'Europe/Madrid');
+        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', 'Europe/Madrid');
         
         $this->assertEquals('Europe/Madrid', date_default_timezone_get()); 
         $this->assertTrue(is_array($result));
@@ -80,7 +80,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     
     public function testParseDraft()
     {
-        $result = $this->app->parse('./tests/fixtures/project', 'dev', null, true);
+        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', null, true);
         $repository = $this->app['spress.config']->getRepository();
         
         $this->assertTrue(true, $repository->get('drafts'));
@@ -96,7 +96,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     
     public function testParseSafe()
     {
-        $result = $this->app->parse('./tests/fixtures/project', 'dev', null, null, true);
+        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', null, null, true);
         $repository = $this->app['spress.config']->getRepository();
 
         $this->assertTrue(true, $repository->get('safe'));
@@ -107,6 +107,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseLocalPathFail()
     {
-        $this->app->parse('./tests/fixtures/project-not-exists');
+        $this->app->parse(__DIR__ . '/fixtures/project-not-exists');
     }
 }

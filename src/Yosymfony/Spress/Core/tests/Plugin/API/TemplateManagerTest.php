@@ -22,7 +22,7 @@ class TemplateManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
-        $this->app['spress.config']->loadLocal('./tests/fixtures/project');
+        $this->app['spress.config']->loadLocal(__DIR__ . '/../../fixtures/project');
         $this->templateManager = new TemplateManager($this->app['spress.cms.renderizer']);
     }
     

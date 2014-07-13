@@ -16,71 +16,74 @@ use Yosymfony\Spress\Operation\NewOperation;
 
 class NewOperationTest extends \PHPUnit_Framework_TestCase
 {
-    protected $base;
+    protected $tmpDir;
     protected $templatePath;
     
     public function setUp()
     {
         $this->templatePath = './tests/fixtures/templates';
-        $this->base = './tests/out';
-        
+        $this->tmpDir = sys_get_temp_dir() . '/spress-tests';
+    }
+
+    public function tearDown()
+    {
         $fs = new FileSystem();
-        $fs->remove($this->base);
+        $fs->remove($this->tmpDir);
     }
     
     public function testNewSiteBlank()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'blank');
+        $operation->newSite($this->tmpDir, 'blank');
         
-        $this->assertFileExists($this->base . '/config.yml');
-        $this->assertFileExists($this->base . '/index.html');
-        $this->assertFileExists($this->base . '/_posts');
-        $this->assertFileExists($this->base . '/_layouts');
+        $this->assertFileExists($this->tmpDir . '/config.yml');
+        $this->assertFileExists($this->tmpDir . '/index.html');
+        $this->assertFileExists($this->tmpDir . '/_posts');
+        $this->assertFileExists($this->tmpDir . '/_layouts');
     }
     
     public function testNewSiteExistsEmptyDir()
     {
         $fs = new FileSystem();
-        $fs->mkdir($this->base);
+        $fs->mkdir($this->tmpDir);
         
-        $this->assertFileExists($this->base);
+        $this->assertFileExists($this->tmpDir);
         
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'blank');
+        $operation->newSite($this->tmpDir, 'blank');
         
-        $this->assertFileExists($this->base . '/config.yml');
-        $this->assertFileExists($this->base . '/composer.json');
-        $this->assertFileExists($this->base . '/index.html');
-        $this->assertFileExists($this->base . '/_posts');
-        $this->assertFileExists($this->base . '/_layouts');
+        $this->assertFileExists($this->tmpDir . '/config.yml');
+        $this->assertFileExists($this->tmpDir . '/composer.json');
+        $this->assertFileExists($this->tmpDir . '/index.html');
+        $this->assertFileExists($this->tmpDir . '/_posts');
+        $this->assertFileExists($this->tmpDir . '/_layouts');
     }
     
     public function testNewSiteBlankForce()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'blank');
-        $operation->newSite($this->base, 'blank', true);
+        $operation->newSite($this->tmpDir, 'blank');
+        $operation->newSite($this->tmpDir, 'blank', true);
         
-        $this->assertFileExists($this->base . '/config.yml');
-        $this->assertFileExists($this->base . '/composer.json');
-        $this->assertFileExists($this->base . '/index.html');
-        $this->assertFileExists($this->base . '/_posts');
-        $this->assertFileExists($this->base . '/_layouts');
+        $this->assertFileExists($this->tmpDir . '/config.yml');
+        $this->assertFileExists($this->tmpDir . '/composer.json');
+        $this->assertFileExists($this->tmpDir . '/index.html');
+        $this->assertFileExists($this->tmpDir . '/_posts');
+        $this->assertFileExists($this->tmpDir . '/_layouts');
     }
     
     public function testNewSiteBlankCompleteScaffold()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'blank', false, true);
+        $operation->newSite($this->tmpDir, 'blank', false, true);
         
-        $this->assertFileExists($this->base . '/config.yml');
-        $this->assertFileExists($this->base . '/composer.json');
-        $this->assertFileExists($this->base . '/index.html');
-        $this->assertFileExists($this->base . '/_posts');
-        $this->assertFileExists($this->base . '/_layouts');
-        $this->assertFileExists($this->base . '/_includes');
-        $this->assertFileExists($this->base . '/_plugins');
+        $this->assertFileExists($this->tmpDir . '/config.yml');
+        $this->assertFileExists($this->tmpDir . '/composer.json');
+        $this->assertFileExists($this->tmpDir . '/index.html');
+        $this->assertFileExists($this->tmpDir . '/_posts');
+        $this->assertFileExists($this->tmpDir . '/_layouts');
+        $this->assertFileExists($this->tmpDir . '/_includes');
+        $this->assertFileExists($this->tmpDir . '/_plugins');
     }
     
     /**
@@ -89,16 +92,16 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteBlankNoForce()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'blank');
-        $operation->newSite($this->base, 'blank', false);
+        $operation->newSite($this->tmpDir, 'blank');
+        $operation->newSite($this->tmpDir, 'blank', false);
     }
     
     public function testNewSiteTemplateTest()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'template-test');
+        $operation->newSite($this->tmpDir, 'template-test');
         
-        $this->assertFileExists($this->base . '/config.yml');
+        $this->assertFileExists($this->tmpDir . '/config.yml');
     }
     
     /**
@@ -107,6 +110,6 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteTemplateNotExists()
     {
         $operation = new NewOperation($this->templatePath);
-        $operation->newSite($this->base, 'template-not-exisits');
+        $operation->newSite($this->tmpDir, 'template-not-exisits');
     }
 }

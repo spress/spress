@@ -21,7 +21,7 @@ class MirrorTest extends \PHPUnit_Framework_TestCase
         $converter = new Mirror();
         $converter->initialize([]);
         
-        $this->assertInstanceOf('Yosymfony\\Spress\\ContentManager\\ConverterInterface', $converter);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\ConverterInterface', $converter);
         $this->assertEquals(0, $converter->getPriority());
         $this->assertTrue(is_array($converter->getSupportExtension()));
         $this->assertCount(0, $converter->getSupportExtension());

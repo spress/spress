@@ -22,7 +22,7 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
-        $this->app['spress.config']->loadLocal('./tests/fixtures/project');
+        $this->app['spress.config']->loadLocal(__DIR__ . '/../fixtures/project');
         $this->pluginManager = $this->app['spress.cms.plugin'];
     }
     

@@ -28,7 +28,7 @@ class Application extends \Silex\Application
 {
     const VERSION = "1.1.0";
     
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this['spress.version'] = self::VERSION;
         

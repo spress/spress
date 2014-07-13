@@ -59,21 +59,13 @@ class BuildCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $spressPath = realpath(dirname(__FILE__) . '/../../../../');
         $timezone = $input->getOption('timezone');
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
         $env = $input->getOption('env');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
-        $app = new Application([
-            'spress.paths' => [
-                'root'      => $spressPath,
-                'config'    => $spressPath . '/app/config/',
-                'templates' => $this->getTemplatesPath($spressPath),
-            ],
-            'spress.io' => $io,
-        ]);
+        $app = new SpressCLI($io);
         
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();
@@ -105,18 +97,5 @@ class BuildCommand extends Command
         $io->write(sprintf('Total pages: %d', $resultData['total_pages']));
         $io->write(sprintf('Processed pages: %d', $resultData['processed_pages']));
         $io->write(sprintf('Other resources: %d', $resultData['other_resources']));
-    }
-    
-    /**
-     * @return string
-     */
-    private function getTemplatesPath($spressPath)
-    {
-        if(file_exists($spressPath . '/app/templates/'))
-        {
-            return $spressPath . '/app/templates';
-        }
-        
-        return realpath($spressPath . '/../spress-templates');
     }
 }

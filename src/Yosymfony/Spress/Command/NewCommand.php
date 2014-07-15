@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\IO\ConsoleIO;
-use Yosymfony\Spress\Operation\NewOperation;
+use Yosymfony\Spress\Scaffolding\NewSite;
 
 class NewCommand extends Command
 {
@@ -63,7 +63,7 @@ class NewCommand extends Command
         
         $app = new SpressCLI($io);
         
-        $operation = new NewOperation($app['spress.paths']['templates']);
+        $operation = new NewSite($app['spress.paths']['templates']);
         $operation->newSite($path, $template, $force, $completeScaffold);
         
         $io->write(sprintf('<comment>New site created at %s.</comment>', $path));

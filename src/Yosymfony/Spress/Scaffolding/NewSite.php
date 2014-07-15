@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Operation;
+namespace Yosymfony\Spress\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -19,7 +19,7 @@ use Symfony\Component\Finder\Finder;
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewOperation
+class NewSite
 {
     private $templatePath; 
     private $fs;

@@ -12,9 +12,9 @@
 namespace Yosymfony\Spress\Tests;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Yosymfony\Spress\Operation\NewOperation;
+use Yosymfony\Spress\Scaffolding\NewSite;
 
-class NewOperationTest extends \PHPUnit_Framework_TestCase
+class NewSiteTest extends \PHPUnit_Framework_TestCase
 {
     protected $tmpDir;
     protected $templatePath;
@@ -33,7 +33,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
     
     public function testNewSiteBlank()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'blank');
         
         $this->assertFileExists($this->tmpDir . '/config.yml');
@@ -49,7 +49,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
         
         $this->assertFileExists($this->tmpDir);
         
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'blank');
         
         $this->assertFileExists($this->tmpDir . '/config.yml');
@@ -61,7 +61,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
     
     public function testNewSiteBlankForce()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'blank');
         $operation->newSite($this->tmpDir, 'blank', true);
         
@@ -74,7 +74,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
     
     public function testNewSiteBlankCompleteScaffold()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'blank', false, true);
         
         $this->assertFileExists($this->tmpDir . '/config.yml');
@@ -91,14 +91,14 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteBlankNoForce()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'blank');
         $operation->newSite($this->tmpDir, 'blank', false);
     }
     
     public function testNewSiteTemplateTest()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'template-test');
         
         $this->assertFileExists($this->tmpDir . '/config.yml');
@@ -109,7 +109,7 @@ class NewOperationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteTemplateNotExists()
     {
-        $operation = new NewOperation($this->templatePath);
+        $operation = new NewSite($this->templatePath);
         $operation->newSite($this->tmpDir, 'template-not-exisits');
     }
 }

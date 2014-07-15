@@ -27,3 +27,30 @@ class MyClass
     }
 }
 ```
+
+## Options
+Options are passed as a key-value array.
+
+* `spress.io`: An implementions of `Yosymfony\Spress\Core\IO\IOInterface` for to interact with the user. The default implementation is `Yosymfony\Spress\Core\IO\NullIO`.
+* `spress.paths`: files and path uses by Spress. The standard sub-keys:
+  * `config`: path to the global configuration file in case you want to override the default global configuration of the core.
+  * `config.file`: Configuration filename. By default: `config.yml`.
+  * `config.file_env`: Template for environment configuration file. By default `config_:env.yml`.
+  * 
+
+Example:
+```
+$io = new BufferIO();
+
+$options = [
+    'spress.paths' => [
+        'config'    => '/my-app/config/',
+    ],
+    'spress.io' => $io,
+];
+```
+
+Backward compatibility
+----------------------
+For backward compatibility events of plugins and plugins class base are located in namespace `Yosymfony\Spress\Plugin`.
+This situation end with Spress 2.0.0.

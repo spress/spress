@@ -19,6 +19,7 @@ Requirements
 Community
 ---------
 
+* Documentation: [spress.yosymfony.com](http://spress.yosymfony.com/docs/).
 * Mention [@spress_cms](https://twitter.com/spress_cms) on Twitter.
 
 ### Contributing

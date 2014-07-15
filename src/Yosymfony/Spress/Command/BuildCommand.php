@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Core\IO\ConsoleIO;
+use Yosymfony\Spress\IO\ConsoleIO;
 
 class BuildCommand extends Command
 {

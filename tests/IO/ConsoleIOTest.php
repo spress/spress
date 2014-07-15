@@ -12,9 +12,9 @@
  * from Nils Adermann <naderman@naderman.de> and Jordi Boggiano <j.boggiano@seld.be>.
  */
  
-namespace Yosymfony\Spress\Core\Tests\IO;
+namespace Yosymfony\Spress\Tests\IO;
 
-use Yosymfony\Spress\Core\IO\ConsoleIO;
+use Yosymfony\Spress\IO\ConsoleIO;
 
 class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 {

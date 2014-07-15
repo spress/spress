@@ -1,0 +1,29 @@
+# Global configuration
+
+source: .
+destination: ./_site
+posts: ./_posts
+includes: ./_includes
+layouts: ./_layouts
+plugins: ./_plugins
+include: [.htaccess]
+exclude: [composer.json]
+markdown_ext: [markdown,mkd,mkdn,md]
+processable_ext: [html,htm,xml,js,css]
+layout_ext: [html.twig,twig,html]
+permalink: pretty
+relative_permalinks: true
+drafts: false
+timezone: null                          # e.g. Europe/Madrid
+
+paginate: 0
+paginate_path: 'page:num'
+limit_posts: 0
+
+safe: false
+env: 'dev'
+
+host: '0.0.0.0'
+port: 4000
+baseurl: '/'
+url: 'http://localhost:4000'

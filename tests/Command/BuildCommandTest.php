@@ -18,10 +18,17 @@ use Yosymfony\Spress\Command\BuildCommand;
 
 class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $sourceDir;
+    
+    public function setUp()
+    {
+        $this->sourceDir = './src/Yosymfony/Spress/Core/tests/fixtures/project';
+    }
+    
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove($this->sourceDir . '/_site');
     }
     
     public function testBuildCommand()
@@ -33,7 +40,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--source' => './tests/fixtures/project'
+            '--source' => $this->sourceDir,
         ]);
         
         $output = $commandTester->getDisplay();
@@ -51,8 +58,8 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--source' => './tests/fixtures/project',
-            '--drafts' => true
+            '--source' => $this->sourceDir,
+            '--drafts' => true,
         ]);
         
         $output = $commandTester->getDisplay();
@@ -71,8 +78,8 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--source' => './tests/fixtures/project',
-            '--safe' => true
+            '--source' => $this->sourceDir,
+            '--safe' => true,
         ]);
         
         $output = $commandTester->getDisplay();
@@ -90,8 +97,8 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--source' => './tests/fixtures/project',
-            '--env' => 'prod'
+            '--source' => $this->sourceDir,
+            '--env' => 'prod',
         ]);
         
         $output = $commandTester->getDisplay();

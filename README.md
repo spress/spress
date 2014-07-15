@@ -7,7 +7,7 @@ Spress - PHP Static site generator
 Spress is a static site generator building on Silex and Twig and inspired by 
 [Jekyll](https://github.com/mojombo/jekyll). See [demo](http://yosymfony.github.io/Spress-example/).
 
-License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE)
+License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE).
 
 Requirements
 ------------
@@ -16,19 +16,25 @@ Requirements
 * PHP >= 5.4.
 * [Composer](http://getcomposer.org/).
 
-Contributing
-------------
+Community
+---------
+
+* Documentation: [spress.yosymfony.com](http://spress.yosymfony.com/docs/).
+* Mention [@spress_cms](https://twitter.com/spress_cms) on Twitter.
+
+### Contributing
+
 When Contributing code to Spress, you must follow its coding standards. Spress follows 
 [Symfony coding style](http://symfony.com/doc/current/contributing/code/standards.html).
 
 Keep in mind a golden rule: **Imitate the existing Spress code**.
 
-### Pull Resquests
+#### Pull Resquests
 * Folk the Spress repository.
 * Create a new branch for each feature or improvement.
-* Send a pull request from each feature branch to master branch.
+* Send a pull request from each feature branch to master branch or appropriated.
 
-### Unit testing
+#### Unit testing
 
 All pull requests must be accompanied by passing unit tests. Spress uses [phpunit](http://phpunit.de/) for testing.
 

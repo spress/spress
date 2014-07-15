@@ -18,7 +18,7 @@ use Symfony\Component\Console\Application;
 use Yosymfony\Spress\Command\BuildCommand;
 use Yosymfony\Spress\Command\NewCommand;
 
-$app = new Application('Spress - The static site generator', Yosymfony\Spress\Application::VERSION);
+$app = new Application('Spress - The static site generator', Yosymfony\Spress\Core\Application::VERSION);
 $app->add(new BuildCommand());
 $app->add(new NewCommand());
 

@@ -14,11 +14,12 @@ namespace Yosymfony\Spress\IO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\HelperSet;
+use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
  * Console implementation
  * 
- * @author Victor Puertas
+ * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConsoleIO implements IOInterface
 {

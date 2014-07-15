@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Yosymfony\Spress\Tests;
+namespace Yosymfony\Spress\Tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,16 +18,17 @@ use Yosymfony\Spress\Command\NewCommand;
 
 class NewCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $tmpDir;
+    
     public function setUp()
-    {   
-        $fs = new FileSystem();
-        //$fs->remove('./tests/out');
+    {
+        $this->tmpDir = sys_get_temp_dir() . '/spress-tests';
     }
     
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(['./tests/out', './tests/fixtures/project/_site']);
+        $fs->remove($this->tmpDir);
     }
     
     public function testNewSite()
@@ -39,7 +40,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out'
+            'path' => $this->tmpDir,
         ]);
         
         $output = $commandTester->getDisplay();
@@ -50,9 +51,9 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteExistsEmptyDir()
     {
         $fs = new FileSystem();
-        $fs->mkdir('./tests/out');
+        $fs->mkdir($this->tmpDir);
         
-        $this->assertFileExists('./tests/out');
+        $this->assertFileExists($this->tmpDir);
         
         $app = new Application();
         $app->add(new NewCommand());
@@ -61,7 +62,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out'
+            'path' => $this->tmpDir,
         ]);
         
         $output = $commandTester->getDisplay();
@@ -81,12 +82,12 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out',
+            'path' => $this->tmpDir,
         ]);
         
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out',
+            'path' => $this->tmpDir,
         ]);
     }
     
@@ -99,12 +100,12 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out',
+            'path' => $this->tmpDir,
         ]);
         
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out',
+            'path' => $this->tmpDir,
             '--force' => true,
         ]);
         
@@ -120,7 +121,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'path' => './tests/out',
+            'path' => $this->tmpDir,
             '--all' => true,
         ]);
         

@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yosymfony\Spress\Application;
+use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 class BuildCommand extends Command
@@ -65,9 +65,7 @@ class BuildCommand extends Command
         $env = $input->getOption('env');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
-        $app = new Application([
-            'spress.io' => $io,
-        ]);
+        $app = new SpressCLI($io);
         
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();

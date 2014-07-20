@@ -2,7 +2,7 @@ Spress - PHP Static site generator
 ==============================
 [![Build Status](https://travis-ci.org/spress/Spress.svg?branch=master)](https://travis-ci.org/spress/Spress)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/yosymfony/Spress/badges/quality-score.png?s=2fde9d65f127dad64c6d3d68f5c47da9b41dfc1b)](https://scrutinizer-ci.com/g/yosymfony/Spress/)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/big.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
 Spress is a static site generator building on Silex and Twig and inspired by 
 [Jekyll](https://github.com/mojombo/jekyll). See [demo](http://yosymfony.github.io/Spress-example/).

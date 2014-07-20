@@ -69,7 +69,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $repository = $this->config->createBlankRepository();
         
-        $this->assertInstanceOf('Yosymfony\Silex\ConfigServiceProvider\ConfigRepository', $repository);
+        $this->assertInstanceOf('Yosymfony\ConfigLoader\Repository', $repository);
         $this->assertCount(0, $repository);
     }
     

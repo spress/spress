@@ -11,8 +11,8 @@
  
 namespace Yosymfony\Spress\Core;
 
-use Yosymfony\Silex\ConfigServiceProvider\Config;
-use Yosymfony\Silex\ConfigServiceProvider\ConfigRepository;
+use Yosymfony\ConfigLoader\Config;
+use Yosymfony\ConfigLoader\Repository;
 use Yosymfony\Spress\Core\Definition\ConfigDefinition;
 
  /**
@@ -22,7 +22,7 @@ use Yosymfony\Spress\Core\Definition\ConfigDefinition;
   */
 class Configuration
 {
-    private $configService;
+    private $configLoader;
     private $paths;
     private $version;
     private $repository;
@@ -34,13 +34,13 @@ class Configuration
     /**
      * Constructor
      * 
-     * @param Yosymfony\Silex\ConfigServiceProvider\ConfigRepository $configService Config service
+     * @param Yosymfony\ConfigLoader\Config $configLoader
      * @param array $paths Spress paths and filenames standard
      * @param string $version App version
      */
-    public function __construct(Config $configService, array $paths, $version)
+    public function __construct(Config $configLoader, array $paths, $version)
     {
-        $this->configService = $configService;
+        $this->configLoader = $configLoader;
         $this->paths = $paths;
         $this->version = $version;
         $this->envName = 'dev';
@@ -82,27 +82,27 @@ class Configuration
      * 
      * @param string $config Configuration
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function getRepositoryInline($config)
     {
-        return $this->configService->load($config, Config::TYPE_YAML);
+        return $this->configLoader->load($config, Config::TYPE_YAML);
     }
     
     /**
      * Create a blank config repository
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function createBlankRepository()
     {
-        return new ConfigRepository();
+        return new Repository();
     }
     
     /**
      * Get the environment repository merged with local repository and global repository
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function getRepository()
     {
@@ -112,7 +112,7 @@ class Configuration
     /**
      * Get the global repository
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function getGlobal()
     {
@@ -122,7 +122,7 @@ class Configuration
     /**
      * Get the local repository
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function getLocal()
     {
@@ -132,7 +132,7 @@ class Configuration
     /**
      * Get the environment repository
      * 
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return Yosymfony\ConfigLoader\Repository
      */
     public function getEnvironment()
     {
@@ -201,7 +201,7 @@ class Configuration
     
     private function loadGlobalRepository()
     {
-        $this->globalRepository = $this->configService->load($this->getConfigFilename());
+        $this->globalRepository = $this->configLoader->load($this->getConfigFilename());
         $this->checkDefinitions($this->globalRepository);
         
         $this->envName = $this->globalRepository['env'];
@@ -214,7 +214,7 @@ class Configuration
     {
         $filename = $this->paths['config.file'];
         $localConfigPath = $this->resolveLocalPath($localPath, $filename);
-        $this->localRepository = $this->configService->load($localConfigPath);
+        $this->localRepository = $this->configLoader->load($localConfigPath);
         $this->localRepository['source'] = $this->resolvePath($localPath);
     }
     
@@ -233,7 +233,7 @@ class Configuration
             
             if($resolvedPath)
             {
-                $this->envRepository = $this->configService->load($resolvedPath);
+                $this->envRepository = $this->configLoader->load($resolvedPath);
             }
         }
     }
@@ -306,9 +306,9 @@ class Configuration
     }
     
     /**
-     * @param ConfigRepository $repository
+     * @param Repository $repository
      */
-    private function checkDefinitions(ConfigRepository $repository)
+    private function checkDefinitions(Repository $repository)
     {
         $intersection = $repository->intersection($this->globalRepository);
         $intersection->validateWith(new ConfigDefinition());

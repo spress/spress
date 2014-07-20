@@ -13,15 +13,16 @@
     "require": {
         "php": ">=5.4",
         "twig/twig": ">=1.8,<2.0-dev",
-        "symfony/console": "2.4.*@dev",
+        "pimple/pimple": "~2.1",
+        "symfony/yaml": "2.4.*@dev",
         "symfony/finder": "2.4.*@dev",
         "symfony/filesystem": "2.4.*@dev",
         "symfony/event-dispatcher": "2.4.*@dev",
-        "silex/silex": "1.1.*@dev",
         "michelf/php-markdown": "1.4.*@dev",
         "composer/composer": "1.*@dev",
         "dflydev/embedded-composer-core": "1.0.*@dev",
-        "yosymfony/config-serviceprovider": ">=1.2,<2.0-dev"
+        "yosymfony/config-loader": "1.*@dev",
+        "yosymfony/spress-theme-spresso": "1.0.*@dev"
     },
     "autoload": {
         "psr-4": {

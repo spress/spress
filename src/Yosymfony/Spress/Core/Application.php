@@ -11,7 +11,9 @@
  
 namespace Yosymfony\Spress\Core;
 
-use Yosymfony\Silex\ConfigServiceProvider\ConfigServiceProvider;
+use Pimple\Container;
+use Symfony\Component\Config\FileLocator;
+use Yosymfony\ConfigLoader\Config;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\ConverterManager;
@@ -24,7 +26,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class Application extends \Silex\Application
+class Application extends Container
 {
     const VERSION = "1.1.0";
     
@@ -44,37 +46,44 @@ class Application extends \Silex\Application
             $this['spress.paths'] = array_replace($this['spress.paths'], $options['spress.paths']);
         }
 
-        $this['spress.io'] = $this->share(function($app){
+        $this['spress.io'] = function($app){
                 return new NullIO();
-        });
+        };
         
         if(isset($options['spress.io']))
         {
             $this['spress.io'] = $options['spress.io'];
         }
         
-        $this->register(new ConfigServiceProvider(array($this['spress.paths']['config'])));
-        
-        $this['spress.config'] = $this->share(function($app){
-            return new Configuration($app['configuration'], $app['spress.paths'], $app['spress.version']);
-        });
-        
-        $this['spress.content_locator'] = $this->share(function($app){
-            return new ContentLocator($app['spress.config']);
-        });
+        $this['configuration'] = function($app){
+            $locator = new FileLocator([$this['spress.paths']['config']]);
+            
+            return new Config([
+                new \Yosymfony\ConfigLoader\Loaders\YamlLoader($locator),
+                new \Yosymfony\ConfigLoader\Loaders\JsonLoader($locator),
+            ]);
+        };
 
-        $this['spress.twig_factory'] = $this->share(function(){
-            return new TwigFactory();
-        });
+        $this['spress.config'] = function($app){
+            return new Configuration($app['configuration'], $app['spress.paths'], $app['spress.version']);
+        };
         
-        $this['spress.cms.converter'] = $this->share(function($app){
+        $this['spress.content_locator'] = function($app){
+            return new ContentLocator($app['spress.config']);
+        };
+
+        $this['spress.twig_factory'] = function(){
+            return new TwigFactory();
+        };
+        
+        $this['spress.cms.converter'] = function($app){
             return new ConverterManager(
             $app['spress.config'],
             [
                 new \Yosymfony\Spress\Core\ContentManager\Converter\Markdown(),
                 new \Yosymfony\Spress\Core\ContentManager\Converter\Mirror(),
             ]);
-        });
+        };
         
         $this['spress.cms.plugin.classLoader'] = function()
         {
@@ -88,21 +97,21 @@ class Application extends \Silex\Application
             'composer_filename' => 'composer.json',
         ];
         
-        $this['spress.cms.plugin'] = $this->share(function($app){
+        $this['spress.cms.plugin'] = function($app){
             return new PluginManager(
                 $app['spress.content_locator'],
                 $app['spress.cms.plugin.classLoader'],
                 $app['spress.cms.plugin.options']);
-        });
+        };
         
-        $this['spress.cms.renderizer'] = $this->share(function($app){
+        $this['spress.cms.renderizer'] = function($app){
             return new Renderizer(
                 $app['spress.twig_factory'],
                 $app['spress.content_locator'],
                 $app['spress.config']);
-        });
+        };
         
-        $this['spress.cms'] = $this->share(function($app){
+        $this['spress.cms'] = function($app){
             return new ContentManager(
                 $app['spress.cms.renderizer'],
                 $app['spress.config'],
@@ -110,7 +119,7 @@ class Application extends \Silex\Application
                 $app['spress.cms.converter'],
                 $app['spress.cms.plugin'],
                 $app['spress.io']);
-        });
+        };
     }
     
     /**

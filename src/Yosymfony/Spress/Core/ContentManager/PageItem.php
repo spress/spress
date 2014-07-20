@@ -66,7 +66,7 @@ class PageItem extends ContentItem
         $repository->set('id', $this->getId());
         $repository->set('path', $this->getRelativePath());
         
-        return $repository->mergeWith($fm)->getRaw();
+        return $repository->union($fm)->getArray();
     }
     
     /**

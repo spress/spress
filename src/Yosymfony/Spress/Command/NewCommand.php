@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Scaffolding\NewSite;
 

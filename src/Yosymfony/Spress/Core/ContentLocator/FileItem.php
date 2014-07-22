@@ -39,7 +39,6 @@ class FileItem
     {
         $this->fileInfo = $fileInfo;
         $this->type = $type;
-        $this->destinyPaths = array();
     }
     
     /**

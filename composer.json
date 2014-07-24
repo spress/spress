@@ -26,6 +26,7 @@
         "yosymfony/spress-theme-spresso": "1.0.*@dev"
     },
     "replace": {
+        "yosymfony/spress": "self.version",
         "spress/spress-core": "self.version"
     },
     "bin": [

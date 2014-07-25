@@ -5,10 +5,21 @@ Spress Core - PHP Static site generator
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
-Spress is a static site generator building on top of Symfony components and Twig as template engine. This repository is the
+Spress is a static site generator built with Symfony components and Twig as template engine. This repository is the
 core of Spress application. You can to integrate Spress Core in your solutions using Composer.
 
 License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE).
+
+Installation
+------------
+Add the following to your `composer.json` and run `composer update`.
+
+```
+    "require": {
+        "spress/spress-core": "1.1.*@dev"
+    }
+
+```
 
 How to use?
 -----------

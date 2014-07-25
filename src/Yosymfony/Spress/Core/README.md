@@ -15,10 +15,9 @@ Installation
 Add the following to your `composer.json` and run `composer update`.
 
 ```
-    "require": {
-        "spress/spress-core": "1.1.*@dev"
-    }
-
+"require": {
+    "spress/spress-core": "1.1.*@dev"
+}
 ```
 
 How to use?

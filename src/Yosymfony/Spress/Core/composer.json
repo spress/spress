@@ -1,5 +1,5 @@
 {
-    "name": "spress/spress-core",
+    "name": "yosymfony/spress-core",
     "description": "Static site generator with blogs support",
     "keywords": ["cms","blog","web","markdown","twig","silex","html"],
     "license": "MIT",

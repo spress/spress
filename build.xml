@@ -17,6 +17,7 @@
                 <exclude name="phpunit.xml.dist" />
                 <exclude name="build.xml" />
                 <exclude name=".travis.yml" />
+                <exclude name="split-branch.sh" />
             </fileset>
         </zip>
     </target>

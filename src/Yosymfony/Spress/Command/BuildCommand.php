@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
+use Yosymfony\Spress\HttpServer\HttpServer;
 
 class BuildCommand extends Command
 {
@@ -74,6 +75,8 @@ class BuildCommand extends Command
         $drafts = $input->getOption('drafts');
         $safe = $input->getOption('safe');
         $env = $input->getOption('env');
+        $server = $input->getOption('server');
+        $watch = $input->getOption('watch');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         
         $app = new SpressCLI($io);
@@ -108,5 +111,16 @@ class BuildCommand extends Command
         $io->write(sprintf('Total pages: %d', $resultData['total_pages']));
         $io->write(sprintf('Processed pages: %d', $resultData['processed_pages']));
         $io->write(sprintf('Other resources: %d', $resultData['other_resources']));
+        
+        if($server)
+        {
+            $config = $app['spress.config'];
+            $port = $config->getRepository()->get('port');
+            $host = $config->getRepository()->get('host');
+            $contentLocator = $app['spress.content_locator'];
+            
+            $server = new HttpServer($io, $contentLocator->getDestinationDir(), $port, $host);
+            $server->start();
+        }
     }
 }

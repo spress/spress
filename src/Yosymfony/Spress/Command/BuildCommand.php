@@ -43,6 +43,18 @@ class BuildCommand extends Command
                 'Name of the environment configuration'
             )
             ->addOption(
+                'watch',
+                null,
+                InputOption::VALUE_NONE,
+                'Watching for changes and regenerate automatically your site'
+            )
+            ->addOption(
+                'server',
+                null,
+                InputOption::VALUE_NONE,
+                'Start the built-in server'
+            )
+            ->addOption(
                 'drafts',
                 null,
                 InputOption::VALUE_NONE,

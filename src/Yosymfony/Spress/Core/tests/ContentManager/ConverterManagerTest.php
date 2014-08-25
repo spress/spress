@@ -12,7 +12,6 @@
 namespace Yosymfony\Spress\Core\tests\ContentManager;
 
 use Symfony\Component\Finder\SplFileInfo;
-
 use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
 use Yosymfony\Spress\Core\ContentManager\PageItem;

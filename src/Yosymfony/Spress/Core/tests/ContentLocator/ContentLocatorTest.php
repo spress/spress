@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\Core\tests\ContentLocator;
 
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Yosymfony\Spress\Core\Application;
 
 class ContentLocatorTest extends \PHPUnit_Framework_TestCase

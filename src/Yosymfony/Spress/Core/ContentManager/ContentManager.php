@@ -14,8 +14,8 @@ namespace Yosymfony\Spress\Core\ContentManager;
 use Yosymfony\Spress\Core\Configuration;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
-use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 /**
  * Content manager

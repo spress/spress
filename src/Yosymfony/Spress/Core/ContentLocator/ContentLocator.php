@@ -11,9 +11,9 @@
 
 namespace Yosymfony\Spress\Core\ContentLocator;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\Configuration;
 
 /**

@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\Plugin\Event;
 
-use Yosymfony\Spress\Core\ContentManager\Renderizer;
 use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
+use Yosymfony\Spress\Core\ContentManager\Renderizer;
 
 class RenderEvent extends ContentEvent
 {

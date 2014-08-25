@@ -11,10 +11,10 @@
 
 namespace Yosymfony\Spress\Core\ContentManager;
 
-use Yosymfony\Spress\Core\TwigFactory;
 use Yosymfony\Spress\Core\Configuration;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\Exception\FrontmatterValueException;
+use Yosymfony\Spress\Core\TwigFactory;
 
 /**
  * Content renderizer

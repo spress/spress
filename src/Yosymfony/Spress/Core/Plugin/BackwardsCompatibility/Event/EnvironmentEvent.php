@@ -13,12 +13,12 @@ namespace Yosymfony\Spress\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Yosymfony\Spress\Core\Configuration;
+use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\ContentManager\ConverterInterface;
 use Yosymfony\Spress\Core\ContentManager\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Renderizer;
-use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Core\Plugin\API\TemplateManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Plugin\API\TemplateManager;
 
 class EnvironmentEvent extends Event implements EnviromentEvent
 {

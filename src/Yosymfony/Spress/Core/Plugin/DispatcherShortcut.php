@@ -11,13 +11,13 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Yosymfony\Spress\Plugin\Event;
 use Yosymfony\Spress\Core\Configuration;
-use Yosymfony\Spress\Core\ContentManager\ConverterManager;
-use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
+use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
+use Yosymfony\Spress\Core\ContentManager\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Renderizer;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Plugin\Event;
 
 /**
  * Shortcut for dispatch events

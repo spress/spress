@@ -15,7 +15,7 @@ use Yosymfony\ConfigLoader\Config;
 use Yosymfony\ConfigLoader\Repository;
 use Yosymfony\Spress\Core\Definition\ConfigDefinition;
 
- /**
+/**
   * Configuration manager
   *
   * @author Victor Puertas <vpgugr@gmail.com>

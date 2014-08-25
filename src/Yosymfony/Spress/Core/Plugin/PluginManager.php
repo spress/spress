@@ -11,12 +11,12 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Finder\SplFileInfo;
 use Composer\Autoload\ClassLoader;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Plugin\EventSubscriber;
 

@@ -28,6 +28,9 @@
     "replace": {
         "yosymfony/spress-core": "self.version"
     },
+    "require-dev": {
+        "phpunit/phpunit": ">=3.7"
+    },
     "bin": [
         "bin/spress"
     ],

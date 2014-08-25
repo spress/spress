@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Core\Tests\ContentManager;
+
+namespace Yosymfony\Spress\Core\tests\ContentManager;
 
 use Yosymfony\Spress\Core\ContentManager\UrlGenerator;
 
@@ -23,18 +23,18 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
             ':categories' => 'tech/news',
             ':title' => 'new-gadget',
         ];
-        
+
         $this->assertEquals('/tech/news/new-gadget/', $generator->getUrl($template, $placeholders));
     }
-    
+
     public function testGetUrlPermalink()
     {
         $generator = new UrlGenerator();
         $template = 'http://my-site.com/blog';
-        
+
         $this->assertEquals('http://my-site.com/blog', $generator->getUrl($template));
     }
-    
+
     /**
      * @expectedException \UnexpectedValueException
      */
@@ -46,7 +46,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
             ':categories' => 'tech/news',
             ':title' => 'new gadget',
         ];
-        
+
         $generator->getUrl($template, $placeholders);
     }
 }

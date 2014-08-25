@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Core\Tests\ContentManager;
+
+namespace Yosymfony\Spress\Core\tests\ContentManager;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\Application;
@@ -22,7 +22,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     protected $projectDir;
     protected $config;
     protected $destination;
-    
+
     public function setUp()
     {
         $this->app = new Application();
@@ -31,17 +31,17 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->cms = $this->app['spress.cms'];
         $this->destination = $this->app['spress.content_locator']->getDestinationDir();
     }
-    
+
     public function tearDown()
     {
         $fs = new Filesystem();
         $fs->remove($this->projectDir . '/_site');
     }
-    
+
     public function testProcessSite()
     {
         $this->cms->processSite();
-        
+
         $this->assertFileNotExists($this->destination . '/config.yml');
         $this->assertFileExists($this->destination . '/index.html');
         $this->assertFileExists($this->destination . '/sitemap.xml');
@@ -54,47 +54,47 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->destination . '/category-1/category-2/2020/01/01/new-post-example/index.html');
         $this->assertFileNotExists($this->destination . '/2013/08/12/post-example-2/2013-08-12-post-example-2.mkd');
     }
-    
+
     public function testProcessSiteDraft()
     {
         $this->app['spress.config']->getRepository()->set('drafts', true);
-        
+
         $this->cms->processSite();
-        
+
         $this->assertFileExists($this->destination . '/books/2013/08/11/best-book/index.html');
         $this->assertFileExists($this->destination . '/books/2013/09/19/new-book/index.html');
         $this->assertFileExists($this->destination . '/category-1/category-2/2020/01/01/new-post-example/index.html');
         $this->assertFileNotExists($this->destination . '/2013/08/12/post-example-2/2013-08-12-post-example-2.mkd');
     }
-    
+
     /**
      * @expectedException Yosymfony\Spress\Core\Exception\FrontmatterValueException
      */
     public function testProcessSiteWithNotExistsLayout()
     {
         $this->app['spress.config']->getRepository()->set('include', array('../extra_pages/extra-page2.html'));
-        
-        $this->cms->processSite();    
+
+        $this->cms->processSite();
     }
-    
+
     public function testProcessSiteWithPaginator()
     {
         $this->app['spress.config']->getRepository()->set('paginate_path', 'pages/page:num');
         $this->app['spress.config']->getRepository()->set('paginate', 1);
-        
+
         $this->cms->processSite();
-        
+
         $this->assertFileExists($this->destination . '/pages/index.html');
         $this->assertFileExists($this->destination . '/pages/page2/index.html');
     }
-    
+
     public function testEventsDispatched()
     {
         $this->cms->processSite();
-        
+
         $plugin = $this->app['spress.cms.plugin'];
         $dispatchedEvents = $plugin->getHistoryEventsDispatched();
-        
+
         $this->assertContains(SpressEvents::SPRESS_START, $dispatchedEvents);
         $this->assertContains(SpressEvents::SPRESS_BEFORE_CONVERT, $dispatchedEvents);
         $this->assertContains(SpressEvents::SPRESS_AFTER_CONVERT, $dispatchedEvents);

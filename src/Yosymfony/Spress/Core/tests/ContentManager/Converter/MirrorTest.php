@@ -8,10 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
-use Yosymfony\Spress\Core\Application;
+namespace Yosymfony\Spress\Core\tests\ContentManager\Converter;
+
 use Yosymfony\Spress\Core\ContentManager\Converter\Mirror;
 
 class MirrorTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +19,7 @@ class MirrorTest extends \PHPUnit_Framework_TestCase
     {
         $converter = new Mirror();
         $converter->initialize([]);
-        
+
         $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\ConverterInterface', $converter);
         $this->assertEquals(0, $converter->getPriority());
         $this->assertTrue(is_array($converter->getSupportExtension()));

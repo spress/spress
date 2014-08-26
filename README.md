@@ -30,7 +30,7 @@ When Contributing code to Spress, you must follow its coding standards. Spress f
 Keep in mind a golden rule: **Imitate the existing Spress code**.
 
 #### Pull Resquests
-* Folk the Spress repository.
+* Fork the Spress repository.
 * Create a new branch for each feature or improvement.
 * Send a pull request from each feature branch to master branch or appropriated.
 
@@ -50,7 +50,7 @@ Getting Started
 
 Use Composer to get vendors:
 
-```
+```bash
 $ cd your-path
 $ composer.phar update
 ```
@@ -91,7 +91,7 @@ Unit tests
 ----------
 
 You can run the unit tests with the following command:
-```
+```bash
 $ cd your-path
 $ composer.phar install --dev
 $ phpunit

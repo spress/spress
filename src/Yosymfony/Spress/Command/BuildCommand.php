@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
- 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -55,7 +55,7 @@ class BuildCommand extends Command
                 'Disable your template plugins'
             );
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $timezone = $input->getOption('timezone');
@@ -63,25 +63,23 @@ class BuildCommand extends Command
         $safe = $input->getOption('safe');
         $env = $input->getOption('env');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        
+
         $app = new SpressCLI($io);
-        
+
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();
-        
+
         $io->write('<comment>Starting...</comment>');
         $io->write(sprintf('<comment>Environment: %s.</comment>', $env ? $env : $envDefault));
-        
-        if($drafts)
-        {
+
+        if ($drafts) {
             $io->write('<comment>Posts drafts activated.</comment>');
         }
-        
-        if($safe)
-        {
+
+        if ($safe) {
             $io->write('<comment>Plugins disabled.</comment>');
         }
-        
+
         $resultData = $app->parse(
             $input->getOption('source'),
             $env,
@@ -89,7 +87,7 @@ class BuildCommand extends Command
             $drafts,
             $safe
         );
-        
+
         $io->write(sprintf('Total posts: %d', $resultData['total_post']));
         $io->write(sprintf('Processed posts: %d', $resultData['processed_post']));
         $io->write(sprintf('Drafts post: %d', $resultData['drafts_post']));

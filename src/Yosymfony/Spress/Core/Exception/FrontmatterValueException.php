@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Core\Exception;
 
 /**
  * Exception class throw when the type or value of Front-matter
  * is invalid
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class FrontmatterValueException extends ConfigValueException

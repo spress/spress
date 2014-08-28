@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
@@ -16,15 +16,15 @@ use Symfony\Component\EventDispatcher\Event;
 class FinishEvent extends Event
 {
     protected $result;
-    
+
     public function __construct(array $result)
     {
         $this->result = $result;
     }
-    
+
     /**
      * Get restult data
-     * 
+     *
      * @return array
      */
     public function getResult()

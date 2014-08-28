@@ -1,8 +1,8 @@
 <?php
 
 use Yosymfony\Spress\Plugin\Event;
-use Yosymfony\Spress\Plugin\Plugin;
 use Yosymfony\Spress\Plugin\EventSubscriber;
+use Yosymfony\Spress\Plugin\Plugin;
 
 class TestPlugin extends Plugin
 {
@@ -21,46 +21,46 @@ class TestPlugin extends Plugin
 
     public function onStart(Event\EnvironmentEvent $event)
     {
-        
+
     }
-    
+
     public function onBefore_convert(Event\ConvertEvent $event)
     {
-        
+
     }
-    
+
     public function onAfter_convert(Event\ConvertEvent $event)
     {
-        
+
     }
-    
+
     public function onAfter_convert_posts(Event\AfterConvertPostsEvent $event)
     {
-        
+
     }
-    
+
     public function onBefore_render(Event\RenderEvent $event)
     {
-        
+
     }
-    
+
     public function onAfter_render(Event\RenderEvent $event)
     {
-        
+
     }
-    
+
     public function onBefore_render_pagination(Event\RenderEvent $event)
     {
-        
+
     }
-    
+
     public function onAfter_render_pagination(Event\RenderEvent $event)
     {
-        
+
     }
-    
+
     public function onFinish(Event\FinishEvent $event)
     {
-        
+
     }
 }

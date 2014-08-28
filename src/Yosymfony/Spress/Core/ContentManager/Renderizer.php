@@ -11,11 +11,10 @@
 
 namespace Yosymfony\Spress\Core\ContentManager;
 
-use Yosymfony\Spress\Core\TwigFactory;
 use Yosymfony\Spress\Core\Configuration;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\Exception\FrontmatterValueException;
-use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
+use Yosymfony\Spress\Core\TwigFactory;
 
 /**
  * Content renderizer
@@ -34,9 +33,9 @@ class Renderizer
     /**
      * Constructor
      *
-     * @param TwigFactory $twigFactory
+     * @param TwigFactory    $twigFactory
      * @param ContentLocator $contentLocator
-     * @param Configuration $config
+     * @param Configuration  $config
      */
     public function __construct(TwigFactory $twigFactory, ContentLocator $contentLocator, Configuration $configuration)
     {
@@ -51,7 +50,7 @@ class Renderizer
      * Render the content of a item
      *
      * @param ContentItemInterface $item
-     * @param array $payload
+     * @param array                $payload
      */
     public function renderItem(ContentItemInterface $item, array $payload = [])
     {
@@ -61,8 +60,7 @@ class Renderizer
 
         $layoutName = $this->getItemLayoutName($item);
 
-        if($layoutName)
-        {
+        if ($layoutName) {
             $payload['page']['content'] = $rendered;
             $layoutNameWithExt = $this->getFullLayoutName($layoutName);
 
@@ -94,11 +92,10 @@ class Renderizer
      */
     public function existsLayout($name)
     {
-        if($this->getFullLayoutName($name))
-        {
+        if ($this->getFullLayoutName($name)) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -111,10 +108,8 @@ class Renderizer
      */
     public function getFullLayoutName($name)
     {
-        foreach($this->configuration->getRepository()->get('layout_ext') as $ext)
-        {
-            if(isset($this->layoutItems[$name . '.' . $ext]))
-            {
+        foreach ($this->configuration->getRepository()->get('layout_ext') as $ext) {
+            if (isset($this->layoutItems[$name . '.' . $ext])) {
                 return $name . '.' . $ext;
             }
         }
@@ -127,9 +122,9 @@ class Renderizer
      *
      * @see http://twig.sensiolabs.org/doc/advanced.html#filters Twig documentation.
      *
-     * @param string $name Name of filter
-     * @param callable $filter Filter implementation
-     * @param array $options
+     * @param string   $name    Name of filter
+     * @param callable $filter  Filter implementation
+     * @param array    $options
      */
     public function addTwigFilter($name, callable $filter, array $options = [])
     {
@@ -142,9 +137,9 @@ class Renderizer
      *
      * @see http://twig.sensiolabs.org/doc/advanced.html#functions Twig documentation.
      *
-     * @param string $name Name of filter
+     * @param string   $name     Name of filter
      * @param callable $function Filter implementation
-     * @param array $options
+     * @param array    $options
      */
     public function addTwigFunction($name, callable $function, array $options = [])
     {
@@ -157,9 +152,9 @@ class Renderizer
      *
      * @see http://twig.sensiolabs.org/doc/advanced.html#tests Twig documentation.
      *
-     * @param string $name Name of test
+     * @param string   $name     Name of test
      * @param callable $function Test implementation
-     * @param array $options
+     * @param array    $options
      */
     public function addTwigTest($name, callable $test, array $options = [])
     {
@@ -175,8 +170,7 @@ class Renderizer
         $result = '';
         $layout = $this->getLayoutNameWithNamespace($layoutName);
 
-        if(strlen($layoutName) > 0)
-        {
+        if (strlen($layoutName) > 0) {
             $result = "{% extends \"$layout\" %}";
         }
 
@@ -200,10 +194,8 @@ class Renderizer
     {
         $layoutName = $item->getFrontmatter()->getFrontmatter()->get('layout');
 
-        if($layoutName)
-        {
-            if(false == is_string($layoutName))
-            {
+        if ($layoutName) {
+            if (false == is_string($layoutName)) {
                 throw new FrontmatterValueException(
                     sprintf('Invalid value.', $layoutName),
                     'layout',
@@ -211,8 +203,7 @@ class Renderizer
                 );
             }
 
-            if(false == $this->existsLayout($layoutName))
-            {
+            if (false == $this->existsLayout($layoutName)) {
                 throw new FrontmatterValueException(
                     sprintf('Layout "%s" not found.', $layoutName),
                     'layout',
@@ -221,9 +212,7 @@ class Renderizer
             }
 
             return $layoutName;
-        }
-        else
-        {
+        } else {
             return '';
         }
     }
@@ -232,15 +221,13 @@ class Renderizer
     {
         $result = [];
 
-        foreach($layouts as $layout)
-        {
+        foreach ($layouts as $layout) {
             $pageItem = new PageItem($layout, $this->configuration);
 
             $layoutName = $this->getItemLayoutName($pageItem);
             $content = $pageItem->getPreConverterContent();
 
-            if($layoutName)
-            {
+            if ($layoutName) {
                 $layoutNameWithExt = $this->getFullLayoutName($layoutName);
                 $content = $this->getTwigEntryPoint($layoutNameWithExt) . $content;
             }
@@ -258,8 +245,7 @@ class Renderizer
         $includesDir = $this->contentLocator->getIncludesDir();
         $extraDirs = [];
 
-        if($includesDir)
-        {
+        if ($includesDir) {
             $extraDirs[] = $includesDir;
         }
 

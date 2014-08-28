@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
@@ -16,49 +16,48 @@ use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
 
 /**
  * Event base for events related with the content
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentEvent extends Event
 {
     protected $item;
     protected $isPost;
-    
+
     public function __construct(ContentItemInterface $item, $isPost = false)
     {
         $this->item = $item;
         $this->isPost = $isPost;
     }
-    
+
     /**
      * Get item identifier
-     * 
+     *
      * @return string
      */
     public function getId()
     {
         return $this->item->getId();
     }
-    
+
     /**
      * Is post content?
-     * 
+     *
      * @return bool
      */
     public function isPost()
     {
         return $this->isPost;
     }
-    
+
     /**
      * Get the content without Front-matter
-     * 
+     *
      * @return string
      */
     public function getContent()
     {
-        switch($this->getName())
-        {
+        switch ($this->getName()) {
             case SpressEvents::SPRESS_BEFORE_CONVERT:
                 return $this->item->getPreConverterContent();
             case SpressEvents::SPRESS_AFTER_CONVERT:
@@ -72,16 +71,15 @@ class ContentEvent extends Event
                 return $this->item->getPreConverterContent();
         }
     }
-    
+
     /**
      * Set the content without Front-matter
-     * 
+     *
      * @param string $content
      */
     public function setContent($content)
     {
-        switch($this->getName())
-        {
+        switch ($this->getName()) {
             case SpressEvents::SPRESS_BEFORE_CONVERT:
                 $this->item->setPreConverterContent($content);
                 break;
@@ -98,10 +96,10 @@ class ContentEvent extends Event
                 $this->item->setPreConverterContent($content);
         }
     }
-    
+
     /**
      * Get relative path to the site, filename included.
-     * 
+     *
      * @return string
      */
     public function getRelativePath()

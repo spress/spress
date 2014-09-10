@@ -23,8 +23,9 @@
         "composer/composer": "1.*@dev",
         "dflydev/embedded-composer-core": "1.0.*@dev",
         "dflydev/apache-mime-types": "1.0.*@dev",
-        "yosymfony/config-loader": "1.*@dev",
+        "yosymfony/config-loader": "~1.0-dev",
         "yosymfony/httpserver": "~1.0-dev",
+        "yosymfony/resource-watcher": "~1.0-dev",
         "yosymfony/spress-theme-spresso": "1.0.*@dev"
     },
     "replace": {

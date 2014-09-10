@@ -122,13 +122,13 @@ class HttpServer
     
     private function resolvePath(Request $request)
     {
-        $path = $this->documentroot . '/' . $request->getPathInfo();
+        $path = $this->documentroot. $request->getPathInfo();
         
         if(is_dir($path))
         {
-            $path .= 'index.html';
+            $path .= '/index.html';
         }
-        
+
         return $path;
     }
     

@@ -82,7 +82,7 @@ class ConfigDefinition implements ConfigurationInterface
             ->scalarNode('host')
             ->end()
             ->integerNode('port')
-                ->min(0)->max(6534)
+                ->min(0)->max(65534)
             ->end()
             ->scalarNode('baseurl')
             ->end()

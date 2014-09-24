@@ -15,6 +15,7 @@ use Dflydev\ApacheMimeTypes\PhpRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\HttpServer\RequestHandler;
+use Yosymfony\Spress\Core\TwigFactory;
 
 /**
  * Built-in server
@@ -24,27 +25,40 @@ use Yosymfony\HttpServer\RequestHandler;
 class HttpServer
 {
     private $io;
+    private $twig;
     private $port;
     private $host;
     private $documentroot;
+    private $serverroot;
     private $requestHandler;
+    private $onBeforeHandleRequestFunction;
     private $defatultMimeType = 'application/octet-stream';
+    private $errorDocument = 'error.html.twig';
     
     /**
      * Constructor
      * 
      * @param IOInterface $io
+     * @param TwigFactory $twigFactory
+     * @param string $serverroot
      * @param string $documentroot
      * @param int $port
      * @param string $host
      */
-    public function __construct(IOInterface $io, $documentroot, $port, $host)
+    public function __construct(IOInterface $io, TwigFactory $twigFactory, $serverroot, $documentroot, $port, $host)
     {
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;
+        $this->serverroot = $serverroot;
         $this->documentroot = $documentroot;
+        $this->buildTwig($twigFactory, [$serverroot]);
         $this->requestHandler = new RequestHandler( function(Request $request) {
+            
+            if($this->onBeforeHandleRequestFunction)
+            {
+                call_user_func($this->onBeforeHandleRequestFunction, $request, $this->io);
+            }
             
             $path = $this->resolvePath($request);
             
@@ -66,6 +80,11 @@ class HttpServer
         $this->requestHandler
             ->listen($port, $host)
             ->enableHttpFoundationRequest();
+    }
+
+    public function onBeforeHandleRequest(callable $callback)
+    {
+        $this->onBeforeHandleRequestFunction = $callback;
     }
     
     /**
@@ -114,8 +133,8 @@ class HttpServer
     private function getResponseError($statusCode)
     {
         return [
-            'content' => 'Error',
-            'headers' => ['Content-Type' => 'text/plain'],
+            'content' => $this->twig->render($this->errorDocument, []),
+            'headers' => ['Content-Type' => 'text/html'],
             'status_code' => $statusCode
         ];
     }
@@ -137,5 +156,14 @@ class HttpServer
         $mimetypeRepo = new PhpRepository();
         
         return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->$defatultMimeType;
+    }
+    
+    private function buildTwig(TwigFactory $twigFactory, array $templateDir)
+    {
+        $this->twig = $twigFactory
+            ->withAutoescape(false)
+            ->withCache(false)
+            ->addLoaderFilesystem($templateDir)
+            ->create();
     }
 }

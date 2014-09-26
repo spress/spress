@@ -21,6 +21,11 @@ use Yosymfony\ResourceWatcher\ResourceCacheMemory;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\HttpServer\HttpServer;
 
+/**
+ * Build command
+ * 
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class BuildCommand extends Command
 {
     protected function configure()
@@ -85,10 +90,11 @@ class BuildCommand extends Command
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         $app = new SpressCLI($io);
         
+        $contentLocator = $app['spress.content_locator'];
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();
         
-        $parse = function() use ($app, $sourceDir, $env, $timezone, $drafts, $safe)
+        $parse = function() use (&$app, $sourceDir, $env, $timezone, $drafts, $safe)
         {
             return $app->parse(
                 $sourceDir,
@@ -98,34 +104,38 @@ class BuildCommand extends Command
                 $safe);
         };
         
-        $io->write('<comment>Starting...</comment>');
-        $io->write(sprintf('<comment>Environment: %s.</comment>', $env ? $env : $envDefault));
-        
-        if($drafts)
-        {
-            $io->write('<comment>Posts drafts enabled.</comment>');
-        }
-        
-        if($safe)
-        {
-            $io->write('<comment>Plugins disabled.</comment>');
-        }
-        
+        $this->startingMessage($io, $env ?: $envDefault, $drafts, $safe);
         $resultData = $parse();
         
         $this->resultMessage($io, $resultData);
+        
+        $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), '_site');
+        
+        $findChangesAndParse = function() use (&$io, &$rw, $parse)
+        {
+            $rw->findChanges();
+            
+            if($rw->hasChanges())
+            {
+                $io->write(sprintf(
+                    '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
+                    count($rw->getNewResources()),
+                    count($rw->getUpdatedResources()),
+                    count($rw->getDeletedResources())));
+            
+                $parse();
+                
+                $io->write('<comment>Site ready.</comment>');
+            }
+        };
         
         if($server)
         {
             $port = $config->getRepository()->get('port');
             $host = $config->getRepository()->get('host');
-            $contentLocator = $app['spress.content_locator'];
             $twigFactory = $app['spress.twig_factory'];
             $documentroot = $contentLocator->getDestinationDir();
-            $sourceDir = $contentLocator->getSourceDir();
-            $destinationDir = $contentLocator->getDestinationDir();
             $serverroot = $app['spress.paths']['http_server_root'];
-            $rw = $this->buildResourceWatcher($sourceDir, $destinationDir);
             
             $server = new HttpServer($io, $twigFactory, $serverroot, $documentroot, $port, $host);
             
@@ -133,22 +143,25 @@ class BuildCommand extends Command
             {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
                 
-                $server->onBeforeHandleRequest(function($request, $io) use ($rw, $parse)
+                $server->onBeforeHandleRequest(function($request, $io) use ($findChangesAndParse)
                 {
-                    $rw->findChanges();
-                    
-                    if($rw->hasChanges())
-                    {
-                        $io->write('<comment>Rebuilding site...</comment>');
-                        
-                        $parse();
-                        
-                        $io->write('<comment>Site ready.</comment>');
-                    }
+                    $findChangesAndParse();
                 });
             }
             
             $server->start();
+        }
+        elseif($watch)
+        {
+            $io->write('<comment>Auto-regeneration: enabled. Press ctrl-c to stop.</comment>');
+            
+            do
+            {
+                sleep(2);
+                
+                $findChangesAndParse();
+                
+            } while(true);
         }
     }
     
@@ -166,6 +179,22 @@ class BuildCommand extends Command
         $rw->setFinder($finder);
         
         return $rw;
+    }
+    
+    private function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
+    {
+        $io->write('<comment>Starting...</comment>');
+        $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
+        
+        if($drafts)
+        {
+            $io->write('<comment>Posts drafts enabled.</comment>');
+        }
+        
+        if($safe)
+        {
+            $io->write('<comment>Plugins disabled.</comment>');
+        }
     }
     
     private function resultMessage(ConsoleIO $io, array $resultData)

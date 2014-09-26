@@ -101,7 +101,11 @@ class HttpServer
     {
         $this->io->write('');
         $this->io->write('<comment>Spress server running... press ctrl-c to stop</comment>');
-        $this->io->write(sprintf("Port: %s Host: %s Document root: %s", $this->port, $this->host, $this->documentroot));
+        $this->io->write(sprintf(
+            '<comment>Port: %s Host: %s Document root: %s</comment>',
+            $this->port,
+            $this->host,
+            $this->documentroot));
     }
     
     private function logRequest(Request $request, $statusCode)

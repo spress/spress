@@ -34,7 +34,7 @@ class SpressCLI extends Application
             'spress.paths' => [
                 'root'              => $spressPath,
                 'config'            => $spressPath . '/app/config/',
-                'http_server_root'    => $spressPath . '/app/httpServer/',
+                'http_server_root'  => $spressPath . '/app/httpServer/',
                 'templates'         => $this->getTemplatesPath($spressPath),
             ],
             'spress.io' => $io,

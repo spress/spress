@@ -12,8 +12,8 @@
 namespace Yosymfony\Spress\Tests;
 
 use Symfony\Component\Console\Application;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Command\BuildCommand;
 
 class BuildCommandTest extends \PHPUnit_Framework_TestCase

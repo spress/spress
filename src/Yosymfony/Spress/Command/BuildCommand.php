@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ResourceWatcher\ResourceWatcher;
 use Yosymfony\ResourceWatcher\ResourceCacheMemory;
 use Yosymfony\Spress\IO\ConsoleIO;
@@ -109,7 +110,7 @@ class BuildCommand extends Command
         
         $this->resultMessage($io, $resultData);
         
-        $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), '_site');
+        $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), $contentLocator->getDestinationDir());
         
         $findChangesAndParse = function() use (&$io, &$rw, $parse)
         {
@@ -167,12 +168,19 @@ class BuildCommand extends Command
     
     private function buildResourceWatcher($sourceDir, $destinationDir)
     {
+        $fs = new Filesystem();
+        $relativeDestination = rtrim($fs->makePathRelative($destinationDir, $sourceDir), '/');
+        
         $finder = new Finder();
         $finder->files()
             ->name('*.*')
-            ->in($sourceDir)
-            ->exclude($destinationDir);
-
+            ->in($sourceDir);
+        
+        if(false === strpos($relativeDestination, '..'))
+        {
+            $finder->exclude($relativeDestination);
+        }
+        
         $rc = new ResourceCacheMemory();
         
         $rw = new ResourceWatcher($rc);

@@ -182,7 +182,6 @@ class BuildCommand extends Command
         }
         
         $rc = new ResourceCacheMemory();
-        
         $rw = new ResourceWatcher($rc);
         $rw->setFinder($finder);
         

@@ -52,7 +52,7 @@ class HttpServer
         $this->host = $host;
         $this->serverroot = $serverroot;
         $this->documentroot = $documentroot;
-        $this->buildTwig($twigFactory, [$serverroot]);
+        $this->buildTwig($twigFactory, $serverroot);
         $this->requestHandler = new RequestHandler( function(Request $request) {
             
             if($this->onBeforeHandleRequestFunction)
@@ -60,17 +60,17 @@ class HttpServer
                 call_user_func($this->onBeforeHandleRequestFunction, $request, $this->io);
             }
             
-            $path = $this->resolvePath($request);
+            $resourcePath = $this->resolvePath($request);
             
-            if(false == file_exists($path))
+            if(false == file_exists($resourcePath))
             {
                 $this->logRequest($request, 404);
                 
-                return $this->getResponseError(404);
+                return $this->getResponseError(404, $resourcePath);
             }
             
-            $content = file_get_contents($path);
-            $contentType = $this->getMimeTypeFile($path);
+            $content = file_get_contents($resourcePath);
+            $contentType = $this->getMimeTypeFile($resourcePath);
             
             $this->logRequest($request, 200);
             
@@ -134,10 +134,12 @@ class HttpServer
         ];
     }
     
-    private function getResponseError($statusCode)
+    private function getResponseError($statusCode, $resourcePath)
     {
+        $model = $this->getErrorModel($statusCode, $resourcePath);
+        
         return [
-            'content' => $this->twig->render($this->errorDocument, []),
+            'content' => $this->twig->render($this->errorDocument, $model),
             'headers' => ['Content-Type' => 'text/html'],
             'status_code' => $statusCode
         ];
@@ -162,12 +164,30 @@ class HttpServer
         return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->$defatultMimeType;
     }
     
-    private function buildTwig(TwigFactory $twigFactory, array $templateDir)
+    private function buildTwig(TwigFactory $twigFactory, $templateDir)
     {
         $this->twig = $twigFactory
             ->withAutoescape(false)
             ->withCache(false)
             ->addLoaderFilesystem($templateDir)
             ->create();
+    }
+    
+    private function getErrorModel($statusCode, $resourcePath)
+    {
+        switch($statusCode)
+        {
+            case 404:
+                $message = sprintf('Resource not found: %s', $resourcePath);
+                break;
+                
+            default:
+                $message = '';
+        }
+        
+        return [
+            'status_code' => $statusCode,
+            'message' => $message,
+        ];
     }
 }

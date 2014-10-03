@@ -32,6 +32,8 @@ class Application extends Container
     
     public function __construct(array $options = [])
     {
+        parent::__construct();
+        
         $this['spress.version'] = self::VERSION;
         
         // Paths and filenames standard
@@ -72,9 +74,9 @@ class Application extends Container
             return new ContentLocator($app['spress.config']);
         };
 
-        $this['spress.twig_factory'] = function(){
+        $this['spress.twig_factory'] = $this->factory(function(){
             return new TwigFactory();
-        };
+        });
         
         $this['spress.cms.converter'] = function($app){
             return new ConverterManager(

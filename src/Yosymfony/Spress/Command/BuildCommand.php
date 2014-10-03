@@ -91,7 +91,6 @@ class BuildCommand extends Command
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         $app = new SpressCLI($io);
         
-        $contentLocator = $app['spress.content_locator'];
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();
         
@@ -110,9 +109,10 @@ class BuildCommand extends Command
         
         $this->resultMessage($io, $resultData);
         
+        $contentLocator = $app['spress.content_locator'];
         $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), $contentLocator->getDestinationDir());
         
-        $findChangesAndParse = function() use (&$io, &$rw, $parse)
+        $findChangesAndParse = function() use (&$io, &$rw, &$parse)
         {
             $rw->findChanges();
             

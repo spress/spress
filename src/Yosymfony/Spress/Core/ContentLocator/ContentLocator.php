@@ -39,6 +39,14 @@ class ContentLocator
         }
         
         $this->configuration = $configuration;
+        $this->setWorkspace();
+    }
+    
+    /**
+     * Set the workspace
+     */
+    public function setWorkspace()
+    {
         $this->setCurrentDir($this->getSourceDir());
         $this->createDestinationDirIfNotExists();
     }

@@ -4,7 +4,84 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>Error in your Spress site</title>
+        
+        <!-- Bootstrap -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        
+        <style>
+            a,
+            a:focus,
+            a:hover {
+                color: #fff;
+            }
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+            html,
+            body {
+                background-color: #333;
+            }
+            body {
+                color: #fff;
+                text-align: center;
+                
+                margin-bottom: 60px;
+            }
+            
+            footer
+            {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 60px;
+                background-color: #f5f5f5;
+            }
+            footer a,
+            footer a:focus,
+            footer a:hover {
+                color: #333;
+            }
+            
+            .container {
+                width: auto;
+                max-width: 680px;
+                padding: 0 15px;
+            }
+            .container .text-muted {
+                margin: 20px 0;
+            }
+        </style>
+    </head>
+    
     <body>
-        <h1>Error</h1>
+        <section>
+            <div class="container">
+                <div class="page-header">
+                    <h1>Spress built-in server</h1>
+                </div>
+                <p class="lead">Error {{ status_code }}</p>
+                <p>{{ message }}</p>
+            </div>
+        </section>
+        
+        <footer>
+        <div class="container">
+        <p class="text-muted">
+            <a href="http://spress.yosymfony.com">Spress</a> static site generator |
+            <a href="https://github.com/spress">Source code</a> |
+            <a href="https://twitter.com/spress_cms">@spress_cms</a>
+        </p>
+        </div>
+        </footer>
     </body>
 </html>

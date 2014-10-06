@@ -134,11 +134,10 @@ class BuildCommand extends Command
         {
             $port = $config->getRepository()->get('port');
             $host = $config->getRepository()->get('host');
-            $twigFactory = $app['spress.twig_factory'];
             $documentroot = $contentLocator->getDestinationDir();
             $serverroot = $app['spress.paths']['http_server_root'];
             
-            $server = new HttpServer($io, $twigFactory, $serverroot, $documentroot, $port, $host);
+            $server = new HttpServer($io, $serverroot, $documentroot, $port, $host);
             
             if($watch)
             {

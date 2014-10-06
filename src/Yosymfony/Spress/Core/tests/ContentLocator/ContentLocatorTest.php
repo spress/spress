@@ -31,6 +31,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
         $this->config->loadLocal($this->projectDir);
         $this->contentLocator = $this->app['spress.content_locator'];
         $this->contentLocator->setConvertersExtension($this->config->getRepository()->get('markdown_ext'));
+        $this->contentLocator->initialize();
     }
     
     public function tearDown()

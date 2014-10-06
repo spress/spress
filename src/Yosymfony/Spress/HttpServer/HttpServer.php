@@ -45,14 +45,14 @@ class HttpServer
      * @param int $port
      * @param string $host
      */
-    public function __construct(IOInterface $io, TwigFactory $twigFactory, $serverroot, $documentroot, $port, $host)
+    public function __construct(IOInterface $io, $serverroot, $documentroot, $port, $host)
     {
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;
         $this->serverroot = $serverroot;
         $this->documentroot = $documentroot;
-        $this->buildTwig($twigFactory, $serverroot);
+        $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler( function(Request $request) {
             
             if($this->onBeforeHandleRequestFunction)
@@ -164,8 +164,9 @@ class HttpServer
         return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->$defatultMimeType;
     }
     
-    private function buildTwig(TwigFactory $twigFactory, $templateDir)
+    private function buildTwig($templateDir)
     {
+        $twigFactory = new TwigFactory();
         $this->twig = $twigFactory
             ->withAutoescape(false)
             ->withCache(false)

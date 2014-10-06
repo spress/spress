@@ -77,10 +77,12 @@ Build your site in your configured destination, typically `_site`.
 
 `site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--drafts] [--safe]`
 
+* `--server` The built-in server will run.
+* `--watcher` Watch for changes and regenerate your site automatically.
 * `--drafts` To include draft posts in the generated site.
 * `--safe` Disable all plugins.
 
-E.g `$ spress site:build -s /your-site-dir` 
+E.g `$ spress site:build -s /your-site-dir`
 
 ##### How to load configuration for production environment:
 

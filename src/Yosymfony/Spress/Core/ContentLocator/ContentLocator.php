@@ -26,6 +26,7 @@ class ContentLocator
     private $orgDir;
     private $configuration;
     private $convertersExtension = [];
+    private $processableExtension = [];
     private $destinationDir;
     private $layoutsDir;
     private $includesDir;
@@ -57,6 +58,7 @@ class ContentLocator
         $this->postsDir = null;
         $this->includesDir = null;
         $this->pluginsDir = null;
+        $this->processableExtension = null;
         
         $this->orgDir = getcwd();
         $this->setCurrentDir($this->getSourceDir());
@@ -393,9 +395,13 @@ class ContentLocator
      */
     public function getProcessableExtention()
     {
-        $processableExt = $this->configuration->getRepository()->get('processable_ext');
+        if(null === $this->processableExtension)
+        {
+            $processableExt = $this->configuration->getRepository()->get('processable_ext');
+            $this->processableExtension = array_unique(array_merge($processableExt, $this->convertersExtension));
+        }
         
-        return array_unique(array_merge($processableExt, $this->convertersExtension));
+        return $this->processableExtension;
     }
     
     private function fileExtToRegExpr(array $extensions)

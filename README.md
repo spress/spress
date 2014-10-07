@@ -75,7 +75,7 @@ E.g `$ spress site:new /your-site-dir`
 
 Build your site in your configured destination, typically `_site`. 
 
-`site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--drafts] [--safe]`
+`site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--server] [--watch] [--drafts] [--safe]`
 
 * `--server` The built-in server will run.
 * `--watch` Watch for changes and regenerate your site automatically.

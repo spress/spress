@@ -78,7 +78,7 @@ Build your site in your configured destination, typically `_site`.
 `site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--drafts] [--safe]`
 
 * `--server` The built-in server will run.
-* `--watcher` Watch for changes and regenerate your site automatically.
+* `--watch` Watch for changes and regenerate your site automatically.
 * `--drafts` To include draft posts in the generated site.
 * `--safe` Disable all plugins.
 

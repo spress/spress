@@ -23,8 +23,15 @@ use Yosymfony\Spress\Core\Configuration;
  */
 class ContentLocator
 {
+    private $orgDir;
     private $configuration;
     private $convertersExtension = [];
+    private $processableExtension = [];
+    private $destinationDir;
+    private $layoutsDir;
+    private $includesDir;
+    private $postsDir;
+    private $pluginsDir;
     
     /**
      * Constructor
@@ -39,8 +46,31 @@ class ContentLocator
         }
         
         $this->configuration = $configuration;
+    }
+    
+    /**
+     * Initialize the ContentLocator
+     */
+    public function initialize()
+    {
+        $this->destinationDir = null;
+        $this->layoutsDir = null;
+        $this->postsDir = null;
+        $this->includesDir = null;
+        $this->pluginsDir = null;
+        $this->processableExtension = null;
+        
+        $this->orgDir = getcwd();
         $this->setCurrentDir($this->getSourceDir());
         $this->createDestinationDirIfNotExists();
+    }
+    
+    /**
+     * Restores the original situation 
+     */
+    public function finish()
+    {
+        $this->setCurrentDir($this->orgDir);
     }
     
     /**
@@ -282,7 +312,12 @@ class ContentLocator
      */
     public function getPostsDir()
     {
-        return $this->resolvePath($this->configuration->getRepository()->get('posts'));
+        if(null === $this->postsDir)
+        {
+            $this->postsDir = $this->resolvePath($this->configuration->getRepository()->get('posts'));
+        }
+        
+        return $this->postsDir;
     }
     
     /**
@@ -302,7 +337,12 @@ class ContentLocator
      */
     public function getDestinationDir()
     {
-        return $this->resolvePath($this->configuration->getRepository()->get('destination'));
+        if(null === $this->destinationDir)
+        {
+            $this->destinationDir = $this->resolvePath($this->configuration->getRepository()->get('destination'));
+        }
+        
+        return $this->destinationDir;
     }
     
     /**
@@ -310,7 +350,12 @@ class ContentLocator
      */
     public function getIncludesDir()
     {
-        return $this->resolvePath($this->configuration->getRepository()->get('includes'));
+        if(null === $this->includesDir)
+        {
+            $this->includesDir = $this->resolvePath($this->configuration->getRepository()->get('includes'));
+        }
+        
+        return $this->includesDir;
     }
     
     /**
@@ -318,7 +363,12 @@ class ContentLocator
      */
     public function getLayoutsDir()
     {
-        return $this->resolvePath($this->configuration->getRepository()->get('layouts'));
+        if(null === $this->layoutsDir)
+        {
+            $this->layoutsDir = $this->resolvePath($this->configuration->getRepository()->get('layouts'));
+        }
+        
+        return $this->layoutsDir;
     }
     
     /**
@@ -328,7 +378,12 @@ class ContentLocator
      */
     public function getPluginDir()
     {
-        return $this->resolvePath($this->configuration->getRepository()->get('plugins'));
+        if(null === $this->pluginsDir)
+        {
+            $this->pluginsDir = $this->resolvePath($this->configuration->getRepository()->get('plugins'));
+        }
+        
+        return $this->pluginsDir;
     }
     
     /**
@@ -340,9 +395,13 @@ class ContentLocator
      */
     public function getProcessableExtention()
     {
-        $processableExt = $this->configuration->getRepository()->get('processable_ext');
+        if(null === $this->processableExtension)
+        {
+            $processableExt = $this->configuration->getRepository()->get('processable_ext');
+            $this->processableExtension = array_unique(array_merge($processableExt, $this->convertersExtension));
+        }
         
-        return array_unique(array_merge($processableExt, $this->convertersExtension));
+        return $this->processableExtension;
     }
     
     private function fileExtToRegExpr(array $extensions)

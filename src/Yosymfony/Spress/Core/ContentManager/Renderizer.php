@@ -38,13 +38,22 @@ class Renderizer
      * @param ContentLocator $contentLocator
      * @param Configuration $config
      */
-    public function __construct(TwigFactory $twigFactory, ContentLocator $contentLocator, Configuration $configuration)
+    public function __construct(ContentLocator $contentLocator, Configuration $configuration)
     {
         $this->contentLocator = $contentLocator;
         $this->configuration = $configuration;
+        $this->layoutItems = [];
+        
+        $this->buildTwig($this->layoutItems);
+    }
+    
+    /**
+     * initialize the Renderizer
+     */
+    public function initialize()
+    {
         $this->layoutItems = $this->contentLocator->getLayouts();
-
-        $this->buildTwig($twigFactory, $this->layoutItems);
+        $this->buildTwig($this->layoutItems);
     }
 
     /**
@@ -252,7 +261,7 @@ class Renderizer
         return $result;
     }
 
-    private function buildTwig(TwigFactory $twigFactory, array $layouts)
+    private function buildTwig(array $layouts)
     {
         $templates = $this->processLayouts($layouts);
         $includesDir = $this->contentLocator->getIncludesDir();
@@ -262,7 +271,8 @@ class Renderizer
         {
             $extraDirs[] = $includesDir;
         }
-
+        
+        $twigFactory = new TwigFactory();
         $this->twig = $twigFactory
             ->withAutoescape(false)
             ->withCache(false)

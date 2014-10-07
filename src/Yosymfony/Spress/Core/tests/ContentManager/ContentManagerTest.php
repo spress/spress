@@ -28,6 +28,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->projectDir = __DIR__ . '/../fixtures/project';
         $this->app['spress.config']->loadLocal($this->projectDir);
+        $this->app['spress.content_locator']->initialize();
         $this->cms = $this->app['spress.cms'];
         $this->destination = $this->app['spress.content_locator']->getDestinationDir();
     }

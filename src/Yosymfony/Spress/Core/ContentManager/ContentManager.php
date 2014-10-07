@@ -73,6 +73,8 @@ class ContentManager
      */
     public function processSite()
     {
+        $this->contentLocator->initialize();
+        $this->renderizer->initialize();
         $this->reset();
         $this->cleanup();
         $this->processExtensible();
@@ -83,6 +85,7 @@ class ContentManager
         $this->renderPostsPagination();
         $this->processOthers();
         $this->finish();
+        $this->contentLocator->finish();
         
         return $this->dataResult;
     }

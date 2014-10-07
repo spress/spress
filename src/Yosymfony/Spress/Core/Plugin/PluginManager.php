@@ -64,6 +64,8 @@ class PluginManager
         
         $this->updateClassLoader();
         
+        $this->dispatcher = new EventDispatcher();
+        
         $this->plugins = $this->getPlugins();
         
         $this->processPlugins();

@@ -23,6 +23,8 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = new Application();
         $this->app['spress.config']->loadLocal(__DIR__ . '/../../../fixtures/project');
+        $this->app['spress.content_locator']->initialize();
+        $this->app['spress.cms.renderizer']->initialize();
         $this->event = new EnvironmentEvent(
             $this->app['spress.config'],
             $this->app['spress.cms.converter'],

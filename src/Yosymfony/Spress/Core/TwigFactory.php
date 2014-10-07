@@ -18,8 +18,8 @@ namespace Yosymfony\Spress\Core;
  * 
  * Usage:
  * <code>
- *  $twig = $twigFactory
- *      ->withAutoescape(false)
+ *  $twig = new TwigFactory();
+ *  $twig->withAutoescape(false)
  *      ->withCache(false)          // or withCache('your/path')
  *      ->addLoaderFilesystem(array(
  *          'your/template/path',

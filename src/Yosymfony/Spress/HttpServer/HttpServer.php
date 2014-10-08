@@ -29,7 +29,6 @@ class HttpServer
     private $port;
     private $host;
     private $documentroot;
-    private $serverroot;
     private $requestHandler;
     private $onBeforeHandleRequestFunction;
     private $defatultMimeType = 'application/octet-stream';
@@ -50,7 +49,6 @@ class HttpServer
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;
-        $this->serverroot = $serverroot;
         $this->documentroot = $documentroot;
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler( function(Request $request) {
@@ -161,7 +159,7 @@ class HttpServer
     {
         $mimetypeRepo = new PhpRepository();
         
-        return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->$defatultMimeType;
+        return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->defatultMimeType;
     }
     
     private function buildTwig($templateDir)

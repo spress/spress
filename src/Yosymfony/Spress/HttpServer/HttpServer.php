@@ -62,7 +62,7 @@ class HttpServer
             
             $resourcePath = $this->resolvePath($request);
             
-            if(false == file_exists($resourcePath))
+            if(false === file_exists($resourcePath))
             {
                 $this->logRequest($request, 404);
                 

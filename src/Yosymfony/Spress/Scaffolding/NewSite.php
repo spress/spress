@@ -43,7 +43,7 @@ class NewSite
         $existsPath = $this->fs->exists($path);
         $isEmpty = $this->isEmptyDir($path);
         
-        if($existsPath && false == $force && false == $isEmpty)
+        if($existsPath && false === $force && false === $isEmpty)
         {
             throw new \RuntimeException(sprintf('Path "%s" exists and is not empty.', $path));
         }
@@ -94,7 +94,7 @@ class NewSite
     {
         $templatePath = $this->getTemplatePath($templateName);
         
-        if(false == $this->fs->exists($templatePath))
+        if(false === $this->fs->exists($templatePath))
         {
             throw new \InvalidArgumentException(sprintf('The template "%s" not exists', $templateName));
         }

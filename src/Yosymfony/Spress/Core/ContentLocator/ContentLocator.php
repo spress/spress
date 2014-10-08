@@ -448,7 +448,7 @@ class ContentLocator
     
     private function getSpecialDir()
     {
-        if (false == isset($this->specialDirs))
+        if (false === isset($this->specialDirs))
         {
             $this->specialDirs = [];
             
@@ -472,7 +472,7 @@ class ContentLocator
         $fs = new Filesystem();
         $destination = $this->configuration->getRepository()->get('destination');
         
-        if(false == $fs->exists($destination))
+        if(false === $fs->exists($destination))
         {
             $fs->mkdir($destination);
         }

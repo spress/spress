@@ -211,7 +211,7 @@ class Renderizer
 
         if($layoutName)
         {
-            if(false == is_string($layoutName))
+            if(false === is_string($layoutName))
             {
                 throw new FrontmatterValueException(
                     sprintf('Invalid value.', $layoutName),
@@ -220,7 +220,7 @@ class Renderizer
                 );
             }
 
-            if(false == $this->existsLayout($layoutName))
+            if(false === $this->existsLayout($layoutName))
             {
                 throw new FrontmatterValueException(
                     sprintf('Layout "%s" not found.', $layoutName),

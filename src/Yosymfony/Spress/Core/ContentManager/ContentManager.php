@@ -212,7 +212,7 @@ class ContentManager
                 
                 foreach($postItem->getCategories() as $category)
                 {
-                    if(false == isset($this->categories[$category]))
+                    if(false === isset($this->categories[$category]))
                     {
                         $this->categories[$category] = [];
                     }
@@ -222,7 +222,7 @@ class ContentManager
                 
                 foreach($postItem->getTags() as $tag)
                 {
-                    if(false == isset($this->tags[$tag]))
+                    if(false === isset($this->tags[$tag]))
                     {
                         $this->tags[$tag] = [];
                     }

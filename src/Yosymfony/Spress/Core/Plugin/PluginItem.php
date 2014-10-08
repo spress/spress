@@ -21,7 +21,7 @@ class PluginItem
         $this->plugin = $plugin;
         $this->metas = $plugin->getMetas();
         
-        if($this->metas && false == is_array($this->metas))
+        if($this->metas && false === is_array($this->metas))
         {
             throw new \RuntimeException(sprintf('Invalid meta plugin at %s.', get_class($plugin)));
         }

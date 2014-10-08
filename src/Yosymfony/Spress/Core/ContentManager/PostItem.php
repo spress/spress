@@ -138,7 +138,7 @@ class PostItem extends ContentItem
         $categories = $this->frontmatter->getFrontmatter()->get('categories', []);
         $categoriesFromPath = $this->fileItem->getRelativePathExplode();
         
-        if(false == is_array($categories))
+        if(false === is_array($categories))
         {
             throw new FrontmatterValueException('Invalid value. Expected array.', 'categories', $this->fileItem->getFilename());
         }
@@ -157,7 +157,7 @@ class PostItem extends ContentItem
     {
         $tags = $this->frontmatter->getFrontmatter()->get('tags', []);
         
-        if(false == is_array($tags))
+        if(false === is_array($tags))
         {
             throw new FrontmatterValueException('Invalid value. Expected array.', 'tags', $this->fileItem->getFilename());
         }
@@ -174,7 +174,7 @@ class PostItem extends ContentItem
     {
         $draft = $this->frontmatter->getFrontmatter()->get('draft', false);
         
-        if(false == is_bool($draft))
+        if(false === is_bool($draft))
         {
             throw new FrontmatterValueException('Invalid value. Expected boolean.', 'draft', $this->fileItem->getFilename());
         }

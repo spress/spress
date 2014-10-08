@@ -83,7 +83,7 @@ class ConverterManager
     {
         $priority = $converter->getPriority();
         
-        if(false == (is_int($priority) && $priority >= 0 && $priority <= 10))
+        if(false === (is_int($priority) && $priority >= 0 && $priority <= 10))
         {
             throw new \InvalidArgumentException(sprintf('Invalid priority at the converter %s', get_class($converter)));
         }

@@ -52,7 +52,7 @@ class FileItem
      */
     public function getSourceContent($reload = false)
     {
-        if(null == $this->sourceContent || $reload)
+        if(null === $this->sourceContent || $reload)
         {
             $this->sourceContent = $this->fileInfo->getContents();
         }

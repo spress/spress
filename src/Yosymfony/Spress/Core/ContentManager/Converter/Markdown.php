@@ -30,7 +30,7 @@ class Markdown implements ConverterInterface
      */
     public function initialize(array $config)
     {
-        if(false == isset($config['markdown_ext']))
+        if(false === isset($config['markdown_ext']))
         {
             throw new \InvalidArgumentException('markdown_ext key was not found in Markdown converter');    
         }

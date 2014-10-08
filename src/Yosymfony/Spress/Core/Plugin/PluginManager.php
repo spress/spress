@@ -183,7 +183,7 @@ class PluginManager
         $baseDir = $this->contentLocator->getPluginDir();
         $vendorDir = $baseDir . '/' . $this->options['vendors_dir'];
         
-        if(false == file_exists($vendorDir))
+        if(false === file_exists($vendorDir))
         {
             return;
         }
@@ -215,7 +215,7 @@ class PluginManager
     {
         foreach($subscriber->getEventListeners() as $eventName => $listener)
         {
-            if(true == is_string($listener))
+            if(true === is_string($listener))
             {
                 $this->dispatcher->addListener($eventName, [$pluginItem->getPlugin(), $listener]);
             }
@@ -253,12 +253,12 @@ class PluginManager
     
     private function checkOptions(array $options)
     {
-        if(false == isset($options['vendors_dir']))
+        if(false === isset($options['vendors_dir']))
         {
             throw new \RuntimeException('vendors_dir option is necessary for Plugin Manager');
         }
         
-        if(false == isset($options['composer_filename']))
+        if(false === isset($options['composer_filename']))
         {
             throw new \RuntimeException('composer_filename option is necessary for Plugin Manager');
         }

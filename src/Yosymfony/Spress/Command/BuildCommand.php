@@ -87,6 +87,7 @@ class BuildCommand extends Command
         $server = $input->getOption('server');
         $watch = $input->getOption('watch');
         $sourceDir = $input->getOption('source');
+        $url = null;
         
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         $app = new SpressCLI($io);
@@ -94,14 +95,15 @@ class BuildCommand extends Command
         $config = $app['spress.config'];
         $envDefault = $config->getEnvironmentName();
         
-        $parse = function() use (&$app, $sourceDir, $env, $timezone, $drafts, $safe)
+        $parse = function() use (&$app, $sourceDir, $env, $timezone, $drafts, $safe, $server)
         {
             return $app->parse(
                 $sourceDir,
                 $env,
                 $timezone,
                 $drafts,
-                $safe);
+                $safe,
+                $server ? '' : null);
         };
         
         $this->startingMessage($io, $env ?: $envDefault, $drafts, $safe);

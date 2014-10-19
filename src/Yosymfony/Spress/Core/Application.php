@@ -127,10 +127,11 @@ class Application extends Container
      * @param string $timezone Set the timezone
      * @param bool $drafts Include draft
      * @param bool $safe Plugins disabled
+     * @param string $url URL base
      * 
      * @return array Key-value result
      */
-    public function parse($localConfigPath = null, $env = null, $timezone = null, $drafts = null, $safe = null)
+    public function parse($localConfigPath = null, $env = null, $timezone = null, $drafts = null, $safe = null, $url = null)
     {
         $this['spress.config']->loadLocal($localConfigPath, $env);
         
@@ -147,6 +148,11 @@ class Application extends Container
         if(null !== $safe && is_bool($safe))
         {
             $this['spress.config']->getRepository()->set('safe', $safe);
+        }
+        
+        if(null !== $url && is_string($url))
+        {
+            $this['spress.config']->getRepository()->set('url', $url);
         }
         
         return $this['spress.cms']->processSite();

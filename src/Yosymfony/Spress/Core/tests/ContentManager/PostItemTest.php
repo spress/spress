@@ -214,7 +214,7 @@ class PostItemTest extends \PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, strlen($post->getId()));
         $this->assertGreaterThan(0, strlen($post->getPreConverterContent()));
-        $this->assertEquals('http://localhost:4000/category-1/category-2/2020/01/01/new-post-example/', $post->getUrl());   
+        $this->assertEquals('/category-1/category-2/2020/01/01/new-post-example/', $post->getUrl());   
     }
     
     public function testPostItemCustomKeyFrontmatter()

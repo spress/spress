@@ -103,7 +103,7 @@ class BuildCommand extends Command
                 $timezone,
                 $drafts,
                 $safe,
-                $server ? '' : null);
+                null);
         };
         
         $this->startingMessage($io, $env ?: $envDefault, $drafts, $safe);

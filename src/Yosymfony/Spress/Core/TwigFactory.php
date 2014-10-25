@@ -37,6 +37,7 @@ class TwigFactory
     public function __construct()
     {
         \Twig_Autoloader::register();
+        $this->withDebug(false);
     }
     
     /**
@@ -164,6 +165,11 @@ class TwigFactory
     {
         $twigLoader = new \Twig_Loader_Chain($this->loader);
         $twig = new \Twig_Environment($twigLoader, $this->environmentOpt);
+
+        if(true === $this->environmentOpt['debug'])
+        {
+            $twig->addExtension(new \Twig_Extension_Debug());
+        }
         
         return $twig;
     }

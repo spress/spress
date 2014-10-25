@@ -27,6 +27,8 @@ class ConfigDefinition implements ConfigurationInterface
         $rootNode = $treeBuilder->root(0);
 
         $rootNode->children()
+            ->booleanNode('debug')
+            ->end()
             ->scalarNode('source')
             ->end()
             ->scalarNode('destination')

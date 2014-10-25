@@ -1,5 +1,7 @@
 # Global configuration
 
+debug: false
+
 # Locations
 
 source: .

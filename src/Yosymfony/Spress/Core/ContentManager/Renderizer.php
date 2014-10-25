@@ -77,8 +77,8 @@ class Renderizer
 
             $rendered = $this->renderString($this->getTwigEntryPoint($layoutNameWithExt), $payload);
         }
-
         $item->setPostLayoutContent($rendered);
+
     }
 
     /**
@@ -279,6 +279,7 @@ class Renderizer
             ->addLoaderFilesystem($extraDirs)
             ->addLoaderArray($templates)
             ->addLoaderString()
+            ->withDebug($this->configuration->getRepository()->get('debug'))
             ->create();
     }
 }

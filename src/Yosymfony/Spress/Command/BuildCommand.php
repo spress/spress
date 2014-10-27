@@ -87,18 +87,22 @@ class BuildCommand extends Command
         $server = $input->getOption('server');
         $watch = $input->getOption('watch');
         $sourceDir = $input->getOption('source');
-        $url = null;
         
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         $app = new SpressCLI($io);
         
         $config = $app['spress.config'];
-        $envDefault = $config->getEnvironmentName();
+        $config->loadLocal($sourceDir, $env);
+        $env = $config->getEnvironmentName();
+
+        if(true === $config->getRepository()->get('debug'))
+        {
+            $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+        }
         
         $parse = function() use (&$app, $sourceDir, $env, $timezone, $drafts, $safe, $server)
         {
-            return $app->parse(
-                $sourceDir,
+            return $app->parseDefault(
                 $env,
                 $timezone,
                 $drafts,
@@ -106,7 +110,7 @@ class BuildCommand extends Command
                 null);
         };
         
-        $this->startingMessage($io, $env ?: $envDefault, $drafts, $safe);
+        $this->startingMessage($io, $env, $drafts, $safe);
         $resultData = $parse();
         
         $this->resultMessage($io, $resultData);
@@ -193,6 +197,11 @@ class BuildCommand extends Command
     {
         $io->write('<comment>Starting...</comment>');
         $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
+
+        if($io->isDebug())
+        {
+            $io->write('<comment>Debug mode enabled.</comment>');
+        }
         
         if($drafts)
         {

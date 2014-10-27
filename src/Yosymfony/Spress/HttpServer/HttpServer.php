@@ -80,6 +80,11 @@ class HttpServer
             ->enableHttpFoundationRequest();
     }
 
+    /**
+     * Runs before handle a request
+     *
+     * @param callabe $callback
+     */
     public function onBeforeHandleRequest(callable $callback)
     {
         $this->onBeforeHandleRequestFunction = $callback;

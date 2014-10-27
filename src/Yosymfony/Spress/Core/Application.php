@@ -121,7 +121,7 @@ class Application extends Container
     
     /**
      * Parse a site
-     * 
+     *
      * @param string $localConfigPath Path of the local configuration
      * @param string $env Environment name
      * @param string $timezone Set the timezone
@@ -135,6 +135,22 @@ class Application extends Container
     {
         $this['spress.config']->loadLocal($localConfigPath, $env);
         
+        return $this->parseDefault($env, $timezone, $drafts, $safe, $url);
+    }
+
+    /**
+     * Parse a site without load the local configuration.
+     *
+     * @param string $env Environment name
+     * @param string $timezone Set the timezone
+     * @param bool $drafts Include draft
+     * @param bool $safe Plugins disabled
+     * @param string $url URL base
+     * 
+     * @return array Key-value result
+     */
+    public function parseDefault($env = null, $timezone = null, $drafts = null, $safe = null, $url = null)
+    {
         if(null !== $drafts && is_bool($drafts))
         {
             $this['spress.config']->getRepository()->set('drafts', $drafts);

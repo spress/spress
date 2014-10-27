@@ -46,6 +46,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
         
         $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Debug mode enabled/', $output);
         $this->assertRegExp('/Total post/', $output);
     }
     

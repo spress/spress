@@ -42,7 +42,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, count($this->config->getRepository()));
         $this->assertGreaterThan(0, count($this->config->getGlobal()));
-        $this->assertCount(1, $this->config->getLocal());
+        $this->assertCount(2, $this->config->getLocal());
         $this->assertCount(0, $this->config->getEnvironment());
     }
     

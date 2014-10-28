@@ -41,6 +41,9 @@ class MyClass
 }
 ```
 
+If you want load the site configuration manually, simply use `$app->parseDefault()`. In that case
+you can load the configuration with `$app['spress.config']->loadLocal($sourceDir, $enviromentName)`.
+
 ## Options
 Options are passed as a key-value array.
 

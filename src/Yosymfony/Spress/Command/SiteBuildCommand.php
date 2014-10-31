@@ -27,7 +27,7 @@ use Yosymfony\Spress\HttpServer\HttpServer;
  * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class BuildCommand extends Command
+class SiteBuildCommand extends Command
 {
     protected function configure()
     {

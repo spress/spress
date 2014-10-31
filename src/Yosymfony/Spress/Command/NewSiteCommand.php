@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Scaffolding\NewSite;
 
-class NewCommand extends Command
+class NewSiteCommand extends Command
 {
     protected function configure()
     {

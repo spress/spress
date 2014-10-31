@@ -19,6 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
+/**
+ * New Post command
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class NewPostCommand extends Command
 {
 	protected function configure()

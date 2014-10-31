@@ -14,9 +14,14 @@ namespace Yosymfony\Spress\Tests;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
-use Yosymfony\Spress\Command\BuildCommand;
+use Yosymfony\Spress\Command\SiteBuildCommand;
 
-class BuildCommandTest extends \PHPUnit_Framework_TestCase
+/**
+ * Build a site
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
+class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 {
     protected $sourceDir;
     
@@ -34,7 +39,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
     public function testBuildCommand()
     {
         $app = new Application();
-        $app->add(new BuildCommand());
+        $app->add(new SiteBuildCommand());
         
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
@@ -53,7 +58,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
     public function testBuildCommandDraft()
     {
         $app = new Application();
-        $app->add(new BuildCommand());
+        $app->add(new SiteBuildCommand());
         
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
@@ -73,7 +78,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
     public function testBuildCommandSafe()
     {
         $app = new Application();
-        $app->add(new BuildCommand());
+        $app->add(new SiteBuildCommand());
         
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
@@ -92,7 +97,7 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
     public function testBuildCommandEnv()
     {
         $app = new Application();
-        $app->add(new BuildCommand());
+        $app->add(new SiteBuildCommand());
         
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);

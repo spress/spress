@@ -14,9 +14,9 @@ namespace Yosymfony\Spress\Tests\Command;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
-use Yosymfony\Spress\Command\NewCommand;
+use Yosymfony\Spress\Command\NewSiteCommand;
 
-class NewCommandTest extends \PHPUnit_Framework_TestCase
+class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 {
     protected $tmpDir;
     
@@ -34,7 +34,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function testNewSite()
     {
         $app = new Application();
-        $app->add(new NewCommand());
+        $app->add(new NewSiteCommand());
         
         $command = $app->find('site:new');
         $commandTester = new CommandTester($command);
@@ -56,7 +56,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir);
         
         $app = new Application();
-        $app->add(new NewCommand());
+        $app->add(new NewSiteCommand());
         
         $command = $app->find('site:new');
         $commandTester = new CommandTester($command);
@@ -76,7 +76,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteNoForce()
     {
         $app = new Application();
-        $app->add(new NewCommand());
+        $app->add(new NewSiteCommand());
         
         $command = $app->find('site:new');
         $commandTester = new CommandTester($command);
@@ -94,7 +94,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteForce()
     {
         $app = new Application();
-        $app->add(new NewCommand());
+        $app->add(new NewSiteCommand());
         
         $command = $app->find('site:new');
         $commandTester = new CommandTester($command);
@@ -115,7 +115,7 @@ class NewCommandTest extends \PHPUnit_Framework_TestCase
     public function testNewSiteCompleteScaffold()
     {
         $app = new Application();
-        $app->add(new NewCommand());
+        $app->add(new NewSiteCommand());
         
         $command = $app->find('site:new');
         $commandTester = new CommandTester($command);

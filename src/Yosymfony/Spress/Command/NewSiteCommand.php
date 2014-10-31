@@ -19,13 +19,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Scaffolding\NewSite;
 
+/**
+ * New site command
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class NewSiteCommand extends Command
 {
     protected function configure()
     {
         $this
             ->setName('site:new')
-            ->setDescription('Create a new site scaffold')
+            ->setDescription('Create a new site')
             ->addArgument(
                 'path',
                 InputArgument::OPTIONAL,

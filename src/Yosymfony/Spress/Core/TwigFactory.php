@@ -67,6 +67,21 @@ class TwigFactory
         
         return $this;
     }
+
+    /**
+     * With Strict variable set, Twig will throw an error if a 
+     * variable or attribute does not exist.
+     *
+     * @param bool $value
+     *
+     * @return TwigFactory Fluent interface
+     */
+    public function withStrictVariables($value)
+    {
+        $this->environmentOpt['strict_variables'] = $value;
+
+        return $this;
+    }
     
     /**
      * Set the autoescape strategy

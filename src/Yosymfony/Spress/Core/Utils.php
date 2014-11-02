@@ -19,7 +19,9 @@ class Utils
     /**
      * Slugify string
      * 
-     * @author: http://stackoverflow.com/questions/2955251/php-function-to-make-slug-url-string/2955878#2955878
+     * @author: Maerlyn
+     *
+     * @link http://stackoverflow.com/questions/2955251/php-function-to-make-slug-url-string/2955878#2955878
      * 
      * @param string $text Input text
      * 

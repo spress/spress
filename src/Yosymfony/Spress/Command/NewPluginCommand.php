@@ -22,33 +22,26 @@ class NewPluginCommand extends Command
 {
 	protected function configure()
 	{
-		$this
-            ->setName('new:plugin')
-            ->setDescription('Create a plugin')
-            ->addOption(
-                'name',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The name of the plugins should follow the pattern "vendor-name/plugin-name".'
-            )
-            ->addOption(
-            	'namespace',
-            	null,
-            	InputOption::VALUE_REQUIRED,
-            	'The namespace of the plugin',
-                ''
-            )
-            ->addOption(
-            	'author',
-            	null,
-            	InputOption::VALUE_REQUIRED,
-            	'The author of the plugin'
-            );
+        $this->setDefinition([
+            new InputOption('name', '', InputOption::VALUE_REQUIRED, 'The name of the plugins should follow the pattern "vendor-name/plugin-name"'),
+            new InputOption('namespace', '', InputOption::VALUE_REQUIRED, 'The namespace of the plugin', ''),
+            new InputOption('author', '', InputOption::VALUE_REQUIRED, 'Tags list separed by white spaces'),
+        ])
+        ->setName('new:plugin')
+        ->setDescription('Generate a plugin');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$question = new Question('Plugin name: ');
+        
+	}
+
+    /**
+     * @see Symfony\Component\Console\Command\Command
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        $question = new Question('Plugin name: ');
         $name = $helper->ask($input, $output, $question);
 
         $question = new Question('Plugin namespace (global): ');
@@ -56,5 +49,5 @@ class NewPluginCommand extends Command
 
         $question = new Question('Plugin author: ');
         $author = $helper->ask($input, $output, $question);
-	}
+    }
 }

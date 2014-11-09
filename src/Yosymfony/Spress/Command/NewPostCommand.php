@@ -56,13 +56,14 @@ EOT
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        $app = new SpressCLI($io);
 
         $title = $input->getOption('title');
         $layout = $input->getOption('layout');
         $date = $input->getOption('date') ?: $this->getDateFormated();
         $tags = explode(' ', $input->getOption('tags') ?: '');
         $categories = explode(' ', $input->getOption('categories') ?: '');
+
+        $app = new SpressCLI($io);
 
         $config = $app['spress.config'];
         $config->loadLocal('./', 'dev');
@@ -71,6 +72,7 @@ EOT
 
         $generator = new PostGenerator();
         $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
+        
         $files = $generator->generate($contentLocator->getPostsDir(), new \DateTime($date), $title, $layout, $tags, $categories);
 
         $this->resultMessage($io, $files);

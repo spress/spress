@@ -1,25 +1,27 @@
 <?php
 
+{% if namespace %}
 namespace {{ namespace }};
+{% endif %}
 
 use Symfony\Component\EventDispatcher\Event;
-use Yosymfony\Spress\Plugin\Plugin;
 use Yosymfony\Spress\Plugin\EventSubscriber;
-use Yosymfony\Spress\Plugin\Event\EnviromentEvent;
-use Yosymfony\Spress\Plugin\Event\RenderEvent;
-use Yosymfony\Spress\Plugin\Event\ConvertEvent;
 use Yosymfony\Spress\Plugin\Event\AfterConvertPostsEvent;
+use Yosymfony\Spress\Plugin\Event\ConvertEvent;
+use Yosymfony\Spress\Plugin\Event\EnvironmentEvent;
 use Yosymfony\Spress\Plugin\Event\FinishEvent;
+use Yosymfony\Spress\Plugin\Event\RenderEvent;
+use Yosymfony\Spress\Plugin\Plugin;
 
 /**
- * {{ name }} plugin for Spress
+ * {{ description }}
  *
  * @author {{ author }}
  */
-class {{ name }} extends Plugin
+class {{ classname }} extends Plugin
 {
     private $io;
-       
+
     public function initialize(EventSubscriber $subscriber)
     {
         $subscriber->addEventListener('spress.start', 'onStart');
@@ -32,8 +34,8 @@ class {{ name }} extends Plugin
         $subscriber->addEventListener('spress.after_render_pagination', 'onAfterRenderPagination');
         $subscriber->addEventListener('spress.finish', 'onFinish');
     }
-    
-    public function onStart(EnviromentEvent $event)
+
+    public function onStart(EnvironmentEvent $event)
     {
         $this->io = $event->getIO();
     }
@@ -43,11 +45,16 @@ class {{ name }} extends Plugin
 
     }
 
+    public function onAfterConvert(ConvertEvent $event)
+    {
+
+    }
+
     public function onAfterConvertPosts(AfterConvertPostsEvent $event)
     {
 
     }
-    
+
     public function onBeforeRender(RenderEvent $event)
     {
 
@@ -57,7 +64,7 @@ class {{ name }} extends Plugin
     {
 
     }
-    
+
     public function onBeforeRenderPagination(RenderEvent $event)
     {
 

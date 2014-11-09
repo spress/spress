@@ -21,7 +21,7 @@ use Yosymfony\Spress\Scaffolding\PostGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 /**
- * New Post command
+ * New post command
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -41,7 +41,7 @@ class NewPostCommand extends Command
         ])
         ->setName('new:post')
         ->setDescription('Generate a post')
-         ->setHelp(<<<EOT
+        ->setHelp(<<<EOT
 The <info>new:post</info> command helps you generates new posts.
 By default, the command interacts with the developer to tweak the generation.
 Any passed option will be used as a default value for the interaction.

@@ -68,14 +68,14 @@ EOT
         $config = $app['spress.config'];
         $config->loadLocal('./', 'dev');
 
-        $contentLocator = $app['spress.content_locator'];
+        $postsDir = $config->getRepository()->get('posts');
 
         $generator = new PostGenerator();
         $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
         
-        $files = $generator->generate($contentLocator->getPostsDir(), new \DateTime($date), $title, $layout, $tags, $categories);
+        $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
 
-        $this->resultMessage($io, $files);
+        $this->resultMessage($io, $this->files);
 	}
 
     /**

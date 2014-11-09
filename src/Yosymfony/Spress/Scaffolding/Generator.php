@@ -21,7 +21,7 @@ use Yosymfony\Spress\Core\TwigFactory;
  */
 class Generator
 {
-	protected $files = [];
+	private $files = [];
 	private $skeletonDirs;
 
 	/**
@@ -62,5 +62,15 @@ class Generator
 		$this->files[] = $target;
 
 		return file_put_contents($target, $this->render($template, $model));
+	}
+
+	protected function getFilesAffected()
+	{
+		return $this->files;
+	}
+
+	protected function cleanFilesAffected()
+	{
+		$this->files = [];
 	}
 }

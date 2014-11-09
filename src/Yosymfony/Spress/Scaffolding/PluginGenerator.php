@@ -72,12 +72,12 @@ class PluginGenerator extends Generator
 			'license'		=> $license,
 		];
 
-		$this->files = [];
+		$this->cleanFilesAffected();
 		
 		$this->renderFile('plugin/plugin.php.twig', $pluginDir . '/' . $this->getPluginFilename($name), $model);
 		$this->renderFile('plugin/composer.json.twig', $pluginDir . '/composer.json', $model);
 
-		return $this->files;
+		return $this->getFilesAffected();
 	}
 
 	protected function getClassname($name)

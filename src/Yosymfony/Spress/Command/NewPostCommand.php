@@ -73,9 +73,9 @@ EOT
         $generator = new PostGenerator();
         $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
         
-        $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
+        $files = $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
 
-        $this->resultMessage($io, $this->files);
+        $this->resultMessage($io, $files);
 	}
 
     /**

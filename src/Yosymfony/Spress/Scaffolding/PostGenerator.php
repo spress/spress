@@ -59,13 +59,11 @@ class PostGenerator extends Generator
 			'tags'			=> $tags,
 		];
 
-		$files = [];
+		$this->cleanFilesAffected();
 
-		$target = $targetDir . '/' . $this->getPostFilename($date, $title);
-		$files[] = $target;
-		$this->renderFile('post/post.md.twig', $target, $model);
+		$this->renderFile('post/post.md.twig', $targetDir . '/' . $this->getPostFilename($date, $title), $model);
 
-		return $files;
+		return $this->getFilesAffected();
 	}
 
 	protected function getPostFilename(\DateTime $date, $title, $extension = 'md')

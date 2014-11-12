@@ -88,16 +88,11 @@ EOT
 
         // Name:
         $name = $input->getOption('name');
-        $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor-name/plugin-name"</comment><info>)</info>: ', $name);
+        $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor/plugin"</comment><info>)</info>: ', $name);
         $question->setMaxAttempts(null);
         $question->setValidator(function($answer)
         {
-            if(0 == strlen($answer))
-            {
-                throw new \RuntimeException('The plugin name should not be empty.');
-            }
-
-            return $answer;
+            return Validators::validatePluginName($answer);
         });
         $name = $helper->ask($input, $output, $question);
         $input->setOption('name', $name);
@@ -105,6 +100,10 @@ EOT
         // Namespace:
         $namespace = $input->getOption('namespace');
         $question = new Question('Plugin namespace (global): ', $namespace);
+        $question->setValidator(function($answer)
+        {
+            return Validators::validateNamespace($answer);
+        });
         $namespace = $helper->ask($input, $output, $question);
         $input->setOption('namespace', $namespace);
 

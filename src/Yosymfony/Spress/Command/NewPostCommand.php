@@ -95,12 +95,7 @@ EOT
         $question->setMaxAttempts(null);
         $question->setValidator(function($answer)
         {
-            if(0 == strlen($answer))
-            {
-                throw new \RuntimeException('The post title should not be empty.');
-            }
-
-            return $answer;
+            return Validators::validatePostTitle($answer);
         });
         $title = $helper->ask($input, $output, $question);
         $input->setOption('title', $title);

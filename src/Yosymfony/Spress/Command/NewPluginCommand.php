@@ -8,14 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
- 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
@@ -30,8 +29,8 @@ class NewPluginCommand extends Command
     /**
      * @see Symfony\Component\Console\Command\Command
      */
-	protected function configure()
-	{
+    protected function configure()
+    {
         $this->setDefinition([
             new InputOption('name', '', InputOption::VALUE_REQUIRED, 'The name of the plugins should follow the pattern "vendor-name/plugin-name"'),
             new InputOption('namespace', '', InputOption::VALUE_REQUIRED, 'The namespace of the plugin', ''),
@@ -48,10 +47,10 @@ Any passed option will be used as a default value for the interaction.
 If you want to disable any user interaction, use <comment>--no-interaction</comment>.
 EOT
             );
-	}
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
         $name = $input->getOption('name');
@@ -73,7 +72,7 @@ EOT
         $files = $generator->generate($pluginDir, $name, $namespace, $author, $description, $license);
 
         $this->resultMessage($io, $files);
-	}
+    }
 
     /**
      * @see Symfony\Component\Console\Command\Command
@@ -83,15 +82,14 @@ EOT
         $helper = $this->getHelper('question');
 
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        
+
         $this->welcomeMessage($io);
 
         // Name:
         $name = $input->getOption('name');
         $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor/plugin"</comment><info>)</info>: ', $name);
         $question->setMaxAttempts(null);
-        $question->setValidator(function($answer)
-        {
+        $question->setValidator(function ($answer) {
             return Validators::validatePluginName($answer);
         });
         $name = $helper->ask($input, $output, $question);
@@ -100,8 +98,7 @@ EOT
         // Namespace:
         $namespace = $input->getOption('namespace');
         $question = new Question('Plugin namespace (global): ', $namespace);
-        $question->setValidator(function($answer)
-        {
+        $question->setValidator(function ($answer) {
             return Validators::validateNamespace($answer);
         });
         $namespace = $helper->ask($input, $output, $question);
@@ -130,8 +127,6 @@ EOT
 
     protected function getPluginDir($app)
     {
-        
-
         return $dir ?: $app['spress.config']->getRepository()->get('plugins');
     }
 
@@ -140,7 +135,7 @@ EOT
         $io->write([
             '',
             'Welcome to <comment>Spress plugin generator</comment>',
-            ''
+            '',
         ]);
     }
 
@@ -167,7 +162,7 @@ EOT
             '<comment>Files afected:</comment>',
             '',
         ]);
-        
+
         $io->write($files);
 
         $io->write([

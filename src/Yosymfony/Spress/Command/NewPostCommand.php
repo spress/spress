@@ -8,14 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
- 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yosymfony\Spress\Scaffolding\PostGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
@@ -30,8 +29,8 @@ class NewPostCommand extends Command
     /**
      * @see Symfony\Component\Console\Command\Command
      */
-	protected function configure()
-	{
+    protected function configure()
+    {
         $this->setDefinition([
             new InputOption('title', '', InputOption::VALUE_REQUIRED, 'The name of the post'),
             new InputOption('layout', '', InputOption::VALUE_REQUIRED, 'The layout of the post'),
@@ -48,13 +47,13 @@ Any passed option will be used as a default value for the interaction.
 If you want to disable any user interaction, use <comment>--no-interaction</comment>.
 EOT
             );
-	}
+    }
 
     /**
      * @see Symfony\Component\Console\Command\Command
      */
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
         $title = $input->getOption('title');
@@ -72,11 +71,11 @@ EOT
 
         $generator = new PostGenerator();
         $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
-        
+
         $files = $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
 
         $this->resultMessage($io, $files);
-	}
+    }
 
     /**
      * @see Symfony\Component\Console\Command\Command
@@ -86,15 +85,14 @@ EOT
         $helper = $this->getHelper('question');
 
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        
+
         $this->welcomeMessage($io);
 
         // Title:
         $title = $input->getOption('title');
         $question = new Question('Post title: ', $title);
         $question->setMaxAttempts(null);
-        $question->setValidator(function($answer)
-        {
+        $question->setValidator(function ($answer) {
             return Validators::validatePostTitle($answer);
         });
         $title = $helper->ask($input, $output, $question);
@@ -135,7 +133,7 @@ EOT
         $io->write([
             '',
             'Welcome to <comment>Spress post generator</comment>',
-            ''
+            '',
         ]);
     }
 

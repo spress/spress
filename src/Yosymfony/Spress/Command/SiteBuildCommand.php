@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
- 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,7 +24,7 @@ use Yosymfony\Spress\HttpServer\HttpServer;
 
 /**
  * Build command
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class SiteBuildCommand extends Command
@@ -77,7 +77,7 @@ class SiteBuildCommand extends Command
                 'Disable your template plugins'
             );
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $timezone = $input->getOption('timezone');
@@ -87,21 +87,19 @@ class SiteBuildCommand extends Command
         $server = $input->getOption('server');
         $watch = $input->getOption('watch');
         $sourceDir = $input->getOption('source');
-        
+
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
         $app = new SpressCLI($io);
-        
+
         $config = $app['spress.config'];
         $config->loadLocal($sourceDir, $env);
         $env = $config->getEnvironmentName();
 
-        if(true === $config->getRepository()->get('debug'))
-        {
+        if (true === $config->getRepository()->get('debug')) {
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
-        
-        $parse = function() use (&$app, $sourceDir, $env, $timezone, $drafts, $safe, $server)
-        {
+
+        $parse = function () use (&$app, $sourceDir, $env, $timezone, $drafts, $safe, $server) {
             return $app->parseDefault(
                 $env,
                 $timezone,
@@ -109,111 +107,98 @@ class SiteBuildCommand extends Command
                 $safe,
                 null);
         };
-        
+
         $this->startingMessage($io, $env, $drafts, $safe);
         $resultData = $parse();
-        
+
         $this->resultMessage($io, $resultData);
-        
+
         $contentLocator = $app['spress.content_locator'];
         $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), $contentLocator->getDestinationDir());
-        
-        $findChangesAndParse = function() use (&$io, &$rw, &$parse)
-        {
+
+        $findChangesAndParse = function () use (&$io, &$rw, &$parse) {
             $rw->findChanges();
-            
-            if($rw->hasChanges())
-            {
+
+            if ($rw->hasChanges()) {
                 $io->write(sprintf(
                     '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
                     count($rw->getNewResources()),
                     count($rw->getUpdatedResources()),
                     count($rw->getDeletedResources())));
-            
+
                 $parse();
-                
+
                 $io->write('<comment>Site ready.</comment>');
             }
         };
-        
-        if($server)
-        {
+
+        if ($server) {
             $port = $config->getRepository()->get('port');
             $host = $config->getRepository()->get('host');
             $documentroot = $contentLocator->getDestinationDir();
             $serverroot = $app['spress.paths']['http_server_root'];
-            
+
             $server = new HttpServer($io, $serverroot, $documentroot, $port, $host);
-            
-            if($watch)
-            {
+
+            if ($watch) {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
-                
-                $server->onBeforeHandleRequest(function($request, $io) use ($findChangesAndParse)
-                {
+
+                $server->onBeforeHandleRequest(function ($request, $io) use ($findChangesAndParse) {
                     $findChangesAndParse();
                 });
             }
-            
+
             $server->start();
-        }
-        elseif($watch)
-        {
+        } elseif ($watch) {
             $io->write('<comment>Auto-regeneration: enabled. Press ctrl-c to stop.</comment>');
-            
-            do
-            {
+
+            do {
                 sleep(2);
-                
+
                 $findChangesAndParse();
-                
-            } while(true);
+            } while (true);
         }
     }
-    
+
     private function buildResourceWatcher($sourceDir, $destinationDir)
     {
         $fs = new Filesystem();
         $relativeDestination = rtrim($fs->makePathRelative($destinationDir, $sourceDir), '/');
-        
+
         $finder = new Finder();
         $finder->files()
             ->name('*.*')
             ->in($sourceDir);
-        
-        if(false === strpos($relativeDestination, '..'))
-        {
+
+        if (false === strpos($relativeDestination, '..')) {
             $finder->exclude($relativeDestination);
         }
-        
+
         $rc = new ResourceCacheMemory();
         $rw = new ResourceWatcher($rc);
         $rw->setFinder($finder);
-        
+
         return $rw;
     }
-    
+
     private function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
     {
         $io->write('<comment>Starting...</comment>');
         $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
 
-        if($io->isDebug())
-        {
+        if ($io->isDebug()) {
             $io->write('<comment>Debug mode enabled.</comment>');
         }
-        
-        if($drafts)
-        {
+
+        if ($drafts) {
             $io->write('<comment>Posts drafts enabled.</comment>');
         }
-        
-        if($safe)
-        {
+
+        if ($safe) {
             $io->write('<comment>Plugins disabled.</comment>');
         }
     }
-    
+
     private function resultMessage(ConsoleIO $io, array $resultData)
     {
         $io->write(sprintf('Total posts: %d', $resultData['total_post']));

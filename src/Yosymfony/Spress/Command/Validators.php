@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
 
 /**
@@ -18,190 +18,182 @@ namespace Yosymfony\Spress\Command;
  */
 class Validators
 {
-	/**
-	 * Validator for the name of a plugin
-	 *
-	 * @param string $name
-	 *
-	 * @return string
-	 */
-	public static function validatePluginName($name)
-	{
-		if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $name))
-		{
-			throw new \InvalidArgumentException(
-				'The plugin name '.$name.' is invalid, it should be lowercase ' .
-				'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.');
-		}
+    /**
+     * Validator for the name of a plugin
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function validatePluginName($name)
+    {
+        if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $name)) {
+            throw new \InvalidArgumentException(
+                'The plugin name '.$name.' is invalid, it should be lowercase '.
+                'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.');
+        }
 
-		return $name;
-	}
+        return $name;
+    }
 
-	/**
-	 * Validator for the name of a plugin
-	 *
-	 * @param string $name
-	 *
-	 * @return string
-	 */
-	public static function validatePluginAuthor($name)
-	{
-		if(preg_match('/^(?P<name>[- \.,\p{L}\'’]+) <(?P<email>.+?)>$/u', $name, $match))
-		{
+    /**
+     * Validator for the name of a plugin
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function validatePluginAuthor($name)
+    {
+        if (preg_match('/^(?P<name>[- \.,\p{L}\'’]+) <(?P<email>.+?)>$/u', $name, $match)) {
             self::validateEmail($match['email']);
-            
+
             return $name;
         }
 
-		throw new \InvalidArgumentException('The author must follow the format: your name <your-name@example.com>');
-	}
+        throw new \InvalidArgumentException('The author must follow the format: your name <your-name@example.com>');
+    }
 
-	/**
-	 * Validator for a namespace
-	 *
-	 * @param string $namespace
-	 *
-	 * @return string
-	 */
-	public static function validateNamespace($namespace)
-	{
-		if(0 == strlen($namespace))
-		{
-			return '';
-		}
+    /**
+     * Validator for a namespace
+     *
+     * @param string $namespace
+     *
+     * @return string
+     */
+    public static function validateNamespace($namespace)
+    {
+        if (0 == strlen($namespace)) {
+            return '';
+        }
 
-		// The namespace:
-		$namespace = strtr($namespace, '/', '\\');
-        
-		if(!preg_match('/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\\\?)+$/', $namespace))
-		{
-			throw new \InvalidArgumentException('The namespace contains invalid characters.');
-		}
+        // The namespace:
+        $namespace = strtr($namespace, '/', '\\');
 
-		// PHP reserved words:
-		$reservedWords = self::getPhpReservedWords();
+        if (!preg_match('/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\\\?)+$/', $namespace)) {
+            throw new \InvalidArgumentException('The namespace contains invalid characters.');
+        }
 
-        foreach(explode('\\', $namespace) as $word)
-        {
-            if(in_array(strtolower($word), $reservedWords))
-            {
+        // PHP reserved words:
+        $reservedWords = self::getPhpReservedWords();
+
+        foreach (explode('\\', $namespace) as $word) {
+            if (in_array(strtolower($word), $reservedWords)) {
                 throw new \InvalidArgumentException(sprintf('The namespace cannot contain PHP reserved words ("%s").', $word));
             }
         }
 
-		return $namespace;
-	}
+        return $namespace;
+    }
 
-	/**
-	 * Validator for the title of a post
-	 *
-	 * @param string $title
-	 *
-	 * @return string
-	 */
-	public function validatePostTitle($title)
-	{
-		if(0 == strlen($answer))
-        {
+    /**
+     * Validator for the title of a post
+     *
+     * @param string $title
+     *
+     * @return string
+     */
+    public function validatePostTitle($title)
+    {
+        if (0 == strlen($answer)) {
             throw new \InvalidArgumentException('The title of a post should not be empty.');
         }
 
-		return $title;
-	}
+        return $title;
+    }
 
-	/**
-	 * Validator for a Email
-	 *
-	 * @param string $email
-	 *
-	 * @return string
-	 */
-	public function validateEmail($email)
-	{
-		if(false === filter_var($email, FILTER_VALIDATE_EMAIL))
-		{
-			throw new \InvalidArgumentException(sprintf('The Email "%s" is invalid.', $email));
-		}
+    /**
+     * Validator for a Email
+     *
+     * @param string $email
+     *
+     * @return string
+     */
+    public function validateEmail($email)
+    {
+        if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException(sprintf('The Email "%s" is invalid.', $email));
+        }
 
-		return $email;
-	}
+        return $email;
+    }
 
-	/**
-	 * List of PHP reserved words
-	 *
-	 * @return array
-	 */
-	public static function getPhpReservedWords()
-	{
-		return [
-			'abstract',
-			'and',
-			'array',
-			'as',
-			'break',
-			'case',
-			'catch',
-			'class',
-			'clone',
-			'const',
-			'continue',
-			'declare',
-			'default',
-			'do',
-			'else',
-			'elseif',
-			'enddeclare',
-			'endfor',
-			'endforeach',
-			'endif',
-			'endswitch',
-			'endwhile',
-			'extends',
-			'final',
-			'for',
-			'foreach',
-			'function',
-			'global',
-			'goto',
-			'if',
-			'implements',
-			'interface',
-			'instanceof',
-			'namespace',
-			'new',
-			'or',
-			'private',
-			'protected',
-			'public',
-			'static',
-			'switch',
-			'throw',
-			'try',
-			'use',
-			'var',
-			'while',
-			'xor',
-			'__CLASS__',
-			'__DIR__',
-			'__FILE__',
-			'__LINE__',
-			'__FUNCTION__',
-			'__METHOD__',
-			'__NAMESPACE__',
-			'die',
-			'echo',
-			'empty',
-			'exit',
-			'eval',
-			'include',
-			'include_once',
-			'isset',
-			'list',
-			'require',
-			'require_once',
-			'return',
-			'print',
-			'unset',
-		];
-	}
+    /**
+     * List of PHP reserved words
+     *
+     * @return array
+     */
+    public static function getPhpReservedWords()
+    {
+        return [
+            'abstract',
+            'and',
+            'array',
+            'as',
+            'break',
+            'case',
+            'catch',
+            'class',
+            'clone',
+            'const',
+            'continue',
+            'declare',
+            'default',
+            'do',
+            'else',
+            'elseif',
+            'enddeclare',
+            'endfor',
+            'endforeach',
+            'endif',
+            'endswitch',
+            'endwhile',
+            'extends',
+            'final',
+            'for',
+            'foreach',
+            'function',
+            'global',
+            'goto',
+            'if',
+            'implements',
+            'interface',
+            'instanceof',
+            'namespace',
+            'new',
+            'or',
+            'private',
+            'protected',
+            'public',
+            'static',
+            'switch',
+            'throw',
+            'try',
+            'use',
+            'var',
+            'while',
+            'xor',
+            '__CLASS__',
+            '__DIR__',
+            '__FILE__',
+            '__LINE__',
+            '__FUNCTION__',
+            '__METHOD__',
+            '__NAMESPACE__',
+            'die',
+            'echo',
+            'empty',
+            'exit',
+            'eval',
+            'include',
+            'include_once',
+            'isset',
+            'list',
+            'require',
+            'require_once',
+            'return',
+            'print',
+            'unset',
+        ];
+    }
 }

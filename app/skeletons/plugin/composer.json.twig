@@ -4,11 +4,14 @@
     "description": "{{ description }}",
     "keywords": ["spress", "plugin"],
     "license": "{{ license }}",
+{% if author and email %}
     "authors": [
         {
-            "name": "{{ author }}"
+            "name": "{{ author }}",
+            "email": "{{ email }}"
         }
     ],
+{% endif %}
     "require": {
         "yosymfony/spress-installer": "~1.0"
     },

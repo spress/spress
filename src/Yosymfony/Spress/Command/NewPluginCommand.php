@@ -35,6 +35,7 @@ class NewPluginCommand extends Command
             new InputOption('name', '', InputOption::VALUE_REQUIRED, 'The name of the plugins should follow the pattern "vendor-name/plugin-name"'),
             new InputOption('namespace', '', InputOption::VALUE_REQUIRED, 'The namespace of the plugin', ''),
             new InputOption('author', '', InputOption::VALUE_REQUIRED, 'The author of the plugin'),
+            new InputOption('email', '', InputOption::VALUE_REQUIRED, 'The Email of the author'),
             new InputOption('description', '', InputOption::VALUE_REQUIRED, 'The description of your plugin'),
             new InputOption('license', '', InputOption::VALUE_REQUIRED, 'The license under you publish your plugin'),
         ])
@@ -56,6 +57,7 @@ EOT
         $name = $input->getOption('name');
         $namespace = $input->getOption('namespace') ?: '';
         $author = $input->getOption('author');
+        $email = $input->getOption('email');
         $description = $input->getOption('description');
         $license = $input->getOption('license') ?: 'MIT';
 
@@ -69,7 +71,7 @@ EOT
 
         $pluginDir = $config->getRepository()->get('plugins');
 
-        $files = $generator->generate($pluginDir, $name, $namespace, $author, $description, $license);
+        $files = $generator->generate($pluginDir, $name, $namespace, $author, $email, $description, $license);
 
         $this->resultMessage($io, $files);
     }
@@ -96,6 +98,8 @@ EOT
         $input->setOption('name', $name);
 
         // Namespace:
+        $this->namespaceMessage($io);
+
         $namespace = $input->getOption('namespace');
         $question = new Question('Plugin namespace (global): ', $namespace);
         $question->setValidator(function ($answer) {
@@ -107,11 +111,21 @@ EOT
         // Author:
         $author = $input->getOption('author');
         $question = new Question('Plugin author: ', $author);
-        $question->setValidator($answer) {
-            return Validators::validatePluginAuthor($answer);
-        }
         $author = $helper->ask($input, $output, $question);
         $input->setOption('author', $author);
+
+        // Email:
+        $email = $input->getOption('email');
+        $question = new Question('Email author: ', $email);
+        $question->setValidator(function ($answer) {
+            if(0 === strlen($answer)) {
+                return $answer;
+            }
+
+            return Validators::validateEmail($answer);
+        });
+        $email = $helper->ask($input, $output, $question);
+        $input->setOption('email', $email);
 
         // Description:
         $description = $input->getOption('description');
@@ -138,6 +152,15 @@ EOT
         $io->write([
             '',
             'Welcome to <comment>Spress plugin generator</comment>',
+            '',
+        ]);
+    }
+
+    protected function namespaceMessage($io)
+    {
+        $io->write([
+            '',
+            '<comment>The global namespace is the option recommended.</comment>',
             '',
         ]);
     }

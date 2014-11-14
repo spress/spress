@@ -25,15 +25,16 @@ class PluginGenerator extends Generator
      * Generate a post
      *
      * @param $targetDir string
-     * @param $tdate DateTime
-     * @param $title string
-     * @param $layout string
-     * @param $categories array
-     * @param $tags array
+     * @param $name DateTime
+     * @param $namespace string
+     * @param $author string
+     * @param $email string
+     * @param $description string
+     * @param $license string
      *
      * @return array
      */
-    public function generate($targetDir, $name, $namespace = '', $author = '', $description = '', $license = 'MIT')
+    public function generate($targetDir, $name, $namespace = '', $author = '', $email = '', $description = '', $license = 'MIT')
     {
         $this->files = [];
 
@@ -58,12 +59,13 @@ class PluginGenerator extends Generator
         }
 
         $model = [
-            'name'            => $name,
-            'classname'        => $this->getClassname($name),
-            'namespace'        => $namespace,
+            'name'          => $name,
+            'classname'     => $this->getClassname($name),
+            'namespace'     => $namespace,
             'author'        => $author,
-            'description'    => $description,
-            'license'        => $license,
+            'email'         => $email,
+            'description'   => $description,
+            'license'       => $license,
         ];
 
         $this->cleanFilesAffected();

@@ -22,10 +22,10 @@ class PluginGenerator extends Generator
     protected $files;
 
     /**
-     * Generate a post
+     * Generate a plugin
      *
      * @param $targetDir string
-     * @param $name DateTime
+     * @param $name string
      * @param $namespace string
      * @param $author string
      * @param $email string
@@ -36,7 +36,7 @@ class PluginGenerator extends Generator
      */
     public function generate($targetDir, $name, $namespace = '', $author = '', $email = '', $description = '', $license = 'MIT')
     {
-        $this->files = [];
+        $this->cleanFilesAffected();
 
         if (0 === strlen(trim($name))) {
             throw new \RuntimeException('Unable to generate the plugin as the name is empty.');

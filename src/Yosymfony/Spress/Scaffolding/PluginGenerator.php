@@ -19,8 +19,6 @@ namespace Yosymfony\Spress\Scaffolding;
  */
 class PluginGenerator extends Generator
 {
-    protected $files;
-
     /**
      * Generate a plugin
      *
@@ -36,8 +34,6 @@ class PluginGenerator extends Generator
      */
     public function generate($targetDir, $name, $namespace = '', $author = '', $email = '', $description = '', $license = 'MIT')
     {
-        $this->cleanFilesAffected();
-
         if (0 === strlen(trim($name))) {
             throw new \RuntimeException('Unable to generate the plugin as the name is empty.');
         }

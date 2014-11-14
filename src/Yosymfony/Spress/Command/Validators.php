@@ -93,9 +93,9 @@ class Validators
      *
      * @return string
      */
-    public function validatePostTitle($title)
+    public static function validatePostTitle($title)
     {
-        if (0 == strlen($answer)) {
+        if (0 == strlen($title)) {
             throw new \InvalidArgumentException('The title of a post should not be empty.');
         }
 
@@ -109,7 +109,7 @@ class Validators
      *
      * @return string
      */
-    public function validateEmail($email)
+    public static function validateEmail($email)
     {
         if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException(sprintf('The Email "%s" is invalid.', $email));

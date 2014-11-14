@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Scaffolding;
 
 use Yosymfony\Spress\Core\Utils;
@@ -20,54 +20,50 @@ use Yosymfony\Spress\Core\Utils;
  */
 class PostGenerator extends Generator
 {
-	/**
-	 * Generate a post
-	 *
-	 * @param $targetDir string
-	 * @param $tdate DateTime
-	 * @param $title string
-	 * @param $layout string
-	 * @param $categories array
-	 * @param $tags array
-	 *
-	 * @return array
-	 */
-	public function generate($targetDir, \DateTime $date, $title, $layout, array $tags, array $categories)
-	{
-		if(0 === strlen(trim($title)))
-		{
-			throw new \RuntimeException('Unable to generate the post as the title is empty.');
-		}
+    /**
+     * Generate a post
+     *
+     * @param $targetDir string
+     * @param $tdate DateTime
+     * @param $title string
+     * @param $layout string
+     * @param $categories array
+     * @param $tags array
+     *
+     * @return array
+     */
+    public function generate($targetDir, \DateTime $date, $title, $layout, array $tags = [], array $categories = [])
+    {
+        if (0 === strlen(trim($title))) {
+            throw new \RuntimeException('Unable to generate the post as the title is empty.');
+        }
 
-		if(file_exists($targetDir))
-		{
-			if(false === is_dir($targetDir))
-			{
-				throw new \RuntimeException(sprintf('Unable to generate the post as the target directory "%s" exists but is a file.', $targetDir));
-			}
+        if (file_exists($targetDir)) {
+            if (false === is_dir($targetDir)) {
+                throw new \RuntimeException(sprintf('Unable to generate the post as the target directory "%s" exists but is a file.', $targetDir));
+            }
 
-			if(false === is_writable($targetDir))
-			{
-				throw new \RuntimeException(sprintf('Unable to generate the post as the target directory "%s" is not writable.', $targetDir));
-			}
-		}
+            if (false === is_writable($targetDir)) {
+                throw new \RuntimeException(sprintf('Unable to generate the post as the target directory "%s" is not writable.', $targetDir));
+            }
+        }
 
-		$model = [
-			'layout' 		=> $layout,
-			'title'			=> $title,
-			'categories'	=> $categories,
-			'tags'			=> $tags,
-		];
+        $model = [
+            'layout'        => $layout,
+            'title'            => $title,
+            'categories'    => $categories,
+            'tags'            => $tags,
+        ];
 
-		$this->cleanFilesAffected();
+        $this->cleanFilesAffected();
 
-		$this->renderFile('post/post.md.twig', $targetDir . '/' . $this->getPostFilename($date, $title), $model);
+        $this->renderFile('post/post.md.twig', $targetDir.'/'.$this->getPostFilename($date, $title), $model);
 
-		return $this->getFilesAffected();
-	}
+        return $this->getFilesAffected();
+    }
 
-	protected function getPostFilename(\DateTime $date, $title, $extension = 'md')
-	{
-		return sprintf('%s-%s.%s', $date->format('Y-m-d'), Utils::slugify($title), $extension);
-	}
+    protected function getPostFilename(\DateTime $date, $title, $extension = 'md')
+    {
+        return sprintf('%s-%s.%s', $date->format('Y-m-d'), Utils::slugify($title), $extension);
+    }
 }

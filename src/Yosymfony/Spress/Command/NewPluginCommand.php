@@ -87,7 +87,7 @@ EOT
 
         // Name:
         $name = $input->getOption('name');
-        $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor/plugin"</comment><info>)</info>: ', $name);
+        $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor-name/plugin-name"</comment><info>)</info>: ', $name);
         $question->setMaxAttempts(null);
         $question->setValidator(function ($answer) {
             return Validators::validatePluginName($answer);
@@ -107,6 +107,9 @@ EOT
         // Author:
         $author = $input->getOption('author');
         $question = new Question('Plugin author: ', $author);
+        $question->setValidator($answer) {
+            return Validators::validatePluginAuthor($answer);
+        }
         $author = $helper->ask($input, $output, $question);
         $input->setOption('author', $author);
 

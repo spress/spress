@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Scaffolding;
 
 use Yosymfony\Spress\Core\TwigFactory;
@@ -21,56 +21,55 @@ use Yosymfony\Spress\Core\TwigFactory;
  */
 class Generator
 {
-	private $files = [];
-	private $skeletonDirs;
+    private $files = [];
+    private $skeletonDirs;
 
-	/**
-	 * Set a string or array of directories
-	 * 
-	 * @param array $value
-	 */
-	public function setSkeletonDirs($value)
-	{
-		$this->skeletonDirs = $value;
-	}
+    /**
+     * Set a string or array of directories
+     *
+     * @param array $value
+     */
+    public function setSkeletonDirs($value)
+    {
+        $this->skeletonDirs = $value;
+    }
 
-	protected function render($template, $model)
-	{
-		$twig = $this->getTwig();
+    protected function render($template, $model)
+    {
+        $twig = $this->getTwig();
 
-		return $twig->render($template, $model);
-	}
+        return $twig->render($template, $model);
+    }
 
-	protected function getTwig()
-	{
-		$factory = new TwigFactory();
+    protected function getTwig()
+    {
+        $factory = new TwigFactory();
 
-		return $factory
-			->withCache(false)
-			->addLoaderFilesystem($this->skeletonDirs)
-			->withStrictVariables(true)
-			->create();
-	}
+        return $factory
+            ->withCache(false)
+            ->addLoaderFilesystem($this->skeletonDirs)
+            ->withStrictVariables(true)
+            ->create();
+    }
 
-	protected function renderFile($template, $target, $model)
-	{
-		if (!is_dir(dirname($target)))
-		{
-			mkdir(dirname($target), 0777, true);
-		}
+    protected function renderFile($template, $target, $model)
+    {
+        if (!is_dir(dirname($target))) {
+            mkdir(dirname($target), 0777, true);
+        }
 
-		$this->files[] = $target;
+        $this->files[] = $target;
 
-		return file_put_contents($target, $this->render($template, $model));
-	}
+        return file_put_contents($target, $this->render($template, $model));
+    }
 
-	protected function getFilesAffected()
-	{
-		return $this->files;
-	}
+    protected function getFilesAffected()
+    {
+        return $this->files;
+    }
 
-	protected function cleanFilesAffected()
-	{
-		$this->files = [];
-	}
+    protected function cleanFilesAffected()
+    {
+        $this->files = [];
+    }
 }

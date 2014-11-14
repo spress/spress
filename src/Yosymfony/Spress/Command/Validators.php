@@ -37,24 +37,6 @@ class Validators
     }
 
     /**
-     * Validator for the name of a plugin
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function validatePluginAuthor($name)
-    {
-        if (preg_match('/^(?P<name>[- \.,\p{L}\'’]+) <(?P<email>.+?)>$/u', $name, $match)) {
-            self::validateEmail($match['email']);
-
-            return $name;
-        }
-
-        throw new \InvalidArgumentException('The author must follow the format: your name <your-name@example.com>');
-    }
-
-    /**
      * Validator for a namespace
      *
      * @param string $namespace

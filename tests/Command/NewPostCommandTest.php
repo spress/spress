@@ -59,7 +59,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress post generator/', $output);
-        $this->assertRegExp('/my-first-post.md/', $output);
+        $this->assertRegExp('/my-first-post\.md/', $output);
     }
 
     public function testOnlyTitle()

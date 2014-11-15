@@ -58,6 +58,7 @@ class PluginGenerator extends Generator
             'name'          => $name,
             'classname'     => $this->getClassname($name),
             'namespace'     => $namespace,
+            'namespace_psr4' => $this->processNamespaceForComposer($namespace),
             'author'        => $author,
             'email'         => $email,
             'description'   => $description,
@@ -100,5 +101,10 @@ class PluginGenerator extends Generator
     protected function getPluginFilename($name)
     {
         return sprintf('%s.php', $this->getClassname($name));
+    }
+
+    protected function processNamespaceForComposer($namespace)
+    {
+        return str_replace('\\', '\\\\', $namespace) . '\\\\';
     }
 }

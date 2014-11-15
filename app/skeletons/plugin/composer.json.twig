@@ -15,6 +15,13 @@
     "require": {
         "yosymfony/spress-installer": "~1.0"
     },
+{% if namespace %}
+    "autoload": {
+        "psr-4": {
+            "{{ namespace_psr4 }}": ""
+        }
+    },
+{% endif %}
     "extra": {
         "spress_name": "{{ classname }}"
     }

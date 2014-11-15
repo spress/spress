@@ -45,12 +45,12 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new NewPluginCommand());
-        
+
         $command = $app->find('new:plugin');
         $commandTester = new CommandTester($command);
 
         $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/testPlugin\n\nVictor <vpgugr@gmail.com>\nMy description\nMIT\n"));
+        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\nVictor\nvpgugr@gmail.com\nMy description\nMIT\n"));
 
         $commandTester->execute([
             'command' => $command->getName(),
@@ -59,8 +59,71 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress plugin generator/', $output);
-        $this->assertRegExp('/YosymfonytestPlugin.php/', $output);
-        $this->assertRegExp('/composer.json/', $output);
+        $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
+        $this->assertRegExp('/composer\.json/', $output);
+    }
+
+    public function testOnlyName()
+    {
+        $app = new Application();
+        $app->add(new NewPluginCommand());
+
+        $command = $app->find('new:plugin');
+        $commandTester = new CommandTester($command);
+
+        $helper = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\n\n\n\n\n"));
+
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+        
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Spress plugin generator/', $output);
+        $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
+        $this->assertRegExp('/composer\.json/', $output);
+    }
+
+    public function testDefaultValues()
+    {
+        $app = new Application();
+        $app->add(new NewPluginCommand());
+
+        $command = $app->find('new:plugin');
+        $commandTester = new CommandTester($command);
+
+        $helper = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream("\n\n\n\n\n\n"));
+
+        $commandTester->execute([
+            'command'       => $command->getName(),
+            '--name'        => 'yosymfony/testplugin',
+            '--namespace'   => 'Yosymfony\Testplugin',
+            '--author'      => 'Victor Puertas',
+            '--email'       => 'vpgugr@gmail.com',
+            '--description' => 'My Spress plugin',
+            '--license'    => 'BSD-2-Clause',
+        ]);
+        
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Spress plugin generator/', $output);
+        $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
+        $this->assertRegExp('/composer\.json/', $output);
+
+        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
+
+        $this->assertRegExp('/namespace Yosymfony\\\\Testplugin;/', $fileContent);
+        $this->assertRegExp('/class Yosymfonytestplugin/', $fileContent);
+
+        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
+
+        $this->assertRegExp('/"name": "yosymfony\/testplugin"/', $fileContent);
+        $this->assertRegExp('/"description": "My Spress plugin"/', $fileContent);
+        $this->assertRegExp('/"name": "Victor Puertas"/', $fileContent);
+        $this->assertRegExp('/"email": "vpgugr@gmail.com"/', $fileContent);
+        //$this->assertRegExp('/"Yosymfony\\\\Testplugin\\\\": ""/', $fileContent);
     }
 
     protected function getInputStream($input)

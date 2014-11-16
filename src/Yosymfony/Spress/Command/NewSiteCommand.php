@@ -28,33 +28,16 @@ class NewSiteCommand extends Command
 {
     protected function configure()
     {
-        $this
-            ->setName('site:new')
-            ->setDescription('Create a new site')
-            ->addArgument(
-                'path',
-                InputArgument::OPTIONAL,
-                'Path of the new site',
-                './'
-            )
-            ->addArgument(
-                'template',
-                InputArgument::OPTIONAL,
-                'Template name',
-                'blank'
-            )
-            ->addOption(
-                'force',
-                null,
-                InputOption::VALUE_NONE,
-                'Force creation event if path already exists'
-            )
-            ->addOption(
-                'all',
-                null,
-                InputOption::VALUE_NONE,
-                'Complete scaffold'
-            );
+        $this->setDefinition([
+            new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
+            new InputArgument('template', InputArgument::OPTIONAL, 'Template name', 'blank'),
+            new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation event if path already exists'),
+            new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
+        ])
+        ->setName('new:site')
+        ->setDescription('Create a new site')
+        ->setAliases(['site:new'])
+        ->setHelp('The <info>new:site</info> command helps you generates new sites.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -100,6 +100,11 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/2014-01-01-my-first-post.md/', $output);
+
+        $fileContent = file_get_contents($this->tmpDir . '/_posts/2014-01-01-my-first-post.md');
+
+        $this->assertRegExp('/tags: \[\]/', $fileContent);
+        $this->assertRegExp('/categories: \[\]/', $fileContent);
     }
 
     public function testDefaultValues()
@@ -125,6 +130,13 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/2015-01-01-my-second-post.md/', $output);
+
+        $fileContent = file_get_contents($this->tmpDir . '/_posts/2015-01-01-my-second-post.md');
+
+        $this->assertRegExp('/title: "My second post"/', $fileContent);
+        $this->assertRegExp('/layout: post/', $fileContent);
+        $this->assertRegExp('/tags: \[tag1,tag2\]/', $fileContent);
+        $this->assertRegExp('/categories: \[category1,category2\]/', $fileContent);
     }
 
     protected function getInputStream($input)

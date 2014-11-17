@@ -142,11 +142,6 @@ EOT
         $input->setOption('license', $license);
     }
 
-    protected function getPluginDir($app)
-    {
-        return $dir ?: $app['spress.config']->getRepository()->get('plugins');
-    }
-
     protected function welcomeMessage($io)
     {
         $io->write([

@@ -19,6 +19,8 @@ namespace Yosymfony\Spress\Scaffolding;
  */
 class PluginGenerator extends Generator
 {
+    protected $dirctoryName;
+
     /**
      * Generate a plugin
      *
@@ -48,21 +50,23 @@ class PluginGenerator extends Generator
             }
         }
 
-        $pluginDir = $targetDir.'/'.$this->getPluginDir($name);
+        $this->dirctoryName = $this->getPluginDir($name);
+
+        $pluginDir = $targetDir.'/'.$this->dirctoryName;
 
         if (file_exists($pluginDir)) {
             throw new \RuntimeException(sprintf('Unable to generate the plugin as the plugin directory "%s" exists.', $pluginDir));
         }
 
         $model = [
-            'name'          => $name,
-            'classname'     => $this->getClassname($name),
-            'namespace'     => $namespace,
-            'namespace_psr4' => $this->processNamespaceForComposer($namespace),
-            'author'        => $author,
-            'email'         => $email,
-            'description'   => $description,
-            'license'       => $license,
+            'name'              => $name,
+            'classname'         => $this->getClassname($name),
+            'namespace'         => $namespace,
+            'namespace_psr4'    => $this->getNamespacePsr4($namespace),
+            'author'            => $author,
+            'email'             => $email,
+            'description'       => $description,
+            'license'           => $license,
         ];
 
         $this->cleanFilesAffected();
@@ -71,6 +75,16 @@ class PluginGenerator extends Generator
         $this->renderFile('plugin/composer.json.twig', $pluginDir.'/composer.json', $model);
 
         return $this->getFilesAffected();
+    }
+
+    /**
+     * Get the directory of the plugin
+     *
+     * @return string
+     */
+    public function getPluginDirName()
+    {
+        return $this->dirctoryName;
     }
 
     protected function getClassname($name)
@@ -103,7 +117,7 @@ class PluginGenerator extends Generator
         return sprintf('%s.php', $this->getClassname($name));
     }
 
-    protected function processNamespaceForComposer($namespace)
+    protected function getNamespacePsr4($namespace)
     {
         return str_replace('\\', '\\\\', $namespace) . '\\\\';
     }

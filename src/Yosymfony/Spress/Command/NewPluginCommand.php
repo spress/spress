@@ -73,6 +73,11 @@ EOT
 
         $files = $generator->generate($pluginDir, $name, $namespace, $author, $email, $description, $license);
 
+        if ($namespace) {
+            $composerPluginPath = $pluginDir.'/'.$generator->getPluginDirName();
+            $this->addNamespaceToComposerFile('./composer.json', $namespace, $composerPluginPath);
+        }
+
         $this->resultMessage($io, $files);
     }
 
@@ -140,6 +145,39 @@ EOT
         $question = new Question('Plugin license (MIT): ', $license);
         $license = $helper->ask($input, $output, $question);
         $input->setOption('license', $license);
+    }
+
+    protected function addNamespaceToComposerFile($composerFile, $namespace, $relativePluginDir)
+    {
+        $namespace .= '\\';
+
+        if (false === file_exists($composerFile)) {
+            return;
+        }
+
+        $jsonContent = file_get_contents($composerFile);
+
+        $composer = json_decode($jsonContent, true);
+        print_r($composer);
+
+        if(false === isset($composer['autoload']))
+        {
+            $composer['autoload'] = [];
+        }
+
+        if(false === isset($composer['autoload']['psr-4']))
+        {
+            $composer['autoload']['psr-4'] = [];
+        }
+
+        if(false === isset($composer['autoload']['psr-4'][$namespace]))
+        {
+            $composer['autoload']['psr-4'][$namespace] = $relativePluginDir.'/';
+        }
+
+        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        file_put_contents($composerFile, $jsonContent);
     }
 
     protected function welcomeMessage($io)

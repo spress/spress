@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Core\ContentManager;
 
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
 
 /**
  * Base implementation for content items
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentItem implements ContentItemInterface
@@ -28,11 +28,11 @@ class ContentItem implements ContentItemInterface
     protected $frontmatter;
     protected $configuration;
     protected $extension;
-    
+
     /**
      * Constructor
-     * 
-     * @param FileItem $fileItem
+     *
+     * @param FileItem                       $fileItem
      * @param Yosymfony\Spress\Configuration $configuration
      */
     public function __construct(FileItem $fileItem, $configuration)
@@ -43,10 +43,10 @@ class ContentItem implements ContentItemInterface
         $this->frontmatter = new Frontmatter($this->fileItem->getSourceContent(), $configuration);
         $this->setPreConverterContent($this->frontmatter->getContentNotFrontmatter());
     }
-    
+
     /**
      * Get item identifier
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -54,10 +54,10 @@ class ContentItem implements ContentItemInterface
         $parts = $this->fileItem->getRelativePathExplode();
         $parts[] = $this->fileItem->getFileName(false);
         $parts[] = $this->fileItem->getExtension();
-        
+
         return implode('-', $parts);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -65,15 +65,15 @@ class ContentItem implements ContentItemInterface
     {
         return $this->frontmatter->hasFrontmatter();
     }
-    
+
     /**
      * @inheritDoc
      */
     public function getFrontmatter()
-    {   
+    {
         return $this->frontmatter;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -81,7 +81,7 @@ class ContentItem implements ContentItemInterface
     {
         return $this->preConverterContent;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -90,7 +90,7 @@ class ContentItem implements ContentItemInterface
         $this->preConverterContent = $content;
         $this->fileItem->setDestinationContent($content);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -98,7 +98,7 @@ class ContentItem implements ContentItemInterface
     {
         return $this->postConverterContent;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -107,7 +107,7 @@ class ContentItem implements ContentItemInterface
         $this->postConverterContent = $content;
         $this->fileItem->setDestinationContent($content);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -115,7 +115,7 @@ class ContentItem implements ContentItemInterface
     {
         return $this->preLayoutContent;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -124,7 +124,7 @@ class ContentItem implements ContentItemInterface
         $this->preLayoutContent = $content;
         $this->fileItem->setDestinationContent($content);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -132,7 +132,7 @@ class ContentItem implements ContentItemInterface
     {
         return $this->postLayoutContent;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -141,7 +141,7 @@ class ContentItem implements ContentItemInterface
         $this->postLayoutContent = $content;
         $this->fileItem->setDestinationContent($content);
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -149,7 +149,7 @@ class ContentItem implements ContentItemInterface
     {
         $this->extension = $extension;
     }
-    
+
     /**
      * @inheritDoc
      */

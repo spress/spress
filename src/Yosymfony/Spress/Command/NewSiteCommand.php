@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Command;
- 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,39 +19,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Scaffolding\NewSite;
 
-class NewCommand extends Command
+/**
+ * New site command
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
+class NewSiteCommand extends Command
 {
     protected function configure()
     {
-        $this
-            ->setName('site:new')
-            ->setDescription('Create a new site scaffold')
-            ->addArgument(
-                'path',
-                InputArgument::OPTIONAL,
-                'Path of the new site',
-                './'
-            )
-            ->addArgument(
-                'template',
-                InputArgument::OPTIONAL,
-                'Template name',
-                'blank'
-            )
-            ->addOption(
-                'force',
-                null,
-                InputOption::VALUE_NONE,
-                'Force creation event if path already exists'
-            )
-            ->addOption(
-                'all',
-                null,
-                InputOption::VALUE_NONE,
-                'Complete scaffold'
-            );
+        $this->setDefinition([
+            new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
+            new InputArgument('template', InputArgument::OPTIONAL, 'Template name', 'blank'),
+            new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation event if path already exists'),
+            new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
+        ])
+        ->setName('new:site')
+        ->setDescription('Create a new site')
+        ->setAliases(['site:new'])
+        ->setHelp('The <info>new:site</info> command helps you generates new sites.');
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
@@ -59,21 +47,18 @@ class NewCommand extends Command
         $force = $input->getOption('force');
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        
+
         $app = new SpressCLI($io);
-        
+
         $operation = new NewSite($app['spress.paths']['templates']);
         $operation->newSite($path, $template, $force, $completeScaffold);
-        
+
         $io->write(sprintf('<comment>New site created at %s.</comment>', $path));
-        
-        if('./' == $path)
-        {
+
+        if ('./' == $path) {
             $io->write('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
-        }
-        else
-        {
+        } else {
             $io->write(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
-        }    
+        }
     }
 }

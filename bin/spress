@@ -14,12 +14,22 @@ if ((!$classloader = @include_once __DIR__ . '/../vendor/autoload.php') &&
 }
 
 use Symfony\Component\Console\Application;
-
-use Yosymfony\Spress\Command\BuildCommand;
-use Yosymfony\Spress\Command\NewCommand;
+use Yosymfony\Spress\Command\WelcomeCommand;
+use Yosymfony\Spress\Command\SiteBuildCommand;
+use Yosymfony\Spress\Command\NewSiteCommand;
+use Yosymfony\Spress\Command\NewPostCommand;
+use Yosymfony\Spress\Command\NewPluginCommand;
 
 $app = new Application('Spress - The static site generator', Yosymfony\Spress\Core\Application::VERSION);
-$app->add(new BuildCommand());
-$app->add(new NewCommand());
+
+$welcomeCommand = new WelcomeCommand();
+
+$app->add($welcomeCommand);
+$app->add(new SiteBuildCommand());
+$app->add(new NewSiteCommand());
+$app->add(new NewPostCommand());
+$app->add(new NewPluginCommand());
+
+$app->setDefaultCommand($welcomeCommand->getName());
 
 $app->run();

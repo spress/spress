@@ -8,53 +8,52 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Core\ContentManager;
 
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
 
 /**
  * Content of a page
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class PageItem extends ContentItem
 {
     /**
      * Constructor
-     * 
-     * @param FileItem $fileItem
+     *
+     * @param FileItem                       $fileItem
      * @param Yosymfony\Spress\Configuration $configuration
      */
     public function __construct(FileItem $fileItem, $configuration)
     {
-        if($fileItem->getType() !== FileItem::TYPE_PAGE)
-        {
+        if ($fileItem->getType() !== FileItem::TYPE_PAGE) {
             throw new \InvalidArgumentException(sprintf('Type item "%s" is invalid in page item.', $fileItem->getType()));
         }
-        
+
         parent::__construct($fileItem, $configuration);
-        
+
         $this->setUpDestinationPath();
     }
-    
+
     /**
      * Get the relative URL. e.g. /about/me.html
-     * 
+     *
      * @return string
      */
     public function getUrl()
     {
         $generator = new UrlGenerator();
         $url = $generator->getUrl($this->getUrlTemplate(), $this->getUrlPlaceholders());
-        
+
         return $url;
     }
-    
+
     /**
      * Get item payload. The 'content' var has been set
      * with PostConverterContent
-     * 
+     *
      * @return array
      */
     public function getPayload()
@@ -65,22 +64,22 @@ class PageItem extends ContentItem
         $repository->set('content', $this->getPostConverterContent());
         $repository->set('id', $this->getId());
         $repository->set('path', $this->getRelativePath());
-        
+
         return $repository->union($fm)->getArray();
     }
-    
+
     /**
      * Set out extension
-     * 
+     *
      * @param string $extension
      */
     public function setOutExtension($extension)
     {
         parent::setOutExtension($extension);
-        
+
         $this->setUpDestinationPath();
     }
-    
+
     /**
      * @return string
      */
@@ -90,22 +89,18 @@ class PageItem extends ContentItem
         $filename = $this->fileItem->getFileName(false);
         $extension = $this->extension;
         $permalinkStyle = $this->configuration->getRepository()->get('permalink');
-        
-        if('pretty' == $permalinkStyle)
-        {
-            if('index' == $filename && 'html' == $extension)
-            {
+
+        if ('pretty' == $permalinkStyle) {
+            if ('index' == $filename && 'html' == $extension) {
                 $template = '/:path/';
-            }
-            else if('html' == $extension)
-            {
+            } elseif ('html' == $extension) {
                 $template = '/:path/:basename/';
             }
         }
-        
+
         return $template;
     }
-    
+
     /**
      * @return array
      */
@@ -117,28 +112,28 @@ class PageItem extends ContentItem
             ':extension'    => $this->extension,
         ];
     }
-    
+
     /**
      * @return string
      */
     private function getFilename()
     {
-       return $this->fileItem->getFileName(false) . '.' . $this->extension; 
+        return $this->fileItem->getFileName(false).'.'.$this->extension;
     }
-    
+
     /**
      * @return string
      */
     private function getRelativePath()
     {
         $relativePath = $this->fileItem->getRelativePath();
-        
-        return strlen($relativePath) > 0 ? $relativePath. '/'. $this->getFilename() : $this->getFilename();
+
+        return strlen($relativePath) > 0 ? $relativePath.'/'.$this->getFilename() : $this->getFilename();
     }
-    
+
     private function setUpDestinationPath()
     {
         $destination = $this->getRelativePath();
-        $this->fileItem->setDestinationPaths(array($destination)); 
+        $this->fileItem->setDestinationPaths(array($destination));
     }
 }

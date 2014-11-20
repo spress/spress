@@ -62,14 +62,7 @@ site.
 
 #### site:new
 
-Create a new site.
-
-`site:new [path="./"] [template="blank"] [--force] [--all]`
-
-* `--force` option force to use the path even though exists and it's not empty.
-* `--all` In blank template, creates the complete scaffold.
-
-E.g `$ spress site:new /your-site-dir`
+This command has been declared as **deprecated since Spress 1.1.0**. See `new:site` command.
 
 #### site:build
 
@@ -88,6 +81,49 @@ E.g `$ spress site:build -s /your-site-dir`
 
 1. To create `config_prod.yml` with the options that will be overrided in `config.yml`.
 2. `$ spress site:build --env=prod`
+
+#### Scaffolding
+
+##### new:site
+
+Create a new site.
+
+`new:site [path="./"] [template="blank"] [--force] [--all]`
+
+* `--force` option force to use the path even though exists and it's not empty.
+* `--all` In blank template, creates the complete scaffold.
+
+E.g `$ spress new:site /your-site-dir`
+
+##### new:post
+
+The `new:post` command helps you generates new posts.
+By default, the command interacts with the developer to tweak the generation.
+Any passed option will be used as a default value for the interaction.
+
+`new:post [--title="..."] [--layout="default"] [--date="..."] [--tags="..."] [--categories="..."]`
+
+* `--title`: The title of the post.
+* `--layout`: The layout of the post.
+* `--date`: he date assigned to the post.
+* `--tags`: Tags list separed by white spaces.
+* `--categories`: Categories list separed by white spaces.
+
+##### new:plugin
+
+The `new:plugin` command helps you generates new plugins.
+By default, the command interacts with the developer to tweak the generation.
+Any passed option will be used as a default value for the interaction.
+
+`new:plugin [--name="..."] [--namespace="..."] [--author="..."] [--email="..."] [--description="..."] [--license="MIT"]`
+
+* `--name`: The name of the plugins should follow the pattern `vendor-name/plugin-name`.
+* `--namespace`: The namespace of the plugin. Global namespace by default.
+* `--author`: The author of the plugin.
+* `--email`: The Email of the author.
+* `--description`: The description of your plugin.
+* `--license`: The license under you publish your plugin. MIT by default.
+
 
 Unit tests
 ----------

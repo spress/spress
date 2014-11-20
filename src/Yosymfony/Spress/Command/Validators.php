@@ -28,44 +28,12 @@ class Validators
     public static function validatePluginName($name)
     {
         if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $name)) {
-            throw new \InvalidArgumentException(
-                'The plugin name '.$name.' is invalid, it should be lowercase '.
-                'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.');
+            throw new \InvalidArgumentException(sprintf(
+                'The plugin name "%s" is invalid, it should be lowercase '.
+                'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.', $name));
         }
 
         return $name;
-    }
-
-    /**
-     * Validator for a namespace
-     *
-     * @param string $namespace
-     *
-     * @return string
-     */
-    public static function validateNamespace($namespace)
-    {
-        if (0 == strlen($namespace)) {
-            return '';
-        }
-
-        // The namespace:
-        $namespace = strtr($namespace, '/', '\\');
-
-        if (!preg_match('/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\\\?)+$/', $namespace)) {
-            throw new \InvalidArgumentException('The namespace contains invalid characters.');
-        }
-
-        // PHP reserved words:
-        $reservedWords = self::getPhpReservedWords();
-
-        foreach (explode('\\', $namespace) as $word) {
-            if (in_array(strtolower($word), $reservedWords)) {
-                throw new \InvalidArgumentException(sprintf('The namespace cannot contain PHP reserved words ("%s").', $word));
-            }
-        }
-
-        return $namespace;
     }
 
     /**

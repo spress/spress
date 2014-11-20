@@ -33,7 +33,6 @@ class NewPluginCommand extends Command
     {
         $this->setDefinition([
             new InputOption('name', '', InputOption::VALUE_REQUIRED, 'The name of the plugins should follow the pattern "vendor-name/plugin-name"'),
-            new InputOption('namespace', '', InputOption::VALUE_REQUIRED, 'The namespace of the plugin', ''),
             new InputOption('author', '', InputOption::VALUE_REQUIRED, 'The author of the plugin'),
             new InputOption('email', '', InputOption::VALUE_REQUIRED, 'The Email of the author'),
             new InputOption('description', '', InputOption::VALUE_REQUIRED, 'The description of your plugin'),
@@ -55,7 +54,6 @@ EOT
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
         $name = $input->getOption('name');
-        $namespace = $input->getOption('namespace') ?: '';
         $author = $input->getOption('author');
         $email = $input->getOption('email');
         $description = $input->getOption('description');
@@ -71,12 +69,7 @@ EOT
 
         $pluginDir = $config->getRepository()->get('plugins');
 
-        $files = $generator->generate($pluginDir, $name, $namespace, $author, $email, $description, $license);
-
-        if ($namespace) {
-            $composerPluginPath = $pluginDir.'/'.$generator->getPluginDirName();
-            $this->addNamespaceToComposerFile('./composer.json', $namespace, $composerPluginPath);
-        }
+        $files = $generator->generate($pluginDir, $name, '', $author, $email, $description, $license);
 
         $this->resultMessage($io, $files);
     }
@@ -101,17 +94,6 @@ EOT
         });
         $name = $helper->ask($input, $output, $question);
         $input->setOption('name', $name);
-
-        // Namespace:
-        $this->namespaceMessage($io);
-
-        $namespace = $input->getOption('namespace');
-        $question = new Question('Plugin namespace (global): ', $namespace);
-        $question->setValidator(function ($answer) {
-            return Validators::validateNamespace($answer);
-        });
-        $namespace = $helper->ask($input, $output, $question);
-        $input->setOption('namespace', $namespace);
 
         // Author:
         $author = $input->getOption('author');
@@ -147,53 +129,11 @@ EOT
         $input->setOption('license', $license);
     }
 
-    protected function addNamespaceToComposerFile($composerFile, $namespace, $relativePluginDir)
-    {
-        $namespace .= '\\';
-
-        if (false === file_exists($composerFile)) {
-            return;
-        }
-
-        $jsonContent = file_get_contents($composerFile);
-
-        $composer = json_decode($jsonContent, true);
-        print_r($composer);
-
-        if(false === isset($composer['autoload']))
-        {
-            $composer['autoload'] = [];
-        }
-
-        if(false === isset($composer['autoload']['psr-4']))
-        {
-            $composer['autoload']['psr-4'] = [];
-        }
-
-        if(false === isset($composer['autoload']['psr-4'][$namespace]))
-        {
-            $composer['autoload']['psr-4'][$namespace] = $relativePluginDir.'/';
-        }
-
-        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-        file_put_contents($composerFile, $jsonContent);
-    }
-
     protected function welcomeMessage($io)
     {
         $io->write([
             '',
             'Welcome to <comment>Spress plugin generator</comment>',
-            '',
-        ]);
-    }
-
-    protected function namespaceMessage($io)
-    {
-        $io->write([
-            '',
-            '<comment>The global namespace is the option recommended.</comment>',
             '',
         ]);
     }

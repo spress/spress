@@ -72,7 +72,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
 
         $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\n\n\n\n\n"));
+        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\n\n\n\n"));
 
         $commandTester->execute([
             'command' => $command->getName(),
@@ -107,7 +107,6 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command'       => $command->getName(),
             '--name'        => 'yosymfony/testplugin',
-            '--namespace'   => 'Yosymfony\Testplugin',
             '--author'      => 'Victor Puertas',
             '--email'       => 'vpgugr@gmail.com',
             '--description' => 'My Spress plugin',
@@ -122,7 +121,6 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
 
         $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
 
-        $this->assertRegExp('/namespace Yosymfony\\\\Testplugin;/', $fileContent);
         $this->assertRegExp('/class Yosymfonytestplugin/', $fileContent);
 
         $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
@@ -132,7 +130,6 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/"name": "Victor Puertas"/', $fileContent);
         $this->assertRegExp('/"email": "vpgugr@gmail.com"/', $fileContent);
         $this->assertRegExp('/"license": "BSD-2-Clause"/', $fileContent);
-        $this->assertRegExp('/"Yosymfony\\\\\\\\Testplugin\\\\\\\\": ""/', $fileContent);
         $this->assertRegExp('/"spress_name": "Yosymfonytestplugin"/', $fileContent);
     }
 

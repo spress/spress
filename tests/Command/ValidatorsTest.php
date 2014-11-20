@@ -36,32 +36,6 @@ class ValidatorsTest extends \PHPUnit_Framework_TestCase
 		Validators::validatePluginName('TestPlugin');
 	}
 
-	public function testValidateNamespace()
-	{
-		$this->assertEquals('Yosymfony\Plugin', Validators::validateNamespace('Yosymfony\Plugin'));
-	}
-
-	public function testValidateGlobalNamespace()
-	{
-		$this->assertEquals('', Validators::validateNamespace(''));
-	}
-
-	/**
-     * @expectedException \InvalidArgumentException
-     */
-	public function testNamespaceWithReservedWords()
-	{
-		Validators::validateNamespace('Yosymfony/array');
-	}
-
-	/**
-     * @expectedException \InvalidArgumentException
-     */
-	public function testNamespaceWithInvalidCharacters()
-	{
-		Validators::validateNamespace('Yosymfony/plu?:in');
-	}
-
 	public function testValidatePostTitle()
 	{
 		$this->assertEquals('The title', Validators::validatePostTitle('The title'));

@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Core\Tests;
+
+namespace Yosymfony\Spress\Core\tests;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\Application;
@@ -17,23 +17,23 @@ use Yosymfony\Spress\Core\Application;
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     protected $app;
-    
+
     public function setUp()
     {
         $this->app = new Application();
     }
-    
+
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(__DIR__ . '/fixtures/project/_site');
+        $fs->remove(__DIR__.'/fixtures/project/_site');
     }
-    
+
     public function testParse()
     {
-        $result = $this->app->parse(__DIR__ . '/fixtures/project');
+        $result = $this->app->parse(__DIR__.'/fixtures/project');
         $config = $this->app['spress.config'];
-        
+
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(2, $result['processed_post']);
@@ -41,15 +41,15 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['total_pages']);
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
-        
+
         $this->assertEquals('dev', $config->getEnvironmentName());
     }
-    
+
     public function testParseProdEnvironment()
     {
-        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'prod');
+        $result = $this->app->parse(__DIR__.'/fixtures/project', 'prod');
         $config = $this->app['spress.config'];
-        
+
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(2, $result['processed_post']);
@@ -57,18 +57,18 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['total_pages']);
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
-        
+
         $this->assertEquals('prod', $config->getEnvironmentName());
     }
-    
+
     /**
      * @link http://php.net/manual/en/timezones.php
      */
     public function testParseTimezone()
     {
-        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', 'Europe/Madrid');
-        
-        $this->assertEquals('Europe/Madrid', date_default_timezone_get()); 
+        $result = $this->app->parse(__DIR__.'/fixtures/project', 'dev', 'Europe/Madrid');
+
+        $this->assertEquals('Europe/Madrid', date_default_timezone_get());
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(2, $result['processed_post']);
@@ -77,14 +77,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
     }
-    
+
     public function testParseDraft()
     {
-        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', null, true);
+        $result = $this->app->parse(__DIR__.'/fixtures/project', 'dev', null, true);
         $repository = $this->app['spress.config']->getRepository();
-        
+
         $this->assertTrue(true, $repository->get('drafts'));
-        
+
         $this->assertTrue(is_array($result));
         $this->assertEquals(4, $result['total_post']);
         $this->assertEquals(3, $result['processed_post']);
@@ -93,20 +93,20 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['processed_pages']);
         $this->assertEquals(3, $result['other_resources']);
     }
-    
+
     public function testParseSafe()
     {
-        $result = $this->app->parse(__DIR__ . '/fixtures/project', 'dev', null, null, true);
+        $result = $this->app->parse(__DIR__.'/fixtures/project', 'dev', null, null, true);
         $repository = $this->app['spress.config']->getRepository();
 
         $this->assertTrue(true, $repository->get('safe'));
     }
-    
+
     /**
      * @expectedException \InvalidArgumentException
      */
     public function testParseLocalPathFail()
     {
-        $this->app->parse(__DIR__ . '/fixtures/project-not-exists');
+        $this->app->parse(__DIR__.'/fixtures/project-not-exists');
     }
 }

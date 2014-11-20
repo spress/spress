@@ -105,7 +105,7 @@ EOT
         $email = $input->getOption('email');
         $question = new Question('Email author: ', $email);
         $question->setValidator(function ($answer) {
-            if(0 === strlen($answer)) {
+            if (0 === strlen($answer)) {
                 return $answer;
             }
 

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Core\IO;
 
 /**
  * Null implementation. Do nothing.
- * 
+ *
  * @author Victor Puertas
  */
 class NullIO implements IOInterface
@@ -22,7 +22,7 @@ class NullIO implements IOInterface
     {
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -30,7 +30,7 @@ class NullIO implements IOInterface
     {
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -38,7 +38,7 @@ class NullIO implements IOInterface
     {
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -46,7 +46,7 @@ class NullIO implements IOInterface
     {
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -62,7 +62,7 @@ class NullIO implements IOInterface
     {
         // do nothing
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -70,7 +70,7 @@ class NullIO implements IOInterface
     {
         return $default;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -78,7 +78,7 @@ class NullIO implements IOInterface
     {
         return $default;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -86,15 +86,15 @@ class NullIO implements IOInterface
     {
         return $default;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
-            return null;
+        return null;
     }
-    
+
     public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
     {
         return null;

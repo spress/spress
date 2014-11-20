@@ -31,7 +31,7 @@ class Frontmatter
     /**
      * Constructor
      *
-     * @param string $content
+     * @param string                         $content
      * @param Yosymfony\Spress\Configuration $configuration Transform Front-matter to repository
      */
     public function __construct($content, Configuration $configuration)
@@ -73,8 +73,7 @@ class Frontmatter
     {
         $result = false;
 
-        if($this->hasFrontmatter())
-        {
+        if ($this->hasFrontmatter()) {
             $result = $this->fm;
         }
 
@@ -108,8 +107,7 @@ class Frontmatter
     {
         $result = false;
 
-        if ($this->hasFrontmatter())
-        {
+        if ($this->hasFrontmatter()) {
             $result = sprintf("---\n%s\n---", $this->fm);
         }
 
@@ -124,6 +122,7 @@ class Frontmatter
     public function getContentNotFrontmatter()
     {
         $result = preg_replace($this->pattern, '', $this->content, 1);
+
         return ltrim($result);
     }
 
@@ -131,8 +130,7 @@ class Frontmatter
     {
         $result = preg_match($this->pattern, $this->content, $matches);
 
-        if(1 === $result)
-        {
+        if (1 === $result) {
             $this->fm = $matches[1];
             $this->result = true;
         }

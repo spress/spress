@@ -11,8 +11,8 @@
  * Based on tests: https://github.com/composer/composer/blob/master/tests/Composer/Test/IO/ConsoleIOTest.php
  * from Nils Adermann <naderman@naderman.de> and Jordi Boggiano <j.boggiano@seld.be>.
  */
- 
-namespace Yosymfony\Spress\Tests\IO;
+
+namespace Yosymfony\Spress\tests\IO;
 
 use Yosymfony\Spress\IO\ConsoleIO;
 
@@ -35,7 +35,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($consoleIO->isInteractive());
         $this->assertFalse($consoleIO->isInteractive());
     }
-    
+
     public function testIsVerbose()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -49,11 +49,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        
+
         $this->assertTrue($consoleIO->isVerbose());
         $this->assertFalse($consoleIO->isVerbose());
     }
-    
+
     public function testIsVeryVerbose()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -67,11 +67,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        
+
         $this->assertTrue($consoleIO->isVeryVerbose());
         $this->assertFalse($consoleIO->isVeryVerbose());
     }
-    
+
     public function testIsDebug()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -85,11 +85,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        
+
         $this->assertTrue($consoleIO->isDebug());
         $this->assertFalse($consoleIO->isDebug());
     }
-    
+
     public function testIsDecorated()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -103,11 +103,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        
+
         $this->assertTrue($consoleIO->isDecorated());
         $this->assertFalse($consoleIO->isDecorated());
     }
-    
+
     public function testWrite()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -116,18 +116,18 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             ->method('write')
             ->with($this->equalTo('Hi IO API'));
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
-        
+
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
         $consoleIO->write('Hi IO API', false);
     }
-    
+
     public function testAsk()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $dialogMock = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
-        
+
         $dialogMock->expects($this->once())
             ->method('ask')
             ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
@@ -137,11 +137,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($this->equalTo('dialog'))
             ->will($this->returnValue($dialogMock));
-        
+
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
         $consoleIO->ask('Is valid?', 'default');
     }
-    
+
     public function testAskConfirmation()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -162,7 +162,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
         $consoleIO->askConfirmation('Is valid?', 'default');
     }
-    
+
     public function testAskAndValidate()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
@@ -174,7 +174,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             ->method('askAndValidate')
             ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
                 $this->equalTo('Is valid?'),
-                $this->callback(function($validator) {
+                $this->callback(function ($validator) {
                     return 'validator' === $validator();
                 }),
                 $this->equalTo(10),
@@ -185,7 +185,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dialogMock));
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->askAndValidate('Is valid?', function() { 
+        $consoleIO->askAndValidate('Is valid?', function () {
             return 'validator';
         }, 10, 'default');
     }

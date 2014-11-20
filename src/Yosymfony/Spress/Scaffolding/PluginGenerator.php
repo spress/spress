@@ -11,7 +11,6 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
-
 /**
  * Plugin generator
  *
@@ -119,6 +118,6 @@ class PluginGenerator extends Generator
 
     protected function getNamespacePsr4($namespace)
     {
-        return str_replace('\\', '\\\\', $namespace) . '\\\\';
+        return str_replace('\\', '\\\\', $namespace).'\\\\';
     }
 }

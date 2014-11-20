@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Tests\Command;
+
+namespace Yosymfony\Spress\tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -21,10 +21,10 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
     protected $tmpDir;
     protected $currentDir;
     protected $fs;
-    
+
     public function setUp()
     {
-        $this->tmpDir = sys_get_temp_dir() . '/spress-tests';
+        $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
         $this->fs->mirror('./src/Yosymfony/Spress/Core/tests/fixtures/project', $this->tmpDir);
@@ -33,7 +33,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
 
         chdir($this->tmpDir);
     }
-    
+
     public function tearDown()
     {
         chdir($this->currentDir);
@@ -45,7 +45,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new NewPostCommand());
-        
+
         $command = $app->find('new:post');
         $commandTester = new CommandTester($command);
 
@@ -55,7 +55,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command' => $command->getName(),
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress post generator/', $output);
@@ -66,7 +66,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new NewPostCommand());
-        
+
         $command = $app->find('new:post');
         $commandTester = new CommandTester($command);
 
@@ -76,7 +76,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command' => $command->getName(),
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/my-first-post.md/', $output);
@@ -86,7 +86,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new NewPostCommand());
-        
+
         $command = $app->find('new:post');
         $commandTester = new CommandTester($command);
 
@@ -96,12 +96,12 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command' => $command->getName(),
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/2014-01-01-my-first-post.md/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_posts/2014-01-01-my-first-post.md');
+        $fileContent = file_get_contents($this->tmpDir.'/_posts/2014-01-01-my-first-post.md');
 
         $this->assertRegExp('/tags: \[\]/', $fileContent);
         $this->assertRegExp('/categories: \[\]/', $fileContent);
@@ -111,7 +111,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new NewPostCommand());
-        
+
         $command = $app->find('new:post');
         $commandTester = new CommandTester($command);
 
@@ -126,12 +126,12 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
             '--tags'          => 'tag1 tag2',
             '--categories'    => 'category1 category2',
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/2015-01-01-my-second-post.md/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_posts/2015-01-01-my-second-post.md');
+        $fileContent = file_get_contents($this->tmpDir.'/_posts/2015-01-01-my-second-post.md');
 
         $this->assertRegExp('/title: "My second post"/', $fileContent);
         $this->assertRegExp('/layout: post/', $fileContent);

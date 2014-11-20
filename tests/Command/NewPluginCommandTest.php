@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Tests\Command;
+
+namespace Yosymfony\Spress\tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -21,10 +21,10 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
     protected $tmpDir;
     protected $currentDir;
     protected $fs;
-    
+
     public function setUp()
     {
-        $this->tmpDir = sys_get_temp_dir() . '/spress-tests';
+        $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
         $this->fs->mirror('./src/Yosymfony/Spress/Core/tests/fixtures/project', $this->tmpDir);
@@ -33,7 +33,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
 
         chdir($this->tmpDir);
     }
-    
+
     public function tearDown()
     {
         chdir($this->currentDir);
@@ -55,7 +55,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command' => $command->getName(),
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress plugin generator/', $output);
@@ -77,18 +77,18 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             'command' => $command->getName(),
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress plugin generator/', $output);
         $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
         $this->assertRegExp('/composer\.json/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
 
         $this->assertNotRegExp('/namespace/', $fileContent);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/composer.json');
 
         $this->assertNotRegExp('/"psr-4":/', $fileContent);
     }
@@ -112,18 +112,18 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
             '--description' => 'My Spress plugin',
             '--license'     => 'BSD-2-Clause',
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Spress plugin generator/', $output);
         $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
         $this->assertRegExp('/composer\.json/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
 
         $this->assertRegExp('/class Yosymfonytestplugin/', $fileContent);
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/composer.json');
 
         $this->assertRegExp('/"name": "yosymfony\/testplugin"/', $fileContent);
         $this->assertRegExp('/"description": "My Spress plugin"/', $fileContent);
@@ -149,10 +149,10 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
             '--name'        => 'yosymfony/testplugin',
             '--author'      => 'Victor Puertas',
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/composer.json');
 
         $this->assertNotRegExp('/"authors":/', $fileContent);
     }
@@ -173,10 +173,10 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
             '--name'        => 'yosymfony/testplugin',
             '--email'       => 'vpgugr@gmail.com',
         ]);
-        
+
         $output = $commandTester->getDisplay();
 
-        $fileContent = file_get_contents($this->tmpDir . '/_plugins/Yosymfonytestplugin/composer.json');
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/composer.json');
 
         $this->assertNotRegExp('/"authors":/', $fileContent);
     }

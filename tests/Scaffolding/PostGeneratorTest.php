@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
-namespace Yosymfony\Spress\Tests\Scaffolding;
+
+namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Scaffolding\PostGenerator;
 
 class PostGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-	protected $tmpDir;
+    protected $tmpDir;
     protected $skeletonDir;
-    
+
     public function setUp()
     {
         $this->skeletonDir = './app/skeletons';
-        $this->tmpDir = sys_get_temp_dir() . '/spress-tests';
+        $this->tmpDir = sys_get_temp_dir().'/spress-tests';
     }
 
     public function tearDown()
@@ -33,9 +33,9 @@ class PostGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-    	$generator = new PostGenerator();
-    	$generator->setSkeletonDirs($this->skeletonDir);
-    	$files = $generator->generate($this->tmpDir, new \DateTime(), 'My first post', 'default', [], []);
+        $generator = new PostGenerator();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $files = $generator->generate($this->tmpDir, new \DateTime(), 'My first post', 'default', [], []);
 
         $this->assertCount(1, $files);
         $this->assertFileExists($files[0]);

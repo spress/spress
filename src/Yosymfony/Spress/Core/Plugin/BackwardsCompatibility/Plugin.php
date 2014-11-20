@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Yosymfony\Spress\Plugin;
 
 use Yosymfony\Spress\Core\Plugin\PluginInterface;
 
 /**
  * Basic implementation of PluginInterface
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class Plugin implements PluginInterface
@@ -26,7 +26,7 @@ class Plugin implements PluginInterface
     public function getMetas()
     {
     }
-    
+
     /**
      * {@inheritDoc}
      */

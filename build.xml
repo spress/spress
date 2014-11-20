@@ -2,13 +2,13 @@
 <project name="Spress" default="test">
     <property name="dir.output" value="${project.basedir}/build" />
     <property name="cmd.composer" value="composer" />
-    
+
     <target name="test" description="Run unit tests">
         <exec passthru="true" command="phpunit" checkReturn="true" />
     </target>
-    
+
     <target name="deploy" depends="check-git-branch-status,prepare,clean-vendors,update-vendors,test,package-zip" />
-    
+
     <target name="package-zip">
         <echo msg="Creating a zip file" />
         <zip destfile="${dir.output}/spress.zip" prefix="spress/">
@@ -21,21 +21,21 @@
             </fileset>
         </zip>
     </target>
-    
+
     <target name="clean">
         <delete dir="${dir.output}" />
     </target>
-    
+
     <target name="clean-vendors">
         <delete dir="${project.basedir}/vendor"/>
         <delete dir="${project.basedir}/app/templates"/>
         <delete file="${project.basedir}/composer.lock" />
     </target>
-    
+
     <target name="prepare" depends="clean">
         <mkdir dir="${dir.output}"/>
     </target>
-    
+
     <target name="coverage" depends="prepare">
         <exec passthru="true" command="phpunit --coverage-html=${dir.output}/coverage" />
     </target>
@@ -43,11 +43,11 @@
     <target name="view-coverage">
         <exec passthru="true" command="open ${dir.output}/coverage/index.html" />
     </target>
-    
+
     <target name="update-vendors">
         <exec passthru="true" command="${cmd.composer} update" checkreturn="true"/>
     </target>
-    
+
     <target name="check-git-branch-status">
         <exec command="git status -s" outputProperty="git.status" />
         <if>

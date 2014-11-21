@@ -115,10 +115,9 @@ The `new:plugin` command helps you generates new plugins.
 By default, the command interacts with the developer to tweak the generation.
 Any passed option will be used as a default value for the interaction.
 
-`new:plugin [--name="..."] [--namespace="..."] [--author="..."] [--email="..."] [--description="..."] [--license="MIT"]`
+`new:plugin [--name="..."] [--author="..."] [--email="..."] [--description="..."] [--license="MIT"]`
 
 * `--name`: The name of the plugins should follow the pattern `vendor-name/plugin-name`.
-* `--namespace`: The namespace of the plugin. Global namespace by default.
 * `--author`: The author of the plugin.
 * `--email`: The Email of the author.
 * `--description`: The description of your plugin.

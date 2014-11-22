@@ -113,11 +113,13 @@ EOT
         // Tags:
         $tags = $input->getOption('tags') ?: '';
         $question = new Question('List of post tags separed by white space: ', $tags);
+        $tags = $helper->ask($input, $output, $question);
         $input->setOption('tags', $tags);
 
         // Categories:
         $categories = $input->getOption('categories') ?: '';
         $question = new Question('List of post categories separed by white space: ', $categories);
+        $categories = $helper->ask($input, $output, $question);
         $input->setOption('categories', $categories);
     }
 

@@ -99,8 +99,8 @@ EOT
         $input->setOption('title', $title);
 
         // Layout:
-        $layout = $input->getOption('layout') ?: 'default';
-        $question = new Question('Post layout (default): ', $layout);
+        $layout = $input->getOption('layout');
+        $question = new Question('Post layout: ', $layout);
         $layout = $helper->ask($input, $output, $question);
         $input->setOption('layout', $layout);
 

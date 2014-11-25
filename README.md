@@ -21,6 +21,7 @@ Community
 
 * Documentation: [spress.yosymfony.com](http://spress.yosymfony.com/docs/).
 * Mention [@spress_cms](https://twitter.com/spress_cms) on Twitter.
+* Discuss and share your opinions in Gitter [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/spress/Spress?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ### Contributing
 

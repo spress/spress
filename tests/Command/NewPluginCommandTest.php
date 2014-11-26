@@ -83,6 +83,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Spress plugin generator/', $output);
         $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
         $this->assertRegExp('/composer\.json/', $output);
+        $this->assertRegExp('/LICENSE/', $output);
 
         $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
 
@@ -91,6 +92,10 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/composer.json');
 
         $this->assertNotRegExp('/"psr-4":/', $fileContent);
+
+        $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/LICENSE');
+
+        $this->assertNotRegExp('/The MIT License (MIT)/', $fileContent);
     }
 
     public function testDefaultValues()
@@ -118,6 +123,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Spress plugin generator/', $output);
         $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
         $this->assertRegExp('/composer\.json/', $output);
+        $this->assertRegExp('/LICENSE/', $output);
 
         $fileContent = file_get_contents($this->tmpDir.'/_plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
 

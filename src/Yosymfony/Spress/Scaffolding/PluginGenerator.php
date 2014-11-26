@@ -19,6 +19,13 @@ namespace Yosymfony\Spress\Scaffolding;
 class PluginGenerator extends Generator
 {
     protected $dirctoryName;
+    protected $licenses = [
+        'MIT'           => 'plugin/MIT.twig',
+        'APACHE-2.0'    => 'plugin/Apache-2.0.twig',
+        'BSD-2-CLAUSE'  => 'plugin/BSD-2-Clause.twig',
+        'GPL-3.0'       => 'plugin/GPL-3.0.twig',
+        'LGPL-3.0'      => 'plugin/LGPL-3.0.twig',
+    ];
 
     /**
      * Generate a plugin
@@ -73,6 +80,16 @@ class PluginGenerator extends Generator
         $this->renderFile('plugin/plugin.php.twig', $pluginDir.'/'.$this->getPluginFilename($name), $model);
         $this->renderFile('plugin/composer.json.twig', $pluginDir.'/composer.json', $model);
 
+        $licenseFile = $this->getLicenseFile($license);
+
+        if ($licenseFile) {
+            $model = [
+                'author' => $author
+            ];
+
+            $this->renderFile($licenseFile, $pluginDir.'/LICENSE', $model);
+        }
+
         return $this->getFilesAffected();
     }
 
@@ -119,5 +136,10 @@ class PluginGenerator extends Generator
     protected function getNamespacePsr4($namespace)
     {
         return str_replace('\\', '\\\\', $namespace).'\\\\';
+    }
+
+    protected function getLicenseFile($licenseName)
+    {
+        return isset($this->licenses[strtoupper($licenseName)]) ? $this->licenses[strtoupper($licenseName)] : '';
     }
 }

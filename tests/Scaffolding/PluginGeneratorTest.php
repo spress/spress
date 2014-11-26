@@ -37,6 +37,20 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->setSkeletonDirs($this->skeletonDir);
         $files = $generator->generate($this->tmpDir, 'yosymfony/myplugin');
 
+        $this->assertCount(3, $files);
+        $this->assertFileExists($files[0]);
+        $this->assertFileExists($files[1]);
+        $this->assertRegExp('/Yosymfonymyplugin.php/', $files[0]);
+        $this->assertRegExp('/composer.json/', $files[1]);
+        $this->assertRegExp('/LICENSE/', $files[2]);
+    }
+
+    public function testLicenseNotExists()
+    {
+        $generator = new PluginGenerator();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $files = $generator->generate($this->tmpDir, 'yosymfony/myplugin', '', '', '', '', 'My-license');
+
         $this->assertCount(2, $files);
         $this->assertFileExists($files[0]);
         $this->assertFileExists($files[1]);

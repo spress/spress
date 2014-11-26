@@ -84,7 +84,7 @@ class PluginGenerator extends Generator
 
         if ($licenseFile) {
             $model = [
-                'author' => $author
+                'author' => $author,
             ];
 
             $this->renderFile($licenseFile, $pluginDir.'/LICENSE', $model);

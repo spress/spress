@@ -34,6 +34,7 @@ safe: false
 # Serving
 host: '0.0.0.0'
 port: 4000
+server_watch_extension: [html,htm,xml]
 
 # Deprecated:
 

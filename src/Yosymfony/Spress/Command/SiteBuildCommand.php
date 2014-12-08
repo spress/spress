@@ -94,6 +94,7 @@ class SiteBuildCommand extends Command
         $config = $app['spress.config'];
         $config->loadLocal($sourceDir, $env);
         $env = $config->getEnvironmentName();
+        $serverWatchExtension = $config->getRepository()->get('server_watch_extension');
 
         if (true === $config->getRepository()->get('debug')) {
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
@@ -143,8 +144,12 @@ class SiteBuildCommand extends Command
             if ($watch) {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
 
-                $server->onBeforeHandleRequest(function ($request, $io) use ($findChangesAndParse) {
-                    $findChangesAndParse();
+                $server->onBeforeHandleRequest(function ($request, $resourcePath, $io) use ($findChangesAndParse, $serverWatchExtension) {
+                    $resourceExtension = pathinfo($resourcePath, PATHINFO_EXTENSION);
+
+                    if (in_array($resourceExtension, $serverWatchExtension)) {
+                        $findChangesAndParse();
+                    }
                 });
             }
 

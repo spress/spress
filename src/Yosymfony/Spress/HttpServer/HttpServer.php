@@ -53,11 +53,11 @@ class HttpServer
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler(function (Request $request) {
 
-            if ($this->onBeforeHandleRequestFunction) {
-                call_user_func($this->onBeforeHandleRequestFunction, $request, $this->io);
-            }
-
             $resourcePath = $this->resolvePath($request);
+
+            if ($this->onBeforeHandleRequestFunction) {
+                call_user_func($this->onBeforeHandleRequestFunction, $request, $resourcePath, $this->io);
+            }
 
             if (false === file_exists($resourcePath)) {
                 $this->logRequest($request, 404);

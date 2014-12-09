@@ -86,7 +86,7 @@ class ConfigDefinition implements ConfigurationInterface
             ->integerNode('port')
                 ->min(0)->max(65534)
             ->end()
-            ->arrayNode('server_watch_extension')
+            ->arrayNode('server_watch_ext')
                 ->prototype('scalar')
                 ->end()
             ->end()

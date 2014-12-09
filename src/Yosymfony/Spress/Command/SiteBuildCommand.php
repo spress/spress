@@ -94,7 +94,7 @@ class SiteBuildCommand extends Command
         $config = $app['spress.config'];
         $config->loadLocal($sourceDir, $env);
         $env = $config->getEnvironmentName();
-        $serverWatchExtension = $config->getRepository()->get('server_watch_extension');
+        $serverWatchExtension = $config->getRepository()->get('server_watch_ext');
 
         if (true === $config->getRepository()->get('debug')) {
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);

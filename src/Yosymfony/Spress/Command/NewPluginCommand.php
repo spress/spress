@@ -85,7 +85,6 @@ EOT
 
         $this->welcomeMessage($io);
 
-        // Name:
         $name = $input->getOption('name');
         $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor-name/plugin-name"</comment><info>)</info>: ', $name);
         $question->setMaxAttempts(null);
@@ -95,13 +94,11 @@ EOT
         $name = $helper->ask($input, $output, $question);
         $input->setOption('name', $name);
 
-        // Author:
         $author = $input->getOption('author');
         $question = new Question('Plugin author: ', $author);
         $author = $helper->ask($input, $output, $question);
         $input->setOption('author', $author);
 
-        // Email:
         $email = $input->getOption('email');
         $question = new Question('Email author: ', $email);
         $question->setValidator(function ($answer) {
@@ -114,13 +111,11 @@ EOT
         $email = $helper->ask($input, $output, $question);
         $input->setOption('email', $email);
 
-        // Description:
         $description = $input->getOption('description');
         $question = new Question('Plugin description: ', $description);
         $description = $helper->ask($input, $output, $question);
         $input->setOption('description', $description);
 
-        // License:
         $this->licenseMessage($io);
 
         $license = $input->getOption('license');

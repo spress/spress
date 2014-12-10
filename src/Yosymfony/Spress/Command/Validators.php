@@ -59,8 +59,12 @@ class Validators
      *
      * @return string
      */
-    public static function validateEmail($email)
+    public static function validateEmail($email, $allowEmptyValue = false)
     {
+        if (0 === strlen($email) && $allowEmptyValue) {
+            return $email;
+        }
+
         if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException(sprintf('The Email "%s" is invalid.', $email));
         }

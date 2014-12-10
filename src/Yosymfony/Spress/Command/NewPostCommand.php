@@ -56,7 +56,7 @@ EOT
     {
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
-        $title = $input->getOption('title');
+        $title = Validators::validatePostTitle($input->getOption('title'));
         $layout = $input->getOption('layout');
         $date = $input->getOption('date') ?: $this->getDateFormated();
         $tags = explode(' ', $input->getOption('tags') ?: '');

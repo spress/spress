@@ -53,9 +53,9 @@ EOT
     {
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
-        $name = $input->getOption('name');
+        $name = Validators::validatePluginName($input->getOption('name'));
         $author = $input->getOption('author');
-        $email = $input->getOption('email');
+        $email = Validators::validateEmail($input->getOption('email'), true);
         $description = $input->getOption('description');
         $license = $input->getOption('license') ?: 'MIT';
 
@@ -102,11 +102,7 @@ EOT
         $email = $input->getOption('email');
         $question = new Question('Email author: ', $email);
         $question->setValidator(function ($answer) {
-            if (0 === strlen($answer)) {
-                return $answer;
-            }
-
-            return Validators::validateEmail($answer);
+            return Validators::validateEmail($answer, true);
         });
         $email = $helper->ask($input, $output, $question);
         $input->setOption('email', $email);

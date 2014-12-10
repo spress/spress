@@ -100,7 +100,7 @@ class SiteBuildCommand extends Command
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
 
-        $parse = function () use (&$app, $sourceDir, $env, $timezone, $drafts, $safe, $server) {
+        $parse = function () use (&$app, $env, $timezone, $drafts, $safe) {
             return $app->parseDefault(
                 $env,
                 $timezone,

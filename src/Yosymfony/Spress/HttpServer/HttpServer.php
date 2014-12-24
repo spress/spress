@@ -56,7 +56,13 @@ class HttpServer
             $resourcePath = $this->resolvePath($request);
 
             if ($this->onBeforeHandleRequestFunction) {
-                call_user_func($this->onBeforeHandleRequestFunction, $request, $resourcePath, $this->io);
+                try {
+                    call_user_func($this->onBeforeHandleRequestFunction, $request, $resourcePath, $this->io);
+                } catch (\Exception $e) {
+                    $this->logRequest($request, 500);
+
+                    return $this->getResponseError(500, $e->getMessage());
+                }
             }
 
             if (false === file_exists($resourcePath)) {
@@ -134,9 +140,9 @@ class HttpServer
         ];
     }
 
-    private function getResponseError($statusCode, $resourcePath)
+    private function getResponseError($statusCode, $data)
     {
-        $model = $this->getErrorModel($statusCode, $resourcePath);
+        $model = $this->getErrorModel($statusCode, $data);
 
         return [
             'content' => $this->twig->render($this->errorDocument, $model),
@@ -173,15 +179,19 @@ class HttpServer
             ->create();
     }
 
-    private function getErrorModel($statusCode, $resourcePath)
+    private function getErrorModel($statusCode, $data)
     {
         switch ($statusCode) {
             case 404:
-                $message = sprintf('Resource not found: %s', $resourcePath);
+                $message = sprintf('Resource not found: %s', $data);
+                break;
+
+            case 500:
+                $message = sprintf('Server exception: %s', $data);
                 break;
 
             default:
-                $message = '';
+                $message = $data;
         }
 
         return [

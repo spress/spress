@@ -213,7 +213,9 @@ class Configuration
         $filename = $this->paths['config.file'];
         $localConfigPath = $this->resolveLocalPath($localPath, $filename);
         $this->localRepository = $this->configLoader->load($localConfigPath);
-        $this->localRepository['source'] = $this->resolvePath($localPath);
+
+        $sourcePath = $this->localRepository->get('source') ?: $localPath;
+        $this->localRepository['source'] = $this->resolvePath($sourcePath);
     }
 
     /**

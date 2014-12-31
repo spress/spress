@@ -31,51 +31,17 @@ class SiteBuildCommand extends Command
 {
     protected function configure()
     {
-        $this
-            ->setName('site:build')
-            ->setDescription('Build your site')
-            ->addOption(
-                'source',
-                's',
-                InputOption::VALUE_REQUIRED,
-                'Directory where Spress will read your files'
-            )
-            ->addOption(
-                'timezone',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Timezone for the site generator'
-            )
-            ->addOption(
-                'env',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Name of the environment configuration'
-            )
-            ->addOption(
-                'watch',
-                null,
-                InputOption::VALUE_NONE,
-                'Watching for changes and regenerate automatically your site'
-            )
-            ->addOption(
-                'server',
-                null,
-                InputOption::VALUE_NONE,
-                'Start the built-in server'
-            )
-            ->addOption(
-                'drafts',
-                null,
-                InputOption::VALUE_NONE,
-                'Parse your draft post'
-            )
-            ->addOption(
-                'safe',
-                null,
-                InputOption::VALUE_NONE,
-                'Disable your template plugins'
-            );
+        $this->setDefinition([
+            new InputOption('source', 's', InputOption::VALUE_REQUIRED, 'Directory where Spress will read your files'),
+            new InputOption('timezone', null, InputOption::VALUE_REQUIRED, 'Timezone for the site generator'),
+            new InputOption('env', null, InputOption::VALUE_REQUIRED, 'Name of the environment configuration'),
+            new InputOption('watch', null, InputOption::VALUE_NONE, 'Watching for changes and regenerate automatically your site'),
+            new InputOption('server', null, InputOption::VALUE_NONE, 'Start the built-in server'),
+            new InputOption('drafts', null, InputOption::VALUE_NONE, 'Parse your draft posts'),
+            new InputOption('safe', null, InputOption::VALUE_NONE, 'Disable your template plugins'),
+        ])
+        ->setName('site:build')
+        ->setDescription('Build your site');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

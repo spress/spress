@@ -58,6 +58,7 @@ class ContentLocator
         $this->includesDir = null;
         $this->pluginsDir = null;
         $this->processableExtension = null;
+        $this->contentDir = null;
 
         $this->orgDir = getcwd();
         $this->setCurrentDir($this->getSourceDir());
@@ -126,7 +127,7 @@ class ContentLocator
         }
 
         $finder = new Finder();
-        $finder->in($this->getSourceDir())->exclude($this->getSpecialDir())->files();
+        $finder->in($this->getContentDir())->exclude($this->getSpecialDir())->files();
         $finder->name($this->fileExtToRegExpr($processableExt));
 
         foreach ($include as $item) {
@@ -223,7 +224,7 @@ class ContentLocator
         $fs = new Filesystem();
         $result = array();
         $includedFiles = array();
-        $dir = $this->getSourceDir();
+        $dir = $this->getContentDir();
         $include = $this->configuration->getRepository()->get('include');
         $exclude = $this->configuration->getRepository()->get('exclude');
         $processableExt = $this->getProcessableExtention();
@@ -301,6 +302,16 @@ class ContentLocator
     public function getSourceDir()
     {
         return $this->configuration->getRepository()->get('source');
+    }
+
+    /**
+     * Get the absolute path of source directory
+     *
+     * @return string
+     */
+    public function getContentDir()
+    {
+        return $this->configuration->getRepository()->get('content');
     }
 
     /**

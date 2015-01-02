@@ -216,6 +216,9 @@ class Configuration
 
         $sourcePath = $this->localRepository->get('source') ?: $localPath;
         $this->localRepository['source'] = $this->resolvePath($sourcePath);
+
+        $contentPath = $this->localRepository->get('content') ?: $localPath;
+        $this->localRepository['content'] = $this->resolvePath($contentPath);
     }
 
     /**

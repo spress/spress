@@ -83,7 +83,7 @@ class SiteBuildCommand extends Command
         $contentLocator = $app['spress.content_locator'];
         $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), $contentLocator->getDestinationDir());
 
-        $findChangesAndParse = function () use (&$io, &$rw, &$parse) {
+        $findChangesAndParse = function () use ($io, $rw, $parse, $config, $sourceDir, $env) {
             $rw->findChanges();
 
             if ($rw->hasChanges()) {
@@ -92,6 +92,8 @@ class SiteBuildCommand extends Command
                     count($rw->getNewResources()),
                     count($rw->getUpdatedResources()),
                     count($rw->getDeletedResources())));
+
+                $config->loadLocal($sourceDir, $env);
 
                 $parse();
 

@@ -125,68 +125,74 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $dialogMock = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
+        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
-        $dialogMock->expects($this->once())
+        $question = new \Symfony\Component\Console\Question\Question('Your name?', '');
+
+        $questionHelperMock->expects($this->once())
             ->method('ask')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $this->equalTo('Is valid?'),
-                $this->equalTo('default'));
+            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
+                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
+                $question);
         $helperMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('dialog'))
-            ->will($this->returnValue($dialogMock));
+            ->with($this->equalTo('question'))
+            ->will($this->returnValue($questionHelperMock));
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->ask('Is valid?', 'default');
+        $consoleIO->ask('Your name?', '');
     }
 
     public function testAskConfirmation()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $dialogMock = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
+        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
-        $dialogMock->expects($this->once())
-            ->method('askConfirmation')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $this->equalTo('Is valid?'),
-                $this->equalTo('default'));
+        $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Is valid?', true);
+
+        $questionHelperMock->expects($this->once())
+            ->method('ask')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
+                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
+                $question);
         $helperMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('dialog'))
-            ->will($this->returnValue($dialogMock));
+            ->with($this->equalTo('question'))
+            ->will($this->returnValue($questionHelperMock));
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->askConfirmation('Is valid?', 'default');
+        $consoleIO->askConfirmation('Is valid?', true);
     }
 
     public function testAskAndValidate()
     {
         $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
         $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $dialogMock = $this->getMock('Symfony\Component\Console\Helper\DialogHelper');
+        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
-        $dialogMock->expects($this->once())
-            ->method('askAndValidate')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $this->equalTo('Is valid?'),
-                $this->callback(function ($validator) {
-                    return 'validator' === $validator();
-                }),
-                $this->equalTo(10),
-                $this->equalTo('default'));
+        $question = new \Symfony\Component\Console\Question\Question('Is valid?', true);
+        $question->setMaxAttempts(10);
+        $question->setValidator(function ($answer) {
+            return $answer;
+        });
+
+        $questionHelperMock->expects($this->once())
+            ->method('ask')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
+                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
+                $question);
         $helperMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('dialog'))
-            ->will($this->returnValue($dialogMock));
+            ->with($this->equalTo('question'))
+            ->will($this->returnValue($questionHelperMock));
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->askAndValidate('Is valid?', function () {
-            return 'validator';
-        }, 10, 'default');
+        $consoleIO->askAndValidate('Is valid?', function ($answer) {
+            return $answer;
+        }, 10, true);
     }
 }

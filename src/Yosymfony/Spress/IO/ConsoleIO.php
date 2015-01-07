@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\IO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
@@ -85,7 +87,11 @@ class ConsoleIO implements IOInterface
      */
     public function ask($question, $default = null)
     {
-        return $this->helperSet->get('dialog')->ask($this->output, $question, $default);
+        $helper = $this->helperSet->get('question');
+
+        $questionObj = new Question($question, $default);
+
+        return $helper->ask($this->input, $this->output, $questionObj);
     }
 
     /**
@@ -93,7 +99,11 @@ class ConsoleIO implements IOInterface
      */
     public function askConfirmation($question, $default = true)
     {
-        return $this->helperSet->get('dialog')->askConfirmation($this->output, $question, $default);
+        $helper = $this->helperSet->get('question');
+
+        $questionObj = new ConfirmationQuestion($question, $default);
+
+        return $helper->ask($this->input, $this->output, $questionObj);
     }
 
     /**
@@ -101,12 +111,15 @@ class ConsoleIO implements IOInterface
      */
     public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
-        return $this->helperSet->get('dialog')->askAndValidate(
-            $this->output,
-            $question,
-            $validator,
-            $attempts,
-            $default);
+        $helper = $this->helperSet->get('question');
+
+        $attempts = is_int($attempts) ?: null;
+
+        $questionObj = new Question($question, $default);
+        $questionObj->setValidator($validator);
+        $questionObj->setMaxAttempts($attempts);
+
+        return $helper->ask($this->input, $this->output, $questionObj);
     }
 
     /**

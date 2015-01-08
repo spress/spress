@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "60f27d3bc7d285feb143ddbe5fde9f1f",
+    "hash": "8e10621a14dc5355c4868e9564b8c88b",
     "packages": [
         {
             "name": "composer/composer",
@@ -1522,22 +1522,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yosymfony/Spress-theme-spresso.git",
-                "reference": "5e9fc0a1e84079ddd6360ced945fd48f03681b06"
+                "reference": "32bd3a56785e5742560e63b6f4dcec37766a2ebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yosymfony/Spress-theme-spresso/zipball/5e9fc0a1e84079ddd6360ced945fd48f03681b06",
-                "reference": "5e9fc0a1e84079ddd6360ced945fd48f03681b06",
+                "url": "https://api.github.com/repos/yosymfony/Spress-theme-spresso/zipball/32bd3a56785e5742560e63b6f4dcec37766a2ebd",
+                "reference": "32bd3a56785e5742560e63b6f4dcec37766a2ebd",
                 "shasum": ""
             },
             "require": {
-                "yosymfony/spress-installer": ">=1.0,<2.0"
+                "yosymfony/spress-installer": "1.1.*@dev"
             },
             "type": "spress-theme",
             "extra": {
                 "spress_name": "spresso",
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1557,7 +1557,7 @@
                 "template",
                 "theme"
             ],
-            "time": "2014-06-07 15:58:28"
+            "time": "2015-01-08 12:09:25"
         }
     ],
     "packages-dev": [],

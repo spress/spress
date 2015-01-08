@@ -28,7 +28,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
  */
 class Application extends Container
 {
-    const VERSION = "1.1.0";
+    const VERSION = "2.0.0";
 
     public function __construct(array $options = [])
     {

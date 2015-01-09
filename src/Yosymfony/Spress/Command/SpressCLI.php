@@ -28,7 +28,7 @@ class SpressCLI extends Application
      */
     public function __construct(IOInterface $io)
     {
-        $spressPath = realpath(dirname(__FILE__).'/../../../../');
+        $spressPath = __DIR__.'/../../../../';
 
         $options = [
             'spress.paths' => [
@@ -50,6 +50,6 @@ class SpressCLI extends Application
             return $spressPath.'/app/templates';
         }
 
-        return realpath($spressPath.'/../spress-templates');
+        return $spressPath.'/../spress-templates';
     }
 }

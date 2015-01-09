@@ -1,0 +1,18 @@
+
+{
+    "alias": "spress.phar",
+    "chmod": "0755",
+    "directories": [
+        "app",
+        "src",
+        "vendor"
+    ],
+    "files": [
+        "app/config/config.yml",
+        "bin/spress",
+        "vendor/autoload.php"
+    ],
+    "main": "bin/spress",
+    "output": "spress.phar",
+    "stub": true
+}

@@ -26,7 +26,7 @@ class NewSite
 
     public function __construct($templatePath)
     {
-        $this->templatePath = realpath($templatePath);
+        $this->templatePath = $templatePath;
         $this->fs = new Filesystem();
     }
 

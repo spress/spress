@@ -127,8 +127,8 @@ Any passed option will be used as a default value for the interaction.
 * `--description`: The description of your plugin.
 * `--license`: The license under you publish your plugin. MIT by default.
 
-How to make a spress.phar
---------------------------
+How to make spress.phar
+-----------------------
 We are using [Box roject](http://box-project.org/) for generating `.phar` file.
 
 You may download Box:

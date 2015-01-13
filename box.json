@@ -4,13 +4,17 @@
     "chmod": "0755",
     "directories": [
         "app",
-        "src",
-        "vendor"
+        "src"
     ],
     "files": [
-        "app/config/config.yml",
-        "bin/spress",
-        "vendor/autoload.php"
+        "bin/spress"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": ["Tests","tests"],
+            "in": "vendor"
+        }
     ],
     "main": "bin/spress",
     "output": "spress.phar",

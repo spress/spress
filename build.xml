@@ -2,12 +2,18 @@
 <project name="Spress" default="test">
     <property name="dir.output" value="${project.basedir}/build" />
     <property name="cmd.composer" value="composer" />
+    <property name="cmd.box" value="box" />
 
     <target name="test" description="Run unit tests">
         <exec passthru="true" command="phpunit" checkReturn="true" />
     </target>
 
-    <target name="deploy" depends="check-git-branch-status,prepare,clean-vendors,update-vendors,test,package-zip" />
+    <target name="deploy" depends="check-git-branch-status,prepare,clean-vendors,update-vendors,test,package-phar,package-zip" />
+
+    <target name="package-phar">
+        <echo msg="Creating a phar file" />
+        <exec passthru="true" command="${cmd.box} build" checkreturn="true"/>
+    </target>
 
     <target name="package-zip">
         <echo msg="Creating a zip file" />
@@ -29,7 +35,6 @@
     <target name="clean-vendors">
         <delete dir="${project.basedir}/vendor"/>
         <delete dir="${project.basedir}/app/templates"/>
-        <delete file="${project.basedir}/composer.lock" />
     </target>
 
     <target name="prepare" depends="clean">

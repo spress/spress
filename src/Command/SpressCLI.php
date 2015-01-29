@@ -28,7 +28,7 @@ class SpressCLI extends Application
      */
     public function __construct(IOInterface $io)
     {
-        $spressPath = __DIR__.'/../../../../';
+        $spressPath = __DIR__.'/../../';
 
         $options = [
             'spress.paths' => [

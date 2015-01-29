@@ -27,7 +27,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
-        $this->fs->mirror('./src/Yosymfony/Spress/Core/tests/fixtures/project', $this->tmpDir);
+        $this->fs->mirror('./src/Core/tests/fixtures/project', $this->tmpDir);
 
         $this->currentDir = getcwd();
 

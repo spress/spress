@@ -27,7 +27,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->sourceDir = './src/Yosymfony/Spress/Core/tests/fixtures/project';
+        $this->sourceDir = './src/Core/tests/fixtures/project';
     }
 
     public function tearDown()

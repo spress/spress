@@ -11,7 +11,6 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Yosymfony\Spress\Core\Plugin\PluginInterface;
 
 /**
  * Basic implementation of PluginInterface

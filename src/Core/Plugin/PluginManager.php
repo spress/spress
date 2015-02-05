@@ -18,7 +18,6 @@ use Symfony\Component\Finder\SplFileInfo;
 use Composer\Autoload\ClassLoader;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
 /**
  * Plugins manager

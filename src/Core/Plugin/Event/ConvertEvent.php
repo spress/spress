@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Plugin\Event;
+namespace Yosymfony\Spress\Core\Plugin\Event;
 
 class ConvertEvent extends ContentEvent
 {

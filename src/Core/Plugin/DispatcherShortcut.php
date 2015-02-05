@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Yosymfony\Spress\Plugin\Event;
+use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;

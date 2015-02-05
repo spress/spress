@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Plugin\Event;
+namespace Yosymfony\Spress\Core\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Yosymfony\Spress\Core\Configuration;
@@ -20,7 +20,7 @@ use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 use Yosymfony\Spress\Core\Plugin\API\TemplateManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
-class EnvironmentEvent extends Event implements EnviromentEvent
+class EnvironmentEvent extends Event
 {
     private $configuration;
     private $converter;

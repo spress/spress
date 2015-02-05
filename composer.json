@@ -36,8 +36,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Yosymfony\\Spress\\": "src/",
-            "Yosymfony\\Spress\\Plugin\\": "src/Core/Plugin/BackwardsCompatibility/"
+            "Yosymfony\\Spress\\": "src/"
         }
     },
     "minimum-stability": "dev",

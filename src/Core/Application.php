@@ -30,6 +30,7 @@ class Application extends Container
 {
     const VERSION = "2.0.0";
 
+
     public function __construct(array $options = [])
     {
         parent::__construct();

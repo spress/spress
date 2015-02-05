@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Yosymfony\Spress\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
 /**
  * Plugin interface

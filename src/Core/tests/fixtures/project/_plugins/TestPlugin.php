@@ -1,8 +1,8 @@
 <?php
 
-use Yosymfony\Spress\Plugin\Event;
-use Yosymfony\Spress\Plugin\Plugin;
-use Yosymfony\Spress\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\Event;
+use Yosymfony\Spress\Core\Plugin\Plugin;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
 class TestPlugin extends Plugin
 {

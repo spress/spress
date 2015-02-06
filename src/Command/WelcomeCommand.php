@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
+use Yosymfony\Spress\Core\Application;
 
 /**
  * Welcome to Spress command
@@ -41,6 +42,14 @@ class WelcomeCommand extends Command
             '',
         ]);
 
+        if($this->isUnstableVersion()) {
+            $output->writeln([
+                '',
+                '<error>Warning: this is a unstable version.</error>',
+                ``,
+            ]);
+        }
+
         $command = $this->getApplication()->find('list');
 
         $arguments = new ArrayInput([
@@ -62,5 +71,9 @@ class WelcomeCommand extends Command
 | | |___/ | || .__/ |_|  \___|/__//__/
 |__|     |__||_|
 EOF;
+    }
+
+    protected function isUnstableVersion() {
+        return Application::EXTRA_VERSION ? true : false;
     }
 }

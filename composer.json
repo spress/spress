@@ -28,6 +28,9 @@
         "yosymfony/resource-watcher": "1.0.*@dev",
         "yosymfony/spress-theme-spresso": "1.1.*@dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.5.*"
+    },
     "replace": {
         "yosymfony/spress-core": "self.version"
     },

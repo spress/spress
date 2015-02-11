@@ -14,3 +14,11 @@ matrix:
   allow_failures:
     - php: hhvm
   fast_finish: true
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/0957171278778ab21da9
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false

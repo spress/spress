@@ -12,24 +12,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "3cff4a3bb977c2ba9a09204690da128c7dceb092"
+                "reference": "0c775e997e0747a561cacf67716e0948511877fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/3cff4a3bb977c2ba9a09204690da128c7dceb092",
-                "reference": "3cff4a3bb977c2ba9a09204690da128c7dceb092",
+                "url": "https://api.github.com/repos/composer/composer/zipball/0c775e997e0747a561cacf67716e0948511877fa",
+                "reference": "0c775e997e0747a561cacf67716e0948511877fa",
                 "shasum": ""
             },
             "require": {
                 "justinrainbow/json-schema": "~1.3",
                 "php": ">=5.3.2",
                 "seld/jsonlint": "~1.0",
-                "symfony/console": "~2.3",
+                "symfony/console": "~2.5",
                 "symfony/finder": "~2.2",
                 "symfony/process": "~2.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.5"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -72,7 +72,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-02-24 13:07:40"
+            "time": "2015-02-25 18:47:31"
         },
         {
             "name": "dflydev/apache-mime-types",
@@ -237,12 +237,12 @@
             "target-dir": "Guzzle/Parser",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guzzle/parser.git",
+                "url": "https://github.com/Guzzle3/parser.git",
                 "reference": "6874d171318a8e93eb6d224cf85e4678490b625c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/parser/zipball/6874d171318a8e93eb6d224cf85e4678490b625c",
+                "url": "https://api.github.com/repos/Guzzle3/parser/zipball/6874d171318a8e93eb6d224cf85e4678490b625c",
                 "reference": "6874d171318a8e93eb6d224cf85e4678490b625c",
                 "shasum": ""
             },
@@ -273,6 +273,7 @@
                 "message",
                 "url"
             ],
+            "abandoned": "guzzle/guzzle",
             "time": "2014-02-05 18:29:46"
         },
         {
@@ -708,12 +709,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "18ceeaad79f1dd9e2097e41871b0a458520a4428"
+                "reference": "901bb1e0fdad75ac89b2ce0699bad65185ddaa44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/18ceeaad79f1dd9e2097e41871b0a458520a4428",
-                "reference": "18ceeaad79f1dd9e2097e41871b0a458520a4428",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/901bb1e0fdad75ac89b2ce0699bad65185ddaa44",
+                "reference": "901bb1e0fdad75ac89b2ce0699bad65185ddaa44",
                 "shasum": ""
             },
             "require": {
@@ -750,7 +751,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-24 11:52:21"
+            "time": "2015-02-25 12:51:23"
         },
         {
             "name": "symfony/console",
@@ -1037,12 +1038,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "ecd20ba3fa8f0eb9946e14ee094a50bb0817db6a"
+                "reference": "d38b4c5f282f2ee880df99c4bc9b83abc8707326"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/ecd20ba3fa8f0eb9946e14ee094a50bb0817db6a",
-                "reference": "ecd20ba3fa8f0eb9946e14ee094a50bb0817db6a",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d38b4c5f282f2ee880df99c4bc9b83abc8707326",
+                "reference": "d38b4c5f282f2ee880df99c4bc9b83abc8707326",
                 "shasum": ""
             },
             "require": {
@@ -1082,7 +1083,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-24 13:39:25"
+            "time": "2015-02-25 12:51:23"
         },
         {
             "name": "symfony/http-kernel",
@@ -1091,12 +1092,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "f8f586c2867e4dfb451401a95b1021eec668d9c9"
+                "reference": "fb7170857178d63d6c773162ec3e0ab88b71a058"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/f8f586c2867e4dfb451401a95b1021eec668d9c9",
-                "reference": "f8f586c2867e4dfb451401a95b1021eec668d9c9",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/fb7170857178d63d6c773162ec3e0ab88b71a058",
+                "reference": "fb7170857178d63d6c773162ec3e0ab88b71a058",
                 "shasum": ""
             },
             "require": {
@@ -1160,7 +1161,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-24 11:52:21"
+            "time": "2015-02-25 12:51:23"
         },
         {
             "name": "symfony/process",

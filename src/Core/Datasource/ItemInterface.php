@@ -90,4 +90,11 @@ interface ItemInterface
      * @return string
      */
     public function getModifiedTime();
+
+    /**
+     * Return the type of this item. Values: "item" or "layout"
+     *
+     * @return string
+     */
+    public function getType();
 }

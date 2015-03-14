@@ -121,6 +121,16 @@ class PostItem extends ContentItem
     }
 
     /**
+     * Get original title
+     *
+     * @return string
+     */
+    public function getOriginalTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Get categories
      *
      * @return array
@@ -246,7 +256,7 @@ class PostItem extends ContentItem
 
     private function getTitleSlugified()
     {
-        return Utils::slugify($this->getTitle());
+        return Utils::slugify($this->getOriginalTitle());
     }
 
     private function extractDataFromFilename()

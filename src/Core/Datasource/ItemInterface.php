@@ -23,6 +23,9 @@ interface ItemInterface
     const SNAPSHOT_AFTER_CONVERT = 'after_convert';
     const SNAPSHOT_AFTER_RENDER = 'after_render';
 
+    const TYPE_ITEM = 'item';
+    const TYPE_LAYOUT = 'layout';
+
     /**
      * A string that uniquely identifies an item.
      *
@@ -43,7 +46,7 @@ interface ItemInterface
      *
      * @param $snapshotName The name of the snapshot. "last" by default.
      *
-     * @return Mixed
+     * @return string If the snapshot not exists return empty string.
      */
     public function getContent($snapshotName = '');
 
@@ -67,10 +70,11 @@ interface ItemInterface
      *
      * @param array $value
      */
-    public function setAttributes(array $value);
+    public function setAttributes(array $values);
 
     /**
      * The item's path. e.g: / for the home or /post/post1
+     * An Item without path will not be stored.
      *
      * @return string
      */

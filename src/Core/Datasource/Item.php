@@ -16,28 +16,40 @@ namespace Yosymfony\Spress\Core\Datasource;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class Item implements ItemInterface 
+class Item implements ItemInterface
 {
-    protected $id;
-    protected $isBinary;
-    protected $snapshot;
+    private $id;
+    private $path;
+    private $type;
+    private $isBinary;
+    private $snapshot;
+    private $attributes;
 
     /**
      * Constructor
      *
      * @param string $content
      * @param string $id
-     * @param array $attributes
-     * @param bool $isBinary
+     * @param array  $attributes
+     * @param bool   $isBinary
      */
-	public function __construct($content, $id, array $attributes, $isBinary)
-	{
+    public function __construct($content, $id, array $attributes, $isBinary = false, $type = self::TYPE_ITEM)
+    {
         $this->snapshot = [];
-        $this->setContent($content, self::SNAPSHOT_RAW);
+        $this->attributes = [];
+
+        $this->setContent('', self::SNAPSHOT_RAW);
+
+        if (false === $isBinary) {
+            $this->setContent($content, self::SNAPSHOT_RAW);
+        }
+
+        $this->setAttributes($attributes);
 
         $this->id = $id;
+        $this->type = $type;
         $this->isBinary = $isBinary;
-	}
+    }
 
     /**
      * @inheritDoc
@@ -52,7 +64,11 @@ class Item implements ItemInterface
      */
     public function getContent($snapshotName = '')
     {
-        if($snapshotName) {
+        if ($snapshotName && false == isset($this->snapshot[$snapshotName])) {
+            return '';
+        }
+
+        if ($snapshotName) {
             return $this->snapshot[$snapshotName];
         }
 
@@ -73,14 +89,15 @@ class Item implements ItemInterface
      */
     public function getAttributes()
     {
+        return $this->attributes;
     }
 
     /**
      * @inheritDoc
      */
-    public function setAttributes(array $value)
+    public function setAttributes(array $values)
     {
-
+        $this->attributes = $values;
     }
 
     /**
@@ -88,7 +105,7 @@ class Item implements ItemInterface
      */
     public function getPath()
     {
-
+        return $this->path;
     }
 
     /**
@@ -96,7 +113,7 @@ class Item implements ItemInterface
      */
     public function setPath($value)
     {
-
+        $this->path = $value;
     }
 
     /**
@@ -104,7 +121,7 @@ class Item implements ItemInterface
      */
     public function isBinary()
     {
-    	return $this->isBinary;
+        return $this->isBinary;
     }
 
     /**
@@ -112,6 +129,6 @@ class Item implements ItemInterface
      */
     public function getType()
     {
-    	return 'item';
+        return $this->type;
     }
 }

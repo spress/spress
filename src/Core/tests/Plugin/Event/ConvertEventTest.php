@@ -15,7 +15,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
 use Yosymfony\Spress\Core\ContentManager\PostItem;
-use Yosymfony\Spress\Plugin\Event\ConvertEvent;
+use Yosymfony\Spress\Core\Plugin\Event\ConvertEvent;
 
 class ConvertEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class ConvertEventTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $path = realpath(__DIR__.'/../../../fixtures/project/_posts/2013-08-12-post-example-1.md');
+        $path = realpath(__DIR__.'/../../fixtures/project/_posts/2013-08-12-post-example-1.md');
 
         $app = new Application();
         $config = $app['spress.config'];

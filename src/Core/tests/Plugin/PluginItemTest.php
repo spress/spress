@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\Plugin;
+namespace Yosymfony\Spress\Core\Tests\Plugin;
 
 use Yosymfony\Spress\Core\Plugin\PluginItem;
 
@@ -20,10 +20,10 @@ class PluginItemTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->pluginMock = $this->getMockBuilder('Yosymfony\\Spress\\Plugin\\Plugin')
+        $this->pluginMock = $this->getMockBuilder('Yosymfony\\Spress\\Core\\Plugin\\Plugin')
             ->getMock();
 
-        $this->pluginMockNoMetas = $this->getMockBuilder('Yosymfony\\Spress\\Plugin\\Plugin')
+        $this->pluginMockNoMetas = $this->getMockBuilder('Yosymfony\\Spress\\Core\\Plugin\\Plugin')
             ->getMock();
 
         $this->pluginMock->expects($this->any())

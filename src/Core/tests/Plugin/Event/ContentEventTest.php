@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\Core\Tests\Plugin\Event;
 
 use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\Core\ContentLocator\FileItem;
 use Yosymfony\Spress\Core\ContentManager\PostItem;
-use Yosymfony\Spress\Plugin\Event\ConvertEvent;
+use Yosymfony\Spress\Core\Plugin\Event\ConvertEvent;
 
 class ContentEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class ContentEventTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $path = realpath(__DIR__.'/../../../fixtures/project/_posts/2013-08-12-post-example-1.md');
+        $path = realpath(__DIR__.'/../../fixtures/project/_posts/2013-08-12-post-example-1.md');
 
         $app = new Application();
         $config = $app['spress.config'];

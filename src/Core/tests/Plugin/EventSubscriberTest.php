@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Tests\Plugin;
 
-use Yosymfony\Spress\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
 class EventSubscriberTest extends \PHPUnit_Framework_TestCase
 {

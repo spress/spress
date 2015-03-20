@@ -24,8 +24,7 @@ interface ItemInterface
     const SNAPSHOT_AFTER_RENDER = 'after_render';
 
     /**
-     * A string that uniquely identifies an item. Identifiers start
-     * and end with a slash. e.g: /posts/post1/ or /posts/post1/index.html/.
+     * A string that uniquely identifies an item.
      *
      * @return string
      */
@@ -46,7 +45,7 @@ interface ItemInterface
      *
      * @return Mixed
      */
-    public function getContent($snapshotName);
+    public function getContent($snapshotName = '');
 
     /**
      * Set the compiled content.
@@ -61,7 +60,14 @@ interface ItemInterface
      *
      * @return array
      */
-    public function getFrontmatter();
+    public function getAttributes();
+
+    /**
+     * Set the attributes of this item
+     *
+     * @param array $value
+     */
+    public function setAttributes(array $value);
 
     /**
      * The item's path. e.g: / for the home or /post/post1
@@ -80,16 +86,9 @@ interface ItemInterface
     /**
      * True if the item is binary; false if it is not.
      *
-     * @return @bool
+     * @return bool
      */
     public function isBinary();
-
-    /**
-     * The time when this item was last modified.
-     *
-     * @return string
-     */
-    public function getModifiedTime();
 
     /**
      * Return the type of this item. Values: "item" or "layout"

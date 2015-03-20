@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Tests\Plugin\Event;
 
 use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Plugin\Event\EnvironmentEvent;
+use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
 
 class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
-        $this->app['spress.config']->loadLocal(__DIR__.'/../../../fixtures/project');
+        $this->app['spress.config']->loadLocal(__DIR__.'/../../fixtures/project');
         $this->app['spress.content_locator']->initialize();
         $this->app['spress.cms.renderizer']->initialize();
         $this->event = new EnvironmentEvent(

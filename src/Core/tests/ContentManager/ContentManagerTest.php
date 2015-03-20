@@ -13,7 +13,7 @@ namespace Yosymfony\Spress\Core\tests\ContentManager;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Plugin\Event\SpressEvents;
+use Yosymfony\Spress\Core\Plugin\Event\SpressEvents;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {

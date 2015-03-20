@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\Core\Tests\Plugin\Event;
 
-use Yosymfony\Spress\Plugin\Event\AfterConvertPostsEvent;
+use Yosymfony\Spress\Core\Plugin\Event\AfterConvertPostsEvent;
 
 class AfterConvertPostsEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Spress Test Suite">
-            <directory>./src/Yosymfony/Spress/Core/tests/</directory>
+            <directory>./src/Core/tests/</directory>
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

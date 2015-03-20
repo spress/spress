@@ -64,11 +64,11 @@ class Item implements ItemInterface
      */
     public function getContent($snapshotName = '')
     {
-        if ($snapshotName && false == isset($this->snapshot[$snapshotName])) {
-            return '';
-        }
-
         if ($snapshotName) {
+            if (false == isset($this->snapshot[$snapshotName])) {
+                return '';
+            }
+
             return $this->snapshot[$snapshotName];
         }
 

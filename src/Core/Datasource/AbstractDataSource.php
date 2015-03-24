@@ -51,15 +51,19 @@ abstract class AbstractDataSource
 	 *
 	 * @param Item $item
 	 */
-	abstract public function addItem(Item $item);
+	public function addItem(Item $item)
+	{
+
+	}
 
 	/**
 	 * Loads the data source
 	 */
 	public function load()
 	{
-		$this->use();
-		$this->unuse();
+		$this->addUse();
+		$this->process();
+		$this->removeUse();
 	}
 
 	/**
@@ -68,7 +72,7 @@ abstract class AbstractDataSource
 	 * When the internal reference count goes from 0 to 1 setUp method
 	 * is invoked.
 	 */
-	public function use()
+	public function addUse()
 	{
 		if (false === $this->isConfigured) {
 			$this->configure();
@@ -92,7 +96,7 @@ abstract class AbstractDataSource
 	 * When the internal reference count is 0 tearDown method
 	 * is invoked.
 	 */
-	public function unuse()
+	public function removeUse()
 	{
 		$this->referenceCounter--;
 
@@ -123,6 +127,14 @@ abstract class AbstractDataSource
 	 * This method is used for setting up a site’s data source for the first time.
 	 */
 	public function configure()
+	{
+
+	}
+
+	/**
+	 * All data source data manipulations and queries
+	 */
+	public function process()
 	{
 
 	}

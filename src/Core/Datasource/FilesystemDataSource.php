@@ -11,6 +11,8 @@
 
 namespace Yosymfony\Spress\Core\Datasource;
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Data source for the filesystem.
  *
@@ -24,12 +26,15 @@ namespace Yosymfony\Spress\Core\Datasource;
  */
 class FilesystemDataSource extends AbstractDataSource
 {
+	private $items;
+	private $layouts;
+
 	/**
 	 * @inheritDoc
 	 */
 	public function getItems()
 	{
-
+		return $this->items;
 	}
 
 	/**
@@ -37,7 +42,7 @@ class FilesystemDataSource extends AbstractDataSource
 	 */
 	public function getLayouts()
 	{
-
+		return $this->layouts;
 	}
 
 	/**
@@ -45,5 +50,36 @@ class FilesystemDataSource extends AbstractDataSource
 	 */
 	public function configure()
 	{
+		$this->items = [];
+		$this->layouts = [];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function process()
+	{
+		$this->processPosts();
+	}
+
+	private function processPosts()
+	{
+		$finder = new Finder();
+		$finder->in($this->params['posts_root'])->files();
+
+		foreach ($finder as $file) {
+			$id = '/posts/'.$file->getRelativePathname();
+			$isBinary = $this->isBinary($file->getPathname());
+
+			$this->items[$id] = new Item($file->getContents(), $id, [], $isBinary);
+		}
+	}
+
+	private function isBinary($filename)
+	{
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mimeType = finfo_file($finfo, $filename);
+
+		return 'text' !== substr($mimeType, 0, 4);
 	}
 }

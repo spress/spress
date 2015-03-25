@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Datasource;
+namespace Yosymfony\Spress\Core\DataSource;
 
 /**
  * File information

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Datasource;
+namespace Yosymfony\Spress\Core\DataSource;
 
 /**
  * Iterface for a data item
@@ -25,6 +25,7 @@ interface ItemInterface
 
     const TYPE_ITEM = 'item';
     const TYPE_LAYOUT = 'layout';
+    const TYPE_INCLUDE = 'include';
 
     /**
      * A string that uniquely identifies an item.
@@ -95,7 +96,7 @@ interface ItemInterface
     public function isBinary();
 
     /**
-     * Return the type of this item. Values: "item" or "layout"
+     * Return the type of this item. Values: "item", "layout" or "include"
      *
      * @return string
      */

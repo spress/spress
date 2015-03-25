@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Datasource;
+namespace Yosymfony\Spress\Core\DataSource;
 
 use Symfony\Component\Finder\Finder;
 
@@ -68,7 +68,7 @@ class FilesystemDataSource extends AbstractDataSource
 		$finder->in($this->params['posts_root'])->files();
 
 		foreach ($finder as $file) {
-			$id = '/posts/'.$file->getRelativePathname();
+			$id = 'posts/'.$file->getRelativePathname();
 			$isBinary = $this->isBinary($file->getPathname());
 
 			$this->items[$id] = new Item($file->getContents(), $id, [], $isBinary);

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Datasource;
+namespace Yosymfony\Spress\Core\DataSource;
 
 /**
  * It is the superclass for all data sources

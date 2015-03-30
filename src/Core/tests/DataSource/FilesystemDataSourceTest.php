@@ -12,12 +12,13 @@
 namespace Yosymfony\Spress\Core\Tests\DataSource;
 
 use Yosymfony\Spress\Core\DataSource\FilesystemDataSource;
+use Yosymfony\Spress\Core\DataSource\AttributeParser;
 
 class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testProcessItems()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'layouts_root'    => __dir__.'/../fixtures/project/_layouts/',
             'includes_root' => __dir__.'/../fixtures/project/_includes/',
@@ -70,7 +71,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testIncludeFile()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'include'        => ['.htaccess'],
         ]);
@@ -81,7 +82,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testIncludeFolder()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'include'        => ['../extra_pages'],
         ]);
@@ -92,7 +93,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testExcludeFile()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'exclude'        => ['robots.txt'],
         ]);
@@ -103,7 +104,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testExcludeFolder()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'exclude'        => ['about'],
         ]);
@@ -114,7 +115,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigOnlySourceRootParam()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
         ]);
         $fsDataSource->load();
@@ -127,7 +128,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfigNoParams()
     {
-        $fsDataSource = new FilesystemDataSource([]);
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), []);
         $fsDataSource->load();
     }
 
@@ -136,7 +137,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamSourceRoot()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => [],
         ]);
         $fsDataSource->load();
@@ -147,7 +148,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamPostsRoot()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'posts_root'    => [],
         ]);
@@ -159,7 +160,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamLayoutsRoot()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'layouts_root'    => [],
         ]);
@@ -171,7 +172,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamIncludesRoot()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'includes_root'    => [],
         ]);
@@ -183,7 +184,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamInclude()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'include'    => './',
         ]);
@@ -195,7 +196,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParamExclude()
     {
-        $fsDataSource = new FilesystemDataSource([
+        $fsDataSource = new FilesystemDataSource(new AttributeParser(), [
             'source_root'    => __dir__.'/../fixtures/project/',
             'exclude'    => './',
         ]);

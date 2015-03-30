@@ -19,15 +19,20 @@ namespace Yosymfony\Spress\Core\DataSource;
 abstract class AbstractDataSource
 {
     protected $referenceCounter;
+    protected $attributeParser;
     protected $params;
     protected $isConfigured;
 
     /**
      * Constructor
+     *
+     * @param AttributeParserInterface $attributeParser
+     * @param array $params Params for initialize the data source
      */
-    public function __construct(array $params)
+    public function __construct(AttributeParserInterface $attributeParser, array $params)
     {
         $this->params = $params;
+        $this->attributeParser = $attributeParser;
         $this->referenceCounter = 0;
         $this->isConfigured = false;
     }

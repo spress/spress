@@ -19,7 +19,8 @@ namespace Yosymfony\Spress\Core\DataSource;
 interface AttributeParserInterface
 {
     /**
-     * Get the attributes of an item from string
+     * Get the attributes of an item from a string such as YAML.
+     * e.g: "layout: default"
      *
      * @return array
      */
@@ -30,7 +31,7 @@ interface AttributeParserInterface
      * block let you specify certain attributes of the page and define
      * new variables that will be available in the content.
      *
-     * e.g:
+     * e.g using YAML:
      *  ---
      *   name: "Victor"
      *  ---

@@ -38,11 +38,7 @@ class Item implements ItemInterface
         $this->snapshot = [];
         $this->attributes = [];
 
-        $this->setContent('', self::SNAPSHOT_RAW);
-
-        if (false === $isBinary) {
-            $this->setContent($content, self::SNAPSHOT_RAW);
-        }
+        $this->setContent($content, self::SNAPSHOT_RAW);
 
         $this->setAttributes($attributes);
 

@@ -52,6 +52,10 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('books/2013-08-11-best-book.md', $items);
         $this->assertArrayHasKey('books/2013-09-19-new-book.md', $items);
 
+        $itemAttributes =  $items['about/index.html']->getAttributes();
+        $this->assertCount(1, $itemAttributes);
+        $this->assertEquals('default', $itemAttributes['layout']);
+
         $this->assertArrayHasKey('default.html', $layouts);
 
         $this->assertArrayHasKey('test.html', $includes);

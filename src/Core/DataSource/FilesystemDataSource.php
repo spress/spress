@@ -192,22 +192,47 @@ class FilesystemDataSource extends AbstractDataSource
         foreach ($finder as $file) {
             $id = $file->getRelativePathname();
             $isBinary = $this->isBinary($file->getPathname());
+            $contentRaw = $isBinary ? '' : $file->getContents();
 
-            $item = new Item($file->getContents(), $id, [], $isBinary, $type);
+            $item = new Item($contentRaw, $id, [], $isBinary, $type);
             $item->setPath($file->getRelativePathname());
 
             switch ($type) {
                 case Item::TYPE_LAYOUT:
+                    $this->processAttributes($item);
                     $this->layouts[$id] = $item;
                     break;
                 case Item::TYPE_INCLUDE:
                     $this->includes[$id] = $item;
                     break;
                 default:
-                   $this->items[$id] = $item;
+                    $this->processAttributes($item);
+                    $this->items[$id] = $item;
                     break;
             }
         }
+    }
+
+    private function processAttributes(Item $item)
+    {
+        if (true === $item->isBinary()) {
+            return;
+        }
+
+        $attributes = $this->attributeParser->getAttributesFromFrontmatter($item->getContent());
+        $content = $this->attributeParser->getContentFromFrontmatter($item->getContent());
+
+        if (0 === count($attributes)) {
+            $attributesFile = $this->getAttributesFilename($item);
+
+            if (file_exists($attributesFile)) {
+                $contentFile = file_get_contents($attributesFile);
+                $this->attributes = $this->attributeParser->getAttributesFromString($contentFile);
+            }
+        }
+
+        $item->setContent($content, Item::SNAPSHOT_RAW);
+        $item->setAttributes($attributes);
     }
 
     private function isBinary($filename)
@@ -216,6 +241,15 @@ class FilesystemDataSource extends AbstractDataSource
         $mimeType = finfo_file($finfo, $filename);
 
         return 'text' !== substr($mimeType, 0, 4);
+    }
+
+    private function getAttributesFilename(Item $item)
+    {
+        $fileInfo = new \splfileinfo($item->getPath());
+        $path = $fileInfo->getPath();
+        $basename = $fileInfo->getBasename('.'.$fileInfo->getExtension());
+
+        return $path ? sprintf('%s/%s.yml', $path, $basename) : sprintf('%s.yml', $basename);
     }
 
     private function setCurrentDir($path)

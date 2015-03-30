@@ -37,16 +37,16 @@ port: 4000
 server_watch_ext: [html,htm,xml]
 
 # Data sources
-data_sources:
-    - filesystem:
-        class: "Yosymfony\Spress\Core\DataSource\FilesystemDataSource\FilesystemDataSource"
-        arguments:
-          - source_root: .
-          - layouts_root: ./_layouts
-          - includes_root: ./_includes
-          - posts_root: ./_posts
-          - include: [.htaccess]
-          - exclude: [composer.json]
+#data_sources:
+#    - filesystem:
+#        class: "Yosymfony\Spress\Core\DataSource\FilesystemDataSource\FilesystemDataSource"
+#        arguments:
+#          - source_root: .
+#          - layouts_root: ./_layouts
+#          - includes_root: ./_includes
+#          - posts_root: ./_posts
+#          - include: [.htaccess]
+#          - exclude: [composer.json]
 
 # Deprecated:
 

@@ -27,7 +27,7 @@ abstract class AbstractDataSource
      * Constructor
      *
      * @param AttributeParserInterface $attributeParser
-     * @param array $params Params for initialize the data source
+     * @param array                    $params          Params for initialize the data source
      */
     public function __construct(AttributeParserInterface $attributeParser, array $params)
     {

@@ -44,7 +44,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $item = new Item('Binary content', '/index.html', [], true);
 
-        $this->assertEquals('', $item->getContent());
+        $this->assertEquals('Binary content', $item->getContent());
         $this->assertTrue($item->isBinary());
     }
 

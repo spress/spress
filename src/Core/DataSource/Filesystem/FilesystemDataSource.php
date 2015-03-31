@@ -11,10 +11,8 @@
 
 namespace Yosymfony\Spress\Core\DataSource\Filesystem;
 
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-
 use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
 

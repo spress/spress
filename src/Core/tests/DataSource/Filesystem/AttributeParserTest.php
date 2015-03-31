@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\DataSource;
+namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
 
-use Yosymfony\Spress\Core\DataSource\AttributeParser;
+use Yosymfony\Spress\Core\DataSource\Filesystem\AttributeParser;
 
 class AttributeParserTest extends \PHPUnit_Framework_TestCase
 {

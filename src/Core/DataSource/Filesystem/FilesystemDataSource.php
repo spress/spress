@@ -9,21 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\DataSource;
+namespace Yosymfony\Spress\Core\DataSource\Filesystem;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+
+use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
+use Yosymfony\Spress\Core\DataSource\Item;
 
 /**
  * Data source for the filesystem.
  *
  * Params:
- *  - source_root	: the root directory for the main content.
- *  - layouts_root	: the root directory for the layouts.
- *  - includes_root	: the root directory for the includes.
- *  - posts_root	: the root directory for the posts.
- *  - include 		: force to include files or directories.
- *  - exclude		: force to exclude files or directories.
+ *  - source_root       : the root directory for the main content.
+ *  - layouts_root      : the root directory for the layouts.
+ *  - includes_root     : the root directory for the includes.
+ *  - posts_root        : the root directory for the posts.
+ *  - include 		    : force to include files or directories.
+ *  - exclude		    : force to exclude files or directories.
+ *  - attribute_syntax  : syntax for describing attributes: "yaml" or "json". "yaml" by default.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -35,6 +40,8 @@ class FilesystemDataSource extends AbstractDataSource
     private $include;
     private $exclude;
     private $orgDir;
+    private $attributeParser;
+    private $attributesFileSufix;
 
     /**
      * @inheritDoc
@@ -106,6 +113,23 @@ class FilesystemDataSource extends AbstractDataSource
                 throw new \RuntimeException('The data source expected an array at param: "exclude".');
             }
         }
+
+        if (false === isset($this->params['attribute_syntax'])) {
+            $this->params['attribute_syntax'] = 'yaml';
+        }
+
+        switch ($this->params['attribute_syntax']) {
+            case 'yaml':
+                $this->attributesFileSufix = 'meta.yml';
+                $this->attributeParser = new AttributeParser(AttributeParser::PARSER_YAML);
+                break;
+            case 'json':
+                $this->attributesFileSufix = 'meta.json';
+                $this->attributeParser = new AttributeParser(AttributeParser::PARSER_JSON);
+                break;
+            default:
+                throw new \RuntimeException(sprintf('Invalid value for attributte "attribute_syntax": "%s".', $this->params['attribute_syntax']));
+        }
     }
 
     /**
@@ -138,6 +162,7 @@ class FilesystemDataSource extends AbstractDataSource
             ->notPath('/^_/')
             ->notPath('config.yml')
             ->notPath('/config_.+\.yml/')
+            ->notName('*.'.$this->attributesFileSufix)
             ->files();
 
         if (isset($this->params['posts_root'])) {
@@ -248,8 +273,9 @@ class FilesystemDataSource extends AbstractDataSource
         $fileInfo = new \splfileinfo($item->getPath());
         $path = $fileInfo->getPath();
         $basename = $fileInfo->getBasename('.'.$fileInfo->getExtension());
+        $filename = $path ? sprintf('%s/%s', $path, $basename) : $basename;
 
-        return $path ? sprintf('%s/%s.yml', $path, $basename) : sprintf('%s.yml', $basename);
+        return $filename.'.'.$this->attributesFileSufix;
     }
 
     private function setCurrentDir($path)

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\DataSource;
+namespace Yosymfony\Spress\Core\DataSource\Filesystem;
 
 use Symfony\Component\Config\FileLocator;
 use Yosymfony\ConfigLoader\Config;
@@ -22,7 +22,7 @@ use Yosymfony\ConfigLoader\Loaders\JsonLoader;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class AttributeParser implements AttributeParserInterface
+class AttributeParser
 {
     const PARSER_YAML = 'yaml';
     const PARSER_JSON = 'json';

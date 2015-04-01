@@ -39,8 +39,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $result['processed_post']);
         $this->assertEquals(1, $result['drafts_post']);
         $this->assertEquals(6, $result['total_pages']);
-        $this->assertEquals(6, $result['processed_pages']);
-        $this->assertEquals(3, $result['other_resources']);
+        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(4, $result['other_resources']);
 
         $this->assertEquals('dev', $config->getEnvironmentName());
     }
@@ -55,8 +55,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $result['processed_post']);
         $this->assertEquals(1, $result['drafts_post']);
         $this->assertEquals(6, $result['total_pages']);
-        $this->assertEquals(6, $result['processed_pages']);
-        $this->assertEquals(3, $result['other_resources']);
+        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(4, $result['other_resources']);
 
         $this->assertEquals('prod', $config->getEnvironmentName());
     }
@@ -74,8 +74,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $result['processed_post']);
         $this->assertEquals(1, $result['drafts_post']);
         $this->assertEquals(6, $result['total_pages']);
-        $this->assertEquals(6, $result['processed_pages']);
-        $this->assertEquals(3, $result['other_resources']);
+        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(4, $result['other_resources']);
     }
 
     public function testParseDraft()
@@ -90,8 +90,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $result['processed_post']);
         $this->assertEquals(0, $result['drafts_post']);
         $this->assertEquals(6, $result['total_pages']);
-        $this->assertEquals(6, $result['processed_pages']);
-        $this->assertEquals(3, $result['other_resources']);
+        $this->assertEquals(5, $result['processed_pages']);
+        $this->assertEquals(4, $result['other_resources']);
     }
 
     public function testParseSafe()

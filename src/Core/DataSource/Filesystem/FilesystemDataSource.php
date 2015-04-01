@@ -17,15 +17,23 @@ use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
 
 /**
- * Data source for the filesystem.
+ * Data source for the filesystem. Binary items don’t have their content
+ * loaded in-memory. getPath() returns the path to the binary filename.
+ *
+ * Each item will automatically receive some extra attributes:
+ *  - mtime:            : modified time.
+ *  - filename          : the name of the file.
+ *  - extension         : the extension of item's filename.
+ *  - meta_filename     : if exists, the name of the filename with the item's attributes (metas).
  *
  * Params:
  *  - source_root       : the root directory for the main content.
  *  - layouts_root      : the root directory for the layouts.
  *  - includes_root     : the root directory for the includes.
  *  - posts_root        : the root directory for the posts.
- *  - include 		    : force to include files or directories.
- *  - exclude		    : force to exclude files or directories.
+ *  - include           : force to include files or directories.
+ *  - exclude           : force to exclude files or directories.
+ *  - text_extensions   : extension of the files considered as text files.
  *  - attribute_syntax  : syntax for describing attributes: "yaml" or "json". "yaml" by default.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
@@ -40,6 +48,7 @@ class FilesystemDataSource extends AbstractDataSource
     private $orgDir;
     private $attributeParser;
     private $attributesFileSufix;
+    private $textExtensions;
 
     /**
      * @inheritDoc
@@ -80,6 +89,14 @@ class FilesystemDataSource extends AbstractDataSource
             throw new \RuntimeException('The data source expected param: "source_root".');
         }
 
+        if (false === isset($this->params['text_extensions'])) {
+            throw new \RuntimeException('The data source expected param: "text_extensions".');
+        }
+
+        if (false === is_array($this->params['text_extensions'])) {
+            throw new \RuntimeException('The data source expected a array at param: "text_extensions".');
+        }
+
         if (false === is_string($this->params['source_root'])) {
             throw new \RuntimeException('The data source expected a string at param: "source_root".');
         }
@@ -115,6 +132,8 @@ class FilesystemDataSource extends AbstractDataSource
         if (false === isset($this->params['attribute_syntax'])) {
             $this->params['attribute_syntax'] = 'yaml';
         }
+
+        $this->textExtensions = $this->params['text_extensions'];
 
         switch ($this->params['attribute_syntax']) {
             case 'yaml':
@@ -214,7 +233,7 @@ class FilesystemDataSource extends AbstractDataSource
     {
         foreach ($finder as $file) {
             $id = $file->getRelativePathname();
-            $isBinary = $this->isBinary($file->getPathname());
+            $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();
 
             $item = new Item($contentRaw, $id, [], $isBinary, $type);
@@ -222,48 +241,55 @@ class FilesystemDataSource extends AbstractDataSource
 
             switch ($type) {
                 case Item::TYPE_LAYOUT:
-                    $this->processAttributes($item);
+                    $this->processAttributes($item, $file);
                     $this->layouts[$id] = $item;
                     break;
                 case Item::TYPE_INCLUDE:
                     $this->includes[$id] = $item;
                     break;
                 default:
-                    $this->processAttributes($item);
+                    $this->processAttributes($item, $file);
                     $this->items[$id] = $item;
                     break;
             }
         }
     }
 
-    private function processAttributes(Item $item)
+    private function processAttributes(Item $item, SplFileInfo $file)
     {
-        if (true === $item->isBinary()) {
-            return;
+        $attributes = [];
+        $attributesFile = $this->getAttributesFilename($item);
+
+        if ($attributesFile && file_exists($attributesFile)) {
+            $contentFile = file_get_contents($attributesFile);
+            $attributes = $this->attributeParser->getAttributesFromString($contentFile);
+            $attributes['meta_filename'] = $attributesFile;
+        } elseif (false === $item->isBinary()) {
+            $attributes = $this->attributeParser->getAttributesFromFrontmatter($item->getContent());
+            $content = $this->attributeParser->getContentFromFrontmatter($item->getContent());
+            $item->setContent($content, Item::SNAPSHOT_RAW);
         }
 
-        $attributes = $this->attributeParser->getAttributesFromFrontmatter($item->getContent());
-        $content = $this->attributeParser->getContentFromFrontmatter($item->getContent());
+        $attributes['mtime'] = $this->getModifiedTime($file);
+        $attributes['filename'] = $file->getFilename();
+        $attributes['extension'] = $file->getExtension();
 
-        if (0 === count($attributes)) {
-            $attributesFile = $this->getAttributesFilename($item);
-
-            if (file_exists($attributesFile)) {
-                $contentFile = file_get_contents($attributesFile);
-                $this->attributes = $this->attributeParser->getAttributesFromString($contentFile);
-            }
-        }
-
-        $item->setContent($content, Item::SNAPSHOT_RAW);
         $item->setAttributes($attributes);
     }
 
-    private function isBinary($filename)
+    private function isBinary(SplFileInfo $file)
     {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_file($finfo, $filename);
+        $ext = $file->getExtension();
 
-        return 'text' !== substr($mimeType, 0, 4);
+        return false === in_array($ext, $this->textExtensions);
+    }
+
+    private function getModifiedTime(SplFileInfo $file)
+    {
+        $dt = new \DateTime();
+        $dt->setTimestamp($file->getMTime());
+
+        return $dt->format(\DateTime::ISO8601);
     }
 
     private function getAttributesFilename(Item $item)

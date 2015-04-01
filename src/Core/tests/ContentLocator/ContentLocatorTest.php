@@ -226,7 +226,7 @@ class ContentLocatorTest extends \PHPUnit_Framework_TestCase
             $filenames[] = pathinfo($item, PATHINFO_BASENAME);
         }
 
-        $this->assertCount(3, $filenames);
+        $this->assertCount(4, $filenames);
         $this->assertContains('.htaccess', $filenames);
         $this->assertNotContains('config.yml', $filenames);
     }

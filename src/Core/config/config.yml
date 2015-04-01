@@ -39,7 +39,7 @@ server_watch_ext: [html,htm,xml]
 # Data sources
 #data_sources:
 #    - filesystem:
-#        class: "Yosymfony\Spress\Core\DataSource\FilesystemDataSource\FilesystemDataSource"
+#        class: "Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource"
 #        arguments:
 #          - source_root: .
 #          - layouts_root: ./_layouts
@@ -47,6 +47,7 @@ server_watch_ext: [html,htm,xml]
 #          - posts_root: ./_posts
 #          - include: [.htaccess]
 #          - exclude: [composer.json]
+#          - text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
 
 # Deprecated:
 

@@ -57,7 +57,9 @@ class AttributeParser
     }
 
     /**
-     * @inheritDoc
+     * Get the attributes of an item from string
+     *
+     * @return array
      */
     public function getAttributesFromString($value)
     {
@@ -66,8 +68,17 @@ class AttributeParser
         return $repository->getArray();
     }
 
-    /**
-     * @inheritDoc
+     /**
+     * Get the attributes from the fronmatter of an item. Front-matter
+     * block let you specify certain attributes of the page and define
+     * new variables that will be available in the content.
+     *
+     * e.g: (YAML syntax)
+     *  ---
+     *   name: "Victor"
+     *  ---
+     *
+     * @return array Array with two elements: "attributes" and "content".
      */
     public function getAttributesFromFrontmatter($value)
     {
@@ -81,7 +92,9 @@ class AttributeParser
     }
 
     /**
-     * @inheritDoc
+     * Get the content without frontmatter block
+     *
+     * @return string
      */
     public function getContentFromFrontmatter($value)
     {

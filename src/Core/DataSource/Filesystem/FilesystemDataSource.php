@@ -19,6 +19,11 @@ use Yosymfony\Spress\Core\DataSource\Item;
 /**
  * Data source for the filesystem. Binary items don’t have their content
  * loaded in-memory. getPath() returns the path to the binary filename.
+ * The item's attributes (metas) will be loaded from a block located at
+ * the top of the each file (frontmatter) or from a separated metadata file.
+ * e.g:
+ *  - index.html
+ *  - index.html.meta   <- metadata file with the attributes.
  *
  * Each item will automatically receive some extra attributes:
  *  - mtime:            : modified time.
@@ -137,11 +142,9 @@ class FilesystemDataSource extends AbstractDataSource
 
         switch ($this->params['attribute_syntax']) {
             case 'yaml':
-                $this->attributesFileSufix = 'meta.yml';
                 $this->attributeParser = new AttributeParser(AttributeParser::PARSER_YAML);
                 break;
             case 'json':
-                $this->attributesFileSufix = 'meta.json';
                 $this->attributeParser = new AttributeParser(AttributeParser::PARSER_JSON);
                 break;
             default:
@@ -179,7 +182,7 @@ class FilesystemDataSource extends AbstractDataSource
             ->notPath('/^_/')
             ->notPath('config.yml')
             ->notPath('/config_.+\.yml/')
-            ->notName('*.'.$this->attributesFileSufix)
+            ->notName('*.meta')
             ->files();
 
         if (isset($this->params['posts_root'])) {
@@ -295,11 +298,8 @@ class FilesystemDataSource extends AbstractDataSource
     private function getAttributesFilename(Item $item)
     {
         $fileInfo = new \splfileinfo($item->getPath());
-        $path = $fileInfo->getPath();
-        $basename = $fileInfo->getBasename('.'.$fileInfo->getExtension());
-        $filename = $path ? sprintf('%s/%s', $path, $basename) : $basename;
 
-        return $filename.'.'.$this->attributesFileSufix;
+        return $fileInfo->getpathname().'.meta';
     }
 
     private function setCurrentDir($path)

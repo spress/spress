@@ -52,7 +52,6 @@ class FilesystemDataSource extends AbstractDataSource
     private $exclude;
     private $orgDir;
     private $attributeParser;
-    private $attributesFileSufix;
     private $textExtensions;
 
     /**

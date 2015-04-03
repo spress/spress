@@ -260,7 +260,7 @@ class FilesystemDataSource extends AbstractDataSource
     private function processAttributes(Item $item, SplFileInfo $file)
     {
         $attributes = [];
-        $attributesFile = $this->getAttributesFilename($item);
+        $attributesFile = $this->getAttributesFilename($file);
 
         if ($attributesFile && file_exists($attributesFile)) {
             $contentFile = file_get_contents($attributesFile);
@@ -294,11 +294,9 @@ class FilesystemDataSource extends AbstractDataSource
         return $dt->format(\DateTime::ISO8601);
     }
 
-    private function getAttributesFilename(Item $item)
+    private function getAttributesFilename(splfileinfo $file)
     {
-        $fileInfo = new \splfileinfo($item->getPath());
-
-        return $fileInfo->getpathname().'.meta';
+        return $file->getRelativePathname().'.meta';
     }
 
     private function setCurrentDir($path)

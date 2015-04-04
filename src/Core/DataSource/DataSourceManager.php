@@ -18,26 +18,156 @@ namespace Yosymfony\Spress\Core\DataSource;
  */
 class DataSourceManager
 {
-    private $params;
+    private $dataSources;
+    private $items;
+    private $layouts;
+    private $includes;
 
     /**
      * Constructor
-     *
-     * @param array $params. Format:
-     *
-     *  data_source_name
-     *    class: "the_class_name"
-     *    arguments:
-     *      argument_1: "value"
      */
-    public function __construct(Array $params)
+    public function __construct()
     {
-        $this->params = $params;
+        $this->dataSources = [];
+        $this->initialize();
     }
 
-    public function process()
+     /**
+     * Returns the list of items
+     *
+     * @return array
+     */
+    public function getItems()
     {
-        foreach ($datasources as $name => $data) {
+        return $this->items;
+    }
+
+    /**
+     * Returns the list of items with type "layout".
+     *
+     * @return array
+     */
+    public function getLayouts()
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * Returns the list of items with type "include".
+     *
+     * @return array
+     */
+    public function getIncludes()
+    {
+        return $this->includes;
+    }
+
+    /**
+     * Load the items across registered data sources
+     */
+    public function load()
+    {
+        $this->initialize();
+
+        foreach ($this->dataSources as $name => $dataSource) {
+            $dataSource->load();
+
+            $this->processItems($dataSource->getItems());
+            $this->processLayouts($dataSource->getLayouts());
+            $this->processIncludes($dataSource->getIncludes());
+        }
+    }
+
+    /**
+     * List of data sources registered.
+     *
+     * @return array Associative array with the name of a data source as key.
+     */
+    public function all()
+    {
+        return $this->dataSources;
+    }
+
+    /**
+     * Add a new data source
+     *
+     * @param AbstractDataSource $dataSource
+     * @param string             $name       The name of the data source
+     *
+     * @throws RuntimeException if a previous data sources exists with the same name
+     */
+    public function add(AbstractDataSource $dataSource, $name)
+    {
+        if (isset($this->dataSources[$name])) {
+            throw new \RuntimeException(sprintf('A previous data source exists with the same name: "%s".', $name));
+        }
+
+        $this->dataSources[$name] = $dataSource;
+    }
+
+    /**
+     * The data source counter
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->dataSources);
+    }
+
+    /**
+     * Remove a data source from the list
+     *
+     * @param string $name The name of the data source
+     */
+    public function remove($name)
+    {
+        unset($this->dataSources[$name]);
+    }
+
+    private function initialize()
+    {
+        $this->items = [];
+        $this->layouts = [];
+        $this->includes = [];
+    }
+
+    private function processItems(array $items)
+    {
+        foreach ($items as $item) {
+            $id = $item->getId();
+
+            if (true === isset($this->items[$id])) {
+                throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $id));
+            }
+
+            $this->items[$id] = $item;
+        }
+    }
+
+    private function processLayouts(array $items)
+    {
+        foreach ($items as $item) {
+            $id = $item->getId();
+
+            if (true === isset($this->layouts[$id])) {
+                throw new \RuntimeException(sprintf('A previous layout item exists with the same id: "%s".', $id));
+            }
+
+            $this->layouts[$id] = $item;
+        }
+    }
+
+    private function processIncludes(array $items)
+    {
+        foreach ($items as $item) {
+            $id = $item->getId();
+
+            if (true === isset($this->includes[$id])) {
+                throw new \RuntimeException(sprintf('A previous include item exists with the same id: "%s".', $id));
+            }
+
+            $this->includes[$id] = $item;
         }
     }
 }

@@ -161,12 +161,18 @@ class FilesystemDataSource extends AbstractDataSource
         $this->processIncludeFiles();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setUp()
     {
         $this->orgDir = getcwd();
         $this->setCurrentDir($this->params['source_root']);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function tearDown()
     {
         $this->setCurrentDir($this->orgDir);

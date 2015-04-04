@@ -301,8 +301,12 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function setCurrentDir($path)
     {
+        if (false === file_exists($path)) {
+            throw new \RuntimeException(sprintf('The source root folder not exists: "%s".', $path));
+        }
+
         if (false === chdir($path)) {
-            throw new \InvalidArgumentException(sprintf('Error changing the current dir to "%s"', $path));
+            throw new \RuntimeException(sprintf('Error changing the current dir to "%s".', $path));
         }
     }
 }

@@ -83,7 +83,7 @@ class DataSourceManager
      *
      * @return array Associative array with the name of a data source as key.
      */
-    public function all()
+    public function getDataSources()
     {
         return $this->dataSources;
     }
@@ -96,7 +96,7 @@ class DataSourceManager
      *
      * @throws RuntimeException if a previous data sources exists with the same name
      */
-    public function add(AbstractDataSource $dataSource, $name)
+    public function addDataSource(AbstractDataSource $dataSource, $name)
     {
         if (isset($this->dataSources[$name])) {
             throw new \RuntimeException(sprintf('A previous data source exists with the same name: "%s".', $name));
@@ -110,7 +110,7 @@ class DataSourceManager
      *
      * @return int
      */
-    public function count()
+    public function countDataSource()
     {
         return count($this->dataSources);
     }
@@ -120,7 +120,7 @@ class DataSourceManager
      *
      * @param string $name The name of the data source
      */
-    public function remove($name)
+    public function removeDataSource($name)
     {
         unset($this->dataSources[$name]);
     }

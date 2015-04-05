@@ -40,7 +40,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->add($fsDataSource, 'filesystem');
+        $dsm->addDataSource($fsDataSource, 'filesystem');
         $dsm->load();
 
         $this->assertCount(12, $dsm->getItems());
@@ -56,7 +56,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->add($fsDataSource, 'filesystem');
+        $dsm->addDataSource($fsDataSource, 'filesystem');
         $dsm->load();
         $dsm->load();
 
@@ -78,11 +78,11 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->add($fsDataSource1, 'filesystem_1');
-        $dsm->add($fsDataSource2, 'filesystem_2');
+        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
+        $dsm->addDataSource($fsDataSource2, 'filesystem_2');
         $dsm->load();
 
-        $this->assertEquals(2, $dsm->count());
+        $this->assertEquals(2, $dsm->countDataSource());
 
         $this->assertCount(10, $dsm->getItems());
         $this->assertCount(0, $dsm->getLayouts());
@@ -102,12 +102,12 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->add($fsDataSource1, 'filesystem_1');
-        $dsm->add($fsDataSource2, 'filesystem_2');
-        $dsm->remove('filesystem_1');
+        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
+        $dsm->addDataSource($fsDataSource2, 'filesystem_2');
+        $dsm->removeDataSource('filesystem_1');
 
-        $this->assertEquals(1, $dsm->count());
-        $this->assertArrayHasKey('filesystem_2', $dsm->all());
-        $this->assertArrayNotHasKey('filesystem_1', $dsm->all());
+        $this->assertEquals(1, $dsm->countDataSource());
+        $this->assertArrayHasKey('filesystem_2', $dsm->getDataSources());
+        $this->assertArrayNotHasKey('filesystem_1', $dsm->getDataSources());
     }
 }

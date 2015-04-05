@@ -81,7 +81,7 @@ class DataSourceManager
     /**
      * List of data sources registered.
      *
-     * @return array Associative array with the name of a data source as key.
+     * @return array Associative array with the name of the data source as key.
      */
     public function getDataSources()
     {

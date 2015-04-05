@@ -82,7 +82,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         $dsm->addDataSource($fsDataSource2, 'filesystem_2');
         $dsm->load();
 
-        $this->assertEquals(2, $dsm->countDataSource());
+        $this->assertCount(2, $dsm->getDataSources());
 
         $this->assertCount(10, $dsm->getItems());
         $this->assertCount(0, $dsm->getLayouts());
@@ -105,9 +105,14 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         $dsm->addDataSource($fsDataSource1, 'filesystem_1');
         $dsm->addDataSource($fsDataSource2, 'filesystem_2');
         $dsm->removeDataSource('filesystem_1');
+        $dsm->load();
 
-        $this->assertEquals(1, $dsm->countDataSource());
+        $this->assertCount(1, $dsm->getDataSources());
         $this->assertArrayHasKey('filesystem_2', $dsm->getDataSources());
         $this->assertArrayNotHasKey('filesystem_1', $dsm->getDataSources());
+
+        $this->assertCount(2, $dsm->getItems());
+        $this->assertCount(0, $dsm->getLayouts());
+        $this->assertCount(0, $dsm->getIncludes());
     }
 }

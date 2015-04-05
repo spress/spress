@@ -106,16 +106,6 @@ class DataSourceManager
     }
 
     /**
-     * The data source counter
-     *
-     * @return int
-     */
-    public function countDataSource()
-    {
-        return count($this->dataSources);
-    }
-
-    /**
      * Remove a data source from the list
      *
      * @param string $name The name of the data source

@@ -46,6 +46,18 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(12, $dsm->getItems());
         $this->assertCount(1, $dsm->getLayouts());
         $this->assertCount(1, $dsm->getIncludes());
+
+        $item = current($dsm->getItems());
+
+        $this->assertArrayHasKey('datasource_name', $item->getAttributes());
+
+        $item = current($dsm->getLayouts());
+
+        $this->assertArrayHasKey('datasource_name', $item->getAttributes());
+
+        $item = current($dsm->getIncludes());
+
+        $this->assertArrayHasKey('datasource_name', $item->getAttributes());
     }
 
     public function testReLoad()

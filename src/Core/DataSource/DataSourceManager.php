@@ -19,7 +19,7 @@ namespace Yosymfony\Spress\Core\DataSource;
  */
 class DataSourceManager
 {
-    const ATTRIBUTE_DATA_SOURCE_NAME = 'datasource_name';
+    const ATTRIBUTE_DATASOURCE_NAME = 'datasource_name';
 
     private $dataSources;
     private $items;
@@ -134,7 +134,7 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATA_SOURCE_NAME, $dataSourceName);
+            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->items[$id] = $item;
         }
     }
@@ -148,7 +148,7 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous layout item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATA_SOURCE_NAME, $dataSourceName);
+            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->layouts[$id] = $item;
         }
     }
@@ -162,7 +162,7 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous include item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATA_SOURCE_NAME, $dataSourceName);
+            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->includes[$id] = $item;
         }
     }

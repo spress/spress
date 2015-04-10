@@ -40,6 +40,8 @@ class DataSourceManagerBuilder
      * )
      *
      * @return \Yosymfony\Spress\Core\DataSource\DataSourceManager
+     *
+     * @throws \RuntimeException if params "class" not found or the class pointed by "class" params not exists
      */
     public function buildFromConfigArray(array $config)
     {
@@ -52,6 +54,10 @@ class DataSourceManagerBuilder
 
             $classname = $data['class'];
             $arguments = true === isset($data['arguments']) ? $data['arguments'] : [];
+
+            if (false === class_exists($classname)) {
+                throw new \RuntimeException(sprintf('Data source "%s" class not found: "%s".', $dataSourceName, $classname));
+            }
 
             $ds = new $classname($arguments);
             $dsm->addDataSource($ds, $dataSourceName);

@@ -33,6 +33,9 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('data_source_name_1', $dsm->getDataSources());
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testBuildFromConfigArrayWithNotExistsClass()
     {
         $config = [

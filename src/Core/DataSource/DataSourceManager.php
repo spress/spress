@@ -12,15 +12,12 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * Data source manager. Each item will automatically receive an
- * extra attribute "datasource_name".
+ * Data source manager
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class DataSourceManager
 {
-    const ATTRIBUTE_DATASOURCE_NAME = 'datasource_name';
-
     private $dataSources;
     private $items;
     private $layouts;
@@ -134,7 +131,6 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->items[$id] = $item;
         }
     }
@@ -148,7 +144,6 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous layout item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->layouts[$id] = $item;
         }
     }
@@ -162,16 +157,7 @@ class DataSourceManager
                 throw new \RuntimeException(sprintf('A previous include item exists with the same id: "%s".', $id));
             }
 
-            $this->addAttribute($item, self::ATTRIBUTE_DATASOURCE_NAME, $dataSourceName);
             $this->includes[$id] = $item;
         }
-    }
-
-    private function addAttribute(Item $item, $key, $value)
-    {
-        $attributes = $item->getAttributes();
-        $attributes[$key] = $value;
-
-        $item->setAttributes($attributes);
     }
 }

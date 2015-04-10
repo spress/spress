@@ -41,6 +41,9 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $dsm->addDataSource($fsDataSource, 'filesystem');
+
+        $this->assertTrue($dsm->hasDataSource('filesystem'));
+
         $dsm->load();
 
         $this->assertCount(12, $dsm->getItems());
@@ -82,7 +85,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         $dsm->addDataSource($fsDataSource2, 'filesystem_2');
         $dsm->load();
 
-        $this->assertCount(2, $dsm->getDataSources());
+        $this->assertCount(2, $dsm->getDataSourceNames());
 
         $this->assertCount(10, $dsm->getItems());
         $this->assertCount(0, $dsm->getLayouts());
@@ -107,12 +110,32 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
         $dsm->removeDataSource('filesystem_1');
         $dsm->load();
 
-        $this->assertCount(1, $dsm->getDataSources());
-        $this->assertArrayHasKey('filesystem_2', $dsm->getDataSources());
-        $this->assertArrayNotHasKey('filesystem_1', $dsm->getDataSources());
+        $this->assertCount(1, $dsm->getDataSourceNames());
+        $this->assertContains('filesystem_2', $dsm->getDataSourceNames());
+        $this->assertNotContains('filesystem_1', $dsm->getDataSourceNames());
 
         $this->assertCount(2, $dsm->getItems());
         $this->assertCount(0, $dsm->getLayouts());
         $this->assertCount(0, $dsm->getIncludes());
+    }
+
+    public function testGetDatasource()
+    {
+        $dsm = new DataSourceManager();
+        $fsDataSource1 = new FilesystemDataSource([
+            'source_root'       => __dir__.'/../fixtures/project/',
+            'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
+        ]);
+
+        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
+
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\AbstractDataSource', $dsm->getDataSource('filesystem_1'));
+    }
+
+    public function testNotHasDataSource()
+    {
+        $dsm = new DataSourceManager();
+
+        $this->assertFalse($dsm->hasDataSource('filesystem'));
     }
 }

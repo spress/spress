@@ -79,13 +79,41 @@ class DataSourceManager
     }
 
     /**
-     * List of data sources registered.
+     * List with the name of the data sources registered.
      *
-     * @return array Associative array with the name of the data source as key.
+     * @return array
      */
-    public function getDataSources()
+    public function getDataSourceNames()
     {
-        return $this->dataSources;
+        return array_keys($this->dataSources);
+    }
+
+    /**
+     * Get a data source
+     *
+     * @return \Yosymfony\Spress\Core\DataSource\AbstractDataSource
+     *
+     * @throws \RuntimeException if data source not found
+     */
+    public function getDataSource($name)
+    {
+        if (false === $this->hasDataSource($name)) {
+            throw new \RuntimeException(sprintf('Data source: "%s" not found.', $name));
+        }
+
+        return $this->dataSources[$name];
+    }
+
+    /**
+     * Exists the data source?
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasDataSource($name)
+    {
+        return isset($this->dataSources[$name]);
     }
 
     /**
@@ -94,7 +122,7 @@ class DataSourceManager
      * @param AbstractDataSource $dataSource
      * @param string             $name       The name of the data source
      *
-     * @throws RuntimeException if a previous data sources exists with the same name
+     * @throws \RuntimeException if a previous data sources exists with the same name
      */
     public function addDataSource(AbstractDataSource $dataSource, $name)
     {

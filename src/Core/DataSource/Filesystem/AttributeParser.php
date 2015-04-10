@@ -35,6 +35,8 @@ class AttributeParser
      * Constructor
      *
      * @param $type Type of parser: yaml or json.
+     *
+     * @throws \RuntimeException if the type of parser is wrong
      */
     public function __construct($type = self::PARSER_YAML)
     {

@@ -80,6 +80,8 @@ class FilesystemDataSource extends AbstractDataSource
 
     /**
      * @inheritDoc
+     *
+     * @throws \RuntimeException if bad configuration params
      */
     public function configure()
     {

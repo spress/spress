@@ -74,7 +74,7 @@ interface ItemInterface
     public function setAttributes(array $values);
 
     /**
-     * The item's path. e.g: / for the home or /post/post1
+     * The item's relative path. e.g: "index.html" or "my-page/index.html".
      * An Item without path will not be stored.
      *
      * @return string
@@ -82,9 +82,9 @@ interface ItemInterface
     public function getPath();
 
     /**
-     * Set the item's path.
+     * Set the item's relative path.
      *
-     * @param string $value e.g: / or /my-page.html
+     * @param string $value e.g: "index.html" or "my-page/index.html"
      */
     public function setPath($value);
 

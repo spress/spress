@@ -30,7 +30,7 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $dsm = $builder->buildFromConfigArray($config);
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $dsm);
-        $this->assertArrayHasKey('data_source_name_1', $dsm->getDataSources());
+        $this->assertContains('data_source_name_1', $dsm->getDataSourceNames());
     }
 
     /**

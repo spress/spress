@@ -33,7 +33,7 @@ class Item implements ItemInterface
      * @param array  $attributes
      * @param bool   $isBinary
      */
-    public function __construct($content, $id, array $attributes, $isBinary = false, $type = self::TYPE_ITEM)
+    public function __construct($content, $id, array $attributes = [], $isBinary = false, $type = self::TYPE_ITEM)
     {
         $this->snapshot = [];
         $this->attributes = [];

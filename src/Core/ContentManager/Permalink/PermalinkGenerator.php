@@ -12,6 +12,8 @@
 namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\Utils;
 
 /**
  * Iterface for a permalink generator.
@@ -46,7 +48,13 @@ class PermalinkGenerator
     }
 
     /**
-     * Get a permalink
+     * Get a permalink.
+     *
+     * Item's attributes with special meaning:
+     *  - title
+     *  - date
+     *  - categories
+     *  - permalink
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
@@ -56,20 +64,23 @@ class PermalinkGenerator
     {
         $placeholders = $this->getPlacehoders($item);
 
+        $urlTemplate = '/:path/:basename.:extension';
+        $pathTemplate = $urlTemplate;
+
         switch ($this->getPermalinkAttribute($item)) {
-            case 'path':
-                $path = $item->getPath();
-                $urlPath = '/'.$path;
-                break;
             case 'ordinal':
                 break;
             case 'date':
                 break;
-            default:
-                $urlTemplate = '/:path/:basename.:extension';
-                $pathTemplate = $urlTemplate;
+            case 'pretty':
+                if ($placeholders[':extension'] !== 'html') {
+                    break;
+                }
 
-                if ($placeholders[':extension'] === 'html') {
+                if ($this->isItemWithDate($item)) {
+                    $urlTemplate = '/:categories/:year/:month/:day/:title';
+                    $pathTemplate = '/:categories/:year/:month/:day/:title/index.html';
+                } else {
                     if ($placeholders[':basename'] === 'index') {
                         $urlTemplate = '/:path';
                         $pathTemplate = '/:path/index.html';
@@ -79,10 +90,11 @@ class PermalinkGenerator
                     }
                 }
 
-                $path = ltrim($this->generateUrlPath($pathTemplate, $placeholders), '/');
-                $urlPath = $this->generateUrlPath($urlTemplate, $placeholders);
                 break;
         }
+
+        $path = $this->generatePath($pathTemplate, $placeholders);
+        $urlPath = $this->generateUrlPath($urlTemplate, $placeholders);
 
         return new Permalink($path, $urlPath);
     }
@@ -90,22 +102,82 @@ class PermalinkGenerator
     private function getPlacehoders(ItemInterface $item)
     {
         $fileInfo = new \SplFileInfo($item->getPath());
+        $time = $this->getDate($item);
 
-        return [
-            ':path'            => $fileInfo->getPath(),
+        $result = [
+            ':path'         => $fileInfo->getPath(),
             ':extension'    => $fileInfo->getExtension(),
             ':basename'     => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
+            ':collection'   => $this->getCollectionAttribute($item),
+            ':categories'   => $this->getCategoriesPath($item),
+            ':title'        => $this->getTitleSlugified($item),
+            ':year'         => $time->format('Y'),
+            ':month'        => $time->format('m'),
+            ':day'          => $time->format('d'),
+            ':i_month'      => $time->format('n'),
+            ':i_day'        => $time->format('j'),
         ];
+
+        return $result;
     }
 
-    private function isPostPath(ItemInterface $item)
+    private function isItemWithDate(ItemInterface $item)
     {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['date']) === true) {
+            return true;
+        }
+
         return false;
     }
 
-    private function isCollection(ItemInterface $item)
+    private function getTitleSlugified(ItemInterface $item)
     {
-        return false;
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['title']) === false) {
+            return;
+        }
+
+        return Utils::slugify($attributes['title']);
+    }
+
+    private function getDate(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['date']) === true) {
+            try {
+                return new \DateTime($attributes['date']);
+            } catch (\Exception $e) {
+                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath());
+            }
+        }
+
+        return new \DateTime();
+    }
+
+    private function getCategoriesPath(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['categories']) === false) {
+            return;
+        }
+
+        if (is_array($attributes['categories']) === false) {
+            throw new AttributeValueException('Invalid value. Expected array.', 'categories', $item->getPath());
+        }
+
+        return implode('/', array_map(function ($a) {
+            return Utils::slugify($a);
+        }, $attributes['categories']));
+    }
+
+    private function generatePath($template, array $placeholders = [])
+    {
+        return ltrim($this->generateUrlPath($template, $placeholders), '/');
     }
 
     private function generateUrlPath($template, array $placeholders = [])
@@ -125,6 +197,10 @@ class PermalinkGenerator
         $result = preg_replace('/\/\/+/', '/', $url);
         $result = str_replace(':/', '://', $result, $count);
 
+        if ($result !== '/') {
+            $result = rtrim($result, '/');
+        }
+
         if ($count > 1) {
             throw new \UnexpectedValueException(sprintf('Bad URL: "%s"', $result));
         }
@@ -139,11 +215,35 @@ class PermalinkGenerator
     private function getPermalinkAttribute(ItemInterface $item)
     {
         $attributes = $item->getAttributes();
+        $permalink = isset($attributes['permalink']) ? $attributes['permalink'] : $this->defaultPermalink;
 
-        if (isset($attributes['permalink']) && $attributes['permalink']) {
-            return $attributes['permalink'];
+        if (is_string($permalink) === false) {
+            throw new AttributeValueException('Invalid value. Expected string.', 'permalink', $item->getPath());
         }
 
-        return $this->defaultPermalink;
+        if (trim($permalink) === '') {
+            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'permalink', $item->getPath());
+        }
+
+        return $permalink;
+    }
+
+    private function getCollectionAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['collection']) === false) {
+            return;
+        }
+
+        if (is_string($attributes['collection']) === false) {
+            throw new AttributeValueException('Invalid value. Expected string.', 'collection', $item->getPath());
+        }
+
+        if (trim($attributes['collection']) === '') {
+            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'collection', $item->getPath());
+        }
+
+        return $attributes['collection'];
     }
 }

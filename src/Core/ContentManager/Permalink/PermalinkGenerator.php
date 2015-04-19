@@ -36,10 +36,22 @@ class PermalinkGenerator
      *
      * @param string $defaultPermalink
      *
+     *   Each item's URL are prefixed by "/:collection" if the item are included in a custom collection.
+     *
      *   "pretty" permalink style:
-     *    - pages: "/:path/:basename".
-     *    - posts: "/:categories/:year/:month/:day/:title/".
-     *    - collections: "/:collection/:path".
+     *    - item: "/:path/:basename"
+     *    - item with date: "/:categories/:year/:month/:day/:title/"
+     *
+     *   "date" permalink style:
+     *    - item: "/:path/:basename.:extension"
+     *    - item with date: "/:categories/:year/:month/:day/:title.:extension"
+     *
+     *   "ordinal" permalink style:
+     *    - item: "/:path/:basename.:extension"
+     *    - item with date: "/:categories/:year/:i_day/:title.:extension"
+     *
+     *   "none" permalink style:
+     *    - item: "/:path/:basename.:extension"
      *
      */
     public function __construct($defaultPermalink = 'pretty')
@@ -55,6 +67,7 @@ class PermalinkGenerator
      *  - date
      *  - categories
      *  - permalink
+     *  - collection
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
@@ -63,17 +76,53 @@ class PermalinkGenerator
     public function getPermalink(ItemInterface $item)
     {
         $placeholders = $this->getPlacehoders($item);
+        $permalinkStyle = $this->getPermalinkAttribute($item);
 
-        $urlTemplate = '/:path/:basename.:extension';
-        $pathTemplate = $urlTemplate;
+        switch ($permalinkStyle) {
+            case 'none':
+                $urlTemplate = '/:path/:basename.:extension';
 
-        switch ($this->getPermalinkAttribute($item)) {
+                if ($this->isCustomCollection($item)) {
+                    $urlTemplate = '/:collection'.$urlTemplate;
+                }
+
+                $pathTemplate = $urlTemplate;
+                break;
             case 'ordinal':
+                if ($this->isItemWithDate($item)) {
+                    $urlTemplate = '/:categories/:year/:i_day/:title.:extension';
+                } else {
+                    $urlTemplate = '/:path/:basename.:extension';
+                }
+
+                if ($this->isCustomCollection($item)) {
+                    $urlTemplate = '/:collection'.$urlTemplate;
+                }
+
+                $pathTemplate = $urlTemplate;
                 break;
             case 'date':
+                if ($this->isItemWithDate($item)) {
+                    $urlTemplate = '/:categories/:year/:month/:day/:title.:extension';
+                } else {
+                    $urlTemplate = '/:path/:basename.:extension';
+                }
+
+                if ($this->isCustomCollection($item)) {
+                    $urlTemplate = '/:collection'.$urlTemplate;
+                }
+
+                $pathTemplate = $urlTemplate;
                 break;
             case 'pretty':
                 if ($placeholders[':extension'] !== 'html') {
+                    $urlTemplate = '/:path/:basename.:extension';
+                    $pathTemplate = $urlTemplate;
+
+                    if ($this->isCustomCollection($item)) {
+                        $urlTemplate = '/:collection'.$urlTemplate;
+                        $pathTemplate = '/:collection'.$pathTemplate;
+                    }
                     break;
                 }
 
@@ -90,6 +139,14 @@ class PermalinkGenerator
                     }
                 }
 
+                if ($this->isCustomCollection($item)) {
+                    $urlTemplate = '/:collection'.$urlTemplate;
+                    $pathTemplate = '/:collection'.$pathTemplate;
+                }
+                break;
+            default:
+                $urlTemplate = $permalinkStyle;
+                $pathTemplate = $urlTemplate;
                 break;
         }
 
@@ -102,7 +159,7 @@ class PermalinkGenerator
     private function getPlacehoders(ItemInterface $item)
     {
         $fileInfo = new \SplFileInfo($item->getPath());
-        $time = $this->getDate($item);
+        $time = $this->getDateAttribute($item);
 
         $result = [
             ':path'         => $fileInfo->getPath(),
@@ -143,21 +200,6 @@ class PermalinkGenerator
         return Utils::slugify($attributes['title']);
     }
 
-    private function getDate(ItemInterface $item)
-    {
-        $attributes = $item->getAttributes();
-
-        if (isset($attributes['date']) === true) {
-            try {
-                return new \DateTime($attributes['date']);
-            } catch (\Exception $e) {
-                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath());
-            }
-        }
-
-        return new \DateTime();
-    }
-
     private function getCategoriesPath(ItemInterface $item)
     {
         $attributes = $item->getAttributes();
@@ -191,25 +233,26 @@ class PermalinkGenerator
         return $this->sanitize($permalink);
     }
 
-    private function sanitize($url)
+    private function getDateAttribute(ItemInterface $item)
     {
-        $count = 0;
-        $result = preg_replace('/\/\/+/', '/', $url);
-        $result = str_replace(':/', '://', $result, $count);
+        $attributes = $item->getAttributes();
 
-        if ($result !== '/') {
-            $result = rtrim($result, '/');
+        if (isset($attributes['date']) === true) {
+            try {
+                return new \DateTime($attributes['date']);
+            } catch (\Exception $e) {
+                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath());
+            }
         }
 
-        if ($count > 1) {
-            throw new \UnexpectedValueException(sprintf('Bad URL: "%s"', $result));
-        }
+        return new \DateTime();
+    }
 
-        if (false !== strpos($result, ' ')) {
-            throw new \UnexpectedValueException(sprintf('Bad URL: "%s". Contain white space/s', $result));
-        }
+    private function isCustomCollection(ItemInterface $item)
+    {
+        $collection = $this->getCollectionAttribute($item);
 
-        return $result;
+        return !in_array($collection, ['posts', 'pages']);
     }
 
     private function getPermalinkAttribute(ItemInterface $item)
@@ -245,5 +288,26 @@ class PermalinkGenerator
         }
 
         return $attributes['collection'];
+    }
+
+    private function sanitize($url)
+    {
+        $count = 0;
+        $result = preg_replace('/\/\/+/', '/', $url);
+        $result = str_replace(':/', '://', $result, $count);
+
+        if ($result !== '/') {
+            $result = rtrim($result, '/');
+        }
+
+        if ($count > 1) {
+            throw new \UnexpectedValueException(sprintf('Bad URL: "%s"', $result));
+        }
+
+        if (false !== strpos($result, ' ')) {
+            throw new \UnexpectedValueException(sprintf('Bad URL: "%s". Contain white space/s', $result));
+        }
+
+        return $result;
     }
 }

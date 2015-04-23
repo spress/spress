@@ -31,6 +31,11 @@ use Yosymfony\Spress\Core\DataSource\Item;
  *  - extension         : the extension of item's filename.
  *  - meta_filename     : if exists, the name of the filename with the item's attributes (metas).
  *
+ * If the filename is a date filename (a filename that mathed a patter yyyy-mm-dd-title.extension)
+ * receive some extra attributes:
+ *  - title
+ *  - date
+ *
  * Params:
  *  - source_root       : the root directory for the main content.
  *  - layouts_root      : the root directory for the layouts.
@@ -284,6 +289,18 @@ class FilesystemDataSource extends AbstractDataSource
         $attributes['filename'] = $file->getFilename();
         $attributes['extension'] = $file->getExtension();
 
+        if ($data = $this->isDateFilename($file)) {
+            $attributes['title_path'] = implode(' ', explode('-', $data[3]));
+
+            if (isset($attributes['title']) === false) {
+                $attributes['title'] = $attributes['title_path'];
+            }
+
+            if (isset($attributes['date']) === false) {
+                $attributes['date'] = implode('-', [$data[0], $data[1], $data[2]]);
+            }
+        }
+
         $item->setAttributes($attributes);
     }
 
@@ -292,6 +309,15 @@ class FilesystemDataSource extends AbstractDataSource
         $ext = $file->getExtension();
 
         return false === in_array($ext, $this->textExtensions);
+    }
+
+    private function isDateFilename(SplFileInfo $file)
+    {
+        $filename = $file->getFilename();
+
+        if (preg_match('/(\d{4})-(\d{2})-(\d{2})-(.+?)(\.[^\.]+|\.[^\.]+\.[^\.]+)$/', $filename, $matches)) {
+            return [$matches[1], $matches[2], $matches[3], $matches[4]];
+        }
     }
 
     private function getModifiedTime(SplFileInfo $file)

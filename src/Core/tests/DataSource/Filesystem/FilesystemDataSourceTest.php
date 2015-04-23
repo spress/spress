@@ -59,16 +59,23 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('books/2013-08-11-best-book.md', $items);
         $this->assertArrayHasKey('books/2013-09-19-new-book.md', $items);
 
-        $itemAttributes =  $items['about/index.html']->getAttributes();
+        $itemAttributes = $items['about/index.html']->getAttributes();
         $this->assertCount(4, $itemAttributes);
         $this->assertEquals('default', $itemAttributes['layout']);
 
-        $itemAttributes =  $items['2013-08-12-post-example-1.md']->getAttributes();
-        $this->assertCount(9, $itemAttributes);
+        $itemAttributes = $items['2013-08-12-post-example-1.md']->getAttributes();
+        $this->assertCount(10, $itemAttributes);
         $this->assertArrayNotHasKey('meta_filename', $itemAttributes);
         $this->assertStringStartsWith('Post example 1', $items['2013-08-12-post-example-1.md']->getContent());
 
-        $itemAttributes =  $items['sitemap.xml']->getAttributes();
+        $itemAttributes = $items['2013-08-12-post-example-2.mkd']->getAttributes();
+        $this->assertArrayHasKey('title', $itemAttributes);
+        $this->assertArrayHasKey('title_path', $itemAttributes);
+        $this->assertArrayHasKey('date', $itemAttributes);
+        $this->assertEquals('post example 2', $itemAttributes['title']);
+        $this->assertEquals('2013-08-12', $itemAttributes['date']);
+
+        $itemAttributes = $items['sitemap.xml']->getAttributes();
         $this->assertEquals('sitemap.xml.meta', $itemAttributes['meta_filename']);
         $this->assertEquals('sitemap', $itemAttributes['name']);
 

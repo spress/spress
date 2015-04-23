@@ -30,6 +30,7 @@ use Yosymfony\Spress\Core\Utils;
 class PermalinkGenerator
 {
     private $defaultPermalink;
+    private $defaultPreservePathTitle;
 
     /**
      * Constructor
@@ -54,20 +55,23 @@ class PermalinkGenerator
      *    - item: "/:path/:basename.:extension"
      *
      */
-    public function __construct($defaultPermalink = 'pretty')
+    public function __construct($defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
     {
         $this->defaultPermalink = $defaultPermalink;
+        $this->defaultPreservePathTitle = $defaultPreservePathTitle;
     }
 
     /**
      * Get a permalink.
      *
      * Item's attributes with special meaning:
-     *  - title
-     *  - date
-     *  - categories
-     *  - permalink
-     *  - collection
+     *  - title: title of the item.
+     *  - title_path: title extracted from the date filename pattern.
+     *  - preserve_path_title: if "1" "title_path" instead of "title" will be used with ":title" placeholder.
+     *  - date: date of item.
+     *  - categories: categories for the item
+     *  - permalink: permalink sytle.
+     *  - collection: the name of the item's collection.
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
@@ -193,11 +197,15 @@ class PermalinkGenerator
     {
         $attributes = $item->getAttributes();
 
-        if (isset($attributes['title']) === false) {
-            return;
+        $preservePathTitle = isset($attributes['preserve_path_title']) ? $attributes['preserve_path_title'] : $this->defaultPreservePathTitle;
+
+        if ($preservePathTitle === true && isset($attributes['title_path']) === true) {
+            return Utils::slugify($attributes['title_path']);
         }
 
-        return Utils::slugify($attributes['title']);
+        if (isset($attributes['title']) === true) {
+            return Utils::slugify($attributes['title']);
+        }
     }
 
     private function getCategoriesPath(ItemInterface $item)

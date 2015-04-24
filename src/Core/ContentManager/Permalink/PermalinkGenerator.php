@@ -67,7 +67,7 @@ class PermalinkGenerator
      * Item's attributes with special meaning:
      *  - title: title of the item.
      *  - title_path: title extracted from the date filename pattern.
-     *  - preserve_path_title: if "1" "title_path" instead of "title" will be used with ":title" placeholder.
+     *  - preserve_path_title: if true "title_path" instead of "title" will be used with ":title" placeholder.
      *  - date: date of item.
      *  - categories: categories for the item
      *  - permalink: permalink sytle.

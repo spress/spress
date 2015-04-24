@@ -187,6 +187,29 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/my-path/2015-04-17-my-first-post.html', $permalink->getUrlPath());
     }
 
+    public function testPreservePathTitle()
+    {
+        $pmg = new PermalinkGenerator('/:title/index.html', true);
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+            'title' => 'title post',
+            'title_path' => 'first-post'
+        ]));
+
+        $this->assertEquals('first-post/index.html', $permalink->getPath());
+        $this->assertEquals('/first-post/index.html', $permalink->getUrlPath());
+
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+            'preserve_path_title' => false,
+            'title' => 'title post',
+            'title_path' => 'first-post'
+        ]));
+
+        $this->assertEquals('title-post/index.html', $permalink->getPath());
+        $this->assertEquals('/title-post/index.html', $permalink->getUrlPath());
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */

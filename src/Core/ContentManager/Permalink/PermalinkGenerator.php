@@ -197,7 +197,7 @@ class PermalinkGenerator
     {
         $attributes = $item->getAttributes();
 
-        $preservePathTitle = isset($attributes['preserve_path_title']) ? $attributes['preserve_path_title'] : $this->defaultPreservePathTitle;
+        $preservePathTitle = $this->getPreservePathTitleAttribute($item);
 
         if ($preservePathTitle === true && isset($attributes['title_path']) === true) {
             return Utils::slugify($attributes['title_path']);
@@ -239,6 +239,21 @@ class PermalinkGenerator
         $permalink = str_replace(array_keys($placeholders), $placeholders, $template, $count);
 
         return $this->sanitize($permalink);
+    }
+
+    private function getPreservePathTitleAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['preserve_path_title']) === true) {
+            if (is_bool($attributes['preserve_path_title']) === false) {
+                throw new AttributeValueException('Invalid value. Expected bolean', 'preserve_path_title', $item->getPath());
+            }
+
+            return $attributes['preserve_path_title'];
+        }
+
+        return $this->defaultPreservePathTitle;
     }
 
     private function getDateAttribute(ItemInterface $item)

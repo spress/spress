@@ -30,31 +30,89 @@ class CollectionManager
         $this->clear();
     }
 
+    /**
+     * Add a new collection
+     *
+     * @param \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface $collection
+     */
     public function add(CollectionInterface $collection)
     {
         if ($this->has($collection->getName()) === true) {
             throw new \RuntimeException(sprintf('A previous collection exists with the same name: "%s".', $collection->getName()));
         }
 
-        $this->collections[$name] = $collection;
+        $this->collections[$collection->getName()] = $collection;
     }
 
-    public function remove($name)
+    /**
+     * Count the collections registered
+     *
+     * @return int
+     */
+    public function count()
     {
-        unset($this->collections[$name]);
+        return count($this->collections);
     }
 
+    /**
+     * Get a collection
+     *
+     * @param string $name
+     *
+     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface
+     *
+     * @throws \RuntimeException if collection not found
+     */
+    public function get($name)
+    {
+        if (false === $this->has($name)) {
+            throw new \RuntimeException(sprintf('Collection: "%s" not found.', $name));
+        }
+
+        return $this->collections[$name];
+    }
+
+    /**
+     * Has a collection with the name specified?
+     *
+     * @param string $name The collection's name
+     *
+     * @return bool
+     */
     public function has($name)
     {
         return isset($this->collections[$name]);
     }
 
+    /**
+     * Clear the collections
+     */
     public function clear()
     {
         $this->collections = [];
     }
 
+    /**
+     * Remove a collection
+     *
+     * @param string $name The collection's name
+     */
+    public function remove($name)
+    {
+        unset($this->collections[$name]);
+    }
+
+    /**
+     * Collection matching of a item
+     *
+     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface
+     */
     public function getCollectionForItem(ItemInterface $item)
     {
+        foreach ($this->collections as $collection) {
+            if (strpos($item->getPath(), $collection->getPath()) === 0) {
+                return $collection;
+            }
+        }
     }
 }

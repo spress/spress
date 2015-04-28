@@ -34,7 +34,7 @@ interface CollectionInterface
     public function getAttributes();
 
     /**
-     * The collection's relative path. e.g: "events"
+     * The collection's relative path. e.g: "_events" or "books/top"
      *
      * return @string
      */

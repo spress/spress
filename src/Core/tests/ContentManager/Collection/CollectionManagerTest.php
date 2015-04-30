@@ -39,6 +39,19 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('books', $collection->getName());
     }
 
+    public function testDefaultCollection()
+    {
+        $cm = new CollectionManager();
+        $cm->add(new Collection('events', '_events', ['output' => true]));
+
+        $item = new Item('Test of content', 'member-1.html', []);
+        $item->setPath('member-1.html');
+        $collection = $cm->getCollectionForItem($item);
+
+        $this->assertEquals('pages', $collection->getName());
+        $this->assertEquals('', $collection->getPath());
+    }
+
     public function testManageCollection()
     {
         $cm = new CollectionManager();
@@ -47,11 +60,11 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->get('events'));
         $this->assertTrue($cm->has('events'));
-        $this->assertEquals(2, $cm->count());
+        $this->assertEquals(3, $cm->count());
 
         $cm->remove('events');
 
-        $this->assertEquals(1, $cm->count());
+        $this->assertEquals(2, $cm->count());
 
         $cm->clear();
 

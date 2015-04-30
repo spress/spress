@@ -21,6 +21,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 class CollectionManager
 {
     private $collections;
+    private $defaultCollection;
 
     /**
      * Constructor
@@ -28,6 +29,7 @@ class CollectionManager
     public function __construct()
     {
         $this->clear();
+        $this->add(new Collection('pages', '', []));
     }
 
     /**
@@ -109,10 +111,15 @@ class CollectionManager
      */
     public function getCollectionForItem(ItemInterface $item)
     {
-        foreach ($this->collections as $collection) {
-            if (strpos($item->getPath(), $collection->getPath()) === 0) {
+        foreach ($this->collections as $name => $collection) {
+            $itemPath = $item->getPath().'/';
+            $collectionPath = $collection->getPath().'/';
+
+            if (strpos($itemPath, $collectionPath) === 0) {
                 return $collection;
             }
         }
+
+        return $this->get('pages');
     }
 }

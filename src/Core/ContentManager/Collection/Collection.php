@@ -31,6 +31,14 @@ class Collection implements CollectionInterface
      */
     public function __construct($name, $path, array $attributes = [])
     {
+        if (is_string($name) === false) {
+            throw new \RuntimeException('Expected string as the name of the collection.');
+        }
+
+        if (is_string($path) === false) {
+            throw new \RuntimeException('Expected string as the path of the collection.');
+        }
+
         $this->name = $name;
         $this->path = $path;
         $this->attributes = $attributes;

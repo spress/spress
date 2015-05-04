@@ -37,14 +37,14 @@ interface RenderizerInterface
     public function addInclude($name, $content, array $attributes);
 
     /**
-     * Render a block of content (layout NOT included)
+     * Render a blocks of content (layout NOT included)
      *
      * @param string $content    The block content
      * @param array  $attributes The attributes for using inside the content
      *
      * @return string The block rendered
      */
-    public function renderBlock($content, array $attributes);
+    public function renderBlocks($content, array $attributes);
 
     /**
      * Render a page completely (layout included)

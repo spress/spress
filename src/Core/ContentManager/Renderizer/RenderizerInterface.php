@@ -25,7 +25,7 @@ interface RenderizerInterface
      * @param string $content
      * @param array  $attributes
      */
-    public function addLayout($name, $content, array $attributes);
+    public function addLayout($name, $content, array $attributes = []);
 
     /**
      * Add a new include
@@ -34,25 +34,27 @@ interface RenderizerInterface
      * @param string $content
      * @param array  $attributes
      */
-    public function addInclude($name, $content, array $attributes);
+    public function addInclude($name, $content, array $attributes = []);
 
     /**
      * Render a blocks of content (layout NOT included)
      *
+     * @param string $name       The name of the content
      * @param string $content    The block content
      * @param array  $attributes The attributes for using inside the content
      *
      * @return string The block rendered
      */
-    public function renderBlocks($content, array $attributes);
+    public function renderBlocks($name, $content, array $attributes);
 
     /**
      * Render a page completely (layout included)
      *
+     * @param string $name       The name of the page
      * @param string $content    The page content
      * @param array  $attributes The attributes for using inside the content
      *
      * @return string The page rendered
      */
-    public function renderPage($content, array $attributes);
+    public function renderPage($name, $content, array $attributes);
 }

@@ -44,6 +44,11 @@ class TwigRenderizer implements RenderizerInterface
     public function addLayout($name, $content, array $attributes = [])
     {
         $fullname = $this->getLayoutNameWithNamespace($name);
+
+        if ($this->arrayLoader->exists($fullname) === true) {
+            throw new \RuntimeException(sprintf('A previous layout exists with the same name: "%s".', $name));   
+        }
+
         $layout = $this->getLayoutAttribute($attributes, $name);
 
         if ($layout) {
@@ -66,6 +71,10 @@ class TwigRenderizer implements RenderizerInterface
      */
     public function addInclude($name, $content, array $attributes = [])
     {
+        if ($this->arrayLoader->exists($name) === true) {
+            throw new \RuntimeException(sprintf('A previous include exists with the same name: "%s".', $name));   
+        }
+
         $this->arrayLoader->setTemplate($name, $content);
     }
 

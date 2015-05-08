@@ -52,7 +52,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
     }
 
-    public function testRenderTemplateWithStackLayouts()
+    public function testRenderTemplateWithStackOfLayouts()
     {
         $renderizer = $this->getRenderizer();
         $renderizer->addLayout('default', '<html></body>{% block page %}{{ page.content }}{% endblock %}</body></html>');

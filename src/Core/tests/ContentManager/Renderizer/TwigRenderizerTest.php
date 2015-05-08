@@ -62,6 +62,37 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<html></body><h1>Hi</h1>Yo! Symfony</body></html>', $rendered);
     }
 
+    /**
+     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     */
+    public function testRenderTemplateLayoutNotFound()
+    {
+        $renderizer = $this->getRenderizer();
+        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', ['layout' => 'default']);
+
+        $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testLayoutWithAPreviousName()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addLayout('default', '{% block page %}{{ page.content }}{% endblock %}');
+        $renderizer->addLayout('default', '{% block page %}{{ page.content }}{% endblock %}');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testAddIncludeWithAPreviousName()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addInclude('message', 'This is a message.');
+        $renderizer->addInclude('message', 'This is a message.');
+    }
+
     private function getRenderizer()
     {
         $twigLoader = new \Twig_Loader_Array([]);

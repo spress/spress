@@ -39,14 +39,19 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * @inheritDoc
+     * Add a new layout
+     *
+     * @param string $name       The name of the layout. e.g: id, path...
+     * @param string $content    The content of the layout
+     * @param array  $attributes The attributes of the layout.
+     *                           "layout" attribute has a special meaning.
      */
     public function addLayout($name, $content, array $attributes = [])
     {
         $fullname = $this->getLayoutNameWithNamespace($name);
 
         if ($this->arrayLoader->exists($fullname) === true) {
-            throw new \RuntimeException(sprintf('A previous layout exists with the same name: "%s".', $name));   
+            throw new \RuntimeException(sprintf('A previous layout exists with the same name: "%s".', $name));
         }
 
         $layout = $this->getLayoutAttribute($attributes, $name);
@@ -72,14 +77,20 @@ class TwigRenderizer implements RenderizerInterface
     public function addInclude($name, $content, array $attributes = [])
     {
         if ($this->arrayLoader->exists($name) === true) {
-            throw new \RuntimeException(sprintf('A previous include exists with the same name: "%s".', $name));   
+            throw new \RuntimeException(sprintf('A previous include exists with the same name: "%s".', $name));
         }
 
         $this->arrayLoader->setTemplate($name, $content);
     }
 
     /**
-     * @inheritDoc
+     * Render a blocks of content (layout NOT included)
+     *
+     * @param string $name       The path of the item
+     * @param string $content    The content
+     * @param array  $attributes The attributes for using inside the content
+     *
+     * @return string The block rendered
      */
     public function renderBlocks($name, $content, array $attributes)
     {
@@ -89,8 +100,16 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * @inheritDoc
+     * Render a page completely (layout included). The value of $content
+     * param will be placed at "page.content" attribute.
      *
+     * @param string $name       The path of the item
+     * @param string $content    The page content
+     * @param array  $attributes The attributes for using inside the content.
+     *                           "layout" attribute has a special meaning.
+     *
+     * @return string The page rendered
+    *
      * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value.
      */
     public function renderPage($name, $content, array $attributes)
@@ -148,6 +167,6 @@ class TwigRenderizer implements RenderizerInterface
             return $layoutName;
         }
 
-        throw new AttributeValueException(sprintf('Layout "%s" not found.', $name), 'layout', $contentName);
+        throw new AttributeValueException(sprintf('Layout "%s" not found.', $layoutName), 'layout', $contentName);
     }
 }

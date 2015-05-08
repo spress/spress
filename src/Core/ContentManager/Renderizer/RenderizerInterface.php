@@ -21,26 +21,26 @@ interface RenderizerInterface
     /**
      * Add a new layout
      *
-     * @param string $name
-     * @param string $content
-     * @param array  $attributes
+     * @param string $name       The name of the layout. e.g: id, path...
+     * @param string $content    The content of the layout
+     * @param array  $attributes The attributes of the layout
      */
     public function addLayout($name, $content, array $attributes = []);
 
     /**
      * Add a new include
      *
-     * @param string $name
-     * @param string $content
-     * @param array  $attributes
+     * @param string $name       $name The name of the include. e.g: id, path...
+     * @param string $content    The content of the include
+     * @param array  $attributes The attributes of the include
      */
     public function addInclude($name, $content, array $attributes = []);
 
     /**
      * Render a blocks of content (layout NOT included)
      *
-     * @param string $name       The name of the content
-     * @param string $content    The block content
+     * @param string $name       The name of the content. e.g: id, path...
+     * @param string $content    The content
      * @param array  $attributes The attributes for using inside the content
      *
      * @return string The block rendered
@@ -50,7 +50,7 @@ interface RenderizerInterface
     /**
      * Render a page completely (layout included)
      *
-     * @param string $name       The name of the page
+     * @param string $name       The name of the page. e.g: id, path...
      * @param string $content    The page content
      * @param array  $attributes The attributes for using inside the content
      *

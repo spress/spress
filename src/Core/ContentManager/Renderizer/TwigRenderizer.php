@@ -107,7 +107,6 @@ class TwigRenderizer implements RenderizerInterface
      * @param string $content    The page content
      * @param array  $attributes The attributes for using inside the content.
      *                           "layout" attribute has a special meaning.
-     *
      * @return string The page rendered
      *
      * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value.

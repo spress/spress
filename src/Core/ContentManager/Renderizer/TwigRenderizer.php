@@ -29,7 +29,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @param \Twig_Environment  $twig
      * @param \Twig_Loader_Array $arrayLoader
-     * @param array              $layoutExtension
+     * @param array              $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig"
      */
     public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader, array $layoutExtension)
     {
@@ -45,6 +45,8 @@ class TwigRenderizer implements RenderizerInterface
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout.
      *                           "layout" attribute has a special meaning.
+     *
+     * @throws \RuntimeException if a previous layout exists with the same name
      */
     public function addLayout($name, $content, array $attributes = [])
     {
@@ -73,6 +75,8 @@ class TwigRenderizer implements RenderizerInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws \RuntimeException if a previous include exists with the same name
      */
     public function addInclude($name, $content, array $attributes = [])
     {
@@ -103,13 +107,14 @@ class TwigRenderizer implements RenderizerInterface
      * Render a page completely (layout included). The value of $content
      * param will be placed at "page.content" attribute.
      *
-     * @param string $name       The path of the item
-     * @param string $content    The page content
-     * @param array  $attributes The attributes for using inside the content.
-     *                           "layout" attribute has a special meaning.
+     * @param  string $name       The path of the item
+     * @param  string $content    The page content
+     * @param  array  $attributes The attributes for using inside the content.
+     *                            "layout" attribute has a special meaning.
      * @return string The page rendered
      *
-     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value.
+     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value
+     *                                                                  or layout not found
      */
     public function renderPage($name, $content, array $attributes)
     {

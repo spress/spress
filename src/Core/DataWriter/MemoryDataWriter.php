@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\DataWriter;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * Memory data writer
+ * Memory data writer. It's used for testing purposes only.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

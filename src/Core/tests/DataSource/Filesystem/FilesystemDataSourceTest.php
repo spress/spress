@@ -90,6 +90,10 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $include = $includes['test.html'];
 
         $this->assertEquals('include', $include->getType());
+
+        $this->assertTrue($items['LICENSE']->isBinary());
+        $this->assertTrue(strlen($items['LICENSE']->getPath('absolute')) > 0);
+        $this->assertTrue(strlen($items['LICENSE']->getPath('relative')) > 0);
     }
 
     public function testIncludeFile()

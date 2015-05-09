@@ -235,7 +235,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     private function createItem($path, $attributes = [])
     {
         $item = new Item('', $path, $attributes);
-        $item->setPath($path);
+        $item->setPath($path, Item::SNAPSHOT_PATH_RELATIVE);
 
         return $item;
     }

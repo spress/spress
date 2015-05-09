@@ -33,7 +33,7 @@ class FilesystemDataWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteItem()
     {
         $item = new Item('Test content', 'my-id');
-        $item->setPath('index.html');
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_PERMALINK);
 
         $dw = new FilesystemDataWriter(new Filesystem(), $this->tmpDir);
         $dw->write($item);

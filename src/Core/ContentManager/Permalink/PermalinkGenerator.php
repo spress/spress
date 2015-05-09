@@ -162,7 +162,7 @@ class PermalinkGenerator
 
     private function getPlacehoders(ItemInterface $item)
     {
-        $fileInfo = new \SplFileInfo($item->getPath());
+        $fileInfo = new \SplFileInfo($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         $time = $this->getDateAttribute($item);
 
         $result = [
@@ -217,7 +217,7 @@ class PermalinkGenerator
         }
 
         if (is_array($attributes['categories']) === false) {
-            throw new AttributeValueException('Invalid value. Expected array.', 'categories', $item->getPath());
+            throw new AttributeValueException('Invalid value. Expected array.', 'categories', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         return implode('/', array_map(function ($a) {
@@ -247,7 +247,7 @@ class PermalinkGenerator
 
         if (isset($attributes['preserve_path_title']) === true) {
             if (is_bool($attributes['preserve_path_title']) === false) {
-                throw new AttributeValueException('Invalid value. Expected bolean', 'preserve_path_title', $item->getPath());
+                throw new AttributeValueException('Invalid value. Expected bolean', 'preserve_path_title', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
             }
 
             return $attributes['preserve_path_title'];
@@ -264,7 +264,7 @@ class PermalinkGenerator
             try {
                 return new \DateTime($attributes['date']);
             } catch (\Exception $e) {
-                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath());
+                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
             }
         }
 
@@ -284,11 +284,11 @@ class PermalinkGenerator
         $permalink = isset($attributes['permalink']) ? $attributes['permalink'] : $this->defaultPermalink;
 
         if (is_string($permalink) === false) {
-            throw new AttributeValueException('Invalid value. Expected string.', 'permalink', $item->getPath());
+            throw new AttributeValueException('Invalid value. Expected string.', 'permalink', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         if (trim($permalink) === '') {
-            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'permalink', $item->getPath());
+            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'permalink', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         return $permalink;
@@ -303,11 +303,11 @@ class PermalinkGenerator
         }
 
         if (is_string($attributes['collection']) === false) {
-            throw new AttributeValueException('Invalid value. Expected string.', 'collection', $item->getPath());
+            throw new AttributeValueException('Invalid value. Expected string.', 'collection', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         if (trim($attributes['collection']) === '') {
-            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'collection', $item->getPath());
+            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'collection', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         return $attributes['collection'];

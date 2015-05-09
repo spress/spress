@@ -252,7 +252,13 @@ class FilesystemDataSource extends AbstractDataSource
             $contentRaw = $isBinary ? '' : $file->getContents();
 
             $item = new Item($contentRaw, $id, [], $isBinary, $type);
-            $item->setPath($file->getRelativePathname());
+
+            if ($isBinary === false) {
+                $item->setPath($file->getRelativePathname(), Item::SNAPSHOT_PATH_RELATIVE);
+            } else {
+                $item->setPath($file->getrealpath(), Item::SNAPSHOT_PATH_RELATIVE);
+                $item->setPath($file->getrealpath(), Item::SNAPSHOT_PATH_ABSOLUTE);
+            }
 
             switch ($type) {
                 case Item::TYPE_LAYOUT:

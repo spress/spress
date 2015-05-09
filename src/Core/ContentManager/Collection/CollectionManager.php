@@ -112,7 +112,7 @@ class CollectionManager
     public function getCollectionForItem(ItemInterface $item)
     {
         foreach ($this->collections as $name => $collection) {
-            $itemPath = $item->getPath().'/';
+            $itemPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE).'/';
             $collectionPath = $collection->getPath().'/';
 
             if (strpos($itemPath, $collectionPath) === 0) {

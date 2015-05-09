@@ -24,7 +24,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $cm->add(new Collection('books', '_books', ['output' => true]));
 
         $item = new Item('Test of content', '_events/event-1.html', []);
-        $item->setPath('_events/event-1.html');
+        $item->setPath('_events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);
         $collection = $cm->getCollectionForItem($item);
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $collection);
@@ -33,7 +33,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $collection->getAttributes());
 
         $item = new Item('Test of content', '_books/symfony-book.html', []);
-        $item->setPath('_books/symfony-book.html');
+        $item->setPath('_books/symfony-book.html', Item::SNAPSHOT_PATH_RELATIVE);
         $collection = $cm->getCollectionForItem($item);
 
         $this->assertEquals('books', $collection->getName());
@@ -45,7 +45,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $cm->add(new Collection('events', '_events', ['output' => true]));
 
         $item = new Item('Test of content', 'member-1.html', []);
-        $item->setPath('member-1.html');
+        $item->setPath('member-1.html', Item::SNAPSHOT_PATH_RELATIVE);
         $collection = $cm->getCollectionForItem($item);
 
         $this->assertEquals('pages', $collection->getName());

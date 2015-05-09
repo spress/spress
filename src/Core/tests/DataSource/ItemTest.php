@@ -79,8 +79,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetPath()
     {
         $item = new Item('Raw content', '/index.html', []);
-        $item->setPath('index.html');
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
+        $item->setPath('/index.html', Item::SNAPSHOT_PATH_PERMALINK);
 
-        $this->assertEquals('index.html', $item->getPath());
+        $this->assertEquals('/index.html', $item->getPath());
+        $this->assertEquals('/index.html', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
+        $this->assertEquals('index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
     }
 }

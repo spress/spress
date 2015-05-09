@@ -40,7 +40,7 @@ class MemoryDataWriter implements DataWriterInterface
      */
     public function write(ItemInterface $item)
     {
-        $this->items[$item->getPath()] = $item->getContent();
+        $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item->getContent();
     }
 
     /**

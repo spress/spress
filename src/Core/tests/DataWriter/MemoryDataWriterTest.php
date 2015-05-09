@@ -19,15 +19,15 @@ class MemoryDataWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteItem()
     {
         $item = new Item('Test content', 'my-id');
-        $item->setPath('index.html', Item::SNAPSHOT_PATH_PERMALINK);
+        $item->setPath('/index.html', Item::SNAPSHOT_PATH_PERMALINK);
 
         $dw = new MemoryDataWriter();
         $dw->write($item);
 
-        $this->assertTrue($dw->existsItem('index.html'));
+        $this->assertTrue($dw->existsItem('/index.html'));
         $this->assertEquals(1, $dw->countItems());
-        $this->assertEquals('Test content', $dw->getContentItem('index.html'));
+        $this->assertEquals('Test content', $dw->getContentItem('/index.html'));
 
-        $this->assertFalse($dw->existsItem('not-found-path.html'));
+        $this->assertFalse($dw->existsItem('/not-found-path.html'));
     }
 }

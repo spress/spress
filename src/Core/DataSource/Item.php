@@ -19,10 +19,10 @@ namespace Yosymfony\Spress\Core\DataSource;
 class Item implements ItemInterface
 {
     private $id;
-    private $path;
     private $type;
     private $isBinary;
     private $snapshot;
+    private $pathSnapshot;
     private $attributes;
 
     /**
@@ -36,6 +36,7 @@ class Item implements ItemInterface
     public function __construct($content, $id, array $attributes = [], $isBinary = false, $type = self::TYPE_ITEM)
     {
         $this->snapshot = [];
+        $this->pathSnapshot = [];
         $this->attributes = [];
 
         $this->setContent($content, self::SNAPSHOT_RAW);
@@ -99,17 +100,26 @@ class Item implements ItemInterface
     /**
      * @inheritDoc
      */
-    public function getPath()
+    public function getPath($snapshotName = '')
     {
-        return $this->path;
+        if ($snapshotName) {
+            if (false == isset($this->pathSnapshot[$snapshotName])) {
+                return '';
+            }
+
+            return $this->pathSnapshot[$snapshotName];
+        }
+
+        return $this->pathSnapshot[self::SNAPSHOT_PATH_LAST];
     }
 
     /**
      * @inheritDoc
      */
-    public function setPath($value)
+    public function setPath($value, $snapshotName)
     {
-        $this->path = $value;
+        $this->pathSnapshot[$snapshotName] = $value;
+        $this->pathSnapshot[self::SNAPSHOT_PATH_LAST] = $value;
     }
 
     /**

@@ -15,7 +15,8 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
  * Memory data writer. It's used for testing purposes only.
- * This data writer uses SNAPSHOT_PATH_PERMALINK for working with items' paths.
+ * This data writer uses SNAPSHOT_PATH_PERMALINK for working
+ * with paths of items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

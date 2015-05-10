@@ -15,7 +15,11 @@ use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * File data writer
+ * File data writer.
+ *
+ * This data writer uses SNAPSHOT_PATH_PERMALINK for working
+ * with the path of the items. In case of binary item this data writer
+ * uses SNAPSHOT_PATH_SOURCE and SNAPSHOT_PATH_RELATIVE.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -49,13 +53,28 @@ class FilesystemDataWriter implements DataWriterInterface
      */
     public function write(ItemInterface $item)
     {
-        $outputPath = $this->outputDir.'/'.$item->getPath();
+        if ($item->isBinary() === true) {
+            $sourcePath = $item->getPath(ItemInterface::SNAPSHOT_PATH_SOURCE);
+            $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
-        if ($item->isBinary() === false) {
-            $this->filesystem->dumpFile($outputPath, $item->getContent());
-        } else {
-            $this->copy($item->getPath(), $outputPath);
+            if (strlen($outputPath) === 0) {
+                return;
+            }
+
+            if (strlen($sourcePath) > 0) {
+                $this->copy($sourcePath, $this->composeOutputPath($outputPath));
+            } else {
+                $this->filesystem->dumpFile($this->composeOutputPath($outputPath), $item->getContent());
+            }
         }
+
+        $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK);
+
+        if (strlen($outputPath) == 0) {
+            return;
+        }
+
+        $this->filesystem->dumpFile($this->composeOutputPath($outputPath), $item->getContent());
     }
 
     /**
@@ -63,5 +82,12 @@ class FilesystemDataWriter implements DataWriterInterface
      */
     public function tearDown()
     {
+    }
+
+    protected function composeOutputPath($relativePath)
+    {
+        $path = $this->outputDir.'/'.$relativePath;
+
+        return str_replace('//', '/', $path);
     }
 }

@@ -26,7 +26,7 @@ interface ItemInterface
     const SNAPSHOT_PATH_RELATIVE = 'relative';
     const SNAPSHOT_PATH_PERMALINK = 'permalink';
     const SNAPSHOT_PATH_LAST = 'last';
-    const SNAPSHOT_PATH_ABSOLUTE = 'absolute';
+    const SNAPSHOT_PATH_SOURCE = 'source';
 
     const TYPE_ITEM = 'item';
     const TYPE_LAYOUT = 'layout';

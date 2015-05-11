@@ -40,16 +40,6 @@ class Mirror implements ConverterInterface
     }
 
     /**
-     * Get the support extension of the converter
-     *
-     * @return array
-     */
-    public function getSupportExtension()
-    {
-        return [];
-    }
-
-    /**
      * If file's extension is support by converter
      *
      * @param string $extension Extension without dot

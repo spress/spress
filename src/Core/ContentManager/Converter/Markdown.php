@@ -31,7 +31,7 @@ class Markdown implements ConverterInterface
     public function initialize(array $config)
     {
         if (false === isset($config['markdown_ext'])) {
-            throw new \InvalidArgumentException('markdown_ext key was not found in Markdown converter');
+            throw new \InvalidArgumentException('markdown_ext key was not found in Markdown converter.');
         }
 
         $this->supportExtension = $config['markdown_ext'];
@@ -45,16 +45,6 @@ class Markdown implements ConverterInterface
     public function getPriority()
     {
         return 1;
-    }
-
-    /**
-     * Get the support extension of the converter
-     *
-     * @return array
-     */
-    public function getSupportExtension()
-    {
-        return $this->supportExtension;
     }
 
     /**

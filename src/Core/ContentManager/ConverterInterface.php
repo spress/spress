@@ -33,14 +33,6 @@ interface ConverterInterface
     public function getPriority();
 
     /**
-     * Get the support extension of the converter. Used by
-     * Content Locator.
-     *
-     * @return array
-     */
-    public function getSupportExtension();
-
-    /**
      * If file's extension is support by converter
      *
      * @param string $extension Extension without dot

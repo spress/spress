@@ -16,8 +16,8 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 /**
  * Memory data writer. It's used for testing purposes only.
  *
- * This data writer uses SNAPSHOT_PATH_PERMALINK for working
- * with the path of the items.
+ * This data writer uses SNAPSHOT_PATH_PERMALINK or SNAPSHOT_PATH_RELATIVE
+ * if binary item for working with the path of the items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -43,7 +43,11 @@ class MemoryDataWriter implements DataWriterInterface
      */
     public function write(ItemInterface $item)
     {
-        $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item->getContent();
+        if ($item->isBinary()) {
+            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE)] = $item->getContent();
+        } else {
+            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item->getContent();
+        }
     }
 
     /**

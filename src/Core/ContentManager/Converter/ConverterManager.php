@@ -50,6 +50,8 @@ class ConverterManager
      *
      * @param string $content
      * @param string $extension
+     *
+     * @return \Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
      */
     public function convertContent($content, $extension)
     {

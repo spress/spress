@@ -12,7 +12,10 @@
 namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 
 /**
- * Interface for rederizers
+ * Interface for rederizers.
+ *
+ * Renderizer are responsible for formatting items.
+ * This can be considered as a template engine.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

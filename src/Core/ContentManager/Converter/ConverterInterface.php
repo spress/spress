@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
 /**
  * Interface for converters.
+ *
  * Converters extend Spress to support new type of content.
  *
  * @author Victor Puertas <vpgugr@gmail.com>

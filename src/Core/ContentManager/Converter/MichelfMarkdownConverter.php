@@ -12,29 +12,25 @@
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
 use Michelf\MarkdownExtra;
-use Yosymfony\Spress\Core\ContentManager\ConverterInterface;
 
 /**
- * Markdown converter
+ * Markdown converter implementation using a Markdown parser from
+ * Miche Fortin: https://github.com/michelf/php-markdown
  *
  * @author Victor Pueras <vpgugr@gmail.com>
  */
-class Markdown implements ConverterInterface
+class MichelfMarkdownConverter implements ConverterInterface
 {
-    private $supportExtension = [];
+    private $supportedExtension;
 
     /**
-     * Initialize the converter
+     * Constructor
      *
-     * @param array $config Configuration parameters
+     * @param array $supportedExtension File extesion supported by the converter. Extension without dot.
      */
-    public function initialize(array $config)
+    public function __construct(array $supportedExtension)
     {
-        if (false === isset($config['markdown_ext'])) {
-            throw new \InvalidArgumentException('markdown_ext key was not found in Markdown converter.');
-        }
-
-        $this->supportExtension = $config['markdown_ext'];
+        $this->supportedExtension = $supportedExtension;
     }
 
     /**
@@ -56,7 +52,7 @@ class Markdown implements ConverterInterface
      */
     public function matches($extension)
     {
-        return in_array($extension, $this->supportExtension);
+        return in_array($extension, $this->supportedExtension);
     }
 
     /**
@@ -68,8 +64,8 @@ class Markdown implements ConverterInterface
      */
     public function convert($input)
     {
-        if (!is_string($input)) {
-            throw new \InvalidArgumentException('Expected Markdown string to parse');
+        if (is_string($input) === false) {
+            throw new \InvalidArgumentException('Expected a string value at MichelfMarkdown converter.');
         }
 
         return MarkdownExtra::defaultTransform($input);

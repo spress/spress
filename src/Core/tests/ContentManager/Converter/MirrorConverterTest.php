@@ -11,19 +11,16 @@
 
 namespace Yosymfony\Spress\Core\tests\ContentManager\Converter;
 
-use Yosymfony\Spress\Core\ContentManager\Converter\Mirror;
+use Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter;
 
-class MirrorTest extends \PHPUnit_Framework_TestCase
+class MirrorConverterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMarkDown()
+    public function testMirrorConverter()
     {
-        $converter = new Mirror();
-        $converter->initialize([]);
+        $converter = new MirrorConverter();
 
-        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\ConverterInterface', $converter);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface', $converter);
         $this->assertEquals(0, $converter->getPriority());
-        $this->assertTrue(is_array($converter->getSupportExtension()));
-        $this->assertCount(0, $converter->getSupportExtension());
         $this->assertTrue($converter->matches('myExt'));
         $this->assertEquals("<h1>hi</h1>", $converter->convert('<h1>hi</h1>'));
         $this->assertEquals('md', $converter->getOutExtension('md'));

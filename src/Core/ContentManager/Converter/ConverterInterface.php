@@ -12,19 +12,13 @@
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
 /**
- * Interface for converters
+ * Interface for converters.
+ * Converters extend Spress to support new type of content.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface ConverterInterface
 {
-    /**
-     * Initialize the converter
-     *
-     * @param array $config Configuration parameters
-     */
-    public function initialize(array $config);
-
     /**
      * Get the priority of converter
      *

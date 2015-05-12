@@ -19,15 +19,15 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testParseSite()
     {
-    	$cm = $this->getContentManager();
+        $cm = $this->getContentManager();
     }
 
     protected function getContentManager()
     {
-    	$dsm = $this->getDataSourceManager();
-    	$dw = new MemoryDataWriter();
+        $dsm = $this->getDataSourceManager();
+        $dw = new MemoryDataWriter();
 
-    	return new ContentManager($dsm, $dw);
+        return new ContentManager($dsm, $dw);
     }
 
     protected function getDataSourceManager()

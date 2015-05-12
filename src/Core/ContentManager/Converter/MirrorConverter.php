@@ -11,24 +11,13 @@
 
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
-use Yosymfony\Spress\Core\ContentManager\ConverterInterface;
-
 /**
  * Mirror converter.
  *
  * @author Victor Pueras <vpgugr@gmail.com>
  */
-class Mirror implements ConverterInterface
+class MirrorConverter implements ConverterInterface
 {
-    /**
-     * Initialize the converter
-     *
-     * @param array $config Configuration parameters
-     */
-    public function initialize(array $config)
-    {
-    }
-
     /**
      * Get the converter priority
      *

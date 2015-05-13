@@ -12,7 +12,9 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * It is the superclass for all data sources
+ * It is the superclass for all data sources.
+ *
+ * Data sources can load site data from certain locations.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

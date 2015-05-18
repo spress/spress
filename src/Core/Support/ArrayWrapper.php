@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Support;
 
 /**
-  * Array wrapper for working with arrays.
+  * A wrapper for working with arrays.
   *
   * Based on https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Arr.php
   *

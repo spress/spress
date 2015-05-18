@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Support;
 
 /**
-  * Array box is a wrapper for working with arrays.
+  * Array wrapper for working with arrays.
   *
   * Based on https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Arr.php
   *

@@ -17,7 +17,7 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
 {
     public function testAdd()
     {
-        $a = new ArrayWrapper([]);
+        $a = new ArrayWrapper();
         $a->add('name', 'Yo! Symfony');
         $a->add('name', 'Yo! Symfony 2');
         $a->add('title', 'Hi');
@@ -45,16 +45,27 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $a = new ArrayWrapper([]);
+        $a = new ArrayWrapper();
         $a->set('site.name', 'Yo! Symfony');
 
         $this->assertTrue($a->has('site.name'));
         $this->assertFalse($a->has('site.notExists'));
     }
 
+    public function testInitialize()
+    {
+        $a = new ArrayWrapper();
+        $a->setArray([
+            'name' => 'Yo! Symfony',
+        ]);
+
+        $this->assertEquals('Yo! Symfony', $a->get('name'));
+        $this->assertCount(1, $a->getArray());
+    }
+
     public function testSet()
     {
-        $a = new ArrayWrapper([]);
+        $a = new ArrayWrapper();
         $a->set('site.name', 'Yo! Symfony');
 
         $this->assertEquals('Yo! Symfony', $a->get('site.name'));

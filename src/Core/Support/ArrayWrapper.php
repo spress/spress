@@ -22,7 +22,7 @@ class ArrayWrapper
 {
     protected $array;
 
-    public function __construct(array $array)
+    public function __construct(array $array = [])
     {
         $this->array = $array;
     }
@@ -71,6 +71,16 @@ class ArrayWrapper
         }
 
         return $array;
+    }
+
+    /**
+     * Get the working array
+     *
+     * @return array
+     */
+    public function getArray()
+    {
+        return $this->array;
     }
 
     /**
@@ -134,6 +144,16 @@ class ArrayWrapper
         $array[array_shift($keys)] = $value;
 
         return $this->array;
+    }
+
+    /**
+     * Set the working array
+     *
+     * @param array $array
+     */
+    public function setArray(array $array)
+    {
+        $this->array = $array;
     }
 
     /**

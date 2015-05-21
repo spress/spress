@@ -12,8 +12,7 @@
 namespace Yosymfony\Spress\Core\Exception;
 
 /**
- * Exception class throw when the type or value of an attribute
- * is invalid
+ * Exception class throw when an attribute is missing
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

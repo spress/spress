@@ -26,6 +26,9 @@ interface GeneratorInterface
     /**
      * Generate items.
      *
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $templateItem The template item
+     * @param array                                           $attributes   The attribute model uses for generating the content
+     *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface[]
      */
     public function generateItems(ItemInterface $templateItem, array $attributes);

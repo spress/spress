@@ -96,6 +96,30 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $pages);
     }
 
+    public function testPaginateSubArray()
+    {
+        $a = new ArrayWrapper();
+        $a->setArray([
+            'level1' => [
+                'level2' => [
+                    'element 1' => 'value 1',
+                    'element 2' => 'value 2',
+                    'element 3' => 'value 3',
+                    'element 4' => 'value 4',
+                    'element 5' => 'value 5',
+                    'element 6' => 'value 6',
+                ],
+            ],
+        ]);
+
+        $pages = $a->paginate(5, 1, 'level1.level2');
+
+        $this->assertCount(2, $pages);
+        $this->assertCount(5, $pages[1]);
+        $this->assertCount(1, $pages[2]);
+        $this->assertEquals('value 1', $pages[1]['element 1']);
+    }
+
     public function testSet()
     {
         $a = new ArrayWrapper();

@@ -116,22 +116,28 @@ class ArrayWrapper
     /**
      * Paginate the array
      *
-     * @param int $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array.
-     * @param int $initialPage Initial page. Page 1 by default.
+     * @param int    $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array.
+     * @param int    $initialPage Initial page. Page 1 by default.
+     * @param string $key         Element to paginate using "dot" notation.
      *
      * @return array A list of pages with an array of elements associated with each page
      */
-    public function paginate($maxPerPage, $initialPage = 1)
+    public function paginate($maxPerPage, $initialPage = 1, $key = null)
     {
         $result = [];
         $page = $initialPage;
+        $array = $this->array;
 
         if ($maxPerPage <= 0) {
             return $result;
         }
 
-        for ($offset = 0; $offset < count($this->array);) {
-            $slice = array_slice($this->array, $offset, $maxPerPage, true);
+        if (is_null($key) === false) {
+            $array = $this->get($key);
+        }
+
+        for ($offset = 0; $offset < count($array);) {
+            $slice = array_slice($array, $offset, $maxPerPage, true);
             $result[$page] = $slice;
 
             $page++;

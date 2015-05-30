@@ -59,6 +59,16 @@ class CollectionManager
     }
 
     /**
+     * Sets a collection.
+     *
+     * @param \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface $collection
+     */
+    public function setCollection(CollectionInterface $collection)
+    {
+        $this->collections[$collection->getName()] = $collection;
+    }
+
+    /**
      * Gets a collection.
      *
      * @param string $name

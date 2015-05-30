@@ -22,6 +22,9 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $cm = new CollectionManager();
         $cm->addCollection(new Collection('events', '_events', ['output' => true]));
         $cm->addCollection(new Collection('books', '_books', ['output' => true]));
+        $cm->setCollection(new Collection('posts', '_posts', ['output' => true]));
+
+        $this->assertEquals(4, $cm->countCollection());
 
         $item = new Item('Test of content', '_events/event-1.html', []);
         $item->setPath('_events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);
@@ -80,5 +83,14 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $cm->addCollection(new Collection('events', '_events', ['output' => true]));
 
         $cm->getCollection('books');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testAddExistingCollection()
+    {
+        $cm = new CollectionManager();
+        $cm->addCollection(new Collection('pages', '_pages', ['output' => true]));
     }
 }

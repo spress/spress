@@ -29,7 +29,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager', $cm);
 
-        $collection = $cm->get('events');
+        $collection = $cm->getCollection('events');
 
         $this->assertEquals('events', $collection->getName());
         $this->assertEquals('_events', $collection->getPath());
@@ -49,7 +49,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager', $cm);
 
-        $collection = $cm->get('events');
+        $collection = $cm->getCollection('events');
 
         $this->assertEquals('events', $collection->getName());
         $this->assertEquals('_events', $collection->getPath());

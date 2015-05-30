@@ -21,7 +21,7 @@ class GeneratorManager
     private $generators = [];
 
     /**
-     * Adds a generator.
+     * Adds a new generator.
      *
      * @param string                                                             $name      The generator name.
      * @param \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
@@ -55,7 +55,7 @@ class GeneratorManager
      *
      * @return \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface
      *
-     * @throws RuntimeException If the generator is not defined
+     * @throws RuntimeException If the generator is not defined.
      */
     public function getGenerator($name)
     {
@@ -67,7 +67,7 @@ class GeneratorManager
     }
 
     /**
-     * Checks if a generator exists
+     * Checks if a generator exists.
      *
      * @param string $name The generator name.
      *
@@ -79,7 +79,7 @@ class GeneratorManager
     }
 
     /**
-     * Counts the generators registered
+     * Counts the generators registered.
      *
      * @return int
      */

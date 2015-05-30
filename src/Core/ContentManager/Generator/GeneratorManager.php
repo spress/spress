@@ -21,16 +21,20 @@ class GeneratorManager
     private $generators = [];
 
     /**
-     * Adds a generator if not exists previously.
+     * Adds a generator.
      *
-     * @param string                                                            $name      The generator name.
-     * @param Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
+     * @param string                                                             $name      The generator name.
+     * @param \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
+     *
+     * @throws RuntimeException If a previous generator exists with the same name.
      */
     public function addGenerator($name, GeneratorInterface $generator)
     {
-        if ($this->has($name) === false) {
-            $this->set($name, $generator);
+        if ($this->hasGenerator($name) === true) {
+            throw new \RuntimeException(sprintf('A previous generator exists with the same name: "%s".', $name));
         }
+
+        $this->setGenerator($name, $generator);
     }
 
     /**
@@ -38,16 +42,10 @@ class GeneratorManager
      *
      * @param string                                                             $name      The generator name.
      * @param \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
-     *
-     * @throws RuntimeException If a previous generator exists with the same name.
      */
     public function setGenerator($name, GeneratorInterface $generator)
     {
-        if ($this->has($name) === false) {
-            throw new \RuntimeException(sprintf('A previous generator exists with the same name: "%s".', $name));
-        }
-
-        $this->generators[$name] = $generators;
+        $this->generators[$name] = $generator;
     }
 
     /**
@@ -57,12 +55,12 @@ class GeneratorManager
      *
      * @return \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface
      *
-     * @throws InvalidArgumentException If the generator is not defined
+     * @throws RuntimeException If the generator is not defined
      */
     public function getGenerator($name)
     {
-        if ($this->has($name) === false) {
-            throw new \InvalidArgumentException(sprintf('Generator not found: "%s".', $name));
+        if ($this->hasGenerator($name) === false) {
+            throw new \RuntimeException(sprintf('Generator not found: "%s".', $name));
         }
 
         return $this->generators[$name];

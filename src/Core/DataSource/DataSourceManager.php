@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * Data source manager
+ * Data source manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -24,7 +24,7 @@ class DataSourceManager
     private $includes;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -33,7 +33,7 @@ class DataSourceManager
     }
 
      /**
-     * Returns the list of items
+     * Returns the list of items.
      *
      * @return array
      */
@@ -63,7 +63,9 @@ class DataSourceManager
     }
 
     /**
-     * Load the items across registered data sources
+     * Load the items from the registered data sources.
+     *
+     * @throws RuntimeException If a previous data sources exists with the same id.
      */
     public function load()
     {
@@ -79,21 +81,39 @@ class DataSourceManager
     }
 
     /**
-     * List with the name of the data sources registered.
+     * Adds a new data source.
      *
-     * @return array
+     * @param string             $name       The name of the data source.
+     * @param AbstractDataSource $dataSource
+     *
+     * @throws \RuntimeException If a previous data sources exists with the same name.
      */
-    public function getDataSourceNames()
+    public function addDataSource($name, AbstractDataSource $dataSource)
     {
-        return array_keys($this->dataSources);
+        if ($this->hasDataSource($name)) {
+            throw new \RuntimeException(sprintf('A previous data source exists with the same name: "%s".', $name));
+        }
+
+        $this->dataSources[$name] = $dataSource;
     }
 
     /**
-     * Get a data source
+     * Sets a data source.
+     *
+     * @param string             $name       The name of the data source.
+     * @param AbstractDataSource $dataSource
+     */
+    public function setDataSource($name, AbstractDataSource $dataSource)
+    {
+        $this->dataSources[$name] = $dataSource;
+    }
+
+    /**
+     * Gets a data source.
      *
      * @return \Yosymfony\Spress\Core\DataSource\AbstractDataSource
      *
-     * @throws \RuntimeException if data source not found
+     * @throws \RuntimeException If data source not found.
      */
     public function getDataSource($name)
     {
@@ -105,9 +125,19 @@ class DataSourceManager
     }
 
     /**
-     * Exists the data source?
+     * Gets the name of the registered data sources.
      *
-     * @param string $name
+     * @return string[]
+     */
+    public function getDataSourceNames()
+    {
+        return array_keys($this->dataSources);
+    }
+
+    /**
+     * Checks if a data source exists.
+     *
+     * @param string $name The name of the data source.
      *
      * @return bool
      */
@@ -117,26 +147,17 @@ class DataSourceManager
     }
 
     /**
-     * Add a new data source
-     *
-     * @param AbstractDataSource $dataSource
-     * @param string             $name       The name of the data source
-     *
-     * @throws \RuntimeException if a previous data sources exists with the same name
+     * Clears all data sources registered.
      */
-    public function addDataSource(AbstractDataSource $dataSource, $name)
+    public function clearDataSource()
     {
-        if (isset($this->dataSources[$name])) {
-            throw new \RuntimeException(sprintf('A previous data source exists with the same name: "%s".', $name));
-        }
-
-        $this->dataSources[$name] = $dataSource;
+        $this->dataSources = [];
     }
 
     /**
-     * Remove a data source from the list
+     * Removes a data source.
      *
-     * @param string $name The name of the data source
+     * @param string $name The name of the data source.
      */
     public function removeDataSource($name)
     {

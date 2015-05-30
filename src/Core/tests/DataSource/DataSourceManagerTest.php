@@ -40,7 +40,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->addDataSource($fsDataSource, 'filesystem');
+        $dsm->addDataSource('filesystem', $fsDataSource);
 
         $this->assertTrue($dsm->hasDataSource('filesystem'));
 
@@ -59,7 +59,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->addDataSource($fsDataSource, 'filesystem');
+        $dsm->addDataSource('filesystem', $fsDataSource);
         $dsm->load();
         $dsm->load();
 
@@ -81,8 +81,8 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
-        $dsm->addDataSource($fsDataSource2, 'filesystem_2');
+        $dsm->addDataSource('filesystem_1', $fsDataSource1);
+        $dsm->setDataSource('filesystem_2', $fsDataSource2);
         $dsm->load();
 
         $this->assertCount(2, $dsm->getDataSourceNames());
@@ -105,8 +105,8 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
-        $dsm->addDataSource($fsDataSource2, 'filesystem_2');
+        $dsm->addDataSource('filesystem_1', $fsDataSource1);
+        $dsm->addDataSource('filesystem_2', $fsDataSource2);
         $dsm->removeDataSource('filesystem_1');
         $dsm->load();
 
@@ -127,7 +127,7 @@ class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
             'text_extensions'   => ['htm', 'html', 'md', 'mkd', 'xml'],
         ]);
 
-        $dsm->addDataSource($fsDataSource1, 'filesystem_1');
+        $dsm->addDataSource('filesystem_1', $fsDataSource1);
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\AbstractDataSource', $dsm->getDataSource('filesystem_1'));
     }

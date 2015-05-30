@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Collection;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * Collection manager
+ * Collection manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -28,18 +28,20 @@ class CollectionManager
      */
     public function __construct()
     {
-        $this->clear();
-        $this->add(new Collection('pages', '', []));
+        $this->clearCollection();
+        $this->addCollection(new Collection('pages', '', []));
     }
 
     /**
-     * Add a new collection
+     * Adds a new collection.
      *
      * @param \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface $collection
+     *
+     * @throws RuntimeException If a previous collection exists with the same name.
      */
-    public function add(CollectionInterface $collection)
+    public function addCollection(CollectionInterface $collection)
     {
-        if ($this->has($collection->getName()) === true) {
+        if ($this->hasCollection($collection->getName()) === true) {
             throw new \RuntimeException(sprintf('A previous collection exists with the same name: "%s".', $collection->getName()));
         }
 
@@ -47,27 +49,27 @@ class CollectionManager
     }
 
     /**
-     * Count the collections registered
+     * Counts the collections registered.
      *
      * @return int
      */
-    public function count()
+    public function countCollection()
     {
         return count($this->collections);
     }
 
     /**
-     * Get a collection
+     * Gets a collection.
      *
      * @param string $name
      *
      * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface
      *
-     * @throws \RuntimeException if collection not found
+     * @throws \RuntimeException If the collection is not defined.
      */
-    public function get($name)
+    public function getCollection($name)
     {
-        if (false === $this->has($name)) {
+        if (false === $this->hasCollection($name)) {
             throw new \RuntimeException(sprintf('Collection: "%s" not found.', $name));
         }
 
@@ -75,29 +77,29 @@ class CollectionManager
     }
 
     /**
-     * Has a collection with the name specified?
+     * Checks if a collection exists.
      *
      * @param string $name The collection's name
      *
      * @return bool
      */
-    public function has($name)
+    public function hasCollection($name)
     {
         return isset($this->collections[$name]);
     }
 
     /**
-     * Clear the collections
+     * Clears all collections registered.
      */
-    public function clear()
+    public function clearCollection()
     {
         $this->collections = [];
     }
 
     /**
-     * Remove a collection
+     * Removes a collection.
      *
-     * @param string $name The collection's name
+     * @param string $name The collection's name.
      */
     public function remove($name)
     {
@@ -105,7 +107,7 @@ class CollectionManager
     }
 
     /**
-     * Collection matching of a item
+     * Collection matching of a item.
      *
      * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface
      */
@@ -120,6 +122,6 @@ class CollectionManager
             }
         }
 
-        return $this->get('pages');
+        return $this->getCollection('pages');
     }
 }

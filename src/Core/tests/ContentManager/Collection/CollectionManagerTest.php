@@ -20,8 +20,8 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionForItems()
     {
         $cm = new CollectionManager();
-        $cm->add(new Collection('events', '_events', ['output' => true]));
-        $cm->add(new Collection('books', '_books', ['output' => true]));
+        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
+        $cm->addCollection(new Collection('books', '_books', ['output' => true]));
 
         $item = new Item('Test of content', '_events/event-1.html', []);
         $item->setPath('_events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);
@@ -42,7 +42,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
     public function testDefaultCollection()
     {
         $cm = new CollectionManager();
-        $cm->add(new Collection('events', '_events', ['output' => true]));
+        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
 
         $item = new Item('Test of content', 'member-1.html', []);
         $item->setPath('member-1.html', Item::SNAPSHOT_PATH_RELATIVE);
@@ -55,20 +55,20 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
     public function testManageCollection()
     {
         $cm = new CollectionManager();
-        $cm->add(new Collection('events', '_events', ['output' => true]));
-        $cm->add(new Collection('books', '_books', ['output' => true]));
+        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
+        $cm->addCollection(new Collection('books', '_books', ['output' => true]));
 
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->get('events'));
-        $this->assertTrue($cm->has('events'));
-        $this->assertEquals(3, $cm->count());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->getCollection('events'));
+        $this->assertTrue($cm->hasCollection('events'));
+        $this->assertEquals(3, $cm->countCollection());
 
         $cm->remove('events');
 
-        $this->assertEquals(2, $cm->count());
+        $this->assertEquals(2, $cm->countCollection());
 
-        $cm->clear();
+        $cm->clearCollection();
 
-        $this->assertEquals(0, $cm->count());
+        $this->assertEquals(0, $cm->countCollection());
     }
 
     /**
@@ -77,8 +77,8 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionNotFound()
     {
         $cm = new CollectionManager();
-        $cm->add(new Collection('events', '_events', ['output' => true]));
+        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
 
-        $cm->get('books');
+        $cm->getCollection('books');
     }
 }

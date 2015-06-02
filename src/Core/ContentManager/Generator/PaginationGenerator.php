@@ -50,7 +50,7 @@ class PaginationGenerator implements GeneratorInterface
      *
      * @throws Yosymfony\Spress\Core\Exception\AttributeValueException if bad attribute value
      */
-    public function generateItems(ItemInterface $templateItem, array $attributes)
+    public function generateItems(ItemInterface $templateItem, array $siteAttributes)
     {
         $result = [];
 
@@ -60,7 +60,7 @@ class PaginationGenerator implements GeneratorInterface
             throw new AttributeValueException('Items per page value must be great than 0.', 'max_page', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $arr = $this->support->getArrayWrapper($attributes);
+        $arr = $this->support->getArrayWrapper($siteAttributes);
 
         if ($arr->has($options['provider']) === false || is_array($provider = $arr->get($options['provider'])) === false) {
             throw new AttributeValueException('Provider for pagination not found.', 'provider', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));

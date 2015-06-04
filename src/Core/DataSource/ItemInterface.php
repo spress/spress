@@ -21,7 +21,8 @@ interface ItemInterface
     const SNAPSHOT_RAW = 'raw';
     const SNAPSHOT_LAST = 'last';
     const SNAPSHOT_AFTER_CONVERT = 'after_convert';
-    const SNAPSHOT_AFTER_RENDER = 'after_render';
+    const SNAPSHOT_AFTER_RENDER_BLOCKS = 'after_render_blocks';
+    const SNAPSHOT_AFTER_PAGE = 'after_render_page';
 
     const SNAPSHOT_PATH_RELATIVE = 'relative';
     const SNAPSHOT_PATH_PERMALINK = 'permalink';

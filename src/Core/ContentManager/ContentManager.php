@@ -165,10 +165,12 @@ class ContentManager
             $this->processPermalink($item);
 
             $snapshotRender = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
+            $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
         }
 
         foreach ($this->items as $item) {
             $snapshotPage = $this->renderPage->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
+            $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_PAGE);
 
             $this->dataWriter->write($item);
         }

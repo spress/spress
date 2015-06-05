@@ -102,7 +102,7 @@ class ContentManager
      */
     public function parseSite(array $attributes, array $spressAttributes)
     {
-        $this->attributes = $siteAttributes;
+        $this->attributes = $attributes;
         $this->spressAttributes = $spressAttributes;
 
         $this->reset();
@@ -110,7 +110,7 @@ class ContentManager
         $this->process();
         $this->finish();
 
-        return $this->dataResult;
+        return $this->parseResult;
     }
 
     private function reset()
@@ -171,7 +171,7 @@ class ContentManager
         }
 
         foreach ($this->items as $item) {
-            $snapshotPage = $this->renderPage->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
+            $snapshotPage = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
             $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_PAGE);
 
             $this->dataWriter->write($item);
@@ -200,7 +200,7 @@ class ContentManager
     private function processCollection(ItemInterface $item)
     {
         $collection = $this->CollectionManager->getCollectionForItem($item);
-        $collectionName = $collection->getAttributes();
+        $collectionName = $collection->getName();
 
         $attributes = $item->getAttributes();
         $attributes['collection'] = $collectionName;
@@ -209,7 +209,7 @@ class ContentManager
 
         $item->setAttributes($newAttributes);
 
-        if (array_key_exists($this->siteAttributes['site'], $collectionName) === false) {
+        if (array_key_exists($collectionName, $this->siteAttributes['site']) === false) {
             $this->siteAttributes['site'][$collectionName] = [];
             $this->siteAttributes['site']['collections'][$collectionName] = $this->getCollectionAttributes($collection);
         }
@@ -260,7 +260,7 @@ class ContentManager
         $item->setPath($permalink->getPath(), ItemInterface::SNAPSHOT_PATH_PERMALINK);
 
         $attributes = $item->getAttributes();
-        $attributes['url'] = $collection->getUrlPath();
+        $attributes['url'] = $permalink->getUrlPath();
 
         $item->setAttributes($attributes);
     }

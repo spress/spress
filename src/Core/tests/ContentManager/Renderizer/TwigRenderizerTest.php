@@ -31,6 +31,8 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $rendered = $renderizer->renderBlocks('2015/05/04/hello.html', 'This is a new post called "{{ name }}".', ['name' => 'hello']);
 
         $this->assertEquals('This is a new post called "hello".', $rendered);
+
+        $renderizer->clear();
     }
 
     public function testRenderTemplateWithInclude()

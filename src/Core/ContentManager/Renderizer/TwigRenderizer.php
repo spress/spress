@@ -33,9 +33,10 @@ class TwigRenderizer implements RenderizerInterface
      */
     public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader, array $layoutExtension)
     {
+        $this->arrayLoaderOrg = $arrayLoader;
         $this->twig = $twig;
-        $this->arrayLoader = $arrayLoader;
         $this->layoutExtension = $layoutExtension;
+        $this->arrayLoader = $arrayLoader;
     }
 
     /**

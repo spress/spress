@@ -119,6 +119,8 @@ class ContentManager
         $this->itemsGenerator = [];
         $this->siteAttributes = [];
 
+        $this->renderizer->clear();
+
         $this->parseResult = [
             'total_post' => 0,
             'processed_post' => 0,

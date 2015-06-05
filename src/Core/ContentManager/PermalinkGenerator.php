@@ -18,5 +18,4 @@ namespace Yosymfony\Spress\Core\ContentManager;
  */
 class PermalinkGenerator
 {
-	
 }

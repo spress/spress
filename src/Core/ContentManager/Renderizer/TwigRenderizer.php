@@ -88,6 +88,15 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function clear()
+    {
+        $this->twig->clearCacheFiles();
+        $this->twig->clearTemplateCache();
+    }
+
+    /**
      * Render a blocks of content (layout NOT included)
      *
      * @param string $name       The path of the item

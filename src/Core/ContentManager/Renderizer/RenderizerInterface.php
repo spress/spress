@@ -40,6 +40,30 @@ interface RenderizerInterface
     public function addInclude($name, $content, array $attributes = []);
 
     /**
+     * Removes a layout.
+     *
+     * @param string $name The layout name.
+     */
+    public function removeLayout($name);
+
+    /**
+     * Removes a include.
+     *
+     * @param string $name The include name.
+     */
+    public function removeInclude($name);
+
+    /**
+     * Clears all layout registered.
+     */
+    public function clearLayout();
+
+    /**
+     * Clears all includes registered.
+     */
+    public function clearInclude();
+
+    /**
      * Render a blocks of content (layout NOT included)
      *
      * @param string $name       The name of the content. e.g: id, path...

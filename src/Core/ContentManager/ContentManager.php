@@ -107,7 +107,7 @@ class ContentManager
 
         $this->reset();
         $this->setUp();
-        $this->process()
+        $this->process();
         $this->finish();
 
         return $this->dataResult;
@@ -209,7 +209,7 @@ class ContentManager
 
         $item->setAttributes($newAttributes);
 
-        if (array_key_exists($this->siteAttributes['site'], $collectionName === false) {
+        if (array_key_exists($this->siteAttributes['site'], $collectionName) === false) {
             $this->siteAttributes['site'][$collectionName] = [];
             $this->siteAttributes['site']['collections'][$collectionName] = $this->getCollectionAttributes($collection);
         }
@@ -221,7 +221,7 @@ class ContentManager
     {
         $attributes = $item->getAttributes();
 
-        return isset($attributes['generator'];
+        return isset($attributes['generator']);
     }
 
     private function processGenerator(ItemInterface $item)
@@ -303,9 +303,9 @@ class ContentManager
             throw new AttributeValueException('Invalid timezone. Expected string at site attributes.', 'timezone');
         }
 
-        if ($timezone){
+        if ($timezone) {
             date_default_timezone_set($timezone);
-            
+
             return;
         }
 

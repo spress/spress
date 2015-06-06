@@ -210,6 +210,23 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/title-post/index.html', $permalink->getUrlPath());
     }
 
+    public function testPermalinkForBinaryItem()
+    {
+        $pmg = new PermalinkGenerator('pretty');
+
+        $item = $this->createItem('spress.phar', [], true);
+        $permalink = $pmg->getPermalink($item);
+
+        $this->assertEquals('spress.phar', $permalink->getPath());
+        $this->assertEquals('/spress.phar', $permalink->getUrlPath());
+
+        $item = $this->createItem('/download/spress.phar', [], true);
+        $permalink = $pmg->getPermalink($item);
+
+        $this->assertEquals('download/spress.phar', $permalink->getPath());
+        $this->assertEquals('/download/spress.phar', $permalink->getUrlPath());
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */
@@ -232,9 +249,9 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         ]));
     }
 
-    private function createItem($path, $attributes = [])
+    private function createItem($path, $attributes = [], $binary = false)
     {
-        $item = new Item('', $path, $attributes);
+        $item = new Item('', $path, $attributes, $binary);
         $item->setPath($path, Item::SNAPSHOT_PATH_RELATIVE);
 
         return $item;

@@ -62,7 +62,7 @@ class PermalinkGenerator
     }
 
     /**
-     * Get a permalink.
+     * Get a permalink. For binary items URL path and path point to SNAPSHOT_PATH_RELATIVE.
      *
      * Item's attributes with special meaning:
      *  - title: title of the item.
@@ -81,6 +81,14 @@ class PermalinkGenerator
     {
         $placeholders = $this->getPlacehoders($item);
         $permalinkStyle = $this->getPermalinkAttribute($item);
+
+        if ($item->isBinary() === true) {
+            $urlTemplate = '/:path/:basename.:extension';
+            $path = $this->generatePath($urlTemplate, $placeholders);
+            $urlPath = $this->generateUrlPath($urlTemplate, $placeholders);
+
+            return new Permalink($path, $urlPath);
+        }
 
         switch ($permalinkStyle) {
             case 'none':

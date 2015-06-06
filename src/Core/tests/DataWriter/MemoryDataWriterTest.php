@@ -26,7 +26,7 @@ class MemoryDataWriterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($dw->existsItem('/index.html'));
         $this->assertEquals(1, $dw->countItems());
-        $this->assertEquals('Test content', $dw->getContentItem('/index.html'));
+        $this->assertEquals('Test content', $dw->getItem('/index.html')->getContent());
         $this->assertCount(1, $dw->getItems());
 
         $this->assertFalse($dw->existsItem('/not-found-path.html'));

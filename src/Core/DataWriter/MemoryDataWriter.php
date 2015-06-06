@@ -16,15 +16,15 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 /**
  * Memory data writer. It's used for testing purposes only.
  *
- * This data writer uses SNAPSHOT_PATH_PERMALINK or SNAPSHOT_PATH_RELATIVE
- * if binary item for working with the path of the items.
- *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class MemoryDataWriter implements DataWriterInterface
 {
     protected $items;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->setUp();
@@ -44,9 +44,9 @@ class MemoryDataWriter implements DataWriterInterface
     public function write(ItemInterface $item)
     {
         if ($item->isBinary()) {
-            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE)] = $item->getContent();
+            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE)] = $item;
         } else {
-            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item->getContent();
+            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item;
         }
     }
 
@@ -72,7 +72,7 @@ class MemoryDataWriter implements DataWriterInterface
      *
      * This method is for internal use only and should never be called directly.
      *
-     * @param string $path Relative path of the content
+     * @param string $path Relative path of the content.
      *
      * @return bool
      */
@@ -88,9 +88,9 @@ class MemoryDataWriter implements DataWriterInterface
      *
      * @param string $path Relative path of the content.
      *
-     * @return string
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
      */
-    public function getContentItem($path)
+    public function getItem($path)
     {
         return $this->items[$path];
     }

@@ -22,20 +22,20 @@ namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 interface RenderizerInterface
 {
     /**
-     * Add a new layout
+     * Add a new layout.
      *
      * @param string $name       The name of the layout. e.g: id, path...
-     * @param string $content    The content of the layout
-     * @param array  $attributes The attributes of the layout
+     * @param string $content    The content of the layout.
+     * @param array  $attributes The attributes of the layout.
      */
     public function addLayout($name, $content, array $attributes = []);
 
     /**
-     * Add a new include
+     * Add a new include.
      *
      * @param string $name       $name The name of the include. e.g: id, path...
-     * @param string $content    The content of the include
-     * @param array  $attributes The attributes of the include
+     * @param string $content    The content of the include.
+     * @param array  $attributes The attributes of the include.
      */
     public function addInclude($name, $content, array $attributes = []);
 
@@ -45,24 +45,25 @@ interface RenderizerInterface
     public function clear();
 
     /**
-     * Render a blocks of content (layout NOT included)
+     * Render a blocks of content (layout NOT included).
      *
      * @param string $name       The name of the content. e.g: id, path...
-     * @param string $content    The content
-     * @param array  $attributes The attributes for using inside the content
+     * @param string $content    The content.
+     * @param array  $attributes The attributes for using inside the content.
      *
      * @return string The block rendered
      */
     public function renderBlocks($name, $content, array $attributes);
 
     /**
-     * Render a page completely (layout included)
+     * Render a page completely (layout included).
      *
-     * @param string $name       The name of the page. e.g: id, path...
-     * @param string $content    The page content
-     * @param array  $attributes The attributes for using inside the content
+     * @param string $name           The name of the page. e.g: id, path...
+     * @param string $content        The page content.
+     * @param string $layoutName     The name of the layout.
+     * @param array  $siteAttributes The attributes for using inside the content.
      *
-     * @return string The page rendered
+     * @return string The page rendered.
      */
-    public function renderPage($name, $content, array $attributes);
+    public function renderPage($name, $content, $layoutName, array $siteAttributes);
 }

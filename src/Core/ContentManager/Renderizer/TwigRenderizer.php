@@ -117,32 +117,32 @@ class TwigRenderizer implements RenderizerInterface
      * Render a page completely (layout included). The value of $content
      * param will be placed at "page.content" attribute.
      *
-     * @param  string $name       The path of the item
-     * @param  string $content    The page content
-     * @param  array  $attributes The attributes for using inside the content.
-     *                            "layout" attribute has a special meaning.
+     * @param  string $name           The path of the item.
+     * @param  string $content        The page content.
+     * @param  string $layoutName     The layout name.
+     * @param  array  $siteAttributes The attributes for using inside the content.
+     *                                "layout" attribute has a special meaning.
      * @return string The page rendered
      *
      * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value
      *                                                                  or layout not found
      */
-    public function renderPage($name, $content, array $attributes)
+    public function renderPage($name, $content, $layoutName, array $siteAttributes)
     {
-        $layout = $this->getLayoutAttribute($attributes, $name);
-
-        if ($layout) {
+        if ($layoutName) {
+            $layout = $this->getLayoutNameWithNamespace($layoutName);
             $fullLayout = $this->getLayoutWithExtension($layout, $name);
 
-            if (isset($attributes['page']) === false) {
-                $attributes['page'] = [];
+            if (isset($siteAttributes['page']) === false) {
+                $siteAttributes['page'] = [];
             }
 
-            $attributes['page']['content'] = $content;
+            $siteAttributes['page']['content'] = $content;
 
             $content = sprintf('{%% extends "%s" %%}', $fullLayout);
         }
 
-        return $this->renderBlocks($name, $content, $attributes);
+        return $this->renderBlocks($name, $content, $siteAttributes);
     }
 
     protected function getLayoutAttribute(array $attributes, $contentName)

@@ -49,7 +49,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
     {
         $renderizer = $this->getRenderizer();
         $renderizer->addLayout('default.twig', '<h1>Hi</h1>{% block content %}{{ page.content }}{% endblock %}');
-        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', ['layout' => 'default']);
+        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'default', []);
 
         $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
     }
@@ -59,7 +59,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $renderizer = $this->getRenderizer();
         $renderizer->addLayout('default', '<html></body>{% block page %}{{ page.content }}{% endblock %}</body></html>');
         $renderizer->addLayout('page', '{% block page %}<h1>Hi</h1>{{ page.content }}{% endblock %}', ['layout' => 'default']);
-        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', ['layout' => 'page']);
+        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'page', []);
 
         $this->assertEquals('<html></body><h1>Hi</h1>Yo! Symfony</body></html>', $rendered);
     }
@@ -70,7 +70,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
     public function testRenderTemplateLayoutNotFound()
     {
         $renderizer = $this->getRenderizer();
-        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', ['layout' => 'default']);
+        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'default', []);
 
         $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
     }

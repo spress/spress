@@ -21,6 +21,7 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
@@ -166,13 +167,14 @@ class ContentManager
             $this->convertItem($item);
             $this->processPermalink($item);
 
-            $snapshotRender = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
+            $snapshotRender = $this->renderBlocks($item);
             $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
         }
 
         foreach ($this->items as $item) {
-            $snapshotPage = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->attributes);
-            $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_PAGE);
+            $snapshotPage = $this->renderPage($item);
+
+            $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_PAGE);
 
             $this->dataWriter->write($item);
         }
@@ -195,6 +197,18 @@ class ContentManager
         foreach ($includes as $item) {
             $this->renderizer->addInclude($item->getId(), $item->getContent(), $item->getAttributes());
         }
+    }
+
+    private function renderBlocks(ItemInterface $item)
+    {
+        return $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttributes);
+    }
+
+    private function renderPage(ItemInterface $item)
+    {
+        $layout = $this->getLayoutAttribute($item);
+
+        return $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttributes);
     }
 
     private function processCollection(ItemInterface $item)
@@ -273,6 +287,7 @@ class ContentManager
         $this->siteAttributes['site']['collections'] = [];
         $this->siteAttributes['site']['categories'] = [];
         $this->siteAttributes['site']['tags'] = [];
+        $this->siteAttributes['page'] = [];
     }
 
     private function getItemAttributes(ItemInterface $item)
@@ -310,5 +325,24 @@ class ContentManager
         }
 
         date_default_timezone_set('UTC');
+    }
+
+    private function getLayoutAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (array_key_exists('layout', $attributes) === false) {
+            return;
+        }
+
+        if (is_string($attributes['layout']) === false) {
+            throw new AttributeValueException('Invalid value. Expected string.', 'layout', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
+
+        if (strlen($attributes['layout']) == 0) {
+            throw new AttributeValueException('Invalid value. Expected a non-empty string.', 'layout', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
+
+        return $attributes['layout'];
     }
 }

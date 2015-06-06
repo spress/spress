@@ -11,23 +11,101 @@
 
 namespace Yosymfony\Spress\Core\tests\ContentManager;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
+use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
+use Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator;
+use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManagerBuilder;
+use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
+use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
+use Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter;
+use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
+use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
+use Yosymfony\Spress\Core\IO\NullIO;
+use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testParseSite()
+    public function setUp()
     {
-        $cm = $this->getContentManager();
+        \Twig_Autoloader::register();
     }
 
-    protected function getContentManager()
+    public function testParseSite()
     {
-        $dsm = $this->getDataSourceManager();
-        $dw = new MemoryDataWriter();
+        $attributes = [
+            'site_name' => 'My tests site',
+        ];
 
-        return new ContentManager($dsm, $dw);
+        $spressAttributes = [
+            'version'           => '2.0.0',
+            'version_id'        => '20000',
+            'major_version'     => '2',
+            'minor_version'     => '0',
+            'release_version'   => '0',
+            'extra_version'     => 'dev',
+        ];
+
+        $dw = new MemoryDataWriter();
+        $cm = $this->getContentManager($dw);
+        $cm->parseSite($attributes, $spressAttributes);
+
+        $this->assertCount(12, $dw->getItems());
+
+        $item = $dw->getItem('2013/09/19/new-book/index.html');
+
+        $this->assertContains('<!DOCTYPE HTML>', $item->getContent());
+    }
+
+    protected function getContentManager($dataWriter)
+    {
+        
+        $dsm = $this->getDataSourceManager();
+        $gm = $this->getGeneratorManager();
+        $cm = $this->getConverterManager();
+        $com = $this->getCollectionManager();
+        $pg = new PermalinkGenerator('pretty');
+        $renderizer = $this->getRenderizer();
+        $dispatcher = new EventDispatcher();
+        $io = new NullIO();
+
+        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $dispatcher, $io);
+    }
+
+    protected function getCollectionManager()
+    {
+        $config = [
+            'events' => [
+                'output' => true,
+                'title'  => 'Events',
+            ],
+        ];
+
+        $builder = new CollectionManagerBuilder();
+        $cm = $builder->buildFromConfigArray($config);
+
+        return $cm;
+    }
+
+    protected function getConverterManager()
+    {
+        $cm = new ConverterManager();
+        $cm->addConverter(new MirrorConverter());
+        $cm->addConverter(new MichelfMarkdownConverter(['markdown', 'mkd', 'mkdn', 'md']));
+
+        return $cm;
+    }
+
+    protected function getGeneratorManager()
+    {
+        $generator = new PaginationGenerator(new SupportFacade());
+
+        $gm = new GeneratorManager();
+        $gm->addGenerator('paginator', $generator);
+
+        return $gm;
     }
 
     protected function getDataSourceManager()
@@ -36,7 +114,11 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'data_source_name_1' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
-                    'source_root' => __dir__.'/../fixtures/project/',
+                    'source_root'       => __dir__.'/../fixtures/project/',
+                    'layouts_root'      => __dir__.'/../fixtures/project/_layouts/',
+                    'includes_root'     => __dir__.'/../fixtures/project/_includes/',
+                    'posts_root'        => __dir__.'/../fixtures/project/_posts/',
+                    'text_extensions'   => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml',],
                 ],
             ],
         ];
@@ -44,5 +126,13 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $builder = new DataSourceManagerBuilder();
 
         return $builder->buildFromConfigArray($config);
+    }
+
+    private function getRenderizer()
+    {
+        $twigLoader = new \Twig_Loader_Array([]);
+        $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
+
+        return new TwigRenderizer($twig, $twigLoader, ['twig', 'html.twig', 'twig.html', 'html']);
     }
 }

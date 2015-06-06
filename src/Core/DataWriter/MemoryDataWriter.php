@@ -58,6 +58,16 @@ class MemoryDataWriter implements DataWriterInterface
     }
 
     /**
+     * Gets all items that has been written.
+     *
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] The array's key is the path of the item.
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
      * Check if we have a item.
      *
      * This method is for internal use only and should never be called directly.
@@ -76,7 +86,7 @@ class MemoryDataWriter implements DataWriterInterface
      *
      * This method is for internal use only and should never be called directly.
      *
-     * @param bool $path Relative path of the content
+     * @param string $path Relative path of the content.
      *
      * @return string
      */

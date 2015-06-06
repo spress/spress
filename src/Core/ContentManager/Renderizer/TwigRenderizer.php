@@ -62,12 +62,6 @@ class TwigRenderizer implements RenderizerInterface
         if ($layout) {
             $fullLayout = $this->getLayoutWithExtension($layout, $name);
 
-            if (isset($attributes['page']) === false) {
-                $attributes['page'] = [];
-            }
-
-            $attributes['page']['content'] = $content;
-
             $content = sprintf('{%% extends "%s" %%}%s', $fullLayout, $content);
         }
 

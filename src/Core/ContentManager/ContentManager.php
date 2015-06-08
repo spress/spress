@@ -41,6 +41,8 @@ class ContentManager
     private $pluginManager;
     private $io;
     private $eventDispatcher;
+    private $timezone;
+    private $safe;
 
     private $attributes;
     private $siteAttributes;
@@ -96,15 +98,19 @@ class ContentManager
     /**
      * Parse a site
      *
-     * @param array $attributes
-     * @param array $spressAttributes
+     * @param array  $attributes
+     * @param array  $spressAttributes
+     * @param bool   $safe             True for disabling custom plugins.
+     * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones.
      *
      * @return array Information about process
      */
-    public function parseSite(array $attributes, array $spressAttributes)
+    public function parseSite(array $attributes, array $spressAttributes, $safe = false, $timezone = 'UTC')
     {
         $this->attributes = $attributes;
         $this->spressAttributes = $spressAttributes;
+        $this->safe = $safe;
+        $this->timezone = $timezone;
 
         $this->reset();
         $this->setUp();
@@ -134,7 +140,7 @@ class ContentManager
 
     private function setUp()
     {
-        $this->configureTimezone();
+        $this->configureTimezone($this->timezone);
         $this->generateSiteAttributes();
         $this->dataWriter->setUp();
     }
@@ -207,6 +213,7 @@ class ContentManager
     private function renderPage(ItemInterface $item)
     {
         $layout = $this->getLayoutAttribute($item);
+        $this->siteAttributes['page'] = $this->getItemAttributes($item);
 
         return $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttributes);
     }
@@ -284,6 +291,8 @@ class ContentManager
         $this->siteAttributes['spress']  = $this->spressAttributes;
         $this->siteAttributes['site'] = $this->attributes;
         $this->siteAttributes['site']['time'] = new \DateTime('now');
+        $this->siteAttributes['site']['safe'] = $this->safe;
+        $this->siteAttributes['site']['timezone'] = $this->timezone;
         $this->siteAttributes['site']['collections'] = [];
         $this->siteAttributes['site']['categories'] = [];
         $this->siteAttributes['site']['tags'] = [];
@@ -310,21 +319,17 @@ class ContentManager
         return $result;
     }
 
-    private function configureTimezone()
+    private function configureTimezone($timezone)
     {
-        $timezone = isset($this->attributes['timezone']) ? $this->attributes['timezone'] : '';
-
         if (is_string($timezone) === false) {
-            throw new AttributeValueException('Invalid timezone. Expected string at site attributes.', 'timezone');
+            throw new \RuntimeException('Invalid timezone. Expected a string value.');
         }
 
-        if ($timezone) {
-            date_default_timezone_set($timezone);
-
-            return;
+        if (strlen($timezone) == 0) {
+            throw new \RuntimeException('Invalid timezone. Expected a non-empty value.');
         }
 
-        date_default_timezone_set('UTC');
+        date_default_timezone_set($timezone);
     }
 
     private function getLayoutAttribute(ItemInterface $item)

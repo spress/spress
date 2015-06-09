@@ -62,14 +62,14 @@ class Item implements ItemInterface
     public function getContent($snapshotName = '')
     {
         if ($snapshotName) {
-            if (false == isset($this->snapshot[$snapshotName])) {
+            if (isset($this->snapshot[$snapshotName]) === false) {
                 return '';
             }
 
             return $this->snapshot[$snapshotName];
         }
 
-        return $this->snapshot[self::SNAPSHOT_LAST];
+        return isset($this->snapshot[self::SNAPSHOT_LAST]) === true ? $this->snapshot[self::SNAPSHOT_LAST] : '';
     }
 
     /**
@@ -103,14 +103,14 @@ class Item implements ItemInterface
     public function getPath($snapshotName = '')
     {
         if ($snapshotName) {
-            if (false == isset($this->pathSnapshot[$snapshotName])) {
+            if (isset($this->pathSnapshot[$snapshotName]) === false) {
                 return '';
             }
 
             return $this->pathSnapshot[$snapshotName];
         }
 
-        return $this->pathSnapshot[self::SNAPSHOT_PATH_LAST];
+        return isset($this->pathSnapshot[self::SNAPSHOT_PATH_LAST]) === true ? $this->pathSnapshot[self::SNAPSHOT_PATH_LAST] : '';
     }
 
     /**

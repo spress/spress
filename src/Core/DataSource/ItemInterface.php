@@ -53,7 +53,7 @@ interface ItemInterface
      *
      * @param $snapshotName The name of the snapshot. "last" by default.
      *
-     * @return string If the snapshot not exists return empty string.
+     * @return string The content or empty-string If the snapshot does not exist.
      */
     public function getContent($snapshotName = '');
 
@@ -91,7 +91,7 @@ interface ItemInterface
      *
      * @param $snapshotName The name of the snapshot. "last" by default.
      *
-     * @return string
+     * @return string The path or empty-string If the snapshot does not exist.
      */
     public function getPath($snapshotName = '');
 

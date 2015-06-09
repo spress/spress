@@ -27,7 +27,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($item->isBinary());
     }
 
-    public function testMultipleSnapshot()
+    public function testMultipleSnapshotOfContent()
     {
         $item = new Item('Raw content', '/index.html', []);
 
@@ -69,11 +69,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $item->getAttributes());
     }
 
-    public function testSnapshotNotFound()
+    public function testSnapshotContentNotFound()
     {
         $item = new Item('Raw content', '/index.html', []);
 
         $this->assertEquals('', $item->getContent('InventedSnapshot'));
+    }
+
+    public function testNullContent()
+    {
+        $item = new Item(null, '/index.html', []);
+
+        $this->assertEquals('', $item->getContent());
     }
 
     public function testSetPath()
@@ -85,5 +92,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/index.html', $item->getPath());
         $this->assertEquals('/index.html', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
+    }
+
+    public function testPathNotInitialized()
+    {
+        $item = new Item('Raw content', '/index.html', []);
+
+        $this->assertEquals('', $item->getPath());
     }
 }

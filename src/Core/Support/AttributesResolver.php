@@ -15,8 +15,8 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\Exception\MissingAttributeException;
 
 /**
-  * It allows you to create an attribute set with required, defaults, validation
-  * attributes. An attribute is like an option.
+  * It allows you to create an attribute or option set with required,
+  * defaults, validation attributes.
   *
   * Inspired by Symfony OptionsResolver component: http://symfony.com/doc/current/components/options_resolver.html
   *

@@ -11,7 +11,6 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-
 /**
  * Plugin interface
  *

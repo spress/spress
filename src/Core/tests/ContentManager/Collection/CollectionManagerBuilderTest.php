@@ -32,7 +32,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $collection = $cm->getCollection('events');
 
         $this->assertEquals('events', $collection->getName());
-        $this->assertEquals('_events', $collection->getPath());
+        $this->assertEquals('events', $collection->getPath());
         $this->assertCount(2, $collection->getAttributes());
         $this->assertArrayHasKey('title', $collection->getAttributes());
         $this->assertArrayHasKey('output', $collection->getAttributes());
@@ -52,7 +52,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $collection = $cm->getCollection('events');
 
         $this->assertEquals('events', $collection->getName());
-        $this->assertEquals('_events', $collection->getPath());
+        $this->assertEquals('events', $collection->getPath());
         $this->assertCount(0, $collection->getAttributes());
     }
 

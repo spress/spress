@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\DataSource;
+namespace Yosymfony\Spress\Core\tests\DataSource;
 
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 

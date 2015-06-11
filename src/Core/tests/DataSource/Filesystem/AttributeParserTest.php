@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
+namespace Yosymfony\Spress\Core\tests\DataSource\Filesystem;
 
 use Yosymfony\Spress\Core\DataSource\Filesystem\AttributeParser;
 

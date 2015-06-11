@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\Plugin\Event;
+namespace Yosymfony\Spress\Core\tests\Plugin\Event;
 
 use Yosymfony\Spress\Core\Plugin\Event\AfterConvertPostsEvent;
 

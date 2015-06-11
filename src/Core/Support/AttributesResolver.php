@@ -104,7 +104,7 @@ class AttributesResolver
 
         foreach ($clone->requires as $attribute) {
             if (array_key_exists($attribute, $attributes) === false) {
-                throw new MissingAttributeException(sprintf('Missing attribute "%s".', $attribute));
+                throw new MissingAttributeException(sprintf('Missing attribute or option "%s".', $attribute));
             }
         }
 

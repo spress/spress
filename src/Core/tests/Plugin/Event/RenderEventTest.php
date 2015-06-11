@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\tests\Plugin\Event;
 
 use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\Application;

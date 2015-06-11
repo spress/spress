@@ -15,10 +15,21 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
  * Data source for the filesystem. Binary items don’t have their content
  * loaded in-memory. getPath() returns the path to the binary filename.
+ *
+ * Source-root structure:
+ * |- includes
+ * |- layouts
+ * |- plugins
+ * |- content
+ * | |- posts
+ * | |- index.html
+ * | |- ...
+ *
  * The item's attributes (metas) will be loaded from a block located at
  * the top of the each file (frontmatter) or from a separated metadata file.
  * e.g:
@@ -29,7 +40,6 @@ use Yosymfony\Spress\Core\DataSource\Item;
  *  - mtime:            : modified time.
  *  - filename          : the name of the file.
  *  - extension         : the extension of item's filename.
- *  - meta_filename     : if exists, the name of the filename with the item's attributes (metas).
  *
  * If the filename is a date filename (a filename that mathed a patter yyyy-mm-dd-title.extension)
  * receive some extra attributes:
@@ -37,10 +47,7 @@ use Yosymfony\Spress\Core\DataSource\Item;
  *  - date
  *
  * Params:
- *  - source_root       : the root directory for the main content.
- *  - layouts_root      : the root directory for the layouts.
- *  - includes_root     : the root directory for the includes.
- *  - posts_root        : the root directory for the posts.
+ *  - source_root       : the root directory.
  *  - include           : force to include files or directories.
  *  - exclude           : force to exclude files or directories.
  *  - text_extensions   : extension of the files considered as text files.
@@ -53,11 +60,8 @@ class FilesystemDataSource extends AbstractDataSource
     private $items;
     private $layouts;
     private $includes;
-    private $include;
-    private $exclude;
     private $orgDir;
     private $attributeParser;
-    private $textExtensions;
 
     /**
      * @inheritDoc
@@ -93,58 +97,9 @@ class FilesystemDataSource extends AbstractDataSource
         $this->items = [];
         $this->layouts = [];
         $this->includes = [];
-        $this->include = [];
-        $this->exclude = [];
 
-        if (false === isset($this->params['source_root'])) {
-            throw new \RuntimeException('The data source expected param: "source_root".');
-        }
-
-        if (false === isset($this->params['text_extensions'])) {
-            throw new \RuntimeException('The data source expected param: "text_extensions".');
-        }
-
-        if (false === is_array($this->params['text_extensions'])) {
-            throw new \RuntimeException('The data source expected a array at param: "text_extensions".');
-        }
-
-        if (false === is_string($this->params['source_root'])) {
-            throw new \RuntimeException('The data source expected a string at param: "source_root".');
-        }
-
-        if (true === isset($this->params['posts_root']) && false === is_string($this->params['posts_root'])) {
-            throw new \RuntimeException('The data source expected a string at param: "posts_root".');
-        }
-
-        if (true === isset($this->params['layouts_root']) && false === is_string($this->params['layouts_root'])) {
-            throw new \RuntimeException('The data source expected a string at param: "layouts_root".');
-        }
-
-        if (true === isset($this->params['includes_root']) && false === is_string($this->params['includes_root'])) {
-            throw new \RuntimeException('The data source expected a string at param: "includes_root".');
-        }
-
-        if (true === isset($this->params['include'])) {
-            if (true === is_array($this->params['include'])) {
-                $this->include = $this->params['include'];
-            } else {
-                throw new \RuntimeException('The data source expected an array at param: "include".');
-            }
-        }
-
-        if (true === isset($this->params['exclude'])) {
-            if (true === is_array($this->params['exclude'])) {
-                $this->exclude = $this->params['exclude'];
-            } else {
-                throw new \RuntimeException('The data source expected an array at param: "exclude".');
-            }
-        }
-
-        if (false === isset($this->params['attribute_syntax'])) {
-            $this->params['attribute_syntax'] = 'yaml';
-        }
-
-        $this->textExtensions = $this->params['text_extensions'];
+        $resolver = $this->getResolver();
+        $this->params = $resolver->resolve($this->params);
 
         switch ($this->params['attribute_syntax']) {
             case 'yaml':
@@ -168,40 +123,16 @@ class FilesystemDataSource extends AbstractDataSource
         $this->processIncludeFiles();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setUp()
-    {
-        $this->orgDir = getcwd();
-        $this->setCurrentDir($this->params['source_root']);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function tearDown()
-    {
-        $this->setCurrentDir($this->orgDir);
-    }
-
     private function processContentFiles()
     {
         $includedFiles = [];
 
         $finder = new Finder();
-        $finder->in($this->params['source_root'])
-            ->notPath('/^_/')
-            ->notPath('config.yml')
-            ->notPath('/config_.+\.yml/')
+        $finder->in($this->composeSubPath('content'))
             ->notName('*.meta')
             ->files();
 
-        if (isset($this->params['posts_root'])) {
-            $finder->in($this->params['posts_root']);
-        }
-
-        foreach ($this->include as $item) {
+        foreach ($this->params['include'] as $item) {
             if (is_dir($item)) {
                 $finder->in($item);
             } elseif (is_file($item)) {
@@ -211,7 +142,7 @@ class FilesystemDataSource extends AbstractDataSource
 
         $finder->append($includedFiles);
 
-        foreach ($this->exclude as $item) {
+        foreach ($this->params['exclude'] as $item) {
             $finder->notPath($item);
         }
 
@@ -220,12 +151,8 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function processLayoutFiles()
     {
-        if (false === isset($this->params['layouts_root'])) {
-            return;
-        }
-
         $finder = new Finder();
-        $finder->in($this->params['layouts_root'])
+        $finder->in($this->composeSubPath('layouts'))
             ->files();
 
         $this->processItems($finder, Item::TYPE_LAYOUT);
@@ -233,12 +160,8 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function processIncludeFiles()
     {
-        if (false === isset($this->params['includes_root'])) {
-            return;
-        }
-
         $finder = new Finder();
-        $finder->in($this->params['includes_root'])
+        $finder->in($this->composeSubPath('includes'))
             ->files();
 
         $this->processItems($finder, Item::TYPE_INCLUDE);
@@ -284,7 +207,6 @@ class FilesystemDataSource extends AbstractDataSource
         if ($attributesFile && file_exists($attributesFile)) {
             $contentFile = file_get_contents($attributesFile);
             $attributes = $this->attributeParser->getAttributesFromString($contentFile);
-            $attributes['meta_filename'] = $attributesFile;
         } elseif (false === $item->isBinary()) {
             $attributes = $this->attributeParser->getAttributesFromFrontmatter($item->getContent());
             $content = $this->attributeParser->getContentFromFrontmatter($item->getContent());
@@ -314,7 +236,7 @@ class FilesystemDataSource extends AbstractDataSource
     {
         $ext = $file->getExtension();
 
-        return false === in_array($ext, $this->textExtensions);
+        return false === in_array($ext, $this->params['text_extensions']);
     }
 
     private function isDateFilename(SplFileInfo $file)
@@ -336,17 +258,23 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function getAttributesFilename(splfileinfo $file)
     {
-        return $file->getRelativePathname().'.meta';
+        return $this->composeSubPath(sprintf('content/%s.meta', $file->getRelativePathname()));
     }
 
-    private function setCurrentDir($path)
+    private function getResolver()
     {
-        if (false === file_exists($path)) {
-            throw new \RuntimeException(sprintf('The source root folder not exists: "%s".', $path));
-        }
+        $resolver = new AttributesResolver();
+        $resolver->setDefault('source_root', '', 'string', true)
+            ->setDefault('include', [], 'array')
+            ->setDefault('exclude', [], 'array')
+            ->setDefault('text_extensions', [], 'array', true)
+            ->setDefault('attribute_syntax', 'yaml', 'string');
 
-        if (false === chdir($path)) {
-            throw new \RuntimeException(sprintf('Error changing the current dir to "%s".', $path));
-        }
+        return $resolver;
+    }
+
+    private function composeSubPath($path)
+    {
+        return $this->params['source_root'].'/'.$path;
     }
 }

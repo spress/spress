@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
+namespace Yosymfony\Spress\Core\tests\DataSource\Filesystem;
 
 use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
 
@@ -25,10 +25,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testProcessItems()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'layouts_root'      => __dir__.'/../../fixtures/project/_layouts/',
-            'includes_root'     => __dir__.'/../../fixtures/project/_includes/',
-            'posts_root'        => __dir__.'/../../fixtures/project/_posts/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'text_extensions'   => $this->textExtensions,
         ]);
 
@@ -54,21 +51,21 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('projects/index.md', $items);
         $this->assertArrayHasKey('robots.txt', $items);
         $this->assertArrayHasKey('sitemap.xml', $items);
-        $this->assertArrayHasKey('2013-08-12-post-example-1.md', $items);
-        $this->assertArrayHasKey('2013-08-12-post-example-2.mkd', $items);
-        $this->assertArrayHasKey('books/2013-08-11-best-book.md', $items);
-        $this->assertArrayHasKey('books/2013-09-19-new-book.md', $items);
+        $this->assertArrayHasKey('posts/2013-08-12-post-example-1.md', $items);
+        $this->assertArrayHasKey('posts/2013-08-12-post-example-2.mkd', $items);
+        $this->assertArrayHasKey('posts/books/2013-08-11-best-book.md', $items);
+        $this->assertArrayHasKey('posts/books/2013-09-19-new-book.md', $items);
 
         $itemAttributes = $items['about/index.html']->getAttributes();
         $this->assertCount(4, $itemAttributes);
         $this->assertEquals('default', $itemAttributes['layout']);
 
-        $itemAttributes = $items['2013-08-12-post-example-1.md']->getAttributes();
+        $itemAttributes = $items['posts/2013-08-12-post-example-1.md']->getAttributes();
         $this->assertCount(10, $itemAttributes);
         $this->assertArrayNotHasKey('meta_filename', $itemAttributes);
-        $this->assertStringStartsWith('Post example 1', $items['2013-08-12-post-example-1.md']->getContent());
+        $this->assertStringStartsWith('Post example 1', $items['posts/2013-08-12-post-example-1.md']->getContent());
 
-        $itemAttributes = $items['2013-08-12-post-example-2.mkd']->getAttributes();
+        $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
         $this->assertArrayHasKey('title', $itemAttributes);
         $this->assertArrayHasKey('title_path', $itemAttributes);
         $this->assertArrayHasKey('date', $itemAttributes);
@@ -76,14 +73,13 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2013-08-12', $itemAttributes['date']);
 
         $itemAttributes = $items['sitemap.xml']->getAttributes();
-        $this->assertEquals('sitemap.xml.meta', $itemAttributes['meta_filename']);
         $this->assertEquals('sitemap', $itemAttributes['name']);
 
         $this->assertArrayHasKey('default.html', $layouts);
 
         $this->assertArrayHasKey('test.html', $includes);
 
-        $this->assertFalse($items['2013-08-12-post-example-1.md']->isBinary());
+        $this->assertFalse($items['posts/2013-08-12-post-example-1.md']->isBinary());
 
         $this->assertEquals('layout', $layouts['default.html']->getType());
 
@@ -99,43 +95,42 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'include'           => ['.htaccess'],
+            'source_root'       => __dir__.'/../../fixtures/project/src',
+            'include'           => [__dir__.'/../../fixtures/extra_pages/extra-page1.html'],
             'text_extensions'   => $this->textExtensions,
         ]);
         $fsDataSource->load();
-
-        $this->assertCount(9, $fsDataSource->getItems());
+        $this->assertCount(13, $fsDataSource->getItems());
     }
 
     public function testIncludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'include'           => ['../extra_pages'],
+            'source_root'       => __dir__.'/../../fixtures/project/src',
+            'include'           => [__dir__.'/../../fixtures/extra_pages'],
             'text_extensions'   => $this->textExtensions,
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(10, $fsDataSource->getItems());
+        $this->assertCount(14, $fsDataSource->getItems());
     }
 
     public function testExcludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'exclude'           => ['robots.txt'],
             'text_extensions'   => $this->textExtensions,
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(7, $fsDataSource->getItems());
+        $this->assertCount(11, $fsDataSource->getItems());
     }
 
     public function testExcludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'exclude'           => ['about'],
             'text_extensions'   => $this->textExtensions,
         ]);
@@ -147,7 +142,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testConfigOnlySourceRootParam()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'text_extensions'   => $this->textExtensions,
         ]);
         $fsDataSource->load();
@@ -156,7 +151,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Yosymfony\Spress\Core\Exception\MissingAttributeException
      */
     public function testConfigNoParams()
     {
@@ -165,18 +160,18 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Yosymfony\Spress\Core\Exception\MissingAttributeException
      */
     public function testNoParamTextExtensions()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'   => __dir__.'/../../fixtures/project/src',
         ]);
         $fsDataSource->load();
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */
     public function testBadParamSourceRoot()
     {
@@ -188,51 +183,12 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
-     */
-    public function testBadParamPostsRoot()
-    {
-        $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'posts_root'        => [],
-            'text_extensions'   => $this->textExtensions,
-        ]);
-        $fsDataSource->load();
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testBadParamLayoutsRoot()
-    {
-        $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'layouts_root'      => [],
-            'text_extensions'   => $this->textExtensions,
-        ]);
-        $fsDataSource->load();
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testBadParamIncludesRoot()
-    {
-        $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
-            'includes_root'     => [],
-            'text_extensions'   => $this->textExtensions,
-        ]);
-        $fsDataSource->load();
-    }
-
-    /**
-     * @expectedException RuntimeException
+     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */
     public function testBadParamInclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'include'           => './',
             'text_extensions'   => $this->textExtensions,
         ]);
@@ -240,12 +196,12 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */
     public function testBadParamExclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/',
+            'source_root'       => __dir__.'/../../fixtures/project/src',
             'exclude'           => './',
             'text_extensions'   => $this->textExtensions,
         ]);

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Tests\Plugin;
+namespace Yosymfony\Spress\Core\tests\Plugin;
 
 use Yosymfony\Spress\Core\Plugin\PluginItem;
 

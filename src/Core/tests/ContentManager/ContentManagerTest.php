@@ -61,7 +61,6 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getContentManager($dataWriter)
     {
-        
         $dsm = $this->getDataSourceManager();
         $gm = $this->getGeneratorManager();
         $cm = $this->getConverterManager();
@@ -77,9 +76,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     protected function getCollectionManager()
     {
         $config = [
-            'events' => [
+            'posts' => [
                 'output' => true,
-                'title'  => 'Events',
+                'title'  => 'Posts',
             ],
         ];
 
@@ -103,7 +102,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $generator = new PaginationGenerator(new SupportFacade());
 
         $gm = new GeneratorManager();
-        $gm->addGenerator('paginator', $generator);
+        $gm->addGenerator('pagination', $generator);
 
         return $gm;
     }
@@ -114,11 +113,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'data_source_name_1' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
-                    'source_root'       => __dir__.'/../fixtures/project/',
-                    'layouts_root'      => __dir__.'/../fixtures/project/_layouts/',
-                    'includes_root'     => __dir__.'/../fixtures/project/_includes/',
-                    'posts_root'        => __dir__.'/../fixtures/project/_posts/',
-                    'text_extensions'   => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml',],
+                    'source_root'       => __dir__.'/../fixtures/project/src',
+                    'text_extensions'   => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
                 ],
             ],
         ];

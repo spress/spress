@@ -44,7 +44,7 @@ class CollectionManagerBuilder
         $cm = new CollectionManager();
 
         foreach ($config as $collectionName => $attributes) {
-            $path = '_'.$collectionName;
+            $path = $collectionName;
 
             if (is_array($attributes) === false) {
                 throw new \RuntimeException(sprintf('Expected array at the collection: "%s".', $collectionName));

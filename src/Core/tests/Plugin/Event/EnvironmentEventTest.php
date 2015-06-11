@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\tests\Plugin\Event;
 
 use Yosymfony\Spress\Core\Application;
 use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;

@@ -22,7 +22,10 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
             ->setDefault('title', 'Hi', 'string')
             ->setDefault('host', 'localhost', 'string', false, true)
             ->setDefault('port', 4000, 'int', false, false)
-            ->setDefault('path', '', 'string', true);
+            ->setDefault('path', '', 'string', true)
+            ->setValidator('port', function ($value) {
+                return $value > 0 && $value <= 65535;
+            });
 
         $result = $a->resolve([
             'name' => 'Yo! Symfony 2',
@@ -102,6 +105,22 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
 
         $result = $a->resolve([
             'port' => null,
+        ]);
+    }
+
+    /**
+     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     */
+    public function testInvalidValue()
+    {
+        $a = new AttributesResolver();
+        $a->setDefault('port', 4000, 'int', false, false)
+            ->setValidator('port', function ($value) {
+                return $value > 0 && $value <= 65535;
+            });
+
+        $result = $a->resolve([
+            'port' => -1,
         ]);
     }
 }

@@ -15,52 +15,77 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\Exception\MissingAttributeException;
 
 /**
-  * It allows you to create an attribute or option set with required,
-  * defaults, validation attributes.
-  *
-  * Inspired by Symfony OptionsResolver component: http://symfony.com/doc/current/components/options_resolver.html
-  *
-  * @author Victor Puertas <vpgugr@gmail.com>
-  */
+ * It allows you to create an attribute or option set with required,
+ * defaults, validation attributes.
+ *
+ * Inspired by Symfony OptionsResolver component:
+ * http://symfony.com/doc/current/components/options_resolver.html.
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class AttributesResolver
 {
     private $defaults = [];
     private $types = [];
     private $requires = [];
     private $notNullables = [];
+    private $validators = [];
     private $resolved = [];
 
     /**
-     * Sets the default value of a given attribute
+     * Sets the default value of a given attribute.
      *
-     * @param string $name     The name of the attribute
-     * @param mixed  $value    The default value of the attribute
-     * @param string $type     The accepted type. Any type for which a corresponding is_<type>() function exists is
-     *                         acceptable
-     * @param bool   $required Is that attribute required?
-     * @param bool   $nullable Is that attribute nullable?
+     * @param string $attribute The name of the attribute.
+     * @param mixed  $value     The default value of the attribute.
+     * @param string $type      The accepted type. Any type for which a corresponding is_<type>() function exists is
+     *                          acceptable.
+     * @param bool   $required  Is that attribute required?
+     * @param bool   $nullable  Is that attribute nullable?
+     *
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
      */
-    public function setDefault($name, $value, $type = null, $required = false, $nullable = false)
+    public function setDefault($attribute, $value, $type = null, $required = false, $nullable = false)
     {
-        $this->defaults[$name] = $value;
+        $this->defaults[$attribute] = $value;
 
         if (empty($type) === false) {
-            $this->types[$name] = $type;
+            $this->types[$attribute] = $type;
         }
 
         if ($required === true) {
-            $this->requires[] = $name;
+            $this->requires[] = $attribute;
         }
 
         if ($nullable === false) {
-            $this->notNullables[] = $name;
+            $this->notNullables[] = $attribute;
         }
 
         return $this;
     }
 
     /**
-     * Return whether a default value is set for an attribute
+     * Sets the validator for an atribute.
+     *
+     * @param string   $attribute The name of the attribute.
+     * @param \Closure $validator The validator should be a closure with the following signature:
+     *
+     * ```php
+     * function ($value) {
+     *     // ...
+     * }
+     * ```
+     *
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
+     */
+    public function setValidator($attribute, \Closure $validator)
+    {
+        $this->validators[$attribute] = $validator;
+
+        return $this;
+    }
+
+    /**
+     * Return whether a default value is set for an attribute.
      *
      * @return bool
      */
@@ -96,6 +121,15 @@ class AttributesResolver
             }
         }
 
+        foreach ($clone->validators as $attribute => $validator) {
+            if ($validator($clone->resolved[$attribute]) === false) {
+                throw new AttributeValueException(
+                        sprintf('Invalid value.', $attribute),
+                        $attribute
+                    );
+            }
+        }
+
         foreach ($clone->notNullables as $attribute) {
             if (is_null($clone->resolved[$attribute]) === true) {
                 throw new AttributeValueException('Unexpected null value.', $attribute);
@@ -112,7 +146,7 @@ class AttributesResolver
     }
 
     /**
-     * Remove all attributes
+     * Remove all attributes.
      */
     public function clear()
     {
@@ -125,9 +159,11 @@ class AttributesResolver
     }
 
     /**
-     * Removes the attributes with the given name
+     * Removes the attributes with the given name.
      *
-     * @param string|string[] One or more attributes
+     * @param string|string[] One or more attributes.
+     *
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
      */
     public function remove($attributes)
     {
@@ -142,7 +178,7 @@ class AttributesResolver
     }
 
     /**
-     * Return the number of set options
+     * Return the number of set options.
      *
      * @return int
      */

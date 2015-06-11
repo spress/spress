@@ -90,7 +90,8 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * @inheritDoc
      *
-     * @throws \RuntimeException if bad configuration params
+     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException   If the attributes don't validate the rules.
+     * @throws \Yosymfony\Spress\Core\Exception\MissingAttributeException If missing attribute.
      */
     public function configure()
     {
@@ -108,8 +109,6 @@ class FilesystemDataSource extends AbstractDataSource
             case 'json':
                 $this->attributeParser = new AttributeParser(AttributeParser::PARSER_JSON);
                 break;
-            default:
-                throw new \RuntimeException(sprintf('Invalid value for attributte "attribute_syntax": "%s".', $this->params['attribute_syntax']));
         }
     }
 
@@ -268,7 +267,18 @@ class FilesystemDataSource extends AbstractDataSource
             ->setDefault('include', [], 'array')
             ->setDefault('exclude', [], 'array')
             ->setDefault('text_extensions', [], 'array', true)
-            ->setDefault('attribute_syntax', 'yaml', 'string');
+            ->setDefault('attribute_syntax', 'yaml', 'string')
+            ->setValidator('attribute_syntax', function ($value) {
+                switch ($value) {
+                    case 'yaml':
+                    case 'json':
+                        return true;
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            });
 
         return $resolver;
     }

@@ -19,14 +19,14 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->textExtensions = [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ];
+        $this->textExtensions = ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml'];
     }
 
     public function testProcessItems()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'text_extensions' => $this->textExtensions,
         ]);
 
         $fsDataSource->load();
@@ -34,6 +34,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $items = $fsDataSource->getItems();
         $layouts = $fsDataSource->getLayouts();
         $includes = $fsDataSource->getIncludes();
+        print_r(array_keys($includes));
 
         $this->assertTrue(is_array($items));
         $this->assertTrue(is_array($layouts));
@@ -95,9 +96,9 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'include'           => [__dir__.'/../../fixtures/extra_pages/extra-page1.html'],
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'include' => [__dir__.'/../../fixtures/extra_pages/extra-page1.html'],
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
         $this->assertCount(13, $fsDataSource->getItems());
@@ -106,9 +107,9 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'include'           => [__dir__.'/../../fixtures/extra_pages'],
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'include' => [__dir__.'/../../fixtures/extra_pages'],
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
 
@@ -118,9 +119,9 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'exclude'           => ['robots.txt'],
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'exclude' => ['robots.txt'],
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
 
@@ -130,24 +131,13 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'exclude'           => ['about'],
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'exclude' => ['about'],
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(6, $fsDataSource->getItems());
-    }
-
-    public function testConfigOnlySourceRootParam()
-    {
-        $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'text_extensions'   => $this->textExtensions,
-        ]);
-        $fsDataSource->load();
-
-        $this->assertCount(8, $fsDataSource->getItems());
+        $this->assertCount(10, $fsDataSource->getItems());
     }
 
     /**
@@ -165,7 +155,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testNoParamTextExtensions()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'   => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.'/../../fixtures/project/src',
         ]);
         $fsDataSource->load();
     }
@@ -176,8 +166,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamSourceRoot()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => [],
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => [],
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
     }
@@ -188,9 +178,9 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamInclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'include'           => './',
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'include' => './',
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
     }
@@ -201,9 +191,9 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamExclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root'       => __dir__.'/../../fixtures/project/src',
-            'exclude'           => './',
-            'text_extensions'   => $this->textExtensions,
+            'source_root' => __dir__.'/../../fixtures/project/src',
+            'exclude' => './',
+            'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
     }

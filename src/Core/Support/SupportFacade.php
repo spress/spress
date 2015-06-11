@@ -12,14 +12,14 @@
 namespace Yosymfony\Spress\Core\Support;
 
 /**
-  * A simply facade for getting support classes
-  *
-  * @author Victor Puertas <vpgugr@gmail.com>
-  */
+ * A simply facade for getting support classes.
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class SupportFacade
 {
     /**
-     * Get an ArrayWrapper
+     * Get an ArrayWrapper.
      *
      * @return \Yosymfony\Spress\Core\Support\ArrayWrapper
      */
@@ -29,7 +29,7 @@ class SupportFacade
     }
 
     /**
-     * Get an AttributeResolver
+     * Get an AttributeResolver.
      *
      * @return \Yosymfony\Spress\Core\Support\AttributesResolver
      */

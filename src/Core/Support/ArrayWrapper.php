@@ -12,12 +12,12 @@
 namespace Yosymfony\Spress\Core\Support;
 
 /**
-  * A wrapper for working with arrays.
-  *
-  * Based on https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Arr.php
-  *
-  * @author Victor Puertas <vpgugr@gmail.com>
-  */
+ * A wrapper for working with arrays.
+ *
+ * Based on https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Arr.php
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class ArrayWrapper
 {
     protected $array;
@@ -28,7 +28,7 @@ class ArrayWrapper
     }
 
     /**
-     * Add an element using "dot" notation if doesn't exists
+     * Add an element using "dot" notation if doesn't exists.
      *
      * @param $key
      * @param $value
@@ -45,7 +45,7 @@ class ArrayWrapper
     }
 
     /**
-     * Get a value from a deeply nested array using "dot" notation
+     * Get a value from a deeply nested array using "dot" notation.
      *
      * e.g: $a->get('site.data')
      *
@@ -74,7 +74,7 @@ class ArrayWrapper
     }
 
     /**
-     * Get the working array
+     * Get the working array.
      *
      * @return array
      */
@@ -84,7 +84,7 @@ class ArrayWrapper
     }
 
     /**
-     * Check if an item exists in using "dot" notation
+     * Check if an item exists in using "dot" notation.
      *
      * @param string $key
      *
@@ -114,7 +114,7 @@ class ArrayWrapper
     }
 
     /**
-     * Paginate the array
+     * Paginate the array.
      *
      * @param int    $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array.
      * @param int    $initialPage Initial page. Page 1 by default.
@@ -148,7 +148,7 @@ class ArrayWrapper
     }
 
     /**
-     * Set an item using "dot" notation
+     * Set an item using "dot" notation.
      *
      * @param string $key
      * @param mixed  $value
@@ -172,7 +172,7 @@ class ArrayWrapper
                 $array[$key] = [];
             }
 
-            $array = & $array[$key];
+            $array = &$array[$key];
         }
 
         $array[array_shift($keys)] = $value;
@@ -181,7 +181,7 @@ class ArrayWrapper
     }
 
     /**
-     * Set the working array
+     * Set the working array.
      *
      * @param array $array
      */
@@ -191,7 +191,7 @@ class ArrayWrapper
     }
 
     /**
-     * Filter using the given callback
+     * Filter using the given callback.
      *
      * @param callable $callback
      *

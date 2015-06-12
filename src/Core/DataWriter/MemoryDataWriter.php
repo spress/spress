@@ -23,7 +23,7 @@ class MemoryDataWriter implements DataWriterInterface
     protected $items;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -76,7 +76,7 @@ class MemoryDataWriter implements DataWriterInterface
      *
      * @return bool
      */
-    public function existsItem($path)
+    public function hasItem($path)
     {
         return isset($this->items[$path]);
     }

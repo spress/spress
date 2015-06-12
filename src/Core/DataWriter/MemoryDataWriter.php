@@ -43,6 +43,10 @@ class MemoryDataWriter implements DataWriterInterface
      */
     public function write(ItemInterface $item)
     {
+        if ($this->isWritable($item) === false) {
+            return;
+        }
+
         if ($item->isBinary()) {
             $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE)] = $item;
         } else {
@@ -105,5 +109,10 @@ class MemoryDataWriter implements DataWriterInterface
     public function countItems()
     {
         return count($this->items);
+    }
+
+    protected function isWritable(ItemInterface $item)
+    {
+        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '' ? false : true;
     }
 }

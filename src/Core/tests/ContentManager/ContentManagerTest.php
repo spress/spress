@@ -40,23 +40,70 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $spressAttributes = [
-            'version'           => '2.0.0',
-            'version_id'        => '20000',
-            'major_version'     => '2',
-            'minor_version'     => '0',
-            'release_version'   => '0',
-            'extra_version'     => 'dev',
+            'version' => '2.0.0',
+            'version_id' => '20000',
+            'major_version' => '2',
+            'minor_version' => '0',
+            'release_version' => '0',
+            'extra_version' => 'dev',
         ];
 
         $dw = new MemoryDataWriter();
         $cm = $this->getContentManager($dw);
         $cm->parseSite($attributes, $spressAttributes);
 
-        $this->assertCount(12, $dw->getItems());
+        $this->assertCount(14, $dw->getItems());
 
-        $item = $dw->getItem('2013/09/19/new-book/index.html');
+        $this->assertTrue($dw->hasItem('about/index.html'));
+        $this->assertTrue($dw->hasItem('about/index.html'));
+        $this->assertTrue($dw->hasItem('about/me/index.html'));
+        $this->assertTrue($dw->hasItem('index.html'));
+        $this->assertTrue($dw->hasItem('LICENSE'));
+        $this->assertTrue($dw->hasItem('category-1/category-2/2020/01/01/new-post-example/index.html'));
+        $this->assertTrue($dw->hasItem('2013/08/12/post-example-2/index.html'));
+        $this->assertTrue($dw->hasItem('2013/08/11/best-book/index.html'));
+        $this->assertTrue($dw->hasItem('projects/index.html'));
+        $this->assertTrue($dw->hasItem('robots.txt'));
+        $this->assertTrue($dw->hasItem('sitemap.xml'));
+        $this->assertTrue($dw->hasItem('pages/index.html'));
+        $this->assertTrue($dw->hasItem('pages/page2/index.html'));
+        $this->assertTrue($dw->hasItem('pages/page3/index.html'));
+        $this->assertTrue($dw->hasItem('pages/page4/index.html'));
 
-        $this->assertContains('<!DOCTYPE HTML>', $item->getContent());
+        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('about/index.html')->getContent());
+        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/index.html')->getContent());
+        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/page2/index.html')->getContent());
+
+        $attributes = $dw->getItem('2013/08/11/best-book/index.html')->getAttributes();
+        $this->assertArrayHasKey('author', $attributes);
+        $this->assertEquals('Yo! Symfony', $attributes['author']);
+    }
+
+    public function parseDraft()
+    {
+        $attributes = [
+            'site_name' => 'My tests site',
+        ];
+
+        $spressAttributes = [
+            'version' => '2.0.0',
+            'version_id' => '20000',
+            'major_version' => '2',
+            'minor_version' => '0',
+            'release_version' => '0',
+            'extra_version' => 'dev',
+        ];
+
+        $dw = new MemoryDataWriter();
+        $cm = $this->getContentManager($dw);
+        $cm->parseSite($attributes, $spressAttributes);
+
+        $this->assertCount(15, $dw->getItems());
+        print_r(array_keys($dw->getItems()));
+
+        $this->assertTrue($dw->hasItem('2013/09/19/new-book/index.html'));
+
+        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('2013/09/19/new-book/index.html')->getContent());
     }
 
     protected function getContentManager($dataWriter)
@@ -78,7 +125,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $config = [
             'posts' => [
                 'output' => true,
-                'title'  => 'Posts',
+                'author' => 'Yo! Symfony',
             ],
         ];
 
@@ -113,8 +160,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'data_source_name_1' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
-                    'source_root'       => __dir__.'/../fixtures/project/src',
-                    'text_extensions'   => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
+                    'source_root' => __dir__.'/../fixtures/project/src',
+                    'text_extensions' => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
                 ],
             ],
         ];

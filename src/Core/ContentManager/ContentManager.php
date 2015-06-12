@@ -25,7 +25,7 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Content manager
+ * Content manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -43,6 +43,7 @@ class ContentManager
     private $eventDispatcher;
     private $timezone;
     private $safe;
+    private $draft;
 
     private $attributes;
     private $siteAttributes;
@@ -53,7 +54,7 @@ class ContentManager
     private $itemsGenerator;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                  $dataSourceManager
      * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                $dataWriter
@@ -96,21 +97,23 @@ class ContentManager
     }
 
     /**
-     * Parse a site
+     * Parse a site.
      *
      * @param array  $attributes
      * @param array  $spressAttributes
+     * @param bool   $draft            Include draft posts.
      * @param bool   $safe             True for disabling custom plugins.
      * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones.
      *
      * @return array Information about process
      */
-    public function parseSite(array $attributes, array $spressAttributes, $safe = false, $timezone = 'UTC')
+    public function parseSite(array $attributes, array $spressAttributes, $draft = false, $safe = false, $timezone = 'UTC')
     {
         $this->attributes = $attributes;
         $this->spressAttributes = $spressAttributes;
         $this->safe = $safe;
         $this->timezone = $timezone;
+        $this->draft = $draft;
 
         $this->reset();
         $this->setUp();
@@ -159,6 +162,8 @@ class ContentManager
             }
 
             $this->processCollection($item);
+            $this->processDraftIfPost($item);
+            $this->processOutputattribute($item);
 
             $this->items[$item->getId()] = $item;
         }
@@ -226,7 +231,7 @@ class ContentManager
         $attributes = $item->getAttributes();
         $attributes['collection'] = $collectionName;
 
-        $newAttributes = array_merge($attributes, $collection->getAttributes());
+        $newAttributes = array_merge($collection->getAttributes(), $attributes);
 
         $item->setAttributes($newAttributes);
 
@@ -236,6 +241,43 @@ class ContentManager
         }
 
         $this->siteAttributes['site'][$collectionName][$item->getId()] = $this->getItemAttributes($item);
+    }
+
+    private function processDraftIfPost(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if ($attributes['collection'] === 'posts' && array_key_exists('draft', $attributes)) {
+            $draft = $attributes['draft'];
+
+            if (is_bool($draft) === false) {
+                throw new AttributeValueException('Invalid value. Expected boolean.', 'draft', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            }
+
+            if ($this->draft === false && $draft === true) {
+                $attributes['output'] = false;
+
+                $item->setAttributes($attributes);
+            }
+        }
+    }
+
+    private function processOutputattribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (array_key_exists('output', $attributes)) {
+            $output = $attributes['output'];
+
+            if (is_bool($output) === false) {
+                throw new AttributeValueException('Invalid value. Expected boolean.', 'output', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            }
+
+            if ($output === false) {
+                $item->setPath('', ItemInterface::SNAPSHOT_PATH_RELATIVE);
+                $item->setPath('', ItemInterface::SNAPSHOT_PATH_SOURCE);
+            }
+        }
     }
 
     private function isGenerator(ItemInterface $item)
@@ -288,7 +330,7 @@ class ContentManager
 
     private function generateSiteAttributes()
     {
-        $this->siteAttributes['spress']  = $this->spressAttributes;
+        $this->siteAttributes['spress'] = $this->spressAttributes;
         $this->siteAttributes['site'] = $this->attributes;
         $this->siteAttributes['site']['time'] = new \DateTime('now');
         $this->siteAttributes['site']['safe'] = $this->safe;

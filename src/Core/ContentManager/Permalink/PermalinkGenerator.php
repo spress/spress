@@ -17,7 +17,7 @@ use Yosymfony\Spress\Core\Utils;
 
 /**
  * Iterface for a permalink generator.
- * e.g: /my-page/about-me.html
+ * e.g: /my-page/about-me.html.
  *
  * Placeholders:
  *  - ":path"		: /my-page
@@ -33,7 +33,7 @@ class PermalinkGenerator
     private $defaultPreservePathTitle;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $defaultPermalink
      *
@@ -53,7 +53,6 @@ class PermalinkGenerator
      *
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
-     *
      */
     public function __construct($defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
     {
@@ -79,6 +78,10 @@ class PermalinkGenerator
      */
     public function getPermalink(ItemInterface $item)
     {
+        if ($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '') {
+            return new Permalink('', '');
+        }
+
         $placeholders = $this->getPlacehoders($item);
         $permalinkStyle = $this->getPermalinkAttribute($item);
 
@@ -174,17 +177,17 @@ class PermalinkGenerator
         $time = $this->getDateAttribute($item);
 
         $result = [
-            ':path'         => $fileInfo->getPath(),
-            ':extension'    => $fileInfo->getExtension(),
-            ':basename'     => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
-            ':collection'   => $this->getCollectionAttribute($item),
-            ':categories'   => $this->getCategoriesPath($item),
-            ':title'        => $this->getTitleSlugified($item),
-            ':year'         => $time->format('Y'),
-            ':month'        => $time->format('m'),
-            ':day'          => $time->format('d'),
-            ':i_month'      => $time->format('n'),
-            ':i_day'        => $time->format('j'),
+            ':path' => $fileInfo->getPath(),
+            ':extension' => $fileInfo->getExtension(),
+            ':basename' => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
+            ':collection' => $this->getCollectionAttribute($item),
+            ':categories' => $this->getCategoriesPath($item),
+            ':title' => $this->getTitleSlugified($item),
+            ':year' => $time->format('Y'),
+            ':month' => $time->format('m'),
+            ':day' => $time->format('d'),
+            ':i_month' => $time->format('n'),
+            ':i_day' => $time->format('j'),
         ];
 
         return $result;

@@ -29,7 +29,7 @@ class FilesystemDataWriter implements DataWriterInterface
     protected $outputDir;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Symfony\Component\Filesystem\Filesystem $filesystem
      * @param string                                  $outputDir  The output folder. e.g: "_site"
@@ -53,13 +53,13 @@ class FilesystemDataWriter implements DataWriterInterface
      */
     public function write(ItemInterface $item)
     {
+        if ($this->isWritable($item) === false) {
+            return;
+        }
+
         if ($item->isBinary() === true) {
             $sourcePath = $item->getPath(ItemInterface::SNAPSHOT_PATH_SOURCE);
             $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
-
-            if (strlen($outputPath) === 0) {
-                return;
-            }
 
             if (strlen($sourcePath) > 0) {
                 $this->copy($sourcePath, $this->composeOutputPath($outputPath));
@@ -89,5 +89,10 @@ class FilesystemDataWriter implements DataWriterInterface
         $path = $this->outputDir.'/'.$relativePath;
 
         return str_replace('//', '/', $path);
+    }
+
+    protected function isWritable(ItemInterface $item)
+    {
+        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '' ? false : true;
     }
 }

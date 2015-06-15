@@ -22,6 +22,11 @@ class ArrayWrapper
 {
     protected $array;
 
+    /**
+     * Constructor
+     * 
+     * @param array $array
+     */
     public function __construct(array $array = [])
     {
         $this->array = $array;

@@ -184,10 +184,14 @@ class ArrayWrapper
      * Set the working array.
      *
      * @param array $array
+     *
+     * @return \Yosymfony\Spress\Core\Support\ArrayWrapper This instance.
      */
     public function setArray(array $array)
     {
         $this->array = $array;
+
+        return $this;
     }
 
     /**

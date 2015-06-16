@@ -21,6 +21,10 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('welcome-to-spress', $str->slug());
         $this->assertEquals('bienvenido-a-espana', $str->setString('Bienvenido a España')->slug());
+        $this->assertEquals('hello-spress', $str->setString('hello  spress')->slug());
+        $this->assertEquals('hello-spress', $str->setString('-hello-spress-')->slug());
+        $this->assertEquals('12-cheese', $str->setString('1\2 cheese')->slug());
+        $this->assertEquals('2-step', $str->setString('.,;{}+¨¿?=()/&%$·#@|!ºª2 step     ^[]')->slug());
     }
 
     public function testToAscii()

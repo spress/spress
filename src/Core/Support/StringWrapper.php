@@ -15,6 +15,7 @@ namespace Yosymfony\Spress\Core\Support;
  * A wrapper for working with string.
  *
  * Based on https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Arr.php
+ * and https://github.com/danielstjules/Stringy/blob/master/src/Stringy.php
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -85,6 +86,16 @@ class StringWrapper
         $str = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $str);
 
         return trim($str, $separator);
+    }
+
+    /**
+     * Returns the string wrapped.
+     *
+     * @return string The current value of the wrapper.
+     */
+    public function __toString()
+    {
+        return $this->str;
     }
 
     /**

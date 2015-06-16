@@ -95,7 +95,7 @@ class StringWrapper
      *
      * @return bool
      */
-    public function startsWith($value)
+    public function startWith($value)
     {
         return $value != '' && strpos($this->str, $value) === 0;
     }
@@ -107,7 +107,7 @@ class StringWrapper
      *
      * @return bool
      */
-    public function endsWith($value)
+    public function endWith($value)
     {
         return (string) $value === substr($this->str, -strlen($value));
     }
@@ -121,7 +121,7 @@ class StringWrapper
      */
     public function deletePrefix($prefix)
     {
-        if ($this->startsWith($prefix) === true) {
+        if ($this->startWith($prefix) === true) {
             return substr($this->str, strlen($prefix));
         }
 
@@ -137,7 +137,7 @@ class StringWrapper
      */
     public function deleteSufix($sufix)
     {
-        if ($this->endsWith($sufix) === true) {
+        if ($this->endWith($sufix) === true) {
             return substr($this->str, 0, -strlen($sufix));
         }
 

@@ -27,20 +27,20 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2-step', $str->setString('.,;{}+¨¿?=()/&%$·#@|!ºª2 step     ^[]')->slug());
     }
 
-    public function testStartsWith()
+    public function testStartWith()
     {
         $str = new StringWrapper('Welcome to Spress');
 
-        $this->assertTrue($str->startsWith('Wel'));
-        $this->assertFalse($str->startsWith('Well'));
+        $this->assertTrue($str->startWith('Wel'));
+        $this->assertFalse($str->startWith('Well'));
     }
 
-    public function testEndsWith()
+    public function testEndWith()
     {
         $str = new StringWrapper('Welcome to Spress');
 
-        $this->assertTrue($str->endsWith('press'));
-        $this->assertFalse($str->endsWith('to'));
+        $this->assertTrue($str->endWith('press'));
+        $this->assertFalse($str->endWith('to'));
     }
 
     public function testDeletePrefix()

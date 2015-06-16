@@ -28,6 +28,12 @@ class SupportFacadeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Yosymfony\Spress\Core\Support\ArrayWrapper', $this->support->getArrayWrapper([]));
     }
 
+    public function testGetStringWrapper()
+    {
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\Support\StringWrapper', $this->support->getStringWrapper());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\Support\StringWrapper', $this->support->getStringWrapper('Hi'));
+    }
+
     public function testGetAttributeResolver()
     {
         $this->assertInstanceOf('\Yosymfony\Spress\Core\Support\AttributesResolver', $this->support->getAttributesResolver());

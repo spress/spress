@@ -19,7 +19,7 @@ namespace Yosymfony\Spress\Core\Support;
 class SupportFacade
 {
     /**
-     * Get an ArrayWrapper.
+     * Gets an ArrayWrapper.
      *
      * @return \Yosymfony\Spress\Core\Support\ArrayWrapper
      */
@@ -29,7 +29,19 @@ class SupportFacade
     }
 
     /**
-     * Get an AttributeResolver.
+     * Gets an StringWrapper.
+     *
+     * @param string $str The string.
+     *
+     * @return \Yosymfony\Spress\Core\Support\StringWrapper
+     */
+    public function getStringWrapper($str = '')
+    {
+        return new StringWrapper($str);
+    }
+
+    /**
+     * Gets an AttributeResolver.
      *
      * @return \Yosymfony\Spress\Core\Support\AttributesResolver
      */

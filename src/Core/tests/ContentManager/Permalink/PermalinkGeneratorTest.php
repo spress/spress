@@ -13,12 +13,13 @@ namespace Yosymfony\Spress\Core\tests\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\DataSource\Item;
+use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNonePermalink()
     {
-        $pmg = new PermalinkGenerator('none');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'none');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkInterface', $permalink);
@@ -26,7 +27,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/index.html', $permalink->getUrlPath());
 
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
-            'collection' => 'events'
+            'collection' => 'events',
         ]));
 
         $this->assertEquals('events/index.html', $permalink->getPath());
@@ -35,10 +36,10 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDatePermalink()
     {
-        $pmg = new PermalinkGenerator('date');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'date');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
-            'title' => 'my-post'
+            'title' => 'my-post',
         ]));
 
         $this->assertEquals('2015/04/17/my-post.html', $permalink->getPath());
@@ -47,7 +48,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'my-post',
-            'collection' => 'events'
+            'collection' => 'events',
         ]));
 
         $this->assertEquals('events/2015/04/17/my-post.html', $permalink->getPath());
@@ -61,10 +62,10 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testOrdinalPermalink()
     {
-        $pmg = new PermalinkGenerator('ordinal');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'ordinal');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-01',
-            'title' => 'my-post'
+            'title' => 'my-post',
         ]));
 
         $this->assertEquals('2015/1/my-post.html', $permalink->getPath());
@@ -73,7 +74,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'my-post',
-            'collection' => 'events'
+            'collection' => 'events',
         ]));
 
         $this->assertEquals('events/2015/17/my-post.html', $permalink->getPath());
@@ -87,7 +88,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPrettyPermalink()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertEquals('index.html', $permalink->getPath());
@@ -114,14 +115,14 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/docs/users.xml', $permalink->getUrlPath());
 
         $permalink = $pmg->getPermalink($this->createItem('docs/users.xml', [
-            'collection' => 'events'
+            'collection' => 'events',
         ]));
 
         $this->assertEquals('events/docs/users.xml', $permalink->getPath());
         $this->assertEquals('/events/docs/users.xml', $permalink->getUrlPath());
 
         $permalink = $pmg->getPermalink($this->createItem('docs/users.xml', [
-            'collection' => 'pages'
+            'collection' => 'pages',
         ]));
 
         $this->assertEquals('docs/users.xml', $permalink->getPath());
@@ -130,9 +131,9 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPrettyDatePermalink()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
-            'date' => '2015-04-17'
+            'date' => '2015-04-17',
         ]));
 
         $this->assertEquals('2015/04/17/index.html', $permalink->getPath());
@@ -140,7 +141,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
-            'title' => 'my first post'
+            'title' => 'my first post',
         ]));
 
         $this->assertEquals('2015/04/17/my-first-post/index.html', $permalink->getPath());
@@ -158,11 +159,11 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPermalinkAttribute()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'permalink' => 'none',
             'date' => '2015-04-17',
-            'title' => 'my first post'
+            'title' => 'my first post',
         ]));
 
         $this->assertEquals('index.html', $permalink->getPath());
@@ -171,7 +172,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomPermalink()
     {
-        $pmg = new PermalinkGenerator('/my-path/:basename.:extension');
+        $pmg = new PermalinkGenerator(new SupportFacade(), '/my-path/:basename.:extension');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertEquals('my-path/index.html', $permalink->getPath());
@@ -180,7 +181,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'permalink' => '/my-path/:year-:month-:day-:title.:extension',
             'date' => '2015-04-17',
-            'title' => 'my first post'
+            'title' => 'my first post',
         ]));
 
         $this->assertEquals('my-path/2015-04-17-my-first-post.html', $permalink->getPath());
@@ -189,11 +190,11 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPreservePathTitle()
     {
-        $pmg = new PermalinkGenerator('/:title/index.html', true);
+        $pmg = new PermalinkGenerator(new SupportFacade(), '/:title/index.html', true);
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'title post',
-            'title_path' => 'first-post'
+            'title_path' => 'first-post',
         ]));
 
         $this->assertEquals('first-post/index.html', $permalink->getPath());
@@ -203,7 +204,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
             'date' => '2015-04-17',
             'preserve_path_title' => false,
             'title' => 'title post',
-            'title_path' => 'first-post'
+            'title_path' => 'first-post',
         ]));
 
         $this->assertEquals('title-post/index.html', $permalink->getPath());
@@ -212,7 +213,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPermalinkForBinaryItem()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
 
         $item = $this->createItem('spress.phar', [], true);
         $permalink = $pmg->getPermalink($item);
@@ -232,7 +233,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrettyBadTypeForCategoriesAttribute()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'categories' => 'news',
         ]));
@@ -243,7 +244,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrettyBadDateAttribute()
     {
-        $pmg = new PermalinkGenerator('pretty');
+        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => [],
         ]));

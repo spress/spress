@@ -112,7 +112,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $gm = $this->getGeneratorManager();
         $cm = $this->getConverterManager();
         $com = $this->getCollectionManager();
-        $pg = new PermalinkGenerator('pretty');
+        $pg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $renderizer = $this->getRenderizer();
         $dispatcher = new EventDispatcher();
         $io = new NullIO();

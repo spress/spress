@@ -13,7 +13,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
-use Yosymfony\Spress\Core\Utils;
+use Yosymfony\Spress\Core\Support\SupportFacade;
 
 /**
  * Iterface for a permalink generator.
@@ -29,13 +29,15 @@ use Yosymfony\Spress\Core\Utils;
  */
 class PermalinkGenerator
 {
+    private $support;
     private $defaultPermalink;
     private $defaultPreservePathTitle;
 
     /**
      * Constructor.
      *
-     * @param string $defaultPermalink
+     * @param \Yosymfony\Spress\Core\Support\SupportFacade $support          Support classes.
+     * @param string                                       $defaultPermalink
      *
      *   Each item's URL are prefixed by "/:collection" if the item are included in a custom collection.
      *
@@ -53,9 +55,11 @@ class PermalinkGenerator
      *
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
+     * @param bool $defaultPreservePathTitle Default value for Preserve-path-title.
      */
-    public function __construct($defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
+    public function __construct(SupportFacade $support, $defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
     {
+        $this->support = $support;
         $this->defaultPermalink = $defaultPermalink;
         $this->defaultPreservePathTitle = $defaultPreservePathTitle;
     }
@@ -206,16 +210,17 @@ class PermalinkGenerator
 
     private function getTitleSlugified(ItemInterface $item)
     {
+        $str = $this->support->getStringWrapper();
         $attributes = $item->getAttributes();
 
         $preservePathTitle = $this->getPreservePathTitleAttribute($item);
 
         if ($preservePathTitle === true && isset($attributes['title_path']) === true) {
-            return Utils::slugify($attributes['title_path']);
+            return $str->setString($attributes['title_path'])->slug();
         }
 
         if (isset($attributes['title']) === true) {
-            return Utils::slugify($attributes['title']);
+            return $str->setString($attributes['title'])->slug();
         }
     }
 
@@ -232,7 +237,7 @@ class PermalinkGenerator
         }
 
         return implode('/', array_map(function ($a) {
-            return Utils::slugify($a);
+            return $this->support->getStringWrapper($a)->slug();
         }, $attributes['categories']));
     }
 

@@ -70,7 +70,7 @@ class StringWrapper
     }
 
     /**
-     * Generate a URL friendly "slug" from a given string.
+     * Generate a URL friendly "slug".
      *
      * @param string $separator
      *
@@ -86,6 +86,62 @@ class StringWrapper
         $str = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $str);
 
         return trim($str, $separator);
+    }
+
+    /**
+     * Determine if a the string starts with a given substring.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function startsWith($value)
+    {
+        return $value != '' && strpos($this->str, $value) === 0;
+    }
+
+    /**
+     * Determine if a the string ends with a given substring.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function endsWith($value)
+    {
+        return (string) $value === substr($this->str, -strlen($value));
+    }
+
+    /**
+     * Deletes a prefix of the string.
+     *
+     * @param string $prefix The prefix.
+     *
+     * @return string The string without prefix.
+     */
+    public function deletePrefix($prefix)
+    {
+        if ($this->startsWith($prefix) === true) {
+            return substr($this->str, strlen($prefix));
+        }
+
+        return $this->str;
+    }
+
+    /**
+     * Deletes a sufix of the string.
+     *
+     * @param string $sufix The sufix.
+     *
+     * @return string The string without sufix.
+     */
+    public function deleteSufix($sufix)
+    {
+        if ($this->endsWith($sufix) === true) {
+            return substr($this->str, 0, -strlen($sufix));
+        }
+
+        return $this->str;
     }
 
     /**

@@ -27,6 +27,40 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2-step', $str->setString('.,;{}+¨¿?=()/&%$·#@|!ºª2 step     ^[]')->slug());
     }
 
+    public function testStartsWith()
+    {
+        $str = new StringWrapper('Welcome to Spress');
+
+        $this->assertTrue($str->startsWith('Wel'));
+        $this->assertFalse($str->startsWith('Well'));
+    }
+
+    public function testEndsWith()
+    {
+        $str = new StringWrapper('Welcome to Spress');
+
+        $this->assertTrue($str->endsWith('press'));
+        $this->assertFalse($str->endsWith('to'));
+    }
+
+    public function testDeletePrefix()
+    {
+        $str = new StringWrapper('Welcome to Spress');
+
+        $this->assertEquals('to Spress', $str->deletePrefix('Welcome '));
+        $this->assertEquals('Welcome to Spress', $str->deletePrefix('Hi'));
+        $this->assertEquals('Welcome to Spress', $str->deletePrefix(''));
+    }
+
+    public function testDeleteSufix()
+    {
+        $str = new StringWrapper('Welcome to Spress');
+
+        $this->assertEquals('Welcome to', $str->deleteSufix(' Spress'));
+        $this->assertEquals('Welcome to Spress', $str->deleteSufix('Hi'));
+        $this->assertEquals('Welcome to Spress', $str->deleteSufix(''));
+    }
+
     public function testToAscii()
     {
         $str = new StringWrapper('camión');

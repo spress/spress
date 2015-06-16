@@ -34,7 +34,6 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $items = $fsDataSource->getItems();
         $layouts = $fsDataSource->getLayouts();
         $includes = $fsDataSource->getIncludes();
-        print_r(array_keys($includes));
 
         $this->assertTrue(is_array($items));
         $this->assertTrue(is_array($layouts));

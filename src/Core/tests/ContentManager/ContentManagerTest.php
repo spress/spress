@@ -61,7 +61,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dw->hasItem('LICENSE'));
         $this->assertTrue($dw->hasItem('category-1/category-2/2020/01/01/new-post-example/index.html'));
         $this->assertTrue($dw->hasItem('2013/08/12/post-example-2/index.html'));
-        $this->assertTrue($dw->hasItem('2013/08/11/best-book/index.html'));
+        $this->assertTrue($dw->hasItem('books/2013/08/11/best-book/index.html'));
         $this->assertTrue($dw->hasItem('projects/index.html'));
         $this->assertTrue($dw->hasItem('robots.txt'));
         $this->assertTrue($dw->hasItem('sitemap.xml'));
@@ -74,7 +74,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/index.html')->getContent());
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/page2/index.html')->getContent());
 
-        $attributes = $dw->getItem('2013/08/11/best-book/index.html')->getAttributes();
+        $attributes = $dw->getItem('books/2013/08/11/best-book/index.html')->getAttributes();
         $this->assertArrayHasKey('author', $attributes);
         $this->assertEquals('Yo! Symfony', $attributes['author']);
     }
@@ -101,9 +101,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(15, $dw->getItems());
         print_r(array_keys($dw->getItems()));
 
-        $this->assertTrue($dw->hasItem('2013/09/19/new-book/index.html'));
+        $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
 
-        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('2013/09/19/new-book/index.html')->getContent());
+        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('books/2013/09/19/new-book/index.html')->getContent());
     }
 
     protected function getContentManager($dataWriter)

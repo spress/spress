@@ -16,6 +16,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
+use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Data source for the filesystem. Binary items don’t have their content
@@ -226,6 +227,18 @@ class FilesystemDataSource extends AbstractDataSource
             if (isset($attributes['date']) === false) {
                 $attributes['date'] = implode('-', [$data[0], $data[1], $data[2]]);
             }
+        }
+
+        $str = new StringWrapper($file->getRelativePath());
+
+        if ($item->isBinary() === false && $str->startWith('posts/') === true) {
+            $categories = explode(DIRECTORY_SEPARATOR, $str->deletePrefix('posts/'));
+
+            if ($categories[0] === '') {
+                unset($categories[0]);
+            }
+
+            $attributes['categories'] = $categories;
         }
 
         $item->setAttributes($attributes);

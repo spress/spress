@@ -76,6 +76,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
         $attributes = $dw->getItem('books/2013/08/11/best-book/index.html')->getAttributes();
         $this->assertArrayHasKey('author', $attributes);
+        $this->assertArrayHasKey('categories', $attributes);
+        $this->assertContains('books', $attributes['categories']);
         $this->assertEquals('Yo! Symfony', $attributes['author']);
     }
 

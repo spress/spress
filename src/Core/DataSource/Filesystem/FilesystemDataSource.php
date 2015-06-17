@@ -231,8 +231,8 @@ class FilesystemDataSource extends AbstractDataSource
 
         $str = new StringWrapper($file->getRelativePath());
 
-        if ($item->isBinary() === false && $str->startWith('posts/') === true) {
-            $categories = explode(DIRECTORY_SEPARATOR, $str->deletePrefix('posts/'));
+        if ($str->startWith('posts/') === true && array_key_exists('categories', $attributes) === false) {
+            $categories = explode('/', $str->deletePrefix('posts/'));
 
             if ($categories[0] === '') {
                 unset($categories[0]);

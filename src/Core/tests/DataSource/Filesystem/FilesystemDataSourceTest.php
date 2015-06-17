@@ -65,6 +65,10 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('meta_filename', $itemAttributes);
         $this->assertStringStartsWith('Post example 1', $items['posts/2013-08-12-post-example-1.md']->getContent());
 
+        $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
+        $this->assertArrayHasKey('categories', $itemAttributes);
+        $this->assertCount(1, $itemAttributes['categories']);
+
         $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
         $this->assertArrayHasKey('title', $itemAttributes);
         $this->assertArrayHasKey('title_path', $itemAttributes);

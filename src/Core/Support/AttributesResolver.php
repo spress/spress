@@ -121,18 +121,18 @@ class AttributesResolver
             }
         }
 
+        foreach ($clone->notNullables as $attribute) {
+            if (is_null($clone->resolved[$attribute]) === true) {
+                throw new AttributeValueException('Unexpected null value.', $attribute);
+            }
+        }
+
         foreach ($clone->validators as $attribute => $validator) {
-            if ($validator($clone->resolved[$attribute]) === false) {
+            if (is_null($clone->resolved[$attribute]) === false && $validator($clone->resolved[$attribute]) === false) {
                 throw new AttributeValueException(
                         sprintf('Invalid value.', $attribute),
                         $attribute
                     );
-            }
-        }
-
-        foreach ($clone->notNullables as $attribute) {
-            if (is_null($clone->resolved[$attribute]) === true) {
-                throw new AttributeValueException('Unexpected null value.', $attribute);
             }
         }
 

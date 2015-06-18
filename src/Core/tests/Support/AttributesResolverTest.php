@@ -68,6 +68,23 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result['port']);
     }
 
+    public function testNullableWithValidator()
+    {
+        $a = new AttributesResolver();
+        $a->setDefault('layout', null, 'string', false, true)
+            ->setValidator('layout', function ($value) {
+                return strlen($value) > 0;
+            });
+
+        $result = $a->resolve([]);
+
+        $this->assertNull($result['layout']);
+
+        $result = $a->resolve(['layout' => 'default']);
+
+        $this->assertEquals('default', $result['layout']);
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */

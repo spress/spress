@@ -23,6 +23,7 @@ use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Support\SupportFacade;
 
 /**
  * Content manager.
@@ -43,12 +44,14 @@ class ContentManager
     private $eventDispatcher;
     private $timezone;
     private $safe;
-    private $draft;
+    private $processDraft;
+    private $support;
 
     private $attributes;
     private $siteAttributes;
     private $spressAttributes;
     private $parseResult;
+    private $postAttributesResolver;
 
     private $items;
     private $itemsGenerator;
@@ -64,6 +67,7 @@ class ContentManager
      * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer
      * @param Symfony\Component\EventDispatcher\EventDispatcher                   $eventDispatcher
      * @param Yosymfony\Spress\Core\IO\IOInterface                                $io
+     * @param Yosymfony\Spress\Core\Support\SupportFacade                         $support            Support classes
      */
     public function __construct(
         DataSourceManager $dataSourceManager,
@@ -74,7 +78,8 @@ class ContentManager
         PermalinkGenerator $permalinkGenerator,
         RenderizerInterface $renderizer,
         EventDispatcher $eventDispatcher,
-        IOInterface $io)
+        IOInterface $io,
+        SupportFacade $support)
     {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
@@ -85,6 +90,8 @@ class ContentManager
         $this->renderizer = $renderizer;
         $this->eventDispatcher = $eventDispatcher;
         $this->io = $io;
+        $this->support = $support;
+        $this->postAttributesResolver = $this->getPostAttributesResolver();
 
         $this->attributes = [];
         $this->siteAttributes = [];
@@ -113,7 +120,7 @@ class ContentManager
         $this->spressAttributes = $spressAttributes;
         $this->safe = $safe;
         $this->timezone = $timezone;
-        $this->draft = $draft;
+        $this->processDraft = $draft;
 
         $this->reset();
         $this->setUp();
@@ -163,7 +170,7 @@ class ContentManager
 
             $this->processCollection($item);
             $this->processDraftIfPost($item);
-            $this->processOutputattribute($item);
+            $this->processOutputAttribute($item);
 
             $this->items[$item->getId()] = $item;
         }
@@ -196,33 +203,6 @@ class ContentManager
         $this->dataWriter->tearDown();
     }
 
-    private function prepareRenderizer()
-    {
-        $layouts = $this->dataSourceManager->getLayouts();
-        $includes = $this->dataSourceManager->getIncludes();
-
-        foreach ($layouts as $item) {
-            $this->renderizer->addLayout($item->getId(), $item->getContent(), $item->getAttributes());
-        }
-
-        foreach ($includes as $item) {
-            $this->renderizer->addInclude($item->getId(), $item->getContent(), $item->getAttributes());
-        }
-    }
-
-    private function renderBlocks(ItemInterface $item)
-    {
-        return $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttributes);
-    }
-
-    private function renderPage(ItemInterface $item)
-    {
-        $layout = $this->getLayoutAttribute($item);
-        $this->siteAttributes['page'] = $this->getItemAttributes($item);
-
-        return $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttributes);
-    }
-
     private function processCollection(ItemInterface $item)
     {
         $collection = $this->CollectionManager->getCollectionForItem($item);
@@ -240,21 +220,15 @@ class ContentManager
             $this->siteAttributes['site']['collections'][$collectionName] = $this->getCollectionAttributes($collection);
         }
 
-        $this->siteAttributes['site'][$collectionName][$item->getId()] = $this->getItemAttributes($item);
+        $this->setItemOnSiteAttributes($item);
     }
 
     private function processDraftIfPost(ItemInterface $item)
     {
-        $attributes = $item->getAttributes();
+        $attributes = $this->postAttributesResolver->resolve($item->getAttributes());
 
-        if ($attributes['collection'] === 'posts' && array_key_exists('draft', $attributes)) {
-            $draft = $attributes['draft'];
-
-            if (is_bool($draft) === false) {
-                throw new AttributeValueException('Invalid value. Expected boolean.', 'draft', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-            }
-
-            if ($this->draft === false && $draft === true) {
+        if ($attributes['collection'] === 'posts' &&  $attributes['draft'] === true) {
+            if ($this->processDraft === false) {
                 $attributes['output'] = false;
 
                 $item->setAttributes($attributes);
@@ -262,7 +236,7 @@ class ContentManager
         }
     }
 
-    private function processOutputattribute(ItemInterface $item)
+    private function processOutputAttribute(ItemInterface $item)
     {
         $attributes = $item->getAttributes();
 
@@ -280,13 +254,6 @@ class ContentManager
         }
     }
 
-    private function isGenerator(ItemInterface $item)
-    {
-        $attributes = $item->getAttributes();
-
-        return isset($attributes['generator']);
-    }
-
     private function processGenerator(ItemInterface $item)
     {
         $attributes = $item->getAttributes();
@@ -301,6 +268,27 @@ class ContentManager
 
             $this->processCollection($item);
             $this->items[$item->getId()] = $item;
+        }
+    }
+
+    private function isGenerator(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        return isset($attributes['generator']);
+    }
+
+    private function prepareRenderizer()
+    {
+        $layouts = $this->dataSourceManager->getLayouts();
+        $includes = $this->dataSourceManager->getIncludes();
+
+        foreach ($layouts as $item) {
+            $this->renderizer->addLayout($item->getId(), $item->getContent(), $item->getAttributes());
+        }
+
+        foreach ($includes as $item) {
+            $this->renderizer->addInclude($item->getId(), $item->getContent(), $item->getAttributes());
         }
     }
 
@@ -326,6 +314,55 @@ class ContentManager
         $attributes['url'] = $permalink->getUrlPath();
 
         $item->setAttributes($attributes);
+    }
+
+    private function renderBlocks(ItemInterface $item)
+    {
+        return $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttributes);
+    }
+
+    private function renderPage(ItemInterface $item)
+    {
+        $layout = $this->getLayoutAttribute($item);
+        $this->siteAttributes['page'] = $this->getItemAttributes($item);
+
+        return $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttributes);
+    }
+
+    private function setItemOnSiteAttributes(ItemInterface $item)
+    {
+        $previousAttributes = [];
+        $attributes = $this->getItemAttributes($item);
+        $collectionName = $attributes['collection'];
+        $id = $item->getId();
+
+        if (isset($this->siteAttributes['site'][$collectionName][$id])) {
+            $previousAttributes = $this->siteAttributes['site'][$collectionName][$id];
+        }
+
+        $newAttributes = array_merge($previousAttributes, $attributes);
+
+        $this->siteAttributes['site'][$collectionName][$id] = $newAttributes;
+
+        if ($collectionName === 'posts') {
+            $postAttributes = $this->postAttributesResolver->resolve($attributes);
+
+            foreach ($postAttributes['categories'] as $category) {
+                if (isset($this->siteAttributes['site']['categories'][$category]) === false) {
+                    $this->siteAttributes['site']['categories'][$category] = [];
+                }
+
+                $this->siteAttributes['site']['categories'][$category][$id] = $newAttributes;
+            }
+
+            foreach ($postAttributes['tags'] as $tag) {
+                if (isset($this->siteAttributes['site']['tags'][$tag]) === false) {
+                    $this->siteAttributes['site']['tags'][$tag] = [];
+                }
+
+                $this->siteAttributes['site']['categories'][$tag][$id] = $newAttributes;
+            }
+        }
     }
 
     private function generateSiteAttributes()
@@ -391,5 +428,15 @@ class ContentManager
         }
 
         return $attributes['layout'];
+    }
+
+    private function getPostAttributesResolver()
+    {
+        $resolver = $this->support->getAttributesResolver();
+        $resolver->setDefault('draft', false, 'bool')
+            ->setDefault('categories', [], 'array')
+            ->setDefault('tags', [], 'array');
+
+        return $resolver;
     }
 }

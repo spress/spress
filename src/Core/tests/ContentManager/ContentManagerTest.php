@@ -118,8 +118,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $renderizer = $this->getRenderizer();
         $dispatcher = new EventDispatcher();
         $io = new NullIO();
+        $support = new SupportFacade();
 
-        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $dispatcher, $io);
+        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $dispatcher, $io, $support);
     }
 
     protected function getCollectionManager()

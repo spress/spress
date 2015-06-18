@@ -96,6 +96,7 @@ class AttributesResolver
 
     /**
      * Merges options with the default values and validates them.
+     * If an attribute is marked as nullable the validate function never will be invoked.
      *
      * @param array $attributes
      *

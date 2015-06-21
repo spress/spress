@@ -36,8 +36,11 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $site->initialize([
             'name' => 'A Spress site',
         ]);
+        $site->addAttribute('site.author', 'Yo! Symfony');
 
         $this->assertTrue($site->hasAttribute('site.name'));
+        $this->assertTrue($site->hasAttribute('site.author'));
+        $this->assertEquals('Yo! Symfony', $site->getAttribute('site.author'));
 
         $arr = $site->getAttributes();
 

@@ -29,4 +29,26 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('categories', $arr['site']);
         $this->assertArrayHasKey('tags', $arr['site']);
     }
+
+    public function testMergedAttributes()
+    {
+        $site = new SiteAttribute(new SupportFacade());
+        $site->initialize([
+            'name' => 'A Spress site',
+        ]);
+
+        $this->assertTrue($site->hasAttribute('site.name'));
+
+        $arr = $site->getAttributes();
+
+        $this->assertArrayHasKey('spress', $arr);
+        $this->assertArrayHasKey('site', $arr);
+        $this->assertArrayHasKey('page', $arr);
+        $this->assertArrayHasKey('time', $arr['site']);
+        $this->assertArrayHasKey('name', $arr['site']);
+        $this->assertEquals('A Spress site', $arr['site']['name']);
+        $this->assertArrayHasKey('collections', $arr['site']);
+        $this->assertArrayHasKey('categories', $arr['site']);
+        $this->assertArrayHasKey('tags', $arr['site']);
+    }
 }

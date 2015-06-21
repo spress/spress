@@ -22,14 +22,14 @@ use Yosymfony\Spress\Core\Support\SupportFacade;
 class SiteAttribute implements SiteAttributeInterface
 {
     protected $support;
-    protected $arryWrapper;
+    protected $arrayWrapper;
     protected $postAttributesResolver;
 
     public function __construct(SupportFacade $support)
     {
         $this->support = $support;
 
-        $this->arryWrapper = $this->support->getArrayWrapper();
+        $this->arrayWrapper = $this->support->getArrayWrapper();
         $this->postAttributesResolver = $this->getPostAttributesResolver();
 
         $this->initialize();
@@ -56,7 +56,7 @@ class SiteAttribute implements SiteAttributeInterface
      */
     public function getAttributes()
     {
-        return $this->arryWrapper->getArray();
+        return $this->arrayWrapper->getArray();
     }
 
     /**
@@ -64,7 +64,7 @@ class SiteAttribute implements SiteAttributeInterface
      */
     public function hasAttribute($name)
     {
-        $this->arrayWrapper->has($name);
+        return $this->arrayWrapper->has($name);
     }
 
     /**
@@ -122,7 +122,7 @@ class SiteAttribute implements SiteAttributeInterface
         $site['site']['tags'] = [];
         $site['page'] = [];
 
-        $this->arryWrapper->setArray($site);
+        $this->arrayWrapper->setArray($site);
     }
 
     protected function getItemAttributes(ItemInterface $item)

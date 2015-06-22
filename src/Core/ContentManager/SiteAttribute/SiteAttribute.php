@@ -151,8 +151,7 @@ class SiteAttribute implements SiteAttributeInterface
     protected function getPostAttributesResolver()
     {
         $resolver = $this->support->getAttributesResolver();
-        $resolver->setDefault('draft', false, 'bool')
-            ->setDefault('categories', [], 'array')
+        $resolver->setDefault('categories', [], 'array')
             ->setDefault('tags', [], 'array');
 
         return $resolver;

@@ -25,7 +25,10 @@ interface SiteAttributeInterface
 {
     /**
      * Adds an attribute using "dot" notation if doesn't exists.
-     * e.g: $->addAttribute('site.name', 'Spress site');.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
+     *
+     * e.g: $a->addAttribute('site.name', 'Spress site');
+     *      $a->addAttribute('site.pages.index[.]html', 'The content');
      *
      * @param string $name  The name of the attribute.
      * @param mixed  $value The value of the attribute.
@@ -34,6 +37,7 @@ interface SiteAttributeInterface
 
     /**
      * Get a value using "dot" notation.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $name
      *
@@ -50,6 +54,7 @@ interface SiteAttributeInterface
 
     /**
      * Check if an attribute exists in using "dot" notation.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $name The name of the attribute.
      *

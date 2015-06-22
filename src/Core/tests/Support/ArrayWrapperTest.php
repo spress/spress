@@ -21,9 +21,11 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $a->add('name', 'Yo! Symfony');
         $a->add('name', 'Yo! Symfony 2');
         $a->add('title', 'Hi');
+        $a->add('site.pages.index[.]html', 'The content');
 
         $this->assertEquals('Yo! Symfony', $a->get('name'));
         $this->assertEquals('Hi', $a->get('title'));
+        $this->assertEquals('The content', $a->get('site.pages.index[.]html'));
     }
 
     public function testGet()
@@ -31,11 +33,13 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $a = new ArrayWrapper([
             'site' => [
                 'name' => 'Yo! Symfony',
+                'index.html' => 'Index content',
             ],
         ]);
 
         $this->assertTrue(is_array($a->get('site')));
         $this->assertEquals('Yo! Symfony', $a->get('site.name'));
+        $this->assertEquals('Index content', $a->get('site.index[.]html'));
         $this->assertEquals('Default value', $a->get('site.not-exists', 'Default value'));
         $this->assertEquals('Default value', $a->get('', 'Default value'));
         $this->assertEquals('Default value', $a->get(null, 'Default value'));
@@ -47,8 +51,12 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
     {
         $a = new ArrayWrapper();
         $a->set('site.name', 'Yo! Symfony');
+        $a->add('site.pages.index[.]html', 'The content');
+        $a->add('index[.]html', 'The content');
 
         $this->assertTrue($a->has('site.name'));
+        $this->assertTrue($a->has('site.pages.index[.]html'));
+        $this->assertTrue($a->has('index[.]html'));
         $this->assertFalse($a->has('site.notExists'));
     }
 
@@ -124,8 +132,10 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
     {
         $a = new ArrayWrapper();
         $a->set('site.name', 'Yo! Symfony');
+        $a->add('site.pages.index[.]html', 'The content');
 
         $this->assertEquals('Yo! Symfony', $a->get('site.name'));
+        $this->assertEquals('The content', $a->get('site.pages.index[.]html'));
     }
 
     public function testWhere()

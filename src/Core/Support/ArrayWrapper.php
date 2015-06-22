@@ -23,8 +23,8 @@ class ArrayWrapper
     protected $array;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @param array $array
      */
     public function __construct(array $array = [])
@@ -34,6 +34,7 @@ class ArrayWrapper
 
     /**
      * Add an element using "dot" notation if doesn't exists.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param $key
      * @param $value
@@ -51,8 +52,9 @@ class ArrayWrapper
 
     /**
      * Get a value from a deeply nested array using "dot" notation.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
-     * e.g: $a->get('site.data')
+     * e.g: $a->get('site.data') or $a->get('site.pages.index[.]html')
      *
      * @param string $key
      * @param mixed  $default
@@ -62,17 +64,20 @@ class ArrayWrapper
     public function get($key, $default = null)
     {
         $array = $this->array;
+        $unescapedKey = $this->unescapeDotKey($key);
 
-        if (isset($array[$key])) {
-            return $array[$key];
+        if (isset($array[$unescapedKey])) {
+            return $array[$unescapedKey];
         }
 
-        foreach (explode('.', $key) as $step) {
-            if (is_array($array) === false || array_key_exists($step, $array) === false) {
+        foreach (explode('.', $this->escapedDotKeyToUnderscore($key)) as $segment) {
+            $segment = $this->underscoreDotKeyToDot($segment);
+
+            if (is_array($array) === false || array_key_exists($segment, $array) === false) {
                 return $default;
             }
 
-            $array = $array[$step];
+            $array = $array[$segment];
         }
 
         return $array;
@@ -90,6 +95,7 @@ class ArrayWrapper
 
     /**
      * Check if an item exists in using "dot" notation.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $key
      *
@@ -103,11 +109,13 @@ class ArrayWrapper
             return false;
         }
 
-        if (array_key_exists($key, $array)) {
+        if (array_key_exists($this->unescapeDotKey($key), $array)) {
             return true;
         }
 
-        foreach (explode('.', $key) as $segment) {
+        foreach (explode('.', $this->escapedDotKeyToUnderscore($key)) as $segment) {
+            $segment = $this->underscoreDotKeyToDot($segment);
+
             if (is_array($array) === false || array_key_exists($segment, $array) === false) {
                 return false;
             }
@@ -154,6 +162,7 @@ class ArrayWrapper
 
     /**
      * Set an item using "dot" notation.
+     * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $key
      * @param mixed  $value
@@ -168,10 +177,10 @@ class ArrayWrapper
             return $array;
         }
 
-        $keys = explode('.', $key);
+        $keys = explode('.', $this->escapedDotKeyToUnderscore($key));
 
         while (count($keys) > 1) {
-            $key = array_shift($keys);
+            $key = $this->underscoreDotKeyToDot(array_shift($keys));
 
             if (isset($array[$key]) === false || is_array($array[$key]) === false) {
                 $array[$key] = [];
@@ -180,7 +189,7 @@ class ArrayWrapper
             $array = &$array[$key];
         }
 
-        $array[array_shift($keys)] = $value;
+        $array[$this->underscoreDotKeyToDot(array_shift($keys))] = $value;
 
         return $this->array;
     }
@@ -217,5 +226,20 @@ class ArrayWrapper
         }
 
         return $filtered;
+    }
+
+    protected function unescapeDotKey($key)
+    {
+        return str_replace('[.]', '.', $key);
+    }
+
+    protected function escapedDotKeyToUnderscore($key)
+    {
+        return str_replace('[.]', '__dot__', $key);
+    }
+
+    protected function underscoreDotKeyToDot($key)
+    {
+        return str_replace('__dot__', '.', $key);
     }
 }

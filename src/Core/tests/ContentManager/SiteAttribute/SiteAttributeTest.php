@@ -62,6 +62,10 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('tags', $arr['site']);
 
         $this->assertEquals('A Spress site', $arr['site']['name']);
+
+        $site->initialize();
+
+        $this->assertFalse($site->hasAttribute('site.name'));
     }
 
     public function testSetItem()
@@ -121,7 +125,6 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $arr = $site->getAttributes();
 
         $this->assertTrue(is_array($arr));
-        print_r($arr);
 
         $this->assertArrayHasKey('page', $arr);
         $this->assertArrayHasKey('categories', $arr['page']);

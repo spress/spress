@@ -103,4 +103,71 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('index.html', $arr['page']['id']);
         $this->assertEquals('index.html', $arr['page']['path']);
     }
+
+    public function testSetItemPostCollection()
+    {
+        $site = new SiteAttribute(new SupportFacade());
+        $site->initialize();
+
+        $item = new Item('The content', 'posts/2015-06-22-hi.md', [
+            'collection' => 'posts',
+            'title' => 'Welcome',
+            'categories' => ['news'],
+            'tags' => ['release'],
+        ]);
+        $item->setPath('2015/06/22/welcome/index.html', Item::SNAPSHOT_PATH_RELATIVE);
+        $site->setItem($item);
+
+        $arr = $site->getAttributes();
+
+        $this->assertTrue(is_array($arr));
+        print_r($arr);
+
+        $this->assertArrayHasKey('page', $arr);
+        $this->assertArrayHasKey('categories', $arr['page']);
+        $this->assertArrayHasKey('tags', $arr['page']);
+        $this->assertArrayHasKey('posts', $arr['site']);
+        $this->assertArrayHasKey('news', $arr['site']['categories']);
+        $this->assertArrayHasKey('release', $arr['site']['tags']);
+        $this->assertArrayHasKey('posts/2015-06-22-hi.md', $arr['site']['posts']);
+        $this->assertArrayHasKey('posts/2015-06-22-hi.md', $arr['site']['categories']['news']);
+        $this->assertArrayHasKey('posts/2015-06-22-hi.md', $arr['site']['tags']['release']);
+        $this->assertArrayHasKey('collections', $arr['site']);
+        $this->assertArrayHasKey('categories', $arr['site']);
+        $this->assertArrayHasKey('tags', $arr['site']);
+        $this->assertArrayHasKey('collection', $arr['page']);
+        $this->assertArrayHasKey('title', $arr['page']);
+        $this->assertArrayHasKey('id', $arr['page']);
+        $this->assertArrayHasKey('path', $arr['page']);
+
+        $this->assertCount(1, $arr['site']['posts']);
+        $this->assertCount(0, $arr['site']['collections']);
+        $this->assertCount(1, $arr['site']['categories']);
+        $this->assertCount(1, $arr['site']['tags']);
+
+        $this->assertEquals('posts', $arr['site']['posts']['posts/2015-06-22-hi.md']['collection']);
+        $this->assertEquals('Welcome', $arr['site']['posts']['posts/2015-06-22-hi.md']['title']);
+        $this->assertEquals('posts/2015-06-22-hi.md', $arr['site']['posts']['posts/2015-06-22-hi.md']['id']);
+        $this->assertEquals('2015/06/22/welcome/index.html', $arr['site']['posts']['posts/2015-06-22-hi.md']['path']);
+
+        $this->assertEquals('posts', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['collection']);
+        $this->assertEquals('Welcome', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['title']);
+        $this->assertEquals('posts/2015-06-22-hi.md', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['id']);
+        $this->assertEquals('2015/06/22/welcome/index.html',
+            $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['path']);
+
+        $this->assertEquals('posts', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['collection']);
+        $this->assertEquals('Welcome', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['title']);
+        $this->assertEquals('posts/2015-06-22-hi.md', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['id']);
+        $this->assertEquals('2015/06/22/welcome/index.html',
+            $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['path']);
+
+        $this->assertEquals('posts', $arr['page']['collection']);
+        $this->assertEquals('Welcome', $arr['page']['title']);
+        $this->assertEquals('posts/2015-06-22-hi.md', $arr['page']['id']);
+        $this->assertEquals('2015/06/22/welcome/index.html', $arr['page']['path']);
+
+        $this->assertCount(1, $arr['page']['categories']);
+        $this->assertCount(1, $arr['page']['tags']);
+    }
 }

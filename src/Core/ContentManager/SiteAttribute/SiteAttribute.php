@@ -23,6 +23,7 @@ class SiteAttribute implements SiteAttributeInterface
 {
     protected $support;
     protected $arrayWrapper;
+    protected $itemAttributesResolver;
     protected $postAttributesResolver;
 
     public function __construct(SupportFacade $support)
@@ -30,6 +31,7 @@ class SiteAttribute implements SiteAttributeInterface
         $this->support = $support;
 
         $this->arrayWrapper = $this->support->getArrayWrapper();
+        $this->itemAttributesResolver = $this->getItemAttributesResolver();
         $this->postAttributesResolver = $this->getPostAttributesResolver();
 
         $this->initialize();
@@ -81,9 +83,10 @@ class SiteAttribute implements SiteAttributeInterface
     public function setItem(ItemInterface $item)
     {
         $previousAttributes = [];
-        $attributes = $this->getItemAttributes($item);
+        $attributes = $this->itemAttributesResolver->resolve($this->getItemAttributes($item));
+
+        $id = str_replace('.', '[.]', $item->getId());
         $collectionName = $attributes['collection'];
-        $id = $item->getId();
 
         $itemPathName = sprintf('site.%s.%s', $collectionName, $id);
 
@@ -94,6 +97,7 @@ class SiteAttribute implements SiteAttributeInterface
         $newAttributes = array_merge($previousAttributes, $attributes);
 
         $this->setAttribute($itemPathName, $newAttributes);
+        $this->setAttribute('page', $newAttributes);
 
         if ($collectionName === 'posts') {
             $postAttributes = $this->postAttributesResolver->resolve($attributes);
@@ -134,6 +138,14 @@ class SiteAttribute implements SiteAttributeInterface
         $result['path'] = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
         return $result;
+    }
+
+    protected function getItemAttributesResolver()
+    {
+        $resolver = $this->support->getAttributesResolver();
+        $resolver->setDefault('collection', '', 'string', true);
+
+        return $resolver;
     }
 
     protected function getPostAttributesResolver()

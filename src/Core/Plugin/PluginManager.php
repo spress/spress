@@ -11,239 +11,127 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Finder\SplFileInfo;
-use Composer\Autoload\ClassLoader;
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
-use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
 
 /**
- * Plugins manager
+ * Plugins manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class PluginManager
 {
-    private $options = [];
-    private $contentLocator;
-    private $classLoader;
-    private $dispatcher;
-    private $plugins = [];
-    private $eventsDispatched = [];
-    private $dispatcherShortcut;
+    private $plugins;
+    private $eventDispatcher;
 
-    /**
-     * Constructor
-     *
-     * @param ContentLocator $contentLocator
-     * @param ClassLoader    $classLoader
-     * @param array          $options
-     */
-    public function __construct(ContentLocator $contentLocator, ClassLoader $classLoader, array $options)
+    public function __construct(EventDispatcher $eventDispatcher)
     {
-        $this->options = $options;
-        $this->contentLocator = $contentLocator;
-        $this->classLoader = $classLoader;
-        $this->dispatcher = new EventDispatcher();
-        $this->dispatcherShortcut = new DispatcherShortcut($this);
+        $this->eventDispatcher = $eventDispatcher;
+
+        $this->clearPlugin();
     }
 
     /**
-     * Start the life clycle
-     *
-     * @expectedException \RuntimeException If not there mandatory options
+     * Invokes initialize method for each plugin registered.
      */
-    public function initialize()
+    public function callInitialize()
     {
-        $this->checkOptions($this->options);
-
-        $this->eventsDispatched = [];
-
-        $this->updateClassLoader();
-
-        $this->dispatcher = new EventDispatcher();
-
-        $this->plugins = $this->getPlugins();
-
-        $this->processPlugins();
-    }
-
-    /**
-     * Dispatch a event
-     *
-     * @param string $eventName Name of event
-     * @param Event  $event     Event object
-     *
-     * @return Symfony\Component\EventDispatcher\Event
-     */
-    public function dispatchEvent($eventName, Event $event = null)
-    {
-        $this->eventsDispatched[] = $eventName;
-
-        return $this->dispatcher->dispatch($eventName, $event);
-    }
-
-    /**
-     * Get plugins availables
-     *
-     * @return array Array of PluginItem
-     */
-    public function getPlugins()
-    {
-        $plugins = [];
-        $composerPlugins = [];
-        $dir = $this->contentLocator->getPluginDir();
-
-        if ($dir) {
-            $plugins = $this->getNotNamespacePlugins($dir);
-            $composerPlugins = $this->getComposerPlugins($dir);
-        }
-
-        return array_merge($plugins, $composerPlugins);
-    }
-
-    /**
-     * Get the events name dispatched
-     *
-     * @return array
-     */
-    public function getHistoryEventsDispatched()
-    {
-        return $this->eventsDispatched;
-    }
-
-    /**
-     * Get the distpatcher shortcut
-     *
-     * @return DispatcherShortcut
-     */
-    public function getDispatcherShortcut()
-    {
-        return $this->dispatcherShortcut;
-    }
-
-    private function getNotNamespacePlugins($dir)
-    {
-        $plugins = [];
-
-        $finder = new Finder();
-        $finder->files()
-            ->in($dir)
-            ->exclude($this->options['vendors_dir'])
-            ->name('*.php');
-
-        foreach ($finder as $file) {
-            $className = $file->getBasename('.php');
-            include_once $file->getRealPath();
-
-            if ($this->isValidClassName($className)) {
-                $plugins[$className] = new PluginItem(new $className());
-            }
-        }
-
-        return $plugins;
-    }
-
-    private function getComposerPlugins($dir)
-    {
-        $plugins = [];
-
-        $finder = new Finder();
-        $finder->files()
-            ->in($dir)
-            ->exclude($this->options['vendors_dir'])
-            ->name($this->options['composer_filename']);
-
-        foreach ($finder as $file) {
-            $pluginConf = $this->getPluginComposerData($file);
-
-            $className = $pluginConf->getSpressClass();
-
-            if ($className) {
-                if ($this->isValidClassName($className)) {
-                    $plugins[$className] = new PluginItem(new $className());
-                }
-            }
-        }
-
-        return $plugins;
-    }
-
-    private function updateClassLoader()
-    {
-        $baseDir = $this->contentLocator->getPluginDir();
-        $vendorDir = $baseDir.'/'.$this->options['vendors_dir'];
-
-        if (false === file_exists($vendorDir)) {
-            return;
-        }
-
-        $embeddedComposerBuilder = new EmbeddedComposerBuilder(
-            $this->classLoader,
-            $this->contentLocator->getSourceDir()
-        );
-
-        $embeddedComposer = $embeddedComposerBuilder
-            ->setComposerFilename($this->options['composer_filename'])
-            ->setVendorDirectory($vendorDir)
-            ->build();
-
-        $embeddedComposer->processAdditionalAutoloads();
-    }
-
-    private function processPlugins()
-    {
-        foreach ($this->plugins as $pluginItem) {
+        foreach ($this->plugins as $plugin) {
             $subscriber = new EventSubscriber();
-            $pluginItem->getPlugin()->initialize($subscriber);
-            $this->addListeners($pluginItem, $subscriber);
+            $plugin->initialize($subscriber);
+            $this->addListeners($plugin, $subscriber);
         }
     }
 
-    private function addListeners(PluginItem $pluginItem, EventSubscriber $subscriber)
+    /**
+     * Adds a new plugin.
+     * 
+     * @param string          $name   The plugin identifier.
+     * @param Yosymfony\Spress\Core\Plugin\PluginInterface $plugin The plugin.
+     */
+    public function addPlugin($name, PluginInterface $plugin)
+    {
+        if ($this->hasPlugin($name) === false) {
+            $this->setPlugin($name, $plugin);
+        }
+    }
+
+    /**
+     * Gets a plugin.
+     *
+     * @param string $name The plugin identifier.
+     *
+     * @return Yosymfony\Spress\Core\Plugin\PluginInterface
+     *
+     * @throws RuntimeException If the plugin is not defined.
+     */
+    public function getPlugin($name)
+    {
+        if ($this->hasPlugin($name) === false) {
+            throw new \RuntimeException(sprintf('Plugin "%s" not found.', $name));
+        }
+
+        return $this->plugins[$name];
+    }
+
+    /**
+     * Checks if a plugin exists.
+     *
+     * @param string $name The plugin identifier.
+     *
+     * @return bool
+     */
+    public function hasPlugin($name)
+    {
+        return isset($this->plugins[$name]);
+    }
+
+    /**
+     * Sets a plugin.
+     * 
+     * @param string          $name   The name of the plugin.
+     * @param Yosymfony\Spress\Core\Plugin\PluginInterface $plugin The plugin.
+     */
+    public function setPlugin($name, PluginInterface $plugin)
+    {
+        $this->plugins[$name] = $plugin;
+    }
+
+    /**
+     * Counts the plugins registered.
+     *
+     * @return int
+     */
+    public function countPlugins()
+    {
+        return count($this->plugins);
+    }
+
+    /**
+     * Clears all generators registered.
+     */
+    public function clearPlugin()
+    {
+        $this->plugins = [];
+    }
+
+    /**
+     * Removes a plugin.
+     *
+     * @param string $name The plugin identifier.
+     */
+    public function removePlugin($name)
+    {
+        unset($this->plugins[$name]);
+    }
+
+    private function addListeners(PluginInterface $plugin, EventSubscriber $subscriber)
     {
         foreach ($subscriber->getEventListeners() as $eventName => $listener) {
             if (true === is_string($listener)) {
-                $this->dispatcher->addListener($eventName, [$pluginItem->getPlugin(), $listener]);
+                $this->eventDispatcher->addListener($eventName, [$plugin, $listener]);
             } else {
-                $this->dispatcher->addListener($eventName, $listener);
+                $this->eventDispatcher->addListener($eventName, $listener);
             }
-        }
-    }
-
-    private function isValidClassName($name)
-    {
-        $result = false;
-
-        if (class_exists($name)) {
-            $implements = class_implements($name);
-
-            if (isset($implements['Yosymfony\\Spress\\Core\\Plugin\\PluginInterface'])) {
-                $result = true;
-            }
-        }
-
-        return $result;
-    }
-
-    private function getPluginComposerData(SplFileInfo $item)
-    {
-        $json = $item->getContents();
-        $data = json_decode($json, true);
-
-        return new PluginComposerData($data);
-    }
-
-    private function checkOptions(array $options)
-    {
-        if (false === isset($options['vendors_dir'])) {
-            throw new \RuntimeException('vendors_dir option is necessary for Plugin Manager');
-        }
-
-        if (false === isset($options['composer_filename'])) {
-            throw new \RuntimeException('composer_filename option is necessary for Plugin Manager');
         }
     }
 }

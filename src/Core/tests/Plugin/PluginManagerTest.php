@@ -11,33 +11,29 @@
 
 namespace Yosymfony\Spress\Core\tests\Plugin;
 
-use Yosymfony\Spress\Core\Application;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 class PluginManagerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $app;
-    protected $pluginManager;
-
-    public function setUp()
+    public function testPluginManager()
     {
-        $this->app = new Application();
-        $this->app['spress.config']->loadLocal(__DIR__.'/../fixtures/project');
-        $this->pluginManager = $this->app['spress.cms.plugin'];
-    }
+        $pm = new PluginManager(new EventDispatcher());
 
-    public function testGetPlugins()
-    {
-        $plugins = $this->pluginManager->getPlugins();
-        $this->assertTrue(is_array($plugins));
-    }
+        $plugin1 = $this->getMockBuilder('\Yosymfony\Spress\Core\Plugin\PluginInterface')->getMock();
+        $plugin2 = $this->getMockBuilder('\Yosymfony\Spress\Core\Plugin\PluginInterface')->getMock();
 
-    public function testGetHistoryEventsDispatched()
-    {
-        $this->pluginManager->dispatchEvent('spress.test_event');
-        $events = $this->pluginManager->getHistoryEventsDispatched();
+        $pm->addPlugin('plugin1', $plugin1);
+        $pm->addPlugin('plugin2', $plugin2);
 
-        $this->assertTrue(is_array($events));
-        $this->assertEquals('spress.test_event', $events[0]);
-    }
+        $this->assertEquals(2, $pm->countPlugins());
+        $this->assertTrue($pm->hasPlugin('plugin1'));
+        $this->assertFalse($pm->hasPlugin('plugin3'));
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugin('plugin1'));
+
+        $pm->removePlugin('plugin1');
+
+        $this->assertEquals(1, $pm->countPlugins());
+    }   
 }

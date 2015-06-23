@@ -22,18 +22,28 @@ interface PluginInterface
      * Metas of a plugin
      *
      * Standard metas:
-     *   - name: name of plugin
-     *   - author: author of plugin
+     *   - name: (string) The name of plugin.
+     *   - description: (string) A short description of the plugin.
+     *   - author: (string|string[]) The author of the plugin.
+     *   - license: (string) The license of the plugin.
      *
-     * @return null or array
+     * e.g:
+     *   return [
+     *     'name' => 'Data loader',
+     *     'description' => 'A simple dataloader with support for JSON and YAML.',
+     *     'author' => 'Victor Puertas',
+     *     'license' => 'MIT',
+     *   ];
+     *
+     * @return array
      */
     public function getMetas();
 
     /**
      * Initialize plugin: subscribe to events and registers others extension
-     * like converters o Twig extension
+     * like datasources, generator, converter, renderizers or Twig extension.
      *
-     * @param EventSubscriber $subscriber
+     * @param Yosymfony\Spress\Core\Plugin\EventSubscriber $subscriber
      */
     public function initialize(EventSubscriber $subscriber);
 }

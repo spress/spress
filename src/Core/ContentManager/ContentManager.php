@@ -57,14 +57,15 @@ class ContentManager
     /**
      * Constructor.
      *
-     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                  $dataSourceManager
-     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                $dataWriter
-     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager     $converterManager
-     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager   $CollectionManager
-     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator   $permalinkGenerator
-     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer
-     * @param Symfony\Component\EventDispatcher\EventDispatcher                   $eventDispatcher
-     * @param Yosymfony\Spress\Core\IO\IOInterface                                $io
+     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                        $dataSourceManager
+     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                      $dataWriter
+     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager           $converterManager
+     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager         $CollectionManager
+     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator         $permalinkGenerator
+     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface       $renderizer
+     * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface $siteAttribute
+     * @param Symfony\Component\EventDispatcher\EventDispatcher                         $eventDispatcher
+     * @param Yosymfony\Spress\Core\IO\IOInterface                                      $io
      */
     public function __construct(
         DataSourceManager $dataSourceManager,

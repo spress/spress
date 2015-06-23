@@ -21,6 +21,7 @@ use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
 use Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter;
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
+use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
@@ -81,7 +82,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Yo! Symfony', $attributes['author']);
     }
 
-    public function parseDraft()
+    public function testParseDraft()
     {
         $attributes = [
             'site_name' => 'My tests site',
@@ -98,10 +99,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
         $dw = new MemoryDataWriter();
         $cm = $this->getContentManager($dw);
-        $cm->parseSite($attributes, $spressAttributes);
+        $cm->parseSite($attributes, $spressAttributes, true);
 
         $this->assertCount(15, $dw->getItems());
-        print_r(array_keys($dw->getItems()));
 
         $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
 
@@ -116,11 +116,11 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $com = $this->getCollectionManager();
         $pg = new PermalinkGenerator(new SupportFacade(), 'pretty');
         $renderizer = $this->getRenderizer();
+        $siteAttribute = new SiteAttribute(new SupportFacade());
         $dispatcher = new EventDispatcher();
         $io = new NullIO();
-        $support = new SupportFacade();
 
-        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $dispatcher, $io, $support);
+        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $dispatcher, $io);
     }
 
     protected function getCollectionManager()

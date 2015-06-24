@@ -24,6 +24,7 @@ use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 /**
  * Content manager.
@@ -64,6 +65,7 @@ class ContentManager
      * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator         $permalinkGenerator
      * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface       $renderizer
      * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface $siteAttribute
+     * @param Yosymfony\Spress\Core\Plugin\PluginManager                                $pluginManager
      * @param Symfony\Component\EventDispatcher\EventDispatcher                         $eventDispatcher
      * @param Yosymfony\Spress\Core\IO\IOInterface                                      $io
      */
@@ -76,6 +78,7 @@ class ContentManager
         PermalinkGenerator $permalinkGenerator,
         RenderizerInterface $renderizer,
         SiteAttributeInterface $siteAttribute,
+        PluginManager $pluginManager,
         EventDispatcher $eventDispatcher,
         IOInterface $io)
     {
@@ -87,6 +90,7 @@ class ContentManager
         $this->permalinkGenerator = $permalinkGenerator;
         $this->renderizer = $renderizer;
         $this->siteAttribute = $siteAttribute;
+        $this->pluginManager = $pluginManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->io = $io;
 
@@ -120,6 +124,7 @@ class ContentManager
 
         $this->reset();
         $this->setUp();
+        $this->InitializePlugins();
         $this->process();
         $this->finish();
 
@@ -152,6 +157,13 @@ class ContentManager
         $this->siteAttribute->setAttribute('site.timezone', $this->timezone);
 
         $this->dataWriter->setUp();
+    }
+
+    private function InitializePlugins()
+    {
+        if ($this->safe === false) {
+            $this->pluginManager->callInitialize();
+        }
     }
 
     private function process()

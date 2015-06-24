@@ -25,6 +25,7 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
+use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
@@ -118,9 +119,10 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $renderizer = $this->getRenderizer();
         $siteAttribute = new SiteAttribute(new SupportFacade());
         $dispatcher = new EventDispatcher();
+        $pm = new PluginManager($dispatcher);
         $io = new NullIO();
 
-        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $dispatcher, $io);
+        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher, $io);
     }
 
     protected function getCollectionManager()

@@ -12,7 +12,6 @@
 namespace Yosymfony\Spress\Core\tests\Plugin;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 class PluginManagerTest extends \PHPUnit_Framework_TestCase
@@ -24,16 +23,28 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
         $plugin1 = $this->getMockBuilder('\Yosymfony\Spress\Core\Plugin\PluginInterface')->getMock();
         $plugin2 = $this->getMockBuilder('\Yosymfony\Spress\Core\Plugin\PluginInterface')->getMock();
 
+        $plugin1->expects($this->once())
+            ->method('initialize');
+
+        $plugin2->expects($this->once())
+            ->method('initialize');
+
         $pm->addPlugin('plugin1', $plugin1);
-        $pm->addPlugin('plugin2', $plugin2);
+        $pm->setPlugin('plugin2', $plugin2);
 
         $this->assertEquals(2, $pm->countPlugins());
         $this->assertTrue($pm->hasPlugin('plugin1'));
         $this->assertFalse($pm->hasPlugin('plugin3'));
         $this->assertInstanceOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugin('plugin1'));
 
+        $pm->callInitialize();
+
         $pm->removePlugin('plugin1');
 
         $this->assertEquals(1, $pm->countPlugins());
-    }   
+
+        $pm->clearPlugin();
+
+        $this->assertEquals(0, $pm->countPlugins());
+    }
 }

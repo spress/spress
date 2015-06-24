@@ -42,7 +42,6 @@ class ContentManager
     private $siteAttribute;
     private $renderizer;
     private $pluginManager;
-    private $io;
     private $eventDispatcher;
     private $timezone;
     private $safe;
@@ -67,7 +66,6 @@ class ContentManager
      * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface $siteAttribute
      * @param Yosymfony\Spress\Core\Plugin\PluginManager                                $pluginManager
      * @param Symfony\Component\EventDispatcher\EventDispatcher                         $eventDispatcher
-     * @param Yosymfony\Spress\Core\IO\IOInterface                                      $io
      */
     public function __construct(
         DataSourceManager $dataSourceManager,
@@ -79,8 +77,7 @@ class ContentManager
         RenderizerInterface $renderizer,
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,
-        EventDispatcher $eventDispatcher,
-        IOInterface $io)
+        EventDispatcher $eventDispatcher)
     {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
@@ -92,7 +89,6 @@ class ContentManager
         $this->siteAttribute = $siteAttribute;
         $this->pluginManager = $pluginManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->io = $io;
 
         $this->attributes = [];
         $this->spressAttributes = [];

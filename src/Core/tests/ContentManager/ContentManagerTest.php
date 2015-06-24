@@ -120,9 +120,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $siteAttribute = new SiteAttribute(new SupportFacade());
         $dispatcher = new EventDispatcher();
         $pm = new PluginManager($dispatcher);
-        $io = new NullIO();
 
-        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher, $io);
+        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher);
     }
 
     protected function getCollectionManager()

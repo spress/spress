@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * File information
+ * File information.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -22,28 +22,32 @@ class Item implements ItemInterface
     private $type;
     private $isBinary;
     private $snapshot;
-    private $pathSnapshot;
+    private $collection;
     private $attributes;
+    private $pathSnapshot;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $content
      * @param string $id
      * @param array  $attributes
      * @param bool   $isBinary
+     *
+     * @throws RuntimeException If invalid id.
      */
     public function __construct($content, $id, array $attributes = [], $isBinary = false, $type = self::TYPE_ITEM)
     {
         $this->snapshot = [];
         $this->pathSnapshot = [];
         $this->attributes = [];
+        $this->collection = 'pages';
 
         $this->setContent($content, self::SNAPSHOT_RAW);
 
         $this->setAttributes($attributes);
 
-        $this->id = $id;
+        $this->setId($id);
         $this->type = $type;
         $this->isBinary = $isBinary;
     }
@@ -54,6 +58,23 @@ class Item implements ItemInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getCollection()
+    {
+        $this->collection;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCollection($name)
+    {
+        if (strlen($name) === 0) {
+            throw new \RuntimeException('Invalid collection name. Expected a non-empty string.');
+        }
+
+        $this->collection = $name;
     }
 
     /**
@@ -136,5 +157,19 @@ class Item implements ItemInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Sets id.
+     *
+     * @param string $id The item identifier.
+     */
+    protected function setId($id)
+    {
+        if (strlen($id) === 0) {
+            throw new \RuntimeException('Invalid id. Expected a non-empty string.');
+        }
+
+        $this->id = $id;
     }
 }

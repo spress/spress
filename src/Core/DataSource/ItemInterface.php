@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * Iterface for a data item
+ * Iterface for a data item.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -39,6 +39,23 @@ interface ItemInterface
      * @return string
      */
     public function getId();
+
+    /**
+     * Gets the collection of the item. e.g: "pages" or "posts".
+     * "pages" is the defatul collection.
+     *
+     * @return string The name of the collection.
+     */
+    public function getCollection();
+
+    /**
+     * Sets the collection of the item.
+     *
+     * @param string $name The name of the collection.
+     *
+     * @throws RuntimeException If invalid collection name.
+     */
+    public function setCollection($name);
 
     /**
      * Get the compiled content. A snapshot is the compiled content at a
@@ -73,7 +90,7 @@ interface ItemInterface
     public function getAttributes();
 
     /**
-     * Set the attributes of this item
+     * Set the attributes of this item.
      *
      * @param array $value
      */
@@ -111,7 +128,7 @@ interface ItemInterface
     public function isBinary();
 
     /**
-     * Return the type of this item. Values: "item", "layout" or "include"
+     * Return the type of this item. Values: "item", "layout" or "include".
      *
      * @return string
      */

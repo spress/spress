@@ -23,7 +23,6 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
-use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 /**
@@ -217,6 +216,7 @@ class ContentManager
         $newAttributes = array_merge($collection->getAttributes(), $attributes);
 
         $item->setAttributes($newAttributes);
+        $item->setCollection($collectionName);
 
         $this->siteAttribute->setAttribute($collectionNamePath, $this->getCollectionAttributes($collection));
         $this->siteAttribute->setItem($item);
@@ -230,7 +230,7 @@ class ContentManager
             throw new AttributeValueException('Invalid value. Expected boolean.', 'draft', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        if ($attributes['collection'] === 'posts' &&  $attributes['draft'] === true) {
+        if ($item->getCollection() === 'posts' &&  $attributes['draft'] === true) {
             if ($this->processDraft === false) {
                 $attributes['output'] = false;
 

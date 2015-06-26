@@ -114,11 +114,11 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $site->initialize();
 
         $item = new Item('The content', 'posts/2015-06-22-hi.md', [
-            'collection' => 'posts',
             'title' => 'Welcome',
             'categories' => ['news'],
             'tags' => ['release'],
         ]);
+        $item->setCollection('posts');
         $item->setPath('2015/06/22/welcome/index.html', Item::SNAPSHOT_PATH_RELATIVE);
         $site->setItem($item);
 

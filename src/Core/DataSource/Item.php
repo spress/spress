@@ -41,13 +41,12 @@ class Item implements ItemInterface
         $this->snapshot = [];
         $this->pathSnapshot = [];
         $this->attributes = [];
-        $this->collection = 'pages';
 
         $this->setContent($content, self::SNAPSHOT_RAW);
-
         $this->setAttributes($attributes);
-
+        $this->setCollection('pages');
         $this->setId($id);
+
         $this->type = $type;
         $this->isBinary = $isBinary;
     }
@@ -62,7 +61,7 @@ class Item implements ItemInterface
 
     public function getCollection()
     {
-        $this->collection;
+        return $this->collection;
     }
 
     /**

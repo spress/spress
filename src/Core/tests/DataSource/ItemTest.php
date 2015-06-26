@@ -21,10 +21,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('/index.html', $item->getId());
         $this->assertEquals(item::TYPE_ITEM, $item->getType());
+        $this->assertEquals('pages', $item->getCollection());
         $this->assertEquals('Test of content', $item->getContent());
         $this->assertEquals('Test of content', $item->getContent(Item::SNAPSHOT_RAW));
         $this->assertCount(0, $item->getAttributes());
         $this->assertFalse($item->isBinary());
+
+        $item->setCollection('posts');
+
+        $this->assertEquals('posts', $item->getCollection());
     }
 
     public function testMultipleSnapshotOfContent()
@@ -99,5 +104,23 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $item = new Item('Raw content', '/index.html', []);
 
         $this->assertEquals('', $item->getPath());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testEmptyCollection()
+    {
+        $item = new Item('Raw content', '/index.html', []);
+        $item->setCollection('');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testNullCollection()
+    {
+        $item = new Item('Raw content', '/index.html', []);
+        $item->setCollection(null);
     }
 }

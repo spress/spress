@@ -17,7 +17,7 @@ Add the following to your `composer.json` and run `composer update`.
 ```
 {
     "require": {
-        "yosymfony/spress-core": "1.1.*@dev"
+        "yosymfony/spress-core": "2.0.*@dev"
     },
     "minimum-stability": "dev"
 }

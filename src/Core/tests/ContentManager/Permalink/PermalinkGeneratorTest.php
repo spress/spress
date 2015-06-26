@@ -26,9 +26,9 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('index.html', $permalink->getPath());
         $this->assertEquals('/index.html', $permalink->getUrlPath());
 
-        $permalink = $pmg->getPermalink($this->createItem('index.html', [
-            'collection' => 'events',
-        ]));
+        $item = $this->createItem('index.html');
+        $item->setCollection('events');
+        $permalink = $pmg->getPermalink($item);
 
         $this->assertEquals('events/index.html', $permalink->getPath());
         $this->assertEquals('/events/index.html', $permalink->getUrlPath());
@@ -45,11 +45,13 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2015/04/17/my-post.html', $permalink->getPath());
         $this->assertEquals('/2015/04/17/my-post.html', $permalink->getUrlPath());
 
-        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+        $item = $this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'my-post',
-            'collection' => 'events',
-        ]));
+        ]);
+        $item->setCollection('events');
+
+        $permalink = $pmg->getPermalink($item);
 
         $this->assertEquals('events/2015/04/17/my-post.html', $permalink->getPath());
         $this->assertEquals('/events/2015/04/17/my-post.html', $permalink->getUrlPath());
@@ -71,11 +73,13 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2015/1/my-post.html', $permalink->getPath());
         $this->assertEquals('/2015/1/my-post.html', $permalink->getUrlPath());
 
-        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+        $item = $this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'my-post',
-            'collection' => 'events',
-        ]));
+        ]);
+        $item->setCollection('events');
+
+        $permalink = $pmg->getPermalink($item);
 
         $this->assertEquals('events/2015/17/my-post.html', $permalink->getPath());
         $this->assertEquals('/events/2015/17/my-post.html', $permalink->getUrlPath());
@@ -114,9 +118,10 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('docs/users.xml', $permalink->getPath());
         $this->assertEquals('/docs/users.xml', $permalink->getUrlPath());
 
-        $permalink = $pmg->getPermalink($this->createItem('docs/users.xml', [
-            'collection' => 'events',
-        ]));
+        $item = $this->createItem('docs/users.xml');
+        $item->setCollection('events');
+
+        $permalink = $pmg->getPermalink($item);
 
         $this->assertEquals('events/docs/users.xml', $permalink->getPath());
         $this->assertEquals('/events/docs/users.xml', $permalink->getUrlPath());

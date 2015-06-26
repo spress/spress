@@ -184,7 +184,7 @@ class PermalinkGenerator
             ':path' => $fileInfo->getPath(),
             ':extension' => $fileInfo->getExtension(),
             ':basename' => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
-            ':collection' => $this->getCollectionAttribute($item),
+            ':collection' => $item->getCollection(),
             ':categories' => $this->getCategoriesPath($item),
             ':title' => $this->getTitleSlugified($item),
             ':year' => $time->format('Y'),
@@ -289,9 +289,7 @@ class PermalinkGenerator
 
     private function isCustomCollection(ItemInterface $item)
     {
-        $collection = $this->getCollectionAttribute($item);
-
-        return !in_array($collection, ['posts', 'pages']);
+        return !in_array($item->getCollection(), ['posts', 'pages']);
     }
 
     private function getPermalinkAttribute(ItemInterface $item)
@@ -308,25 +306,6 @@ class PermalinkGenerator
         }
 
         return $permalink;
-    }
-
-    private function getCollectionAttribute(ItemInterface $item)
-    {
-        $attributes = $item->getAttributes();
-
-        if (isset($attributes['collection']) === false) {
-            return;
-        }
-
-        if (is_string($attributes['collection']) === false) {
-            throw new AttributeValueException('Invalid value. Expected string.', 'collection', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-        }
-
-        if (trim($attributes['collection']) === '') {
-            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'collection', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-        }
-
-        return $attributes['collection'];
     }
 
     private function sanitize($url)

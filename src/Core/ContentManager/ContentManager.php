@@ -16,7 +16,7 @@ use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager;
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
-use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
+use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGeneratorInterface;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
@@ -55,15 +55,15 @@ class ContentManager
     /**
      * Constructor.
      *
-     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                        $dataSourceManager
-     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                      $dataWriter
-     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager           $converterManager
-     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager         $CollectionManager
-     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator         $permalinkGenerator
-     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface       $renderizer
-     * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface $siteAttribute
-     * @param Yosymfony\Spress\Core\Plugin\PluginManager                                $pluginManager
-     * @param Symfony\Component\EventDispatcher\EventDispatcher                         $eventDispatcher
+     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                         $dataSourceManager
+     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                       $dataWriter
+     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager            $converterManager
+     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager          $CollectionManager
+     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGeneratorInterface $permalinkGenerator
+     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface        $renderizer
+     * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface  $siteAttribute
+     * @param Yosymfony\Spress\Core\Plugin\PluginManager                                 $pluginManager
+     * @param Symfony\Component\EventDispatcher\EventDispatcher                          $eventDispatcher
      */
     public function __construct(
         DataSourceManager $dataSourceManager,
@@ -71,7 +71,7 @@ class ContentManager
         GeneratorManager $generatorManager,
         ConverterManager $converterManager,
         CollectionManager $CollectionManager,
-        PermalinkGenerator $permalinkGenerator,
+        PermalinkGeneratorInterface $permalinkGenerator,
         RenderizerInterface $renderizer,
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,

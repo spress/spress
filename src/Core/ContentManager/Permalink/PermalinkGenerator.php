@@ -27,7 +27,7 @@ use Yosymfony\Spress\Core\Support\SupportFacade;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class PermalinkGenerator
+class PermalinkGenerator implements PermalinkGeneratorInterface
 {
     private $support;
     private $defaultPermalink;
@@ -65,7 +65,9 @@ class PermalinkGenerator
     }
 
     /**
-     * Get a permalink. For binary items URL path and path point to SNAPSHOT_PATH_RELATIVE.
+     * Gets a permalink.
+     *
+     * For binary items URL path and path point to SNAPSHOT_PATH_RELATIVE.
      *
      * Item's attributes with special meaning:
      *  - title: title of the item.

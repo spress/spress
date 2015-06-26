@@ -51,7 +51,6 @@ class ContentManager
     private $parseResult;
 
     private $items;
-    private $itemsGenerator;
 
     /**
      * Constructor.
@@ -93,7 +92,6 @@ class ContentManager
         $this->spressAttributes = [];
 
         $this->items = [];
-        $this->itemsGenerator = [];
 
         $this->parseResult = [];
     }
@@ -129,7 +127,6 @@ class ContentManager
     private function reset()
     {
         $this->items = [];
-        $this->itemsGenerator = [];
         $this->siteAttribute->initialize($this->attributes);
         $this->renderizer->clear();
 
@@ -163,13 +160,15 @@ class ContentManager
 
     private function process()
     {
+        $itemsGenerator = [];
+
         $this->dataSourceManager->load();
 
         $items = $this->dataSourceManager->getItems();
 
         foreach ($items as $item) {
             if ($this->isGenerator($item)) {
-                $this->itemsGenerator[$item->getId()] = $item;
+                $itemsGenerator[$item->getId()] = $item;
 
                 continue;
             }
@@ -181,7 +180,7 @@ class ContentManager
             $this->items[$item->getId()] = $item;
         }
 
-        foreach ($this->itemsGenerator as $item) {
+        foreach ($itemsGenerator as $item) {
             $this->processGenerator($item);
         }
 

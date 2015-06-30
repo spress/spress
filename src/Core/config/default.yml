@@ -1,0 +1,21 @@
+# Default configuration
+
+debug: false
+
+# Reading
+env: 'dev'
+drafts: false
+
+# Outputting
+timezone: "UTC"                          # e.g. Europe/Madrid
+safe: false
+
+# Data sources
+data_sources:
+  filesystem:
+    class: "Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource"
+    arguments:
+      source_root: ./src
+      include: [.htaccess]
+      text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
+      attribute_syntax: "yaml"

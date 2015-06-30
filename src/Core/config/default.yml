@@ -7,13 +7,14 @@ env: 'dev'
 drafts: false
 
 # Outputting
-timezone: "UTC"                          # e.g. Europe/Madrid
+timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false
+permalink: 'pretty'
 
 # Data sources
 data_sources:
   filesystem:
-    class: "Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource"
+    class: 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource'
     arguments:
       source_root: ./src
       include: [.htaccess]

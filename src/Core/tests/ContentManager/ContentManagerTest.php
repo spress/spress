@@ -24,7 +24,6 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
-use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Support\SupportFacade;
 
@@ -115,7 +114,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $gm = $this->getGeneratorManager();
         $cm = $this->getConverterManager();
         $com = $this->getCollectionManager();
-        $pg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pg = new PermalinkGenerator('pretty');
         $renderizer = $this->getRenderizer();
         $siteAttribute = new SiteAttribute(new SupportFacade());
         $dispatcher = new EventDispatcher();

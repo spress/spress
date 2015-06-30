@@ -19,7 +19,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNonePermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'none');
+        $pmg = new PermalinkGenerator('none');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkInterface', $permalink);
@@ -36,7 +36,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDatePermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'date');
+        $pmg = new PermalinkGenerator('date');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'my-post',
@@ -64,7 +64,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testOrdinalPermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'ordinal');
+        $pmg = new PermalinkGenerator('ordinal');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-01',
             'title' => 'my-post',
@@ -92,7 +92,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPrettyPermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertEquals('index.html', $permalink->getPath());
@@ -136,7 +136,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPrettyDatePermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
         ]));
@@ -164,7 +164,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPermalinkAttribute()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'permalink' => 'none',
             'date' => '2015-04-17',
@@ -177,7 +177,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomPermalink()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), '/my-path/:basename.:extension');
+        $pmg = new PermalinkGenerator('/my-path/:basename.:extension');
         $permalink = $pmg->getPermalink($this->createItem('index.html'));
 
         $this->assertEquals('my-path/index.html', $permalink->getPath());
@@ -195,7 +195,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPreservePathTitle()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), '/:title/index.html', true);
+        $pmg = new PermalinkGenerator('/:title/index.html', true);
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => '2015-04-17',
             'title' => 'title post',
@@ -218,7 +218,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPermalinkForBinaryItem()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
 
         $item = $this->createItem('spress.phar', [], true);
         $permalink = $pmg->getPermalink($item);
@@ -238,7 +238,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrettyBadTypeForCategoriesAttribute()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'categories' => 'news',
         ]));

@@ -140,7 +140,9 @@ class Configuration implements ConfigurationInterface
             ->setDefault('drafts', false, 'bool', true)
             ->setDefault('timezone', 'UTC', 'string', true)
             ->setDefault('safe', false, 'bool', true)
-            ->setDefault('data_sources', [], 'array', true);
+            ->setDefault('data_sources', [], 'array', true)
+            ->setDefault('permalink', 'pretty', 'string', true)
+            ->setDefault('markdown_ext', [], 'array', true);
 
         return $resolver;
     }

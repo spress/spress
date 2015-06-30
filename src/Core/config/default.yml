@@ -5,6 +5,7 @@ debug: false
 # Reading
 env: 'dev'
 drafts: false
+markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
 
 # Outputting
 timezone: 'UTC'                          # e.g. Europe/Madrid

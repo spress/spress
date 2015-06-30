@@ -116,7 +116,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $com = $this->getCollectionManager();
         $pg = new PermalinkGenerator('pretty');
         $renderizer = $this->getRenderizer();
-        $siteAttribute = new SiteAttribute(new SupportFacade());
+        $siteAttribute = new SiteAttribute();
         $dispatcher = new EventDispatcher();
         $pm = new PluginManager($dispatcher);
 

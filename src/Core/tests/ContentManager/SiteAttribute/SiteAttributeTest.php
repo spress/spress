@@ -13,13 +13,12 @@ namespace Yosymfony\Spress\Core\tests\ContentManager\SiteAttribute;
 
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\Item;
-use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class SiteAttributeTest extends \PHPUnit_Framework_TestCase
 {
     public function testSiteAttributes()
     {
-        $site = new SiteAttribute(new SupportFacade());
+        $site = new SiteAttribute();
         $arr = $site->getAttributes();
 
         $this->assertArrayHasKey('spress', $arr);
@@ -33,7 +32,7 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testMergedAttributes()
     {
-        $site = new SiteAttribute(new SupportFacade());
+        $site = new SiteAttribute();
         $site->initialize([
             'name' => 'A Spress site',
         ]);
@@ -70,7 +69,7 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetItem()
     {
-        $site = new SiteAttribute(new SupportFacade());
+        $site = new SiteAttribute();
         $site->initialize();
 
         $item = new Item('The content', 'index.html', ['collection' => 'pages', 'title' => 'Welcome']);
@@ -110,7 +109,7 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetItemPostCollection()
     {
-        $site = new SiteAttribute(new SupportFacade());
+        $site = new SiteAttribute();
         $site->initialize();
 
         $item = new Item('The content', 'posts/2015-06-22-hi.md', [

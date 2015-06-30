@@ -12,7 +12,8 @@
 namespace Yosymfony\Spress\Core\ContentManager\SiteAttribute;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
-use Yosymfony\Spress\Core\Support\SupportFacade;
+use Yosymfony\Spress\Core\Support\ArrayWrapper;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
  * The site's attribute structure.
@@ -21,15 +22,15 @@ use Yosymfony\Spress\Core\Support\SupportFacade;
  */
 class SiteAttribute implements SiteAttributeInterface
 {
-    protected $support;
     protected $arrayWrapper;
     protected $postAttributesResolver;
 
-    public function __construct(SupportFacade $support)
+    /**
+     * Constructor.
+     */
+    public function __construct()
     {
-        $this->support = $support;
-
-        $this->arrayWrapper = $this->support->getArrayWrapper();
+        $this->arrayWrapper = new ArrayWrapper();
         $this->postAttributesResolver = $this->getPostAttributesResolver();
 
         $this->initialize();
@@ -141,7 +142,7 @@ class SiteAttribute implements SiteAttributeInterface
 
     protected function getPostAttributesResolver()
     {
-        $resolver = $this->support->getAttributesResolver();
+        $resolver = new AttributesResolver();
         $resolver->setDefault('categories', [], 'array')
             ->setDefault('tags', [], 'array');
 

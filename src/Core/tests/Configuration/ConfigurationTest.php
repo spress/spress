@@ -33,6 +33,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($values['safe']);
         $this->assertEquals('dev', $values['env']);
         $this->assertEquals('UTC', $values['timezone']);
+        $this->assertEquals('pretty', $values['permalink']);
+        $this->assertFalse($values['preserve_path_title']);
+
+        $this->assertTrue(is_array($values['collections']));
+        $this->assertArrayHasKey('posts', $values['collections']);
 
         $this->assertTrue(is_array($values['data_sources']));
         $this->assertCount(1, $values['data_sources']);

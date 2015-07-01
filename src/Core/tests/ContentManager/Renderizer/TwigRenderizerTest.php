@@ -64,6 +64,46 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<html></body><h1>Hi</h1>Yo! Symfony</body></html>', $rendered);
     }
 
+    public function testAddTwigFunction()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigFunction('fTest', function ($param) {
+            return $param;
+        });
+    }
+
+    public function testAddTwigFunctionWithOptions()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigFunction('fTest', function (\Twig_Environment $env, $context, $param) {
+            return $param;
+        }, ['needs_context' => true, 'needs_environment' => true]);
+    }
+
+    public function testAddTwigFilter()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigFilter('fTest', function ($param) {
+            return $param;
+        });
+    }
+
+    public function testAddTwigFilterWithOptions()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigFilter('fTest', function (\Twig_Environment $env, $context, $param) {
+            return $param;
+        }, ['needs_context' => true, 'needs_environment' => true]);
+    }
+
+    public function testAddTwigTest()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigFilter('tTest', function ($param) {
+            return true;
+        });
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
      */

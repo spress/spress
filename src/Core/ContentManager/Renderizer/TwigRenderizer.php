@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 
 /**
- * Twig renderizer
+ * Twig renderizer.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -25,7 +25,7 @@ class TwigRenderizer implements RenderizerInterface
     protected $layoutExtension;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \Twig_Environment  $twig
      * @param \Twig_Loader_Array $arrayLoader
@@ -40,7 +40,7 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * Add a new layout
+     * Add a new layout.
      *
      * @param string $name       The name of the layout. e.g: id, path...
      * @param string $content    The content of the layout
@@ -92,7 +92,7 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * Render a blocks of content (layout NOT included)
+     * Render a blocks of content (layout NOT included).
      *
      * @param string $name       The path of the item
      * @param string $content    The content
@@ -111,11 +111,12 @@ class TwigRenderizer implements RenderizerInterface
      * Render a page completely (layout included). The value of $content
      * param will be placed at "page.content" attribute.
      *
-     * @param  string $name           The path of the item.
-     * @param  string $content        The page content.
-     * @param  string $layoutName     The layout name.
-     * @param  array  $siteAttributes The attributes for using inside the content.
-     *                                "layout" attribute has a special meaning.
+     * @param string $name           The path of the item.
+     * @param string $content        The page content.
+     * @param string $layoutName     The layout name.
+     * @param array  $siteAttributes The attributes for using inside the content.
+     *                               "layout" attribute has a special meaning.
+     *
      * @return string The page rendered
      *
      * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value
@@ -137,6 +138,54 @@ class TwigRenderizer implements RenderizerInterface
         }
 
         return $this->renderBlocks($name, $content, $siteAttributes);
+    }
+
+    /**
+     * Adds a new Twig filter.
+     *
+     * @see http://twig.sensiolabs.org/doc/advanced.html#filters Twig documentation.
+     *
+     * @param string   $name    Name of filter
+     * @param callable $filter  Filter implementation
+     * @param array    $options
+     */
+    public function addTwigFilter($name, callable $filter, array $options = [])
+    {
+        $twigFilter = new \Twig_SimpleFilter($name, $filter, $options);
+
+        $this->twig->addFilter($twigFilter);
+    }
+
+    /**
+     * Adds a new Twig function.
+     *
+     * @see http://twig.sensiolabs.org/doc/advanced.html#functions Twig documentation.
+     *
+     * @param string   $name     Name of filter
+     * @param callable $function Filter implementation
+     * @param array    $options
+     */
+    public function addTwigFunction($name, callable $function, array $options = [])
+    {
+        $twigfunction = new \Twig_SimpleFunction($name, $function, $options);
+
+        $this->twig->addFunction($twigfunction);
+    }
+
+    /**
+     * Adds a new Twig test.
+     *
+     * @see http://twig.sensiolabs.org/doc/advanced.html#tests Twig documentation.
+     *
+     * @param string   $name     Name of test
+     * @param callable $function Test implementation
+     * @param array    $options
+     */
+    public function addTwigTest($name, callable $test, array $options = [])
+    {
+        $twigTest = new \Twig_SimpleTest($name, $test, $options);
+
+        $this->twig->addTest($twigTest);
     }
 
     protected function getLayoutAttribute(array $attributes, $contentName)

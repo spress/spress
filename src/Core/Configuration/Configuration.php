@@ -138,6 +138,7 @@ class Configuration implements ConfigurationInterface
                 return strlen($value) > 0;
             })
             ->setDefault('drafts', false, 'bool', true)
+            ->setDefault('preserve_path_title', false, 'bool', true)
             ->setDefault('timezone', 'UTC', 'string', true)
             ->setDefault('safe', false, 'bool', true)
             ->setDefault('data_sources', [], 'array', true)

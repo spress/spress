@@ -13,7 +13,6 @@ namespace Yosymfony\Spress\Core\tests\ContentManager\Generator;
 
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator;
-use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +20,7 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->pagination = new PaginationGenerator(new SupportFacade());
+        $this->pagination = new PaginationGenerator();
     }
 
     public function testPaginateWithDefaulPermalink()

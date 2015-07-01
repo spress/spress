@@ -13,7 +13,8 @@ namespace Yosymfony\Spress\Core\ContentManager\Generator;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\DataSource\Item;
-use Yosymfony\Spress\Core\Support\SupportFacade;
+use Yosymfony\Spress\Core\Support\ArrayWrapper;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 
 /**
@@ -33,18 +34,6 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
  */
 class PaginationGenerator implements GeneratorInterface
 {
-    protected $support;
-
-    /**
-     * Constructor
-     *
-     * @param \Yosymfony\Spress\Core\Support\SupportFacade Support classes
-     */
-    public function __construct(SupportFacade $support)
-    {
-        $this->support = $support;
-    }
-
     /**
      * @inheritDoc
      *
@@ -60,7 +49,7 @@ class PaginationGenerator implements GeneratorInterface
             throw new AttributeValueException('Items per page value must be great than 0.', 'max_page', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $arr = $this->support->getArrayWrapper($siteAttributes);
+        $arr = new ArrayWrapper($siteAttributes);
 
         if ($arr->has($options['provider']) === false || is_array($provider = $arr->get($options['provider'])) === false) {
             throw new AttributeValueException('Provider for pagination not found.', 'provider', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
@@ -75,14 +64,14 @@ class PaginationGenerator implements GeneratorInterface
         $templatePath = dirname($templateItem->getPath(Item::SNAPSHOT_PATH_RELATIVE));
 
         foreach ($pages as $page => $elements) {
-            $previousPage =  $page > 1 ? $page -1 : null;
+            $previousPage = $page > 1 ? $page - 1 : null;
             $previousPagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $previousPage);
             $previousPageUrl = $this->getPagePermalink($previousPagePath);
-            $nextPage = $page === $totalPages ? null : $page +1;
+            $nextPage = $page === $totalPages ? null : $page + 1;
             $nextPagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $nextPage);
             $nextPageUrl = $this->getPagePermalink($nextPagePath);
 
-            $pageAttr = $this->support->getArrayWrapper($templateItem->getAttributes());
+            $pageAttr = new ArrayWrapper($templateItem->getAttributes());
             $pageAttr->set('pagination.items', $elements);
             $pageAttr->set('pagination.per_page', $options['max_page']);
             $pageAttr->set('pagination.total_items', $totalItems);
@@ -150,7 +139,7 @@ class PaginationGenerator implements GeneratorInterface
 
     protected function getConfig(ItemInterface $templateItem)
     {
-        $resolver = $this->support->getAttributesResolver();
+        $resolver = new AttributesResolver();
         $resolver->setDefault('max_page', 5, 'int')
             ->setDefault('provider', 'site.posts', 'string')
             ->setDefault('permalink', '/page:num');

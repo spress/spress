@@ -11,6 +11,12 @@ markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
 timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false
 permalink: 'pretty'
+preserve_path_title: false
+
+# Collections
+collections:
+  posts:
+    output: true
 
 # Data sources
 data_sources:

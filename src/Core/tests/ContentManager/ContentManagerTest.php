@@ -25,7 +25,6 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
-use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -149,7 +148,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getGeneratorManager()
     {
-        $generator = new PaginationGenerator(new SupportFacade());
+        $generator = new PaginationGenerator();
 
         $gm = new GeneratorManager();
         $gm->addGenerator('pagination', $generator);

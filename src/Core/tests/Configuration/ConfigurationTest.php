@@ -64,6 +64,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('prod', $values['env']);
         $this->assertEquals('UTC', $values['timezone']);
         $this->assertEquals('http://spress.yosymfony.com', $values['url']);
+        $this->assertEquals('pretty', $values['permalink']);
+        $this->assertFalse($values['preserve_path_title']);
 
         $this->assertTrue(is_array($values['data_sources']));
         $this->assertCount(1, $values['data_sources']);

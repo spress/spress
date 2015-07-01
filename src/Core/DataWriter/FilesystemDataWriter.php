@@ -62,7 +62,7 @@ class FilesystemDataWriter implements DataWriterInterface
             $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
             if (strlen($sourcePath) > 0) {
-                $this->copy($sourcePath, $this->composeOutputPath($outputPath));
+                $this->filesystem->copy($sourcePath, $this->composeOutputPath($outputPath));
             } else {
                 $this->filesystem->dumpFile($this->composeOutputPath($outputPath), $item->getContent());
             }

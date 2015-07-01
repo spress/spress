@@ -13,11 +13,18 @@ namespace Yosymfony\Spress\Core;
 
 use Pimple\Container;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ConfigLoader\Config;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
+use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManagerBuilder;
+use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
+use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
+use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
+use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
+use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
@@ -29,7 +36,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
  */
 class Spress extends Container
 {
-    const VERSION = "2.0.0-DEV";
+    const VERSION = '2.0.0-DEV';
     const VERSION_ID = '20000';
     const MAJOR_VERSION = '2';
     const MINOR_VERSION = '0';
@@ -53,9 +60,18 @@ class Spress extends Container
 
         $this['spress.config.default_filename'] = __DIR__.'/config/default.yml';
         $this['spress.config.build_dir'] = './build';
+        $this['spress.config.site_dir'] = './';
+        $this['spress.config.env'] = null;
+        $this['spress.config.safe'] = null;
+        $this['spress.config.drafts'] = null;
+        $this['spress.config.timezone'] = null;
+        $this['spress.config.values'] = function ($c) {
+            $configLoader = new Configuration($c['lib.configLoader'], $c['spress.config.default_filename']);
 
+            return $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
+        };
 
-        $this['lib.configLoader'] = function ($app) {
+        $this['lib.configLoader'] = function ($c) {
             $locator = new FileLocator([]);
 
             return new Config([
@@ -66,10 +82,14 @@ class Spress extends Container
 
         $this['lib.eventDispatcher'] = function ($c) {
             return new EventDispatcher();
-        }
+        };
 
-        $this['spress.configuration'] = function ($c) {
-            return new Configuration($c['lib.configLoader'], $c['spress.config.default_filename']);
+        $this['lib.twig_loader_array'] = function ($c) {
+            return new \Twig_Loader_Array([]);
+        };
+
+        $this['lib.twig'] = function ($c) {
+            return new \Twig_Environment($c['lib.twig_loader_array'], ['autoescape' => false]);
         };
 
         $this['spress.io'] = function ($c) {
@@ -84,57 +104,110 @@ class Spress extends Container
 
         $this['spress.plugin.pluginManager'] = function ($c) {
             return new PluginManager($c['lib.eventDispatcher']);
-        }
+        };
 
         $this['spress.dataWriter'] = function ($c) {
             $fs = new Filesystem();
 
-            return new FilesystemDataWriter($c['spress.config.build_dir']);
-        }
+            return new FilesystemDataWriter($fs, $c['spress.config.build_dir']);
+        };
 
         $this['spress.dataSourceManager'] = function ($c) {
-            
-        }
+            $builder = new DataSourceManagerBuilder();
+            $dataSources = $c['spress.config.values']['data_sources'];
+
+            return $builder->buildFromConfigArray($dataSources);
+        };
 
         $this['spress.cms.generatorManager'] = function ($c) {
-            
-        }
+            $generator = new \Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator();
+
+            $manager = new GeneratorManager();
+            $manager->addGenerator('pagination', $generator);
+
+            return $manager;
+        };
 
         $this['spress.cms.converterManager'] = function ($c) {
-            
-        }
+            $markdownExts = $c['spress.config.values']['markdown_ext'];
+
+            $cm = new ConverterManager();
+            $cm->addConverter(new \Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter());
+            $cm->addConverter(new \Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter($markdownExts));
+
+            return $cm;
+        };
 
         $this['spress.cms.collectionManager'] = function ($c) {
-            
-        }
+            $builder = new CollectionManagerBuilder();
+
+            return $builder->buildFromConfigArray($c['spress.config.values']['collections']);
+        };
 
         $this['spress.cms.permalinkGenerator'] = function ($c) {
-            
-        }
+            $permalink = $c['spress.config.values']['permalink'];
+            $preservePathTitle = $c['spress.config.values']['preserve_path_title'];
+
+            return new PermalinkGenerator($permalink, $preservePathTitle);
+        };
 
         $this['spress.cms.renderizer'] = function ($c) {
-            
-        }
+            $twig = $c['lib.twig'];
+            $loader = $c['lib.twig_loader_array'];
+            $layoutExts = $c['spress.config.values']['layout_ext'];
 
-        $this['spress.cms.siteAttribute'] = function ($app) {
-            
-        }
+            return new TwigRenderizer($twig, $loader, $layoutExts);
+        };
+
+        $this['spress.cms.siteAttribute'] = function ($c) {
+            return new SiteAttribute();
+        };
+
+        $this['spress.cms.contentManager'] = $this->factory(function ($c) {
+            return new ContentManager(
+                $c['spress.dataSourceManager'],
+                $c['spress.dataWriter'],
+                $c['spress.cms.generatorManager'],
+                $c['spress.cms.converterManager'],
+                $c['spress.cms.collectionManager'],
+                $c['spress.cms.permalinkGenerator'],
+                $c['spress.cms.renderizer'],
+                $c['spress.cms.siteAttribute'],
+                $c['spress.plugin.pluginManager'],
+                $c['lib.eventDispatcher']
+            );
+        });
     }
 
     /**
-     * Parse a site
+     * Parse a site.
      *
-     * @param string $localConfigPath Path of the local configuration
-     * @param string $env             Environment name
-     * @param string $timezone        Set the timezone
-     * @param bool   $drafts          Include draft
-     * @param bool   $safe            Plugins disabled
-     * @param string $url             URL base
+     * Example:
+     *   $spress['spress.config.site_dir'] = '/my-site-folder';
+     *   $spress->parse();
      *
-     * @return array Key-value result
+     * @return array
      */
-    public function parse($localConfigPath = null, $env = null, $timezone = null, $drafts = null, $safe = null, $url = null)
+    public function parse()
     {
-       return [];
+        $orgDir = getcwd();
+
+        $this->setCurrentDir($this['spress.config.site_dir']);
+
+        $attributes = $this['spress.config.values'];
+        $spressAttributes = [];
+
+        $this['spress.cms.contentManager']->parseSite($attributes, $spressAttributes);
+
+        $this->setCurrentDir($orgDir);
+
+        return [];
+    }
+
+    private function setCurrentDir($path)
+    {
+        if (false === chdir($path)) {
+            throw new \RuntomeException(sprintf('Error when change the current dir to "%s"', $path));
+        }
     }
 }

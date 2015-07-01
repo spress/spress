@@ -36,6 +36,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('pretty', $values['permalink']);
         $this->assertFalse($values['preserve_path_title']);
 
+        $this->assertTrue(is_array($values['layout_ext']));
+        $this->assertCount(3, $values['layout_ext']);
+
         $this->assertTrue(is_array($values['collections']));
         $this->assertArrayHasKey('posts', $values['collections']);
 
@@ -66,6 +69,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://spress.yosymfony.com', $values['url']);
         $this->assertEquals('pretty', $values['permalink']);
         $this->assertFalse($values['preserve_path_title']);
+
+        $this->assertTrue(is_array($values['layout_ext']));
+        $this->assertCount(3, $values['layout_ext']);
+
+        $this->assertTrue(is_array($values['collections']));
+        $this->assertArrayHasKey('posts', $values['collections']);
 
         $this->assertTrue(is_array($values['data_sources']));
         $this->assertCount(1, $values['data_sources']);

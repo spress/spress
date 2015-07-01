@@ -12,6 +12,7 @@ timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false
 permalink: 'pretty'
 preserve_path_title: false
+layout_ext: ['html.twig', 'twig', 'html']
 
 # Collections
 collections:

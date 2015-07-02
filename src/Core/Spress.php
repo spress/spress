@@ -84,12 +84,27 @@ class Spress extends Container
             return new EventDispatcher();
         };
 
-        $this['lib.twig_loader_array'] = function ($c) {
+        $this['lib.twig.loader_array'] = function ($c) {
             return new \Twig_Loader_Array([]);
         };
 
+        $this['lib.twig.options'] = function ($c) {
+            return [
+                'autoescape' => false,
+                'debug' => $c['spress.config.values']['debug'],
+            ];
+        };
+
         $this['lib.twig'] = function ($c) {
-            return new \Twig_Environment($c['lib.twig_loader_array'], ['autoescape' => false]);
+            $options = $c['lib.twig.options'];
+
+            $twig = new \Twig_Environment($c['lib.twig.loader_array'], $options);
+
+            if ($options['debug'] === true) {
+                $twig->addExtension(new \Twig_Extension_Debug());
+            }
+
+            return $twig;
         };
 
         $this['spress.io'] = function ($c) {
@@ -153,7 +168,7 @@ class Spress extends Container
 
         $this['spress.cms.renderizer'] = function ($c) {
             $twig = $c['lib.twig'];
-            $loader = $c['lib.twig_loader_array'];
+            $loader = $c['lib.twig.loader_array'];
             $layoutExts = $c['spress.config.values']['layout_ext'];
 
             return new TwigRenderizer($twig, $loader, $layoutExts);

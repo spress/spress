@@ -145,6 +145,7 @@ class ContentManager
         $this->configureTimezone($this->timezone);
 
         $this->siteAttribute->setAttribute('spress', $this->spressAttributes);
+        $this->siteAttribute->setAttribute('site.drafts', $this->processDraft);
         $this->siteAttribute->setAttribute('site.safe', $this->safe);
         $this->siteAttribute->setAttribute('site.timezone', $this->timezone);
 

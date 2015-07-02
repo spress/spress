@@ -213,7 +213,7 @@ class Spress extends Container
         $this->setCurrentDir($this['spress.config.site_dir']);
 
         $attributes = $this['spress.config.values'];
-        $spressAttributes = [];
+        $spressAttributes = $this->getSpressAttributes();
 
         if (is_null($this['spress.config.drafts']) === false) {
             $attributes['drafts'] = (bool) $this['spress.config.drafts'];
@@ -237,6 +237,19 @@ class Spress extends Container
         $this->setCurrentDir($orgDir);
 
         return $result;
+    }
+
+    private function getSpressAttributes()
+    {
+        return [
+            'version' => $this['spress.version'],
+            'version_id' => $this['spress.version.details']['id'],
+            'major_version' => $this['spress.version.details']['major'],
+            'minor_version' => $this['spress.version.details']['minor'],
+            'release_version' => $this['spress.version.details']['release'],
+            'extra_version' => $this['spress.version.details']['extra'],
+            'external' => $this['spress.externals'],
+        ];
     }
 
     private function setCurrentDir($path)

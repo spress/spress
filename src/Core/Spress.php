@@ -199,6 +199,10 @@ class Spress extends Container
      *
      * Example:
      *   $spress['spress.config.site_dir'] = '/my-site-folder';
+     *   $spress['spress.config.drafts'] = true;
+     *   $spress['spress.config.safe'] = false;
+     *   $spress['spress.config.timezone'] = 'UTC';
+     *
      *   $spress->parse();
      *
      * @return array
@@ -206,17 +210,33 @@ class Spress extends Container
     public function parse()
     {
         $orgDir = getcwd();
-
         $this->setCurrentDir($this['spress.config.site_dir']);
 
         $attributes = $this['spress.config.values'];
         $spressAttributes = [];
 
-        $this['spress.cms.contentManager']->parseSite($attributes, $spressAttributes);
+        if (is_null($this['spress.config.drafts']) === false) {
+            $attributes['drafts'] = (bool) $this['spress.config.drafts'];
+        }
+
+        if (is_null($this['spress.config.safe']) === false) {
+            $attributes['safe'] = (bool) $this['spress.config.safe'];
+        }
+
+        if (is_null($this['spress.config.timezone']) === false) {
+            $attributes['timezone'] = $this['spress.config.timezone'];
+        }
+
+        $result = $this['spress.cms.contentManager']->parseSite(
+            $attributes,
+            $spressAttributes,
+            $attributes['drafts'],
+            $attributes['safe'],
+            $attributes['timezone']);
 
         $this->setCurrentDir($orgDir);
 
-        return [];
+        return $result;
     }
 
     private function setCurrentDir($path)

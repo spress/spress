@@ -64,6 +64,7 @@ class Spress extends Container
         $this['spress.config.env'] = null;
         $this['spress.config.safe'] = null;
         $this['spress.config.drafts'] = null;
+        $this['spress.config.url'] = null;
         $this['spress.config.timezone'] = null;
         $this['spress.config.values'] = function ($c) {
             $configLoader = new Configuration($c['lib.configLoader'], $c['spress.config.default_filename']);
@@ -197,11 +198,17 @@ class Spress extends Container
     /**
      * Parse a site.
      *
+     * Namespaces:
+     *  - "spress.externals": (array) Externals attributes are located
+     *    in this namespace. e.g: CLI command arguments. These attributes
+     *    could be recovered on a site using "spress.external.attribute_name".
+     *
      * Example:
      *   $spress['spress.config.site_dir'] = '/my-site-folder';
      *   $spress['spress.config.drafts'] = true;
      *   $spress['spress.config.safe'] = false;
      *   $spress['spress.config.timezone'] = 'UTC';
+     *   $spress['spress.config.url'] = 'http://your-domain.local:4000';
      *
      *   $spress->parse();
      *
@@ -225,6 +232,10 @@ class Spress extends Container
 
         if (is_null($this['spress.config.timezone']) === false) {
             $attributes['timezone'] = $this['spress.config.timezone'];
+        }
+
+        if (is_null($this['spress.config.url']) === false) {
+            $attributes['url'] = $this['spress.config.url'];
         }
 
         $result = $this['spress.cms.contentManager']->parseSite(

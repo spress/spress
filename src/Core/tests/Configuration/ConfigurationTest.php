@@ -34,6 +34,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('dev', $values['env']);
         $this->assertEquals('UTC', $values['timezone']);
         $this->assertEquals('pretty', $values['permalink']);
+        $this->assertEquals('', $values['url']);
         $this->assertFalse($values['preserve_path_title']);
 
         $this->assertTrue(is_array($values['layout_ext']));

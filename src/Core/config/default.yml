@@ -13,6 +13,7 @@ safe: false
 permalink: 'pretty'
 preserve_path_title: false
 layout_ext: ['html.twig', 'twig', 'html']
+url: ''                                  # e.g: http://your-domain.local:4000
 
 # Collections
 collections:

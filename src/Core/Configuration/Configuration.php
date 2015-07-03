@@ -140,6 +140,7 @@ class Configuration implements ConfigurationInterface
             ->setDefault('drafts', false, 'bool', true)
             ->setDefault('preserve_path_title', false, 'bool', true)
             ->setDefault('timezone', 'UTC', 'string', true)
+            ->setDefault('url', '', 'string', true)
             ->setDefault('safe', false, 'bool', true)
             ->setDefault('layout_ext', [], 'array', true)
             ->setDefault('data_sources', [], 'array', true)

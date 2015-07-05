@@ -1,11 +1,18 @@
 <?php
 
 use Yosymfony\Spress\Core\Plugin\Event;
-use Yosymfony\Spress\Core\Plugin\Plugin;
+use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
-class TestPlugin extends Plugin
+class TestPlugin implements PluginInterface
 {
+    public function getMetas()
+    {
+        return [
+            'name' => 'Test plugin',
+        ];
+    }
+
     public function initialize(EventSubscriber $subscriber)
     {
         $subscriber->addEventListener('spress.start', 'onStart');

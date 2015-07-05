@@ -43,7 +43,7 @@ interface PluginInterface
      * Initialize plugin: subscribe to events and registers others extension
      * like datasources, generator, converter, renderizers or Twig extension.
      *
-     * @param Yosymfony\Spress\Core\Plugin\EventSubscriber $subscriber
+     * @param \Yosymfony\Spress\Core\Plugin\EventSubscriber $subscriber
      */
     public function initialize(EventSubscriber $subscriber);
 }

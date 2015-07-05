@@ -12,19 +12,19 @@
 namespace Yosymfony\Spress\Core\Plugin;
 
 /**
- * Plugin interface
+ * Plugin interface.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface PluginInterface
 {
     /**
-     * Metas of a plugin
+     * Metas of a plugin.
      *
      * Standard metas:
      *   - name: (string) The name of plugin.
      *   - description: (string) A short description of the plugin.
-     *   - author: (string|string[]) The author of the plugin.
+     *   - author: (string) The author of the plugin.
      *   - license: (string) The license of the plugin.
      *
      * e.g:

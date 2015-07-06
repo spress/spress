@@ -26,7 +26,7 @@ class EventSubscriber
      * @param string   $eventName
      * @param \closure $listener
      */
-    public function addEventListener($eventName, \closure $listener)
+    public function addEventListener($eventName, $listener)
     {
         $this->listener[$eventName] = $listener;
     }

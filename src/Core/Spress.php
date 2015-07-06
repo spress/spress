@@ -11,10 +11,12 @@
 
 namespace Yosymfony\Spress\Core;
 
+use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Pimple\Container;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Yosymfony\ConfigLoader\Config;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
@@ -28,6 +30,7 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
+use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 
 /**
  * Spress application.
@@ -60,7 +63,10 @@ class Spress extends Container
 
         $this['spress.config.default_filename'] = __DIR__.'/config/default.yml';
         $this['spress.config.build_dir'] = './build';
+        $this['spress.config.plugin_dir'] = './src/plugins';
         $this['spress.config.site_dir'] = './';
+        $this['spress.config.vendor_dir'] = './vendor';
+        $this['spress.config.composer_filename'] = 'composer.json';
         $this['spress.config.env'] = null;
         $this['spress.config.safe'] = null;
         $this['spress.config.drafts'] = null;
@@ -108,18 +114,42 @@ class Spress extends Container
             return $twig;
         };
 
+        $this['lib.embeddedComposer'] = function ($c) {
+            $embeddedComposerBuilder = new EmbeddedComposerBuilder($c['spress.plugin.classLoader']);
+            $embeddedComposer = $embeddedComposerBuilder
+                ->setComposerFilename($c['spress.config.composer_filename'])
+                ->setVendorDirectory($c['spress.config.vendor_dir'])
+                ->build();
+
+            return $embeddedComposer;
+        };
+
         $this['spress.io'] = function ($c) {
                 return new NullIO();
         };
 
-        $this['spress.plugin.classLoader'] = function () {
+        $this['spress.plugin.classLoader'] = function ($c) {
             $autoloaders = spl_autoload_functions();
 
             return $autoloaders[0][0];
         };
 
+        $this['spress.plugin.finder'] = function ($c) {
+            $finder = new Finder();
+            $finder->files()
+                ->in($c['spress.config.plugin_dir'])
+                ->name('/(\.php|composer\.json)$/');
+
+            return $finder;
+        };
+
         $this['spress.plugin.pluginManager'] = function ($c) {
-            return new PluginManager($c['lib.eventDispatcher']);
+            $embeddedComposer = $c['lib.embeddedComposer'];
+            $embeddedComposer->processAdditionalAutoloads();
+
+            $builder = new PluginManagerBuilder($c['spress.plugin.finder'], $c['lib.eventDispatcher']);
+
+            return $builder->build();
         };
 
         $this['spress.dataWriter'] = function ($c) {
@@ -205,6 +235,7 @@ class Spress extends Container
      *
      * Example:
      *   $spress['spress.config.site_dir'] = '/my-site-folder';
+     *
      *   $spress['spress.config.drafts'] = true;
      *   $spress['spress.config.safe'] = false;
      *   $spress['spress.config.timezone'] = 'UTC';

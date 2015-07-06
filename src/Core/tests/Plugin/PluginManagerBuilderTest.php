@@ -38,14 +38,15 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
             ->setComposerFilename('composer.json')
             ->setVendorDirectory($vendorDir)
             ->build();
+        $this->embeddedComposer->processAdditionalAutoloads();
     }
 
     public function testBuild()
     {
-        $builder = new PluginManagerBuilder($this->finder, $this->embeddedComposer, new EventDispatcher());
+        $builder = new PluginManagerBuilder($this->finder, new EventDispatcher());
         $pm = $builder->build();
 
-        $this->assertEquals(1, $pm->countPlugins());
+        $this->assertEquals(2, $pm->countPlugins());
 
         $plugin = $pm->getPlugin('Test plugin');
 
@@ -54,5 +55,13 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $metas = $plugin->getMetas();
 
         $this->assertEquals('Test plugin', $metas['name']);
+
+        $plugin = $pm->getPlugin('Hello plugin');
+
+        $this->assertInstanceOf('Yosymfony\Spress\Core\Plugin\PluginInterface', $plugin);
+
+        $metas = $plugin->getMetas();
+
+        $this->assertEquals('Hello plugin', $metas['name']);
     }
 }

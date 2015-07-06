@@ -14,7 +14,6 @@ namespace Yosymfony\Spress\Core\Plugin;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
@@ -27,24 +26,20 @@ class PluginManagerBuilder
     protected $finder;
     protected $resolver;
     protected $eventDispatcher;
-    protected $embeddedComposer;
     protected $composerFilename;
 
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\Finder\Finder                         $finder           Finder to locate plugins.
-     * @param \Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface $embeddedComposer
-     * @param \Symfony\Component\EventDispatcher\EventDispatcher       $eventDispatcher
+     * @param \Symfony\Component\Finder\Finder                   $finder          Finder to locate plugins.
+     * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
      */
     public function __construct(
         Finder $finder,
-        EmbeddedComposerInterface $embeddedComposer,
         EventDispatcher $eventDispatcher)
     {
         $this->finder = $finder;
         $this->eventDispatcher = $eventDispatcher;
-        $this->embeddedComposer = $embeddedComposer;
         $this->resolver = $this->getResolver();
         $this->setComposerFilename('composer.json');
     }
@@ -62,13 +57,15 @@ class PluginManagerBuilder
     /**
      * Builds the PluginManager with the plugins of a site.
      *
+     * Each plugin is added to PluginManager using "name"
+     * meta or its classname if that meta do not exists.
+     *
      * @return \Yosymfony\Spress\Core\Plugin\PluginManager
      */
     public function build()
     {
         $pm = new PluginManager($this->eventDispatcher);
-
-        $this->embeddedComposer->processAdditionalAutoloads();
+        $composerClassname = [];
 
         foreach ($this->finder as $file) {
             $classname = $this->getClassname($file);
@@ -77,18 +74,33 @@ class PluginManagerBuilder
                 continue;
             }
 
-            if (stripos($classname, '\\', 1) === false) {
-                include_once $file->getRealPath();
+            if ($file->getFilename() === $this->composerFilename) {
+                $composerClassname[] = $classname;
+
+                continue;
             }
+
+            include_once $file->getRealPath();
 
             if ($this->isValidClassName($classname) === false) {
                 continue;
             }
 
             $plugin = new $classname();
-            $metas = $this->getPluginMetas($file->getRelativePathname(), $plugin);
+
+            $metas = $this->getPluginMetas($plugin);
 
             $pm->addPlugin($metas['name'], $plugin);
+        }
+
+        foreach ($composerClassname as $classname) {
+            if ($this->isValidClassName($classname) === true) {
+                $plugin = new $classname();
+
+                $metas = $this->getPluginMetas($plugin);
+
+                $pm->addPlugin($metas['name'], $plugin);
+            }
         }
 
         return $pm;
@@ -110,8 +122,8 @@ class PluginManagerBuilder
         if ($file->getFilename() === $this->composerFilename) {
             $composerData = $this->readComposerFile($file);
 
-            if (isset($this->data['extra']['spress_class'])) {
-                return $this->data['extra']['spress_class'];
+            if (isset($composerData['extra']['spress_class']) === true && is_string($composerData['extra']['spress_class'])) {
+                return $composerData['extra']['spress_class'];
             }
         }
 
@@ -126,12 +138,14 @@ class PluginManagerBuilder
      *
      * @return array
      */
-    protected function getPluginMetas($filename, PluginInterface $plugin)
+    protected function getPluginMetas(PluginInterface $plugin)
     {
         $metas = $plugin->getMetas();
 
         if (is_array($metas) === false) {
-            throw new \RuntimeException(sprintf('Expected an array at method "getMetas" of the plugin: "%s"', $filename));
+            $classname = get_class($plugin);
+
+            throw new \RuntimeException(sprintf('Expected an array at method "getMetas" of the plugin: "%s"', $classname));
         }
 
         $metas = $this->resolver->resolve($metas);

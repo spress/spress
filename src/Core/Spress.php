@@ -35,6 +35,16 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 /**
  * Spress application.
  *
+ * Namespaces:
+ *  - "spress.config.site_dir": (string) The path to the site. "./" by defatul.
+ *
+ *  - "spress.externals": (array) Externals attributes. e.g: CLI command arguments.
+ *    These attributes could be recovered on a site using "spress.external.attribute_name".
+ *
+ *  - "spress.dataSourceManager.parameters": (array) Parameters accesibles by arguments
+ *    at Datasources declaration.
+ *
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class Spress extends Container
@@ -62,10 +72,19 @@ class Spress extends Container
         $this['spress.externals'] = [];
 
         $this['spress.config.default_filename'] = __DIR__.'/config/default.yml';
-        $this['spress.config.build_dir'] = './build';
-        $this['spress.config.plugin_dir'] = './src/plugins';
         $this['spress.config.site_dir'] = './';
-        $this['spress.config.vendor_dir'] = './vendor';
+
+        $this['spress.config.build_dir'] = function ($c) {
+            return $c['spress.config.site_dir'].'/build';
+        };
+        $this['spress.config.plugin_dir'] = function ($c) {
+            return $c['spress.config.site_dir'].'/src/plugins';
+        };
+
+        $this['spress.config.vendor_dir'] = function ($c) {
+            return $c['spress.config.site_dir'].'/vendor';
+        };
+
         $this['spress.config.composer_filename'] = 'composer.json';
         $this['spress.config.env'] = null;
         $this['spress.config.safe'] = null;
@@ -158,8 +177,15 @@ class Spress extends Container
             return new FilesystemDataWriter($fs, $c['spress.config.build_dir']);
         };
 
+        $this['spress.dataSourceManager.parameters'] = function ($c) {
+            return [
+                '%site_dir%' => $c['spress.config.site_dir'],
+            ];
+        };
+
         $this['spress.dataSourceManager'] = function ($c) {
-            $builder = new DataSourceManagerBuilder();
+            $parameters = $c['spress.dataSourceManager.parameters'];
+            $builder = new DataSourceManagerBuilder($parameters);
             $dataSources = $c['spress.config.values']['data_sources'];
 
             return $builder->buildFromConfigArray($dataSources);
@@ -228,11 +254,6 @@ class Spress extends Container
     /**
      * Parse a site.
      *
-     * Namespaces:
-     *  - "spress.externals": (array) Externals attributes are located
-     *    in this namespace. e.g: CLI command arguments. These attributes
-     *    could be recovered on a site using "spress.external.attribute_name".
-     *
      * Example:
      *   $spress['spress.config.site_dir'] = '/my-site-folder';
      *
@@ -247,9 +268,6 @@ class Spress extends Container
      */
     public function parse()
     {
-        $orgDir = getcwd();
-        $this->setCurrentDir($this['spress.config.site_dir']);
-
         $attributes = $this['spress.config.values'];
         $spressAttributes = $this->getSpressAttributes();
 
@@ -275,8 +293,6 @@ class Spress extends Container
             $attributes['drafts'],
             $attributes['safe'],
             $attributes['timezone']);
-
-        $this->setCurrentDir($orgDir);
 
         return $result;
     }

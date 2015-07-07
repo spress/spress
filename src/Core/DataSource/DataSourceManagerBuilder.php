@@ -12,17 +12,38 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * Data source manager builder
+ * Data source manager builder.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class DataSourceManagerBuilder
 {
+    protected $parameterKeys;
+    protected $parameterValues;
+
+    /**
+     * Constructor.
+     *
+     * @param array $parameters A key-value array with parameters.
+     *                          These parameter may be recovered from the arguments array.
+     *
+     * e.g:
+     *   .array(
+     *     [%site_dir%] => './'
+     *   )
+     */
+    public function __construct(array $parameters = [])
+    {
+        $this->parameterKeys = array_keys($parameters);
+        $this->parameterValues = array_values($parameters);
+    }
+
     /**
      * Build a data source manager with data sources
      * loaded from config array.
      *
      * Config array structure:
+     *
      * .Array
      * (
      *   [data_source_name_1] => Array
@@ -30,7 +51,7 @@ class DataSourceManagerBuilder
      *            [class] => Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource
      *            [arguments] => Array
      *                (
-     *                    [source_root] => ./
+     *                    [source_root] => %site_dir%/src
      *                )
      *        )
      *
@@ -56,6 +77,10 @@ class DataSourceManagerBuilder
 
             $classname = $data['class'];
             $arguments = true === isset($data['arguments']) ? $data['arguments'] : [];
+
+            if (count($this->parameterKeys) > 0 && count($arguments) > 0) {
+                $arguments = str_replace($this->parameterKeys, $this->parameterValues, $arguments);
+            }
 
             if (false === class_exists($classname)) {
                 throw new \RuntimeException(sprintf('Data source "%s" class not found: "%s".', $dataSourceName, $classname));

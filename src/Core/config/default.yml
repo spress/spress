@@ -25,7 +25,7 @@ data_sources:
   filesystem:
     class: 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource'
     arguments:
-      source_root: ./src
-      include: [.htaccess]
+      source_root: '%site_dir%/src'
+      include: ['.htaccess']
       text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
-      attribute_syntax: "yaml"
+      attribute_syntax: 'yaml'

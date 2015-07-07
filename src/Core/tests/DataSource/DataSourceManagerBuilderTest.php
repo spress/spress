@@ -21,12 +21,14 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
             'data_source_name_1' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
-                    'source_root' => __dir__.'/../fixtures/project/',
+                    'source_root' => '%site_dir%/src',
                 ],
             ],
         ];
 
-        $builder = new DataSourceManagerBuilder();
+        $builder = new DataSourceManagerBuilder([
+            '%site_dir%' => __dir__.'/../fixtures/project',
+        ]);
         $dsm = $builder->buildFromConfigArray($config);
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $dsm);
@@ -42,7 +44,7 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
             'data_source_name_1' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource_1',
                 'arguments' => [
-                    'source_root' => __dir__.'/../fixtures/project/',
+                    'source_root' => __dir__.'/../fixtures/project/src',
                 ],
             ],
         ];

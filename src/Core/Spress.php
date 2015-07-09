@@ -180,6 +180,10 @@ class Spress extends Container
         $this['spress.dataSourceManager.parameters'] = function ($c) {
             return [
                 '%site_dir%' => $c['spress.config.site_dir'],
+                '%include%' => $c['spress.config.values']['include'],
+                '%exclude%' => $c['spress.config.values']['exclude'],
+                '%text_extensions%' => $c['spress.config.values']['text_extensions'],
+                '%attribute_syntax%' => $c['spress.config.values']['attribute_syntax'],
             ];
         };
 

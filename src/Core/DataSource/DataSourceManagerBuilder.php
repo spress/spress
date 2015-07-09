@@ -18,6 +18,7 @@ namespace Yosymfony\Spress\Core\DataSource;
  */
 class DataSourceManagerBuilder
 {
+    protected $parameters;
     protected $parameterKeys;
     protected $parameterValues;
 
@@ -34,6 +35,7 @@ class DataSourceManagerBuilder
      */
     public function __construct(array $parameters = [])
     {
+        $this->parameters = $parameters;
         $this->parameterKeys = array_keys($parameters);
         $this->parameterValues = array_values($parameters);
     }
@@ -79,7 +81,7 @@ class DataSourceManagerBuilder
             $arguments = true === isset($data['arguments']) ? $data['arguments'] : [];
 
             if (count($this->parameterKeys) > 0 && count($arguments) > 0) {
-                $arguments = str_replace($this->parameterKeys, $this->parameterValues, $arguments);
+                $arguments = $this->resolveArgumentsParameters($arguments);
             }
 
             if (false === class_exists($classname)) {
@@ -91,5 +93,37 @@ class DataSourceManagerBuilder
         }
 
         return $dsm;
+    }
+
+    /**
+     * Resolve parameters in arguments.
+     *
+     * @param array $arguments
+     *
+     * @return array
+     */
+    protected function resolveArgumentsParameters(array $arguments)
+    {
+        foreach ($arguments as $argument => &$value) {
+            if (is_string($value) === false || preg_match('/%[\S_\-]+%/', $value, $matches) == false) {
+                continue;
+            }
+
+            $name = $matches[0];
+
+            if (array_key_exists($name, $this->parameters) === false) {
+                continue;
+            }
+
+            if (is_string($this->parameters[$name])) {
+                $value = str_replace($name, $this->parameters[$name], (string) $value);
+
+                continue;
+            }
+
+            $value = $this->parameters[$name];
+        }
+
+        return $arguments;
     }
 }

@@ -6,8 +6,12 @@ debug: false
 env: 'dev'
 drafts: false
 markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
+text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
+attribute_syntax: 'yaml'
 
 # Outputting
+include: ['.htaccess']
+exclude: []
 timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false
 permalink: 'pretty'
@@ -26,6 +30,7 @@ data_sources:
     class: 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource'
     arguments:
       source_root: '%site_dir%/src'
-      include: ['.htaccess']
-      text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
-      attribute_syntax: 'yaml'
+      include: '%include%'
+      exclude: '%exclude%'
+      text_extensions: '%text_extensions%'
+      attribute_syntax: '%attribute_syntax%'

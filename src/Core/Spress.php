@@ -92,9 +92,13 @@ class Spress extends Container
         $this['spress.config.url'] = null;
         $this['spress.config.timezone'] = null;
         $this['spress.config.values'] = function ($c) {
-            $configLoader = new Configuration($c['lib.configLoader'], $c['spress.config.default_filename']);
+            $configLoader = $c['spress.config'];
 
             return $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
+        };
+
+        $this['spress.config'] = function ($c) {
+            return new Configuration($c['lib.configLoader'], $c['spress.config.default_filename']);
         };
 
         $this['lib.configLoader'] = function ($c) {

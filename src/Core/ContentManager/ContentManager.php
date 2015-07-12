@@ -22,6 +22,7 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
@@ -103,7 +104,7 @@ class ContentManager
     /**
      * Parse a site.
      *
-     * @param array  $attributes
+     * @param array  $attributes       The site attributes.
      * @param array  $spressAttributes
      * @param bool   $draft            Include draft posts.
      * @param bool   $safe             True for disabling custom plugins.
@@ -131,7 +132,6 @@ class ContentManager
     private function reset()
     {
         $this->items = [];
-        $this->siteAttribute->initialize($this->attributes);
         $this->renderizer->clear();
 
         $this->parseResult = [
@@ -147,12 +147,6 @@ class ContentManager
     private function setUp()
     {
         $this->configureTimezone($this->timezone);
-
-        $this->siteAttribute->setAttribute('spress', $this->spressAttributes);
-        $this->siteAttribute->setAttribute('site.drafts', $this->processDraft);
-        $this->siteAttribute->setAttribute('site.safe', $this->safe);
-        $this->siteAttribute->setAttribute('site.timezone', $this->timezone);
-
         $this->dataWriter->setUp();
     }
 
@@ -166,6 +160,15 @@ class ContentManager
     private function process()
     {
         $itemsGenerator = [];
+
+        $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
+            $this->dataSourceManager,
+            $this->converterManager,
+            $this->renderizer,
+            $this->io,
+            $this->attributes));
+
+        $this->prepareSiteAttributes();
 
         $this->dataSourceManager->load();
 
@@ -206,6 +209,16 @@ class ContentManager
     private function finish()
     {
         $this->dataWriter->tearDown();
+    }
+
+    private function prepareSiteAttributes()
+    {
+        $this->siteAttribute->initialize($this->attributes);
+
+        $this->siteAttribute->setAttribute('spress', $this->spressAttributes);
+        $this->siteAttribute->setAttribute('site.drafts', $this->processDraft);
+        $this->siteAttribute->setAttribute('site.safe', $this->safe);
+        $this->siteAttribute->setAttribute('site.timezone', $this->timezone);
     }
 
     private function processCollection(ItemInterface $item)

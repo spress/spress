@@ -12,60 +12,66 @@
 namespace Yosymfony\Spress\Core\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Yosymfony\Spress\Core\Configuration;
-use Yosymfony\Spress\Core\ContentManager\ConverterInterface;
-use Yosymfony\Spress\Core\ContentManager\ConverterManager;
-use Yosymfony\Spress\Core\ContentManager\Renderizer;
-use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Core\Plugin\API\TemplateManager;
+use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
+use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
+use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 class EnvironmentEvent extends Event
 {
-    private $configuration;
-    private $converter;
+    private $dataSourceManager;
+    private $converterManager;
     private $renderizer;
-    private $contentLocator;
     private $io;
 
     public function __construct(
-        Configuration $configuration,
-        ConverterManager $converter,
-        Renderizer $renderizer,
-        ContentLocator $contentLocator,
-        IOInterface $io)
+        DataSourceManager $dataSourceManager,
+        ConverterManager $converterManager,
+        RenderizerInterface $renderizer,
+        IOInterface $io,
+        array &$configValues)
     {
-        $this->configuration = $configuration;
-        $this->converter = $converter;
+        $this->dataSourceManager = $dataSourceManager;
+        $this->converterManager = $converterManager;
         $this->renderizer = $renderizer;
-        $this->contentLocator = $contentLocator;
         $this->io = $io;
+        $this->configValues = &$configValues;
     }
 
     /**
-     * Get repository configuration
+     * Gets the data source manager.
      *
-     * @return Yosymfony\Silex\ConfigServiceProvider\ConfigRepository
+     * @return \Yosymfony\Spress\Core\DataSource\DataSourceManager
      */
-    public function getConfigRepository()
+    public function getDataSourceManager()
     {
-        return $this->configuration->getRepository();
+        return $this->dataSourceManager;
     }
 
     /**
-     * Get the template TemplateManager
+     * Gets the converter manager.
      *
-     * @return Yosymfony\Spress\Plugin\Api\TemplateManager
+     * @return \Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager
      */
-    public function getTemplateManager()
+    public function getConverterManager()
     {
-        return new TemplateManager($this->renderizer);
+        return $this->converterManager;
     }
 
     /**
-     * Access to IO API.
+     * Gets the renderizer.
      *
-     * @return Yosymfony\Spress\IO\IOInterface
+     * @return \Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface
+     */
+    public function getRenderizer()
+    {
+        return $this->renderizer;
+    }
+
+    /**
+     * Gets IO.
+     *
+     * @return \Yosymfony\Spress\IO\IOInterface
      */
     public function getIO()
     {
@@ -73,83 +79,22 @@ class EnvironmentEvent extends Event
     }
 
     /**
-     * Add new converter
+     * Gets the configuration values.
      *
-     * @param ConverterInterface $converter
+     * @return array
      */
-    public function addConverter(ConverterInterface $converter)
+    public function getConfigValues()
     {
-        $this->converter->addConverter($converter);
+        return $this->configValues;
     }
 
     /**
-     * Add a new Twig function
+     * Sets the configuration values.
      *
-     * @param string   $name     Name of function
-     * @param callable $function Function implementation
-     * @param array    $options
+     * @param array $values
      */
-    public function addTwigFunction($name, callable $function, array $options = [])
+    public function setConfigValues(array $values)
     {
-        $this->renderizer->addTwigFunction($name, $function, $options);
-    }
-
-    /**
-     * Add a new Twig filter
-     *
-     * @param string   $name    Name of filter
-     * @param callable $filter  Filter implementation
-     * @param array    $options
-     */
-    public function addTwigFilter($name, callable $filter, array $options = [])
-    {
-        $this->renderizer->addTwigFilter($name, $filter, $options);
-    }
-
-    /**
-     * Add a new Twig test
-     *
-     * @param string   $name    Name of test
-     * @param callable $test    Test implementation
-     * @param array    $options
-     */
-    public function addTwigTest($name, callable $test, array $options = [])
-    {
-        $this->renderizer->addTwigTest($name, $test, $options);
-    }
-
-    public function getSourceDir()
-    {
-        return $this->contentLocator->getSourceDir();
-    }
-
-    public function getPostsDir()
-    {
-        return $this->contentLocator->getPostsDir();
-    }
-
-    public function getDestinationDir()
-    {
-        return $this->contentLocator->getDestinationDir();
-    }
-
-    /**
-     * Get the absolute paths of includes directory
-     *
-     * @return string
-     */
-    public function getIncludesDir()
-    {
-        return $this->contentLocator->getIncludesDir();
-    }
-
-    /**
-     * Get the absolute paths of layouts directory
-     *
-     * @return string
-     */
-    public function getLayoutsDir()
-    {
-        return $this->contentLocator->getLayoutsDir();
+        $this->configValues = $values;
     }
 }

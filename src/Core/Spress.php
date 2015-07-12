@@ -254,7 +254,8 @@ class Spress extends Container
                 $c['spress.cms.renderizer'],
                 $c['spress.cms.siteAttribute'],
                 $c['spress.plugin.pluginManager'],
-                $c['lib.eventDispatcher']
+                $c['lib.eventDispatcher'],
+                $c['spress.io']
             );
         });
     }

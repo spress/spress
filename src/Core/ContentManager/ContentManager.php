@@ -23,6 +23,7 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 /**
@@ -42,6 +43,7 @@ class ContentManager
     private $renderizer;
     private $pluginManager;
     private $eventDispatcher;
+    private $io;
     private $timezone;
     private $safe;
     private $processDraft;
@@ -75,8 +77,9 @@ class ContentManager
         RenderizerInterface $renderizer,
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,
-        EventDispatcher $eventDispatcher)
-    {
+        EventDispatcher $eventDispatcher,
+        IOInterface $io
+        ) {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
         $this->generatorManager = $generatorManager;
@@ -87,6 +90,7 @@ class ContentManager
         $this->siteAttribute = $siteAttribute;
         $this->pluginManager = $pluginManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->io = $io;
 
         $this->attributes = [];
         $this->spressAttributes = [];

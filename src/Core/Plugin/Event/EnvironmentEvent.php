@@ -17,6 +17,13 @@ use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
+/**
+ * The spress.start is thrown when start to generate a project. Hook this
+ * event for modifying configuration values, managin datasources, converters
+ * and to extend the renderizer.
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class EnvironmentEvent extends Event
 {
     private $dataSourceManager;

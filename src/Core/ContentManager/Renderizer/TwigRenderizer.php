@@ -88,7 +88,6 @@ class TwigRenderizer implements RenderizerInterface
     public function clear()
     {
         $this->twig->clearCacheFiles();
-        $this->twig->clearTemplateCache();
     }
 
     /**

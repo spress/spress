@@ -67,7 +67,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
     public function testAddTwigFunction()
     {
         $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFunction('fTest', function ($param) {
+        $renderizer->addTwigFunction('fuTest1', function ($param) {
             return $param;
         });
     }
@@ -75,7 +75,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
     public function testAddTwigFunctionWithOptions()
     {
         $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFunction('fTest', function (\Twig_Environment $env, $context, $param) {
+        $renderizer->addTwigFunction('fuTest2', function (\Twig_Environment $env, $context, $param) {
             return $param;
         }, ['needs_context' => true, 'needs_environment' => true]);
     }

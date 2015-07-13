@@ -19,14 +19,14 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Shortcut for dispatch events
+ * Shortcut for dispatch events.
  */
 class DispatcherShortcut
 {
     private $pm;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Yosymfony\Spress\Core\Plugin\PluginManager $pluginManager
      */

@@ -317,6 +317,12 @@ class ContentManager
 
     private function convertItem(ItemInterface $item)
     {
+        $this->eventDispatcher->dispatch('spress.before_convert', new Event\ContentEvent(
+            $item,
+            ItemInterface::SNAPSHOT_RAW,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
         $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
@@ -325,6 +331,12 @@ class ContentManager
 
         $item->setContent($result->getResult(), ItemInterface::SNAPSHOT_AFTER_CONVERT);
         $item->setPath($newPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
+
+        $this->eventDispatcher->dispatch('spress.after_convert', new Event\ContentEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_CONVERT,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
 
         $this->siteAttribute->setItem($item);
     }
@@ -343,9 +355,21 @@ class ContentManager
 
     private function renderBlocks(ItemInterface $item)
     {
+        $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_CONVERT,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
         $snapshotRender = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttribute->getAttributes());
 
         $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
+
+        $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
 
         $this->siteAttribute->setItem($item);
     }

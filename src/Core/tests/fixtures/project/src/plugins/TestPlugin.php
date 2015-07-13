@@ -30,11 +30,11 @@ class TestPlugin implements PluginInterface
     {
     }
 
-    public function onBefore_convert(Event\ConvertEvent $event)
+    public function onBefore_convert(Event\ContentEvent $event)
     {
     }
 
-    public function onAfter_convert(Event\ConvertEvent $event)
+    public function onAfter_convert(Event\ContentEvent $event)
     {
     }
 

@@ -12,26 +12,35 @@
 namespace Yosymfony\Spress\Core\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
+use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * Event base for events related with the content
+ * Content event.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentEvent extends Event
 {
     protected $item;
-    protected $isPost;
+    protected $defaultSnapshotContent;
+    protected $defaultSnapshotPath;
 
-    public function __construct(ContentItemInterface $item, $isPost = false)
+    /**
+     * Constructor.
+     *
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
+     * @param string                                          $defaultSnapshotContent The name of the defatul snapshot for content.
+     * @param string                                          $defaultSnapshotPath    The name of the defatul snapshot for path.
+     */
+    public function __construct(ItemInterface $item, $defaultSnapshotContent, $defaultSnapshotPath)
     {
         $this->item = $item;
-        $this->isPost = $isPost;
+        $this->defaultSnapshotContent = $defaultSnapshotContent;
+        $this->defaultSnapshotPath = $defaultSnapshotPath;
     }
 
     /**
-     * Get item identifier
+     * Gets the item identifier.
      *
      * @return string
      */
@@ -41,69 +50,52 @@ class ContentEvent extends Event
     }
 
     /**
-     * Is post content?
-     *
-     * @return bool
-     */
-    public function isPost()
-    {
-        return $this->isPost;
-    }
-
-    /**
-     * Get the content without Front-matter
+     * Gets the content.
      *
      * @return string
      */
     public function getContent()
     {
-        switch ($this->getName()) {
-            case SpressEvents::SPRESS_BEFORE_CONVERT:
-                return $this->item->getPreConverterContent();
-            case SpressEvents::SPRESS_AFTER_CONVERT:
-            case SpressEvents::SPRESS_BEFORE_RENDER:
-            case SpressEvents::SPRESS_BEFORE_RENDER_PAGINATION:
-                return $this->item->getPostConverterContent();
-            case SpressEvents::SPRESS_AFTER_RENDER:
-            case SpressEvents::SPRESS_AFTER_RENDER_PAGINATION:
-                return $this->item->getPostLayoutContent();
-            default:
-                return $this->item->getPreConverterContent();
-        }
+        return $this->item->getContent($this->defaultSnapshotContent);
     }
 
     /**
-     * Set the content without Front-matter
+     * Sets the content (without Front-matter).
      *
      * @param string $content
      */
     public function setContent($content)
     {
-        switch ($this->getName()) {
-            case SpressEvents::SPRESS_BEFORE_CONVERT:
-                $this->item->setPreConverterContent($content);
-                break;
-            case SpressEvents::SPRESS_AFTER_CONVERT:
-            case SpressEvents::SPRESS_BEFORE_RENDER:
-            case SpressEvents::SPRESS_BEFORE_RENDER_PAGINATION:
-                $this->item->setPostConverterContent($content);
-                break;
-            case SpressEvents::SPRESS_AFTER_RENDER:
-            case SpressEvents::SPRESS_AFTER_RENDER_PAGINATION:
-                $this->item->setPostLayoutContent($content);
-                break;
-            default:
-                $this->item->setPreConverterContent($content);
-        }
+        $this->item->setContent($content, $this->defaultSnapshotContent);
     }
 
     /**
-     * Get relative path to the site, filename included.
+     * Gets the attributes of the item.
      *
-     * @return string
+     * @return array
      */
-    public function getRelativePath()
+    public function getAttributes()
     {
-        return $this->item->getFileItem()->getRelativePathFilename();
+        return $this->item->getAttributes();
+    }
+
+    /**
+     * Sets the attributes of the item.
+     *
+     * @param array $attributes
+     */
+    public function setAttributes(array $attributes)
+    {
+        return $this->item->setAttributes($attributes);
+    }
+
+    /**
+     * Gets the item.
+     *
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
+     */
+    public function getItem()
+    {
+        return $this->item;
     }
 }

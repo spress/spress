@@ -25,7 +25,7 @@ class AfterConvertPostsEvent extends Event
     }
 
     /**
-     * Get categories of posts
+     * Get categories of posts.
      *
      * @return array
      */
@@ -35,7 +35,7 @@ class AfterConvertPostsEvent extends Event
     }
 
     /**
-     * Get tags of posts
+     * Get tags of posts.
      *
      * @return array
      */

@@ -23,7 +23,7 @@ class FinishEvent extends Event
     }
 
     /**
-     * Get restult data
+     * Get restult data.
      *
      * @return array
      */

@@ -44,8 +44,8 @@ class PluginManager
 
     /**
      * Adds a new plugin.
-     * 
-     * @param string          $name   The plugin identifier.
+     *
+     * @param string                                       $name   The plugin identifier.
      * @param Yosymfony\Spress\Core\Plugin\PluginInterface $plugin The plugin.
      */
     public function addPlugin($name, PluginInterface $plugin)
@@ -87,8 +87,8 @@ class PluginManager
 
     /**
      * Sets a plugin.
-     * 
-     * @param string          $name   The name of the plugin.
+     *
+     * @param string                                       $name   The name of the plugin.
      * @param Yosymfony\Spress\Core\Plugin\PluginInterface $plugin The plugin.
      */
     public function setPlugin($name, PluginInterface $plugin)

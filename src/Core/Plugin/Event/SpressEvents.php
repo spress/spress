@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Plugin\Event;
 
 /**
- * Description about Spress events
+ * Description about Spress events.
  */
 final class SpressEvents
 {

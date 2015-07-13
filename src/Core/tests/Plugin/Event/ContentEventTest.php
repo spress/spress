@@ -11,64 +11,34 @@
 
 namespace Yosymfony\Spress\Core\tests\Plugin\Event;
 
-use Symfony\Component\Finder\SplFileInfo;
-use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Core\ContentLocator\FileItem;
-use Yosymfony\Spress\Core\ContentManager\PostItem;
-use Yosymfony\Spress\Core\Plugin\Event\ConvertEvent;
+use Yosymfony\Spress\Core\DataSource\Item;
+use Yosymfony\Spress\Core\Plugin\Event\ContentEvent;
 
 class ContentEventTest extends \PHPUnit_Framework_TestCase
 {
-    protected $item;
-
-    public function setUp()
+    public function testContentEvent()
     {
-        $path = realpath(__DIR__.'/../../fixtures/project/_posts/2013-08-12-post-example-1.md');
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
 
-        $app = new Application();
-        $config = $app['spress.config'];
+        $event = new ContentEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
 
-        $fileInfo = new SplFileInfo($path, '', '2013-08-12-post-example-1.md');
-        $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
+        $this->assertEquals('index.html', $event->getId());
+        $this->assertEquals('Test of content', $event->getContent());
+        $this->assertTrue(is_array($event->getAttributes()));
+        $this->assertCount(1, $event->getAttributes());
+        $this->assertArrayHasKey('title', $event->getAttributes());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\ItemInterface', $event->getItem());
 
-        $this->item = new PostItem($fileItem, $config);
-        $this->item->setPostConverterContent($this->item->getPreConverterContent());
-        $this->item->setOutExtension('html');
-    }
+        $attributes = $event->getAttributes();
+        $attributes['name'] = 'Yo! Symtony';
+        $event->setAttributes($attributes);
 
-    public function testIsPost()
-    {
-        $event = new ConvertEvent($this->item, true);
+        $this->assertCount(2, $event->getAttributes());
+        $this->assertArrayHasKey('name', $event->getAttributes());
 
-        $this->assertTrue($event->isPost());
-    }
-
-    public function testIsNotPost()
-    {
-        $event = new ConvertEvent($this->item);
-
-        $this->assertFalse($event->isPost());
-    }
-
-    public function testGetContent()
-    {
-        $event = new ConvertEvent($this->item);
-
-        $this->assertEquals($this->item->getPreConverterContent(), $event->getContent());
-    }
-
-    public function testSetContent()
-    {
-        $event = new ConvertEvent($this->item);
         $event->setContent('New content');
-
-        $this->assertEquals('New content', $this->item->getPreConverterContent());
-    }
-
-    public function testGetRelativePath()
-    {
-        $event = new ConvertEvent($this->item);
-
-        $this->assertEquals('2013-08-12-post-example-1.md', $event->getRelativePath());
+        $this->assertEquals('New content', $event->getContent());
+        $this->assertEquals('New content', $event->getItem()->getContent(Item::SNAPSHOT_RAW));
     }
 }

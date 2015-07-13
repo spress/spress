@@ -11,52 +11,6 @@
 
 namespace Yosymfony\Spress\Core\Plugin\Event;
 
-use Yosymfony\Spress\Core\ContentManager\Renderizer;
-use Yosymfony\Spress\Core\ContentManager\ContentItemInterface;
-
 class RenderEvent extends ContentEvent
 {
-    protected $render;
-    protected $payload;
-
-    public function __construct(Renderizer $render, array $payload, ContentItemInterface $item, $isPost = false)
-    {
-        parent::__construct($item, $isPost);
-
-        $this->render = $render;
-        $this->payload = $payload;
-    }
-
-    /**
-     * Render content with Twig template engine
-     *
-     * @param string $content
-     * @param array  $payload Data available in the template
-     *
-     * @return string
-     */
-    public function render($content, array $payload)
-    {
-        return $this->render->renderString($content, $payload);
-    }
-
-    /**
-     * Get the model data available in templates
-     *
-     * @return array
-     */
-    public function getPayload()
-    {
-        return $this->payload;
-    }
-
-    /**
-     * Set a new model data available in templates
-     *
-     * @param array $payload Model
-     */
-    public function setPayload(array $payload)
-    {
-        $this->payload = $payload;
-    }
 }

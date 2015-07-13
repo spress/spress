@@ -17,9 +17,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaultContent()
     {
-        $item = new Item('Test of content', '/index.html', []);
+        $item = new Item('Test of content', 'index.html', []);
 
-        $this->assertEquals('/index.html', $item->getId());
+        $this->assertEquals('index.html', $item->getId());
         $this->assertEquals(item::TYPE_ITEM, $item->getType());
         $this->assertEquals('pages', $item->getCollection());
         $this->assertEquals('Test of content', $item->getContent());
@@ -34,7 +34,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleSnapshotOfContent()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
 
         $this->assertEquals('Raw content', $item->getContent(Item::SNAPSHOT_RAW));
 
@@ -47,7 +47,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testBinaryContent()
     {
-        $item = new Item('Binary content', '/index.html', [], true);
+        $item = new Item('Binary content', 'index.html', [], true);
 
         $this->assertEquals('Binary content', $item->getContent());
         $this->assertTrue($item->isBinary());
@@ -55,14 +55,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testLayoutItem()
     {
-        $item = new Item('Test of content', '/index.html', [], false, Item::TYPE_LAYOUT);
+        $item = new Item('Test of content', 'index.html', [], false, Item::TYPE_LAYOUT);
 
         $this->assertEquals(item::TYPE_LAYOUT, $item->getType());
     }
 
     public function testAttributes()
     {
-        $item = new Item('Test of content', '/index.html', ['name' => 'test']);
+        $item = new Item('Test of content', 'index.html', ['name' => 'test']);
 
         $this->assertCount(1, $item->getAttributes());
 
@@ -76,7 +76,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSnapshotContentNotFound()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
 
         $this->assertEquals('', $item->getContent('InventedSnapshot'));
     }
@@ -90,7 +90,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPath()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
         $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
         $item->setPath('/index.html', Item::SNAPSHOT_PATH_PERMALINK);
 
@@ -101,7 +101,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testPathNotInitialized()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
 
         $this->assertEquals('', $item->getPath());
     }
@@ -111,7 +111,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyCollection()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
         $item->setCollection('');
     }
 
@@ -120,7 +120,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testNullCollection()
     {
-        $item = new Item('Raw content', '/index.html', []);
+        $item = new Item('Raw content', 'index.html', []);
         $item->setCollection(null);
     }
 }

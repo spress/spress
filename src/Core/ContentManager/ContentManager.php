@@ -132,7 +132,6 @@ class ContentManager
     private function reset()
     {
         $this->items = [];
-        $this->renderizer->clear();
 
         $this->parseResult = [
             'total_post' => 0,
@@ -161,12 +160,16 @@ class ContentManager
     {
         $itemsGenerator = [];
 
-        $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
+        $event = $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
             $this->dataSourceManager,
             $this->converterManager,
             $this->renderizer,
             $this->io,
             $this->attributes));
+
+        $this->renderizer = $event->getRenderizer();
+
+        $this->renderizer->clear();
 
         $this->prepareSiteAttributes();
 

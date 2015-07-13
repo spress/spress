@@ -19,8 +19,8 @@ use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
  * The spress.start is thrown when start to generate a project. Hook this
- * event for modifying configuration values, managin datasources, converters
- * and to extend the renderizer.
+ * event for modifying configuration values, managin datasources, converters,
+ * to extend the renderizer or to set a custom renderizer.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -73,6 +73,16 @@ class EnvironmentEvent extends Event
     public function getRenderizer()
     {
         return $this->renderizer;
+    }
+
+    /**
+     * Sets a custom renderizer.
+     *
+     * @param \Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer The renderizer.
+     */
+    public function setRenderizer(RenderizerInterface $renderizer)
+    {
+        $this->renderizer = $renderizer;
     }
 
     /**

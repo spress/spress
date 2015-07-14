@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "twig/twig": ">=1.8,<2.0-dev",
         "pimple/pimple": "~2.1",
         "symfony/yaml": "2.6.*@dev",

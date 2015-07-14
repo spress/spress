@@ -15,7 +15,7 @@ Requirements
 ------------
 
 * Linux, Unix or Mac OS X.
-* PHP >= 5.4.
+* PHP >= 5.5.
 * [Composer](http://getcomposer.org/).
 
 Community

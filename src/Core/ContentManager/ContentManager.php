@@ -361,6 +361,8 @@ class ContentManager
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
 
+        $this->siteAttribute->setItem($item);
+
         $snapshotRender = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttribute->getAttributes());
 
         $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
@@ -376,11 +378,25 @@ class ContentManager
 
     private function renderPage(ItemInterface $item)
     {
+        $this->eventDispatcher->dispatch('spress.before_render_page', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
+        $this->siteAttribute->setItem($item);
+
         $layout = $this->getLayoutAttribute($item);
 
         $snapshotPage = $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttribute->getAttributes());
 
         $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_PAGE);
+
+        $this->eventDispatcher->dispatch('spress.after_render_page', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
 
         $this->siteAttribute->setItem($item);
     }

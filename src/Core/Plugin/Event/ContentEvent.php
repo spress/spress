@@ -17,6 +17,10 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 /**
  * Content event.
  *
+ * Used with events:
+ *   - "spress.before_convert".
+ *   - "spress.after_convert".
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentEvent extends Event

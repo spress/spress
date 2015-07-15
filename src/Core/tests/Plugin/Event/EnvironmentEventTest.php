@@ -25,17 +25,21 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
                      ->getMock();
         $io = $this->getMockBuilder('\Yosymfony\Spress\Core\IO\IOInterface')
                      ->getMock();
+        $dw = $this->getMockBuilder('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface')
+                     ->getMock();
 
         $configValues = ['name' => 'Yo! Symfony'];
 
         $event = new EnvironmentEvent(
             $dsm,
+            $dw,
             $cm,
             $renderizer,
             $io,
             $configValues);
 
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $event->getDataSourceManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface', $event->getDataWriter());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager', $event->getConverterManager());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface', $event->getRenderizer());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\IO\IOInterface', $event->getIO());

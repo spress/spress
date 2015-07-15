@@ -146,7 +146,6 @@ class ContentManager
     private function setUp()
     {
         $this->configureTimezone($this->timezone);
-        $this->dataWriter->setUp();
     }
 
     private function InitializePlugins()
@@ -162,13 +161,16 @@ class ContentManager
 
         $event = $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
             $this->dataSourceManager,
+            $this->dataWriter,
             $this->converterManager,
             $this->renderizer,
             $this->io,
             $this->attributes));
 
-        $this->renderizer = $event->getRenderizer();
+        $this->dataWriter = $event->getDataWriter();
+        $this->dataWriter->setUp();
 
+        $this->renderizer = $event->getRenderizer();
         $this->renderizer->clear();
 
         $this->prepareSiteAttributes();

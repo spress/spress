@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
+use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
@@ -27,13 +28,15 @@ use Yosymfony\Spress\Core\IO\IOInterface;
  */
 class EnvironmentEvent extends Event
 {
-    private $dataSourceManager;
-    private $converterManager;
-    private $renderizer;
-    private $io;
+    protected $dataSourceManager;
+    protected $converterManager;
+    protected $dataWriter;
+    protected $renderizer;
+    protected $io;
 
     public function __construct(
         DataSourceManager $dataSourceManager,
+        DataWriterInterface $dataWriter,
         ConverterManager $converterManager,
         RenderizerInterface $renderizer,
         IOInterface $io,
@@ -41,6 +44,7 @@ class EnvironmentEvent extends Event
     {
         $this->dataSourceManager = $dataSourceManager;
         $this->converterManager = $converterManager;
+        $this->dataWriter = $dataWriter;
         $this->renderizer = $renderizer;
         $this->io = $io;
         $this->configValues = &$configValues;
@@ -84,6 +88,26 @@ class EnvironmentEvent extends Event
     public function setRenderizer(RenderizerInterface $renderizer)
     {
         $this->renderizer = $renderizer;
+    }
+
+    /**
+     * Gets the data writer.
+     *
+     * @return \Yosymfony\Spress\Core\DataWriter\DataWriterInterface
+     */
+    public function getDataWriter()
+    {
+        return $this->dataWriter;
+    }
+
+    /**
+     * Sets the data writer.
+     *
+     * @param \Yosymfony\Spress\Core\DataWriter\DataWriterInterface $dataWriter
+     */
+    public function setDataWriter(DataWriterInterface $dataWriter)
+    {
+        $this->dataWriter = $dataWriter;
     }
 
     /**

@@ -25,8 +25,30 @@ class RenderEventTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('', $event->getRelativeUrl());
 
-        $event->setRelativeUrl('/index.html');
+        $event->setRelativeUrl('/welcome/index.html');
 
-        $this->assertEquals('/index.html', $event->getRelativeUrl());
+        $this->assertEquals('/welcome/index.html', $event->getRelativeUrl());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testAbsoluteUrl()
+    {
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
+        $event->setRelativeUrl('http://localhost/index.html');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testUrlWithoutStartWithSlash()
+    {
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
+        $event->setRelativeUrl('index.html');
     }
 }

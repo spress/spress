@@ -13,22 +13,46 @@ namespace Yosymfony\Spress\Core\Plugin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Finish event.
+ *
+ * Used with events:
+ *   - "spress.finish".
+ */
 class FinishEvent extends Event
 {
-    protected $result;
+    protected $items;
+    protected $siteAttributes;
 
-    public function __construct(array $result)
+    /**
+     * Constructor.
+     *
+     * @param array $items
+     * @param array $siteAttributes The site attributes used for rendering the site.
+     */
+    public function __construct(array $items, array $siteAttributes)
     {
-        $this->result = $result;
+        $this->items = $items;
+        $this->siteAttributes = $siteAttributes;
     }
 
     /**
-     * Get restult data.
+     * Gets items.
+     *
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Gets site attributes.
      *
      * @return array
      */
-    public function getResult()
+    public function getSiteAttributes()
     {
-        return $this->result;
+        return $this->siteAttributes;
     }
 }

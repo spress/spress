@@ -212,6 +212,10 @@ class ContentManager
     private function finish()
     {
         $this->dataWriter->tearDown();
+
+        $event = new Event\FinishEvent($this->items, $this->siteAttribute->getAttributes());
+
+        $this->eventDispatcher->dispatch('spress.finish', $event);
     }
 
     private function prepareSiteAttributes()
@@ -372,8 +376,6 @@ class ContentManager
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
-
-        $this->siteAttribute->setItem($item);
     }
 
     private function renderPage(ItemInterface $item)
@@ -397,8 +399,6 @@ class ContentManager
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
-
-        $this->siteAttribute->setItem($item);
     }
 
     private function getCollectionAttributes(CollectionInterface $collection)

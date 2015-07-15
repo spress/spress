@@ -18,9 +18,10 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * The spress.start is thrown when start to generate a project. Hook this
- * event for modifying configuration values, managin datasources, converters,
- * to extend the renderizer or to set a custom renderizer.
+ * Environment event.
+ *
+ * Used with events:
+ *   - "spress.start".
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

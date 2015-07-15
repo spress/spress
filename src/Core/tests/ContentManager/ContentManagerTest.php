@@ -56,7 +56,6 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(14, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('about/index.html'));
-        $this->assertTrue($dw->hasItem('about/index.html'));
         $this->assertTrue($dw->hasItem('about/me/index.html'));
         $this->assertTrue($dw->hasItem('index.html'));
         $this->assertTrue($dw->hasItem('LICENSE'));

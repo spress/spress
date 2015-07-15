@@ -16,20 +16,23 @@ use Yosymfony\Spress\Core\Plugin\Event\FinishEvent;
 
 class FinishEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFinishTest()
-    {
-        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+	public function testFinishTest()
+	{
+		$item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
 
-        $items = [$item];
-        $siteAttributes = [
-            'site' => [
-                'name' => 'Yo! Symfony',
-            ],
-        ];
+		$items = [$item];
+		$siteAttributes = [
+			'site' => [
+				'name' => 'Yo! Symfony',
+			],
+		];
 
-        $event = new FinishEvent($items, $siteAttributes);
+		$event = new FinishEvent($items, $siteAttributes);
 
-        $this->assertCount(1, $event->getItems());
-        $this->assertCount(1, $event->getSiteAttributes());
-    }
+		$this->assertTrue(is_array($event->getItems()));
+		$this->assertTrue(is_array($event->getSiteAttributes());
+
+		$this->assertCount(1, $event->getItems());
+		$this->assertCount(1, $event->getSiteAttributes());
+	}
 }

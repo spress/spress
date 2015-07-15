@@ -30,7 +30,7 @@ class FinishEventTest extends \PHPUnit_Framework_TestCase
 		$event = new FinishEvent($items, $siteAttributes);
 
 		$this->assertTrue(is_array($event->getItems()));
-		$this->assertTrue(is_array($event->getSiteAttributes());
+		$this->assertTrue(is_array($event->getSiteAttributes()));
 
 		$this->assertCount(1, $event->getItems());
 		$this->assertCount(1, $event->getSiteAttributes());

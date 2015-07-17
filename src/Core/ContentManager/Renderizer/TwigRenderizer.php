@@ -46,16 +46,10 @@ class TwigRenderizer implements RenderizerInterface
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout.
      *                           "layout" attribute has a special meaning.
-     *
-     * @throws \RuntimeException if a previous layout exists with the same name
      */
     public function addLayout($name, $content, array $attributes = [])
     {
         $fullname = $this->getLayoutNameWithNamespace($name);
-
-        if ($this->arrayLoader->exists($fullname) === true) {
-            throw new \RuntimeException(sprintf('A previous layout exists with the same name: "%s".', $name));
-        }
 
         $layout = $this->getLayoutAttribute($attributes, $name);
 
@@ -70,15 +64,9 @@ class TwigRenderizer implements RenderizerInterface
 
     /**
      * @inheritDoc
-     *
-     * @throws \RuntimeException if a previous include exists with the same name
      */
     public function addInclude($name, $content, array $attributes = [])
     {
-        if ($this->arrayLoader->exists($name) === true) {
-            throw new \RuntimeException(sprintf('A previous include exists with the same name: "%s".', $name));
-        }
-
         $this->arrayLoader->setTemplate($name, $content);
     }
 

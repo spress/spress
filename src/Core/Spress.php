@@ -273,7 +273,7 @@ class Spress extends Container
      *
      *   $spress->parse();
      *
-     * @return array
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site.
      */
     public function parse()
     {
@@ -317,12 +317,5 @@ class Spress extends Container
             'extra_version' => $this['spress.version.details']['extra'],
             'external' => $this['spress.externals'],
         ];
-    }
-
-    private function setCurrentDir($path)
-    {
-        if (false === chdir($path)) {
-            throw new \RuntomeException(sprintf('Error when change the current dir to "%s"', $path));
-        }
     }
 }

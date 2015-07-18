@@ -53,6 +53,19 @@ class SpressTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('books/2013/09/19/new-book/index.html')->getContent());
     }
 
+    public function testParseSafe()
+    {
+        $dw = new MemoryDataWriter();
+
+        $spress = new Spress();
+        $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
+        $spress['spress.config.safe'] = true;
+        $spress['spress.dataWriter'] = $dw;
+        $spress->parse();
+
+        $this->assertCount(14, $dw->getItems());
+    }
+
     public function testReParseSite()
     {
         $dw = new MemoryDataWriter();

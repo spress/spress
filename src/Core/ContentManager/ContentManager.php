@@ -51,7 +51,6 @@ class ContentManager
 
     private $attributes;
     private $spressAttributes;
-    private $parseResult;
 
     private $items;
 
@@ -97,8 +96,6 @@ class ContentManager
         $this->spressAttributes = [];
 
         $this->items = [];
-
-        $this->parseResult = [];
     }
 
     /**
@@ -110,7 +107,7 @@ class ContentManager
      * @param bool   $safe             True for disabling custom plugins.
      * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones.
      *
-     * @return array Information about process
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site.
      */
     public function parseSite(array $attributes, array $spressAttributes, $draft = false, $safe = false, $timezone = 'UTC')
     {
@@ -126,21 +123,12 @@ class ContentManager
         $this->process();
         $this->finish();
 
-        return $this->parseResult;
+        return $this->items;
     }
 
     private function reset()
     {
         $this->items = [];
-
-        $this->parseResult = [
-            'total_post' => 0,
-            'processed_post' => 0,
-            'drafts_post' => 0,
-            'total_pages' => 0,
-            'processed_pages' => 0,
-            'other_resources' => 0,
-        ];
     }
 
     private function setUp()

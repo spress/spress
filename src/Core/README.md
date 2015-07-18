@@ -41,7 +41,7 @@ class MyClass
 }
 ```
 
-### Include draft posts
+### Includes draft posts
 ```
 use Yosymfony\Spress\Core\Spress;
 

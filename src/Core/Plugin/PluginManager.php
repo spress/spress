@@ -20,7 +20,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class PluginManager
 {
-    private $plugins;
+    private $plugins = [];
+    private $eventSubscriberPlugins = [];
     private $eventDispatcher;
 
     public function __construct(EventDispatcher $eventDispatcher)
@@ -38,7 +39,20 @@ class PluginManager
         foreach ($this->plugins as $plugin) {
             $subscriber = new EventSubscriber();
             $plugin->initialize($subscriber);
+
+            $this->eventSubscriberPlugins[] = [$plugin, $subscriber];
+
             $this->addListeners($plugin, $subscriber);
+        }
+    }
+
+    /**
+     * Releases resources like event listeners.
+     */
+    public function tearDown()
+    {
+        foreach ($this->eventSubscriberPlugins as list($plugin, $eventSubscriber)) {
+            $this->removeListeners($plugin, $eventSubscriber);
         }
     }
 
@@ -112,6 +126,7 @@ class PluginManager
     public function clearPlugin()
     {
         $this->plugins = [];
+        $this->eventSubscriberPlugins = [];
     }
 
     /**
@@ -131,6 +146,17 @@ class PluginManager
                 $this->eventDispatcher->addListener($eventName, [$plugin, $listener]);
             } else {
                 $this->eventDispatcher->addListener($eventName, $listener);
+            }
+        }
+    }
+
+    private function removeListeners(PluginInterface $plugin, EventSubscriber $subscriber)
+    {
+        foreach ($subscriber->getEventListeners() as $eventName => $listener) {
+            if (true === is_string($listener)) {
+                $this->eventDispatcher->removeListener($eventName, [$plugin, $listener]);
+            } else {
+                $this->eventDispatcher->removeListener($eventName, $listener);
             }
         }
     }

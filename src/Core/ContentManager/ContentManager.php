@@ -218,6 +218,8 @@ class ContentManager
         $event = new Event\FinishEvent($this->items, $this->siteAttribute->getAttributes());
 
         $this->eventDispatcher->dispatch('spress.finish', $event);
+
+        $this->pluginManager->tearDown();
     }
 
     private function prepareSiteAttributes()
@@ -373,7 +375,7 @@ class ContentManager
 
         $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
 
-        $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
+        $this->eventDispatcher->dispatch('spress.after_render_blocks', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
             ItemInterface::SNAPSHOT_PATH_RELATIVE

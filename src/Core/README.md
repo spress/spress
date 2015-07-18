@@ -5,7 +5,7 @@ Spress Core - PHP Static site generator
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
-Spress is a static site generator built with Symfony components and Twig as template engine. This repository is the
+Spress is a static site generator built with Symfony components and Twig as default template engine. This repository is the
 core of Spress application. You can to integrate Spress Core in your solutions using Composer.
 
 License: [MIT](https://github.com/yosymfony/Spress/blob/master/LICENSE).
@@ -25,48 +25,42 @@ Add the following to your `composer.json` and run `composer update`.
 
 How to use?
 -----------
-The entry-point class is `Yosymfony\Spress\Core\Application`. The below example point out how to use:
+The entry-point class is `Yosymfony\Spress\Core\Spress`. The below example point out how to use:
 
 ```
-use Yosymfony\Spress\Core\Application;
+use Yosymfony\Spress\Core\Spress;
 
 class MyClass
 {
     public function parseSite()
     {
-        $options = [];
-        $app = new Application($options);
-        $app->parse('/path-to-my-spress-site/');
+        $spress = new Spress();
+        $spress['spress.config.site_dir'] = '/path-to-your-spress-site';
+        $spress->parse();
     }
 }
 ```
 
-If you want load the site configuration manually, simply use `$app->parseDefault()`. In that case
-you can load the configuration with `$app['spress.config']->loadLocal($sourceDir, $enviromentName)`.
-
-## Options
-Options are passed as a key-value array.
-
-* `spress.io`: An implementions of `Yosymfony\Spress\Core\IO\IOInterface` for to interact with the user. The default implementation is `Yosymfony\Spress\Core\IO\NullIO`.
-* `spress.paths`: files and path uses by Spress. The standard sub-keys:
-  * `config`: path to the global configuration file in case you want to override the default global configuration of the core.
-  * `config.file`: Configuration filename. By default: `config.yml`.
-  * `config.file_env`: Template for environment configuration file. By default `config_:env.yml`.
-  * 
-
-Example:
+### Include draft posts
 ```
-$io = new BufferIO();
+use Yosymfony\Spress\Core\Spress;
 
-$options = [
-    'spress.paths' => [
-        'config'    => '/my-app/config/',
-    ],
-    'spress.io' => $io,
-];
-```
+class MyClass
+{
+    public function parseSite()
+    {
+        $spress = new Spress();
+        $spress['spress.config.site_dir'] = '/path-to-your-spress-site';
+        $spress['spress.config.drafts'] = true;
+        $spress->parse();
+    }
+}
+``` 
 
-Backward compatibility
-----------------------
-For backward compatibility events of plugins and plugins class base are located in namespace `Yosymfony\Spress\Plugin`.
-This situation end with Spress 2.0.0.
+### Another configuration values:
+
+* `$spress['spress.config.env']`: Environment name `dev` by default. This option determines the configuration file in case you have a specific configuration file for that environment name. e.g: `$spress['spress.config.env'] = 'prod'`
+* `$spress['spress.config.safe']`: With `true` disable all plugins. e.g: `spress['spress.config.safe'] = true`.
+* `$spress['spress.config.drafts']`: Include the draft post in the transformation. `false` by default.
+* `$spress['spress.config.url']`: Sets the URL base.
+* `$spress['spress.config.timezone']`: Sets the timezone. E.g: "Europe/Madrid".

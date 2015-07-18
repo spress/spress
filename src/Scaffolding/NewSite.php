@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Create a new site.
+ * Creates a new site.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -31,7 +31,7 @@ class NewSite
     }
 
     /**
-     * Create a new site scaffold
+     * Create a new site scaffold.
      *
      * @param string $path         Destination path
      * @param string $templateName Template name. "blank" is a special template.
@@ -68,15 +68,16 @@ class NewSite
     private function createBlankSite($path, $completeScaffold)
     {
         $orgDir = getcwd();
+
         chdir($path);
 
-        $this->fs->mkdir(['_layouts', '_posts']);
+        $this->fs->mkdir(['build', 'src/layouts', 'src/content', 'src/content/posts']);
         $this->fs->dumpFile('config.yml', '# Site configuration');
         $this->fs->dumpFile('composer.json', $this->getContentComposerJsonFile());
-        $this->fs->dumpFile('index.html', '');
+        $this->fs->dumpFile('src/content/index.html', '');
 
         if (true === $completeScaffold) {
-            $this->fs->mkdir(['_includes', '_plugins']);
+            $this->fs->mkdir(['src/includes', 'src/plugins']);
         }
 
         chdir($orgDir);
@@ -87,15 +88,12 @@ class NewSite
         $templatePath = $this->getTemplatePath($templateName);
 
         if (false === $this->fs->exists($templatePath)) {
-            throw new \InvalidArgumentException(sprintf('The template "%s" not exists', $templateName));
+            throw new \InvalidArgumentException(sprintf('The template "%s" not exists.', $templateName));
         }
 
         $this->fs->mirror($templatePath, $path);
     }
 
-    /**
-     * @return bool
-     */
     private function isEmptyDir($path)
     {
         if ($this->fs->exists($path)) {
@@ -131,9 +129,6 @@ class NewSite
         return $this->templatePath.'/'.$templateName;
     }
 
-    /**
-     * @return string
-     */
     private function getContentComposerJsonFile()
     {
         $result = <<<eot
@@ -143,13 +138,7 @@ class NewSite
     "license": "MIT",
     "type": "spress-theme",
     "require": {
-            "yosymfony/spress-installer": ">=1.0,<2.0"
-    },
-    "config": {
-        "vendor-dir": "_plugins/vendors"
-    },
-    "extra": {
-        "spress_name": "your-theme-name"
+            "yosymfony/spress-installer": "2.0.*"
     }
 }
 eot;

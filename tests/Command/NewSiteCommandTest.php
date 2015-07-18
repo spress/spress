@@ -73,7 +73,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testNewSiteNoForce()
+    public function testNewSiteNotForce()
     {
         $app = new Application();
         $app->add(new NewSiteCommand());

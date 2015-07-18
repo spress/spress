@@ -20,7 +20,7 @@ use Yosymfony\Spress\Scaffolding\PluginGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 /**
- * New plugin command
+ * New plugin command.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -59,15 +59,10 @@ EOT
         $description = $input->getOption('description');
         $license = $input->getOption('license') ?: 'MIT';
 
-        $app = new SpressCLI($io);
-
-        $config = $app['spress.config'];
-        $config->loadLocal('./', 'dev');
-
         $generator = new PluginGenerator();
-        $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
+        $generator->setSkeletonDirs(__DIR__.'/../../app/skeletons');
 
-        $pluginDir = $config->getRepository()->get('plugins');
+        $pluginDir = './src/plugins';
 
         $files = $generator->generate($pluginDir, $name, '', $author, $email, $description, $license);
 

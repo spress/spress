@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Scaffolding;
 
 /**
- * Plugin generator
+ * Plugin generator.
  *
  * @author Victor Puertas <vpuertas@gmail.com>
  */
@@ -20,15 +20,15 @@ class PluginGenerator extends Generator
 {
     protected $dirctoryName;
     protected $licenses = [
-        'MIT'           => 'plugin/MIT.twig',
-        'APACHE-2.0'    => 'plugin/Apache-2.0.twig',
-        'BSD-2-CLAUSE'  => 'plugin/BSD-2-Clause.twig',
-        'GPL-3.0'       => 'plugin/GPL-3.0.twig',
-        'LGPL-3.0'      => 'plugin/LGPL-3.0.twig',
+        'MIT' => 'plugin/MIT.twig',
+        'APACHE-2.0' => 'plugin/Apache-2.0.twig',
+        'BSD-2-CLAUSE' => 'plugin/BSD-2-Clause.twig',
+        'GPL-3.0' => 'plugin/GPL-3.0.twig',
+        'LGPL-3.0' => 'plugin/LGPL-3.0.twig',
     ];
 
     /**
-     * Generate a plugin
+     * Generates a plugin.
      *
      * @param $targetDir string
      * @param $name string
@@ -65,14 +65,14 @@ class PluginGenerator extends Generator
         }
 
         $model = [
-            'name'              => $name,
-            'classname'         => $this->getClassname($name),
-            'namespace'         => $namespace,
-            'namespace_psr4'    => $this->getNamespacePsr4($namespace),
-            'author'            => $author,
-            'email'             => $email,
-            'description'       => $description,
-            'license'           => $license,
+            'name' => $name,
+            'classname' => $this->getClassname($name),
+            'namespace' => $namespace,
+            'namespace_psr4' => $this->getNamespacePsr4($namespace),
+            'author' => $author,
+            'email' => $email,
+            'description' => $description,
+            'license' => $license,
         ];
 
         $this->cleanFilesAffected();
@@ -94,7 +94,7 @@ class PluginGenerator extends Generator
     }
 
     /**
-     * Get the directory of the plugin
+     * Gets the plugin directory.
      *
      * @return string
      */
@@ -103,6 +103,13 @@ class PluginGenerator extends Generator
         return $this->dirctoryName;
     }
 
+    /**
+     * Gets the classname.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     protected function getClassname($name)
     {
         // replace non letter or digits by empty string
@@ -123,21 +130,49 @@ class PluginGenerator extends Generator
         return ucfirst($result);
     }
 
+    /**
+     * Gets the plugin directory.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     protected function getPluginDir($name)
     {
         return $this->getClassname($name);
     }
 
+    /**
+     * Gets the plugin filename.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     protected function getPluginFilename($name)
     {
         return sprintf('%s.php', $this->getClassname($name));
     }
 
+    /**
+     * Gets the namepspace for PSR-4.
+     *
+     * @param string $namespace
+     *
+     * @return string
+     */
     protected function getNamespacePsr4($namespace)
     {
         return str_replace('\\', '\\\\', $namespace).'\\\\';
     }
 
+    /**
+     * Gets the license filename.
+     *
+     * @param string $licenseName [description]
+     *
+     * @return string Filename or empty-string if not exists.
+     */
     protected function getLicenseFile($licenseName)
     {
         return isset($this->licenses[strtoupper($licenseName)]) ? $this->licenses[strtoupper($licenseName)] : '';

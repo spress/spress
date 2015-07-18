@@ -11,45 +11,41 @@
 
 namespace Yosymfony\Spress\Command;
 
-use Yosymfony\Spress\Core\Application;
+use Yosymfony\Spress\Core\Spress;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Spress core wrapper with the options for SpressCLI
+ * Spress core wrapper for CLI.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class SpressCLI extends Application
+class SpressCLI extends Spress
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param IOInterface $io
      */
     public function __construct(IOInterface $io)
     {
-        $spressPath = __DIR__.'/../../';
+        parent::__construct();
 
-        $options = [
-            'spress.paths' => [
-                'root'              => $spressPath,
-                'config'            => $spressPath.'/app/config/',
-                'http_server_root'  => $spressPath.'/app/httpServer/',
-                'skeletons'         => $spressPath.'/app/skeletons',
-                'templates'         => $this->getTemplatesPath($spressPath),
-            ],
-            'spress.io' => $io,
-        ];
-
-        parent::__construct($options);
+        $this['spress.io'] = $io;
     }
 
-    private function getTemplatesPath($spressPath)
+    /**
+     * Gets the template path.
+     *
+     * @return string
+     */
+    public function getTemplatesPath()
     {
-        if (file_exists($spressPath.'/app/templates/')) {
-            return $spressPath.'/app/templates';
+        $spressPath = __DIR__.'/../../';
+
+        if (file_exists($spressPath.'app/templates/')) {
+            return $spressPath.'app/templates';
         }
 
-        return $spressPath.'/../spress-templates';
+        return $spressPath.'../spress-templates';
     }
 }

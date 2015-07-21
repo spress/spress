@@ -11,17 +11,17 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
-use Yosymfony\Spress\Core\Utils;
+use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
- * Post generator
+ * Post generator.
  *
  * @author Victor Puertas <vpuertas@gmail.com>
  */
 class PostGenerator extends Generator
 {
     /**
-     * Generate a post
+     * Generates a post.
      *
      * @param $targetDir string
      * @param $tdate DateTime
@@ -49,10 +49,10 @@ class PostGenerator extends Generator
         }
 
         $model = [
-            'layout'        => $layout,
-            'title'            => $title,
-            'categories'    => $categories,
-            'tags'            => $tags,
+            'layout' => $layout,
+            'title' => $title,
+            'categories' => $categories,
+            'tags' => $tags,
         ];
 
         $this->cleanFilesAffected();
@@ -64,6 +64,8 @@ class PostGenerator extends Generator
 
     protected function getPostFilename(\DateTime $date, $title, $extension = 'md')
     {
-        return sprintf('%s-%s.%s', $date->format('Y-m-d'), Utils::slugify($title), $extension);
+        $slug = (new StringWrapper($title))->slug();
+
+        return sprintf('%s-%s.%s', $date->format('Y-m-d'), $slug, $extension);
     }
 }

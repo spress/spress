@@ -20,7 +20,7 @@ use Yosymfony\Spress\Scaffolding\PostGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 /**
- * New post command
+ * New post command.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -62,15 +62,10 @@ EOT
         $tags = explode(' ', $input->getOption('tags') ?: '');
         $categories = explode(' ', $input->getOption('categories') ?: '');
 
-        $app = new SpressCLI($io);
-
-        $config = $app['spress.config'];
-        $config->loadLocal('./', 'dev');
-
-        $postsDir = $config->getRepository()->get('posts');
+        $postsDir = './src/content/posts';
 
         $generator = new PostGenerator();
-        $generator->setSkeletonDirs($app['spress.paths']['skeletons']);
+        $generator->setSkeletonDirs(__DIR__.'/../../app/skeletons');
 
         $files = $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
 

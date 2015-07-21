@@ -51,9 +51,7 @@ class NewSiteCommand extends Command
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
-        $spress = new SpressCLI($io);
-
-        $operation = new NewSite($spress->getTemplatesPath());
+        $operation = new NewSite($this->getTemplatesPath());
         $operation->newSite($path, $template, $force, $completeScaffold);
 
         $io->write(sprintf('<comment>New site created at %s.</comment>', $path));
@@ -63,5 +61,16 @@ class NewSiteCommand extends Command
         } else {
             $io->write(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
         }
+    }
+
+    protected function getTemplatesPath()
+    {
+        $spressPath = __DIR__.'/../../';
+
+        if (file_exists($spressPath.'app/templates/')) {
+            return $spressPath.'app/templates';
+        }
+
+        return $spressPath.'../spress-templates';
     }
 }

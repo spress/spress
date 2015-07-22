@@ -22,7 +22,9 @@ class TwigRenderizer implements RenderizerInterface
 {
     protected $twig;
     protected $arrayLoader;
+    protected $layouts = [];
     protected $layoutExtension;
+    protected $isLayoutsProcessed;
 
     /**
      * Construct.
@@ -37,6 +39,7 @@ class TwigRenderizer implements RenderizerInterface
         $this->twig = $twig;
         $this->layoutExtension = $layoutExtension;
         $this->arrayLoader = $arrayLoader;
+        $this->isLayoutsProcessed = false;
     }
 
     /**
@@ -49,17 +52,8 @@ class TwigRenderizer implements RenderizerInterface
      */
     public function addLayout($name, $content, array $attributes = [])
     {
-        $fullname = $this->getLayoutNameWithNamespace($name);
-
-        $layout = $this->getLayoutAttribute($attributes, $name);
-
-        if ($layout) {
-            $fullLayout = $this->getLayoutWithExtension($layout, $name);
-
-            $content = sprintf('{%% extends "%s" %%}%s', $fullLayout, $content);
-        }
-
-        $this->arrayLoader->setTemplate($fullname, $content);
+        $key = $this->getLayoutNameWithNamespace($name);
+        $this->layouts[$key] = [$name, $content, $attributes];
     }
 
     /**
@@ -76,6 +70,8 @@ class TwigRenderizer implements RenderizerInterface
     public function clear()
     {
         $this->twig->clearCacheFiles();
+        $this->layouts = [];
+        $this->isLayoutsProcessed = false;
     }
 
     /**
@@ -111,6 +107,10 @@ class TwigRenderizer implements RenderizerInterface
      */
     public function renderPage($name, $content, $layoutName, array $siteAttributes)
     {
+        if ($this->isLayoutsProcessed === false) {
+            $this->processLayouts();
+        }
+
         if ($layoutName) {
             $layout = $this->getLayoutNameWithNamespace($layoutName);
             $fullLayout = $this->getLayoutWithExtension($layout, $name);
@@ -202,15 +202,34 @@ class TwigRenderizer implements RenderizerInterface
         foreach ($this->layoutExtension as $extension) {
             $fullname = $layoutName.'.'.$extension;
 
-            if ($this->arrayLoader->exists($fullname)) {
+            if (isset($this->layouts[$fullname]) === true) {
                 return $fullname;
             }
         }
 
-        if ($this->arrayLoader->exists($layoutName) === true) {
+        if (isset($this->layouts[$layoutName]) === true) {
             return $layoutName;
         }
 
         throw new AttributeValueException(sprintf('Layout "%s" not found.', $layoutName), 'layout', $contentName);
+    }
+
+    protected function processLayouts()
+    {
+        foreach ($this->layouts as list($name, $content, $attributes)) {
+            $fullname = $this->getLayoutNameWithNamespace($name);
+
+            $layout = $this->getLayoutAttribute($attributes, $name);
+
+            if ($layout) {
+                $fullLayout = $this->getLayoutWithExtension($layout, $name);
+
+                $content = sprintf('{%% extends "%s" %%}%s', $fullLayout, $content);
+            }
+
+            $this->arrayLoader->setTemplate($fullname, $content);
+        }
+
+        $this->isLayoutsProcessed = true;
     }
 }

@@ -94,7 +94,25 @@ class Spress extends Container
         $this['spress.config.values'] = function ($c) {
             $configLoader = $c['spress.config'];
 
-            return $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
+            $attributes = $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
+
+            if (is_null($this['spress.config.drafts']) === false) {
+                $attributes['drafts'] = (bool) $this['spress.config.drafts'];
+            }
+
+            if (is_null($this['spress.config.safe']) === false) {
+                $attributes['safe'] = (bool) $this['spress.config.safe'];
+            }
+
+            if (is_null($this['spress.config.timezone']) === false) {
+                $attributes['timezone'] = $this['spress.config.timezone'];
+            }
+
+            if (is_null($this['spress.config.url']) === false) {
+                $attributes['url'] = $this['spress.config.url'];
+            }
+
+            return $attributes;
         };
 
         $this['spress.config'] = function ($c) {
@@ -279,22 +297,6 @@ class Spress extends Container
     {
         $attributes = $this['spress.config.values'];
         $spressAttributes = $this->getSpressAttributes();
-
-        if (is_null($this['spress.config.drafts']) === false) {
-            $attributes['drafts'] = (bool) $this['spress.config.drafts'];
-        }
-
-        if (is_null($this['spress.config.safe']) === false) {
-            $attributes['safe'] = (bool) $this['spress.config.safe'];
-        }
-
-        if (is_null($this['spress.config.timezone']) === false) {
-            $attributes['timezone'] = $this['spress.config.timezone'];
-        }
-
-        if (is_null($this['spress.config.url']) === false) {
-            $attributes['url'] = $this['spress.config.url'];
-        }
 
         $result = $this['spress.cms.contentManager']->parseSite(
             $attributes,

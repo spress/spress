@@ -55,13 +55,13 @@ class SiteBuildCommand extends Command
 
         $spress = $this->buildSpress($io, $input);
 
-        $env = $input->getOption('env');
-        $drafts = $input->getOption('drafts');
-        $safe = $input->getOption('safe');
-        $serverWatchExtension = $spress['spress.config.values']['server_watch_ext'];
+        $env = $spress['spress.config.values']['env'];
+        $drafts = $spress['spress.config.values']['drafts'];
+        $safe = $spress['spress.config.values']['safe'];
         $debug = $spress['spress.config.values']['debug'];
         $host = $spress['spress.config.values']['host'];
         $port = $spress['spress.config.values']['port'];
+        $serverWatchExtension = $spress['spress.config.values']['server_watch_ext'];
 
         if ($debug === true) {
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);

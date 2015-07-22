@@ -72,7 +72,7 @@ class Spress extends Container
         $this['spress.externals'] = [];
 
         $this['spress.config.default_filename'] = __DIR__.'/config/default.yml';
-        $this['spress.config.site_dir'] = './';
+        $this['spress.config.site_dir'] = realpath('./');
 
         $this['spress.config.build_dir'] = function ($c) {
             return $c['spress.config.site_dir'].'/build';
@@ -93,6 +93,7 @@ class Spress extends Container
         $this['spress.config.timezone'] = null;
         $this['spress.config.values'] = function ($c) {
             $configLoader = $c['spress.config'];
+            $realSiteDir = realpath($c['spress.config.site_dir']);
 
             $attributes = $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
 

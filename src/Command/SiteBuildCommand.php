@@ -117,7 +117,15 @@ class SiteBuildCommand extends Command
 
         $spress = new Spress();
         $spress['spress.config.default_filename'] = __DIR__.'/../../app/config/config.yml';
-        $spress['spress.config.site_dir'] = $sourceDir;
+
+        if (is_null($sourceDir) === false) {
+            if (($realDir = realpath($sourceDir)) === false) {
+                throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
+            }
+
+            $spress['spress.config.site_dir'] = $realDir;
+        }
+
         $spress['spress.config.env'] = $env;
         $spress['spress.config.safe'] = $safe;
         $spress['spress.config.drafts'] = $drafts;

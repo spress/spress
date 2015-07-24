@@ -1,5 +1,5 @@
 vendor/
 build/
 app/templates/
-src/Yosymfony/Spress/Core/tests/fixtures/project/_site/
+src/Yosymfony/Spress/Core/tests/fixtures/project/build/
 phpunit.xml

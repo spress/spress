@@ -180,7 +180,7 @@ class HttpServer
         $loader = new \Twig_Loader_Filesystem();
         $loader->addPath($templateDir);
 
-        return new \Twig_Environment($loader, $options);
+        $this->twig = new \Twig_Environment($loader, $options);
     }
 
     private function getErrorModel($statusCode, $data)

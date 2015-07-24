@@ -8,6 +8,8 @@ CHANGELOG for 2.x.x
 * [New] collections: collections allow you to define a new type of document like page or post.
 * [New] These events "spress.before_convert", "spress.after_convert" receive a ContentEvent as an argument.
 * [New] events: "spress.before_render_blocks", "spress.after_render_blocks", "spress.before_render_page", "spress.after_render_page".
+* [Improved] updated Symfony componentes to 2.7.
+* [Improved] updated Markdown parser (michelf/php-markdown) from Michel Fortin.
 * [Deleted] methods initialize and getSupportExtension of ConverterInterface.
 * [Deleted] TemplateManager of plugin API.
 * [Deleted] events: "spress.after_convert_posts", "spress.after_render_pagination", "spress.before_render_pagination".

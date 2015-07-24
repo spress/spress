@@ -1,0 +1,36 @@
+# Default configuration
+
+debug: false
+
+# Reading
+env: 'dev'
+drafts: false
+markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
+text_extensions: [ 'htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml' ]
+attribute_syntax: 'yaml'
+
+# Outputting
+include: ['.htaccess']
+exclude: []
+timezone: 'UTC'                          # e.g. Europe/Madrid
+safe: false
+permalink: 'pretty'
+preserve_path_title: false
+layout_ext: ['html.twig', 'twig', 'html']
+url: ''                                  # e.g: http://your-domain.local:4000
+
+# Collections
+collections:
+  posts:
+    output: true
+
+# Data sources
+data_sources:
+  filesystem:
+    class: 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource'
+    arguments:
+      source_root: '%site_dir%/src'
+      include: '%include%'
+      exclude: '%exclude%'
+      text_extensions: '%text_extensions%'
+      attribute_syntax: '%attribute_syntax%'

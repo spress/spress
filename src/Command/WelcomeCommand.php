@@ -15,10 +15,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
-use Yosymfony\Spress\Core\Application;
+use Yosymfony\Spress\Core\Spress;
 
 /**
- * Welcome to Spress command
+ * Welcome to Spress command.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -42,7 +42,7 @@ class WelcomeCommand extends Command
             '',
         ]);
 
-        if($this->isUnstableVersion()) {
+        if ($this->isUnstableVersion()) {
             $output->writeln([
                 '',
                 '<error>Warning: this is a unstable version.</error>',
@@ -73,7 +73,8 @@ class WelcomeCommand extends Command
 EOF;
     }
 
-    protected function isUnstableVersion() {
-        return Application::EXTRA_VERSION ? true : false;
+    protected function isUnstableVersion()
+    {
+        return Spress::EXTRA_VERSION ? true : false;
     }
 }

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin;
+namespace Yosymfony\Spress\tests\Plugin;
 
-use Yosymfony\Spress\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
 class EventSubscriberTest extends \PHPUnit_Framework_TestCase
 {

@@ -11,426 +11,431 @@
 
 namespace Yosymfony\Spress\Core\ContentManager;
 
-use Yosymfony\Spress\Core\Configuration;
-use Yosymfony\Spress\Core\ContentLocator\ContentLocator;
-use Yosymfony\Spress\Core\ContentLocator\FileItem;
-use Yosymfony\Spress\Core\Plugin\PluginManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager;
+use Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface;
+use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
+use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
+use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGeneratorInterface;
+use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
+use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface;
+use Yosymfony\Spress\Core\DataSource\DataSourceManager;
+use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
+use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Plugin\Event;
+use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 /**
- * Content manager
+ * Content manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentManager
 {
+    private $dataSourceManager;
+    private $dataWriter;
+    private $generatorManager;
+    private $converterManager;
+    private $CollectionManager;
+    private $permalinkGenerator;
+    private $siteAttribute;
     private $renderizer;
-    private $converter;
-    private $configuration;
-    private $contentLocator;
-    private $pageItems;
-    private $pages;
-    private $postItems;
-    private $posts;
-    private $categories;
-    private $tags;
-    private $time;
-    private $dataResult;
-    private $plugin;
+    private $pluginManager;
+    private $eventDispatcher;
     private $io;
-    private $events;
+    private $timezone;
+    private $safe;
+    private $processDraft;
+
+    private $attributes;
+    private $spressAttributes;
+
+    private $items;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param Renderizer       $renderizer
-     * @param Configuration    $configuration  Configuration manager
-     * @param ContentLocator   $contentLocator Locate the site content
-     * @param ConverterManager $converter
-     * @param PluginManager    $plugin
+     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                         $dataSourceManager
+     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                       $dataWriter
+     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager            $converterManager
+     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager          $CollectionManager
+     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGeneratorInterface $permalinkGenerator
+     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface        $renderizer
+     * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface  $siteAttribute
+     * @param Yosymfony\Spress\Core\Plugin\PluginManager                                 $pluginManager
+     * @param Symfony\Component\EventDispatcher\EventDispatcher                          $eventDispatcher
      */
     public function __construct(
-        Renderizer $renderizer,
-        Configuration $configuration,
-        ContentLocator $contentLocator,
-        ConverterManager $converter,
-        PluginManager $plugin,
-        IOInterface $io)
-    {
-        $this->configuration = $configuration;
-        $this->contentLocator = $contentLocator;
+        DataSourceManager $dataSourceManager,
+        DataWriterInterface $dataWriter,
+        GeneratorManager $generatorManager,
+        ConverterManager $converterManager,
+        CollectionManager $CollectionManager,
+        PermalinkGeneratorInterface $permalinkGenerator,
+        RenderizerInterface $renderizer,
+        SiteAttributeInterface $siteAttribute,
+        PluginManager $pluginManager,
+        EventDispatcher $eventDispatcher,
+        IOInterface $io
+        ) {
+        $this->dataSourceManager = $dataSourceManager;
+        $this->dataWriter = $dataWriter;
+        $this->generatorManager = $generatorManager;
+        $this->converterManager = $converterManager;
+        $this->CollectionManager = $CollectionManager;
+        $this->permalinkGenerator = $permalinkGenerator;
         $this->renderizer = $renderizer;
-        $this->converter = $converter;
-        $this->plugin = $plugin;
+        $this->siteAttribute = $siteAttribute;
+        $this->pluginManager = $pluginManager;
+        $this->eventDispatcher = $eventDispatcher;
         $this->io = $io;
-        $this->events = $this->plugin->getDispatcherShortcut();
+
+        $this->attributes = [];
+        $this->spressAttributes = [];
+
+        $this->items = [];
     }
 
     /**
-     * Parse entirely site
+     * Parse a site.
      *
-     * @return array Information about process
+     * @param array  $attributes       The site attributes.
+     * @param array  $spressAttributes
+     * @param bool   $draft            Include draft posts.
+     * @param bool   $safe             True for disabling custom plugins.
+     * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones.
+     *
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site.
      */
-    public function processSite()
+    public function parseSite(array $attributes, array $spressAttributes, $draft = false, $safe = false, $timezone = 'UTC')
     {
-        $this->contentLocator->initialize();
-        $this->renderizer->initialize();
-        $this->reset();
-        $this->cleanup();
-        $this->processExtensible();
-        $this->processPost();
-        $this->processPages();
-        $this->renderPosts();
-        $this->renderPages();
-        $this->renderPostsPagination();
-        $this->processOthers();
-        $this->finish();
-        $this->contentLocator->finish();
+        $this->attributes = $attributes;
+        $this->spressAttributes = $spressAttributes;
+        $this->safe = $safe;
+        $this->timezone = $timezone;
+        $this->processDraft = $draft;
 
-        return $this->dataResult;
+        $this->reset();
+        $this->setUp();
+        $this->InitializePlugins();
+        $this->process();
+        $this->finish();
+
+        return $this->items;
     }
 
     private function reset()
     {
-        $this->pageItems = [];
-        $this->pages = [];
-        $this->postItems = [];
-        $this->posts = [];
-        $this->categories = [];
-        $this->tags = [];
-        $timezone = $this->configuration->getRepository()->get('timezone');
-
-        if ($timezone) {
-            date_default_timezone_set($timezone);
-        } else {
-            date_default_timezone_set('UTC');
-        }
-
-        $this->time = new \DateTime('now');
-
-        $this->dataResult = [
-            'total_post' => 0,
-            'processed_post' => 0,
-            'drafts_post' => 0,
-            'total_pages' => 0,
-            'processed_pages' => 0,
-            'other_resources' => 0,
-        ];
+        $this->items = [];
     }
 
-    private function processExtensible()
+    private function setUp()
     {
-        if (false === $this->configuration->getRepository()->get('safe')) {
-            $this->plugin->initialize();
+        $this->configureTimezone($this->timezone);
+    }
 
-            $this->events->dispatchStartEvent(
-                $this->configuration,
-                $this->converter,
-                $this->renderizer,
-                $this->contentLocator,
-                $this->io);
+    private function InitializePlugins()
+    {
+        if ($this->safe === false) {
+            $this->pluginManager->callInitialize();
+        }
+    }
+
+    private function process()
+    {
+        $itemsGenerator = [];
+
+        $event = $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
+            $this->dataSourceManager,
+            $this->dataWriter,
+            $this->converterManager,
+            $this->renderizer,
+            $this->io,
+            $this->attributes));
+
+        $this->dataWriter = $event->getDataWriter();
+        $this->dataWriter->setUp();
+
+        $this->renderizer = $event->getRenderizer();
+        $this->renderizer->clear();
+
+        $this->prepareSiteAttributes();
+
+        $this->dataSourceManager->load();
+
+        $items = $this->dataSourceManager->getItems();
+
+        foreach ($items as $item) {
+            if ($this->isGenerator($item)) {
+                $itemsGenerator[$item->getId()] = $item;
+
+                continue;
+            }
+
+            $this->processCollection($item);
+            $this->processDraftIfPost($item);
+            $this->processOutputAttribute($item);
+
+            $this->items[$item->getId()] = $item;
         }
 
-        $this->converter->initialize();
-        $this->contentLocator->setConvertersExtension($this->converter->getExtensions());
+        foreach ($itemsGenerator as $item) {
+            $this->processGenerator($item);
+        }
+
+        $this->prepareRenderizer();
+
+        foreach ($this->items as $item) {
+            $this->convertItem($item);
+            $this->processPermalink($item);
+            $this->renderBlocks($item);
+        }
+
+        foreach ($this->items as $item) {
+            $this->renderPage($item);
+            $this->dataWriter->write($item);
+        }
     }
 
     private function finish()
     {
-        $this->events->dispatchFinish($this->dataResult);
+        $this->dataWriter->tearDown();
+
+        $event = new Event\FinishEvent($this->items, $this->siteAttribute->getAttributes());
+
+        $this->eventDispatcher->dispatch('spress.finish', $event);
+
+        $this->pluginManager->tearDown();
     }
 
-    private function cleanup()
+    private function prepareSiteAttributes()
     {
-        $this->contentLocator->cleanupDestination();
+        $this->siteAttribute->initialize($this->attributes);
+
+        $this->siteAttribute->setAttribute('spress', $this->spressAttributes);
+        $this->siteAttribute->setAttribute('site.drafts', $this->processDraft);
+        $this->siteAttribute->setAttribute('site.safe', $this->safe);
+        $this->siteAttribute->setAttribute('site.timezone', $this->timezone);
     }
 
-    private function processOthers()
+    private function processCollection(ItemInterface $item)
     {
-        $result = $this->contentLocator->copyRestToDestination();
-        $this->dataResult['other_resources'] = count($result);
+        $collection = $this->CollectionManager->getCollectionForItem($item);
+        $collectionName = $collection->getName();
+        $collectionNamePath = sprintf('site.collections.%s', $this->escapeDot($collectionName));
+
+        $attributes = $item->getAttributes();
+        $attributes['collection'] = $collectionName;
+
+        $newAttributes = array_merge($collection->getAttributes(), $attributes);
+
+        $item->setAttributes($newAttributes);
+        $item->setCollection($collectionName);
+
+        $this->siteAttribute->setAttribute($collectionNamePath, $this->getCollectionAttributes($collection));
+        $this->siteAttribute->setItem($item);
     }
 
-    private function processPages()
+    private function processDraftIfPost(ItemInterface $item)
     {
-        $pageFiles = $this->contentLocator->getPages();
-        $this->dataResult['total_pages'] = count($pageFiles);
+        $attributes = array_replace(['draft' => false], $item->getAttributes());
 
-        foreach ($pageFiles as $page) {
-            $pageItem = new PageItem($page, $this->configuration);
+        if (is_bool($attributes['draft']) === false) {
+            throw new AttributeValueException('Invalid value. Expected boolean.', 'draft', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
 
-            $this->events->dispatchBeforeConvertEvent($pageItem);
+        if ($item->getCollection() === 'posts' &&  $attributes['draft'] === true) {
+            if ($this->processDraft === false) {
+                $attributes['output'] = false;
 
-            if ($pageItem->hasFrontmatter()) {
-                $this->converter->convertItem($pageItem);
-
-                $this->pages[$pageItem->getId()] = $pageItem->getPayload();
-                $this->pageItems[$pageItem->getId()] = $pageItem;
-
-                $this->dataResult['processed_pages']++;
-
-                $this->events->dispatchAfterConvertEvent($pageItem);
-            } else {
-                $this->saveItem($pageItem);
+                $item->setAttributes($attributes);
             }
         }
     }
 
-    private function processPost()
+    private function processOutputAttribute(ItemInterface $item)
     {
-        $postFiles = $this->contentLocator->getPosts();
-        $this->dataResult['total_post'] = count($postFiles);
-        $enableDrafts = $this->configuration->getRepository()->get('drafts');
+        $attributes = $item->getAttributes();
 
-        foreach ($postFiles as $post) {
-            $postItem = new PostItem($post, $this->configuration);
+        if (array_key_exists('output', $attributes)) {
+            $output = $attributes['output'];
 
-            $this->events->dispatchBeforeConvertEvent($postItem, true);
+            if (is_bool($output) === false) {
+                throw new AttributeValueException('Invalid value. Expected boolean.', 'output', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            }
 
-            if ($postItem->hasFrontmatter()) {
-                if ($postItem->isDraft() && false === $enableDrafts) {
-                    $this->dataResult['drafts_post']++;
-                    continue;
-                }
-
-                $this->converter->convertItem($postItem);
-
-                $payload = $postItem->getPayload();
-                $this->posts[$postItem->getId()] = $payload;
-                $this->postItems[$postItem->getId()] = $postItem;
-
-                foreach ($postItem->getCategories() as $category) {
-                    if (false === isset($this->categories[$category])) {
-                        $this->categories[$category] = [];
-                    }
-
-                    $this->categories[$category][$postItem->getId()] = $payload;
-                }
-
-                foreach ($postItem->getTags() as $tag) {
-                    if (false === isset($this->tags[$tag])) {
-                        $this->tags[$tag] = [];
-                    }
-
-                    $this->tags[$tag][$postItem->getId()] = $payload;
-                }
-
-                $this->dataResult['processed_post']++;
-
-                $this->events->dispatchAfterConvertEvent($postItem, true);
+            if ($output === false) {
+                $item->setPath('', ItemInterface::SNAPSHOT_PATH_RELATIVE);
+                $item->setPath('', ItemInterface::SNAPSHOT_PATH_SOURCE);
             }
         }
-
-        $this->events->dispatchAfterConvertPosts(
-            array_keys($this->categories),
-            array_keys($this->tags));
     }
 
-    private function renderPages()
+    private function processGenerator(ItemInterface $item)
     {
-        $payload = $this->getPayload();
+        $attributes = $item->getAttributes();
 
-        foreach ($this->pages as $key => $page) {
-            $item = $this->pageItems[$key];
+        $generator = $this->generatorManager->getGenerator($attributes['generator']);
+        $items = $generator->generateItems($item, $this->siteAttribute->getAttributes());
 
-            $payload['page'] = $page;
+        foreach ($items as $item) {
+            if (array_key_exists($item->getId(), $this->items) === true) {
+                throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s". Generator: "%s".', $id, $attributes['generator']));
+            }
 
-            $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item);
-            $this->renderizer->renderItem($item, $event->getPayload());
-            $payload['page']['content'] = $item->getPreLayoutContent();
-            $this->events->dispatchAfterRender($this->renderizer, $payload, $item);
-
-            $this->saveItem($item);
+            $this->processCollection($item);
+            $this->items[$item->getId()] = $item;
         }
     }
 
-    private function renderPosts()
+    private function isGenerator(ItemInterface $item)
     {
-        if (0 == count($this->posts)) {
+        $attributes = $item->getAttributes();
+
+        return isset($attributes['generator']);
+    }
+
+    private function prepareRenderizer()
+    {
+        $layouts = $this->dataSourceManager->getLayouts();
+        $includes = $this->dataSourceManager->getIncludes();
+
+        foreach ($layouts as $item) {
+            $this->renderizer->addLayout($item->getId(), $item->getContent(), $item->getAttributes());
+        }
+
+        foreach ($includes as $item) {
+            $this->renderizer->addInclude($item->getId(), $item->getContent(), $item->getAttributes());
+        }
+    }
+
+    private function convertItem(ItemInterface $item)
+    {
+        $this->eventDispatcher->dispatch('spress.before_convert', new Event\ContentEvent(
+            $item,
+            ItemInterface::SNAPSHOT_RAW,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
+        $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+        $result = $this->converterManager->convertContent($item->getContent(), $ext);
+        $newPath = preg_replace('/\.'.$ext.'$/', '.'.$result->getExtension(), $path);
+
+        $item->setContent($result->getResult(), ItemInterface::SNAPSHOT_AFTER_CONVERT);
+        $item->setPath($newPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
+
+        $this->eventDispatcher->dispatch('spress.after_convert', new Event\ContentEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_CONVERT,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
+        $this->siteAttribute->setItem($item);
+    }
+
+    private function processPermalink(ItemInterface $item)
+    {
+        $permalink = $this->permalinkGenerator->getPermalink($item);
+
+        $item->setPath($permalink->getPath(), ItemInterface::SNAPSHOT_PATH_PERMALINK);
+
+        $attributes = $item->getAttributes();
+        $attributes['url'] = $permalink->getUrlPath();
+
+        $item->setAttributes($attributes);
+    }
+
+    private function renderBlocks(ItemInterface $item)
+    {
+        $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_CONVERT,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
+        $this->siteAttribute->setItem($item);
+
+        $snapshotRender = $this->renderizer->renderBlocks($item->getId(), $item->getContent(), $this->siteAttribute->getAttributes());
+
+        $item->setContent($snapshotRender, ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS);
+
+        $this->eventDispatcher->dispatch('spress.after_render_blocks', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+    }
+
+    private function renderPage(ItemInterface $item)
+    {
+        $this->eventDispatcher->dispatch('spress.before_render_page', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+
+        $this->siteAttribute->setItem($item);
+
+        $layout = $this->getLayoutAttribute($item);
+
+        $snapshotPage = $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttribute->getAttributes());
+
+        $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_PAGE);
+
+        $this->eventDispatcher->dispatch('spress.after_render_page', new Event\RenderEvent(
+            $item,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
+            ItemInterface::SNAPSHOT_PATH_RELATIVE
+        ));
+    }
+
+    private function getCollectionAttributes(CollectionInterface $collection)
+    {
+        $result = $collection->getAttributes();
+
+        $result['path'] = $collection->getPath();
+
+        return $result;
+    }
+
+    private function configureTimezone($timezone)
+    {
+        if (is_string($timezone) === false) {
+            throw new \RuntimeException('Invalid timezone. Expected a string value.');
+        }
+
+        if (strlen($timezone) == 0) {
+            throw new \RuntimeException('Invalid timezone. Expected a non-empty value.');
+        }
+
+        date_default_timezone_set($timezone);
+    }
+
+    private function getLayoutAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (array_key_exists('layout', $attributes) === false) {
             return;
         }
 
-        $this->sortPost();
-
-        $payload = $this->getPayload();
-
-        foreach ($this->posts as $id => $post) {
-            $item = $this->postItems[$id];
-            $payload['page'] = $post;
-
-            $event = $this->events->dispatchBeforeRender($this->renderizer, $payload, $item, true);
-            $this->renderizer->renderItem($item, $event->getPayload());
-            $this->posts[$id]['content'] = $item->getPreLayoutContent();
-            $payload['page']['content'] = $item->getPreLayoutContent();
-            $this->updateContentCategoriesAndTags($item);
-            $this->events->dispatchAfterRender($this->renderizer, $payload, $item, true);
-
-            $this->saveItem($item);
-        }
-    }
-
-    private function renderPostsPagination()
-    {
-        $paginator = new Paginator($this->posts, $this->configuration->getRepository()->get('paginate'));
-
-        if (0 == $paginator->getItemsPerPage()) {
-            return;
+        if (is_string($attributes['layout']) === false) {
+            throw new AttributeValueException('Invalid value. Expected string.', 'layout', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $fileItemTemplate = $this->contentLocator->getItem($this->getRelativePathPaginatorTemplate());
-        $payload = $this->getPayload();
-
-        foreach ($this->posts as $post) {
-            $this->renderPagination($payload, $paginator, $fileItemTemplate);
-        }
-    }
-
-    private function renderPagination(array $payload, Paginator $paginator, FileItem $template)
-    {
-        if ($template) {
-            $paginatorItemTemplate = new PageItem($template, $this->configuration);
-            $paginatorItemTemplate->setPostConverterContent($paginatorItemTemplate->getPreConverterContent());
-
-            if ($paginator->pageChanged() && $paginatorItemTemplate) {
-                $payload['page'] = $paginatorItemTemplate->getPayload();
-                $payload['paginator'] = $this->getPaginatorPayload($paginator);
-
-                $event = $this->events->dispatchBeforeRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
-                $this->renderizer->renderItem($paginatorItemTemplate, $event->getPayload());
-                $this->events->dispatchAfterRenderPagination($this->renderizer, $payload, $paginatorItemTemplate);
-
-                $relativePath = $this->getPageRelativePath($paginator->getCurrentPage());
-                $paginatorItemTemplate->getFileItem()->setDestinationPaths([$relativePath]);
-                $this->saveItem($paginatorItemTemplate);
-            }
+        if (strlen($attributes['layout']) == 0) {
+            throw new AttributeValueException('Invalid value. Expected a non-empty string.', 'layout', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $paginator->nextItem();
+        return $attributes['layout'];
     }
 
-    /**
-     * @return array
-     */
-    private function getPayload()
+    private function escapeDot($key)
     {
-        $result = [];
-        $result['spress']  = [];
-        $result['spress']['version'] = $this->configuration->getAppVersion();
-        $result['spress']['paths'] = $this->configuration->getPaths();
-        $result['site'] = $this->configuration->getRepository()->getRaw();
-        $result['site']['posts'] = $this->posts;
-        $result['site']['pages'] = $this->pages;
-        $result['site']['time'] = $this->time;
-        $result['site']['categories'] = $this->categories;
-        $result['site']['tags'] = $this->tags;
-
-        return $result;
-    }
-
-    private function getPaginatorPayload(Paginator $paginator)
-    {
-        $result = [];
-        $result['per_page'] = $paginator->getItemsPerPage();
-        $result['posts'] = $paginator->getItemsCurrentPage();
-        $result['total_posts'] = $paginator->getTotalItems();
-        $result['total_pages'] = $paginator->getTotalPages();
-        $result['page'] = $paginator->getCurrentPage();
-        $result['previous_page'] = $paginator->getPreviousPage();
-        $result['previous_page_path'] = $this->getPageRelativePath($result['previous_page']);
-        $result['next_page'] = $paginator->getNextPage();
-        $result['next_page_path'] = $this->getPageRelativePath($result['next_page']);
-
-        return $result;
-    }
-
-    private function sortPost()
-    {
-        uasort($this->posts, function ($a, $b) {
-            $dateA = new \Datetime($a['date']);
-            $dateB = new \Datetime($b['date']);
-
-            if ($dateA == $dateB) {
-                return 0;
-            }
-
-            return ($dateA < $dateB) ? 1 : -1;
-        });
-    }
-
-    private function updateContentCategoriesAndTags(ContentItemInterface $item)
-    {
-        foreach ($item->getCategories() as $category) {
-            $this->categories[$category][$item->getId()]['content'] = $item->getPreLayoutContent();
-        }
-
-        foreach ($item->getTags() as $tag) {
-            $this->tags[$tag][$item->getId()]['content'] = $item->getPreLayoutContent();
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function getPageRelativeUrl($page)
-    {
-        $result = false;
-
-        if ($page) {
-            $generator = new UrlGenerator();
-            $template = $this->configuration->getRepository()->get('paginate_path');
-            $result = $generator->getUrl($template, [':num' => $page]);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return string
-     */
-    private function getPageRelativePath($page)
-    {
-        if ($page) {
-            if (1 == $page) {
-                return $this->getRelativePathPaginatorTemplate();
-            } else {
-                return $this->getPageRelativeUrl($page).'/index.html';
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get relative path of paginator template e.g blog/index.html
-     *
-     * @return string
-     */
-    private function getRelativePathPaginatorTemplate()
-    {
-        $path = $this->getRelativePathPaginator();
-
-        return $path ? $path.'/index.html' : 'index.html';
-    }
-
-    /**
-     * @return string
-     */
-    private function getRelativePathPaginator()
-    {
-        $result = '';
-        $template = $this->configuration->getRepository()->get('paginate_path');
-        $dir = dirname($template);
-
-        if ($dir != '.') {
-            $result = ltrim($dir, '/');
-        }
-
-        return $result;
-    }
-
-    private function saveItem(ContentItemInterface $contentItem)
-    {
-        $item = $contentItem->getFileItem();
-        $this->contentLocator->saveItem($item);
+        return str_replace('.', '[.]', $key);
     }
 }

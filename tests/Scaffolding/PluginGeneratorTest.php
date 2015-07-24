@@ -21,7 +21,7 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->skeletonDir = './app/skeletons';
+        $this->skeletonDir = __DIR__.'/../../app/skeletons';
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
     }
 

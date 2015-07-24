@@ -9,62 +9,46 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\tests\Plugin\Event;
 
-use Symfony\Component\Finder\SplFileInfo;
-use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Core\ContentLocator\FileItem;
-use Yosymfony\Spress\Core\ContentManager\PostItem;
-use Yosymfony\Spress\Plugin\Event\RenderEvent;
+use Yosymfony\Spress\Core\DataSource\Item;
+use Yosymfony\Spress\Core\Plugin\Event\RenderEvent;
 
 class RenderEventTest extends \PHPUnit_Framework_TestCase
 {
-    protected $item;
-    protected $renderizer;
-
-    public function setUp()
+    public function testRenderEvent()
     {
-        $path = realpath(__DIR__.'/../../../fixtures/project/_posts/2013-08-12-post-example-1.md');
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
 
-        $app = new Application();
-        $config = $app['spress.config'];
-        $config->loadLocal(__DIR__.'/../../../fixtures/project');
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
 
-        $fileInfo = new SplFileInfo($path, '', '2013-08-12-post-example-1.md');
-        $fileItem = new FileItem($fileInfo, FileItem::TYPE_POST);
+        $this->assertEquals('', $event->getRelativeUrl());
 
-        $this->item = new PostItem($fileItem, $config);
-        $this->item->setPostConverterContent($this->item->getPreConverterContent());
-        $this->item->setOutExtension('html');
+        $event->setRelativeUrl('/welcome/index.html');
 
-        $this->renderizer = $app['spress.cms.renderizer'];
+        $this->assertEquals('/welcome/index.html', $event->getRelativeUrl());
     }
 
-    public function testRender()
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testAbsoluteUrl()
     {
-        $event = new RenderEvent($this->renderizer, [], $this->item);
-        $rendered = $event->render('{{ name }}', ['name' => 'Spress']);
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
 
-        $this->assertEquals('Spress', $rendered);
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
+        $event->setRelativeUrl('http://localhost/index.html');
     }
 
-    public function testGetPayload()
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testUrlWithoutStartWithSlash()
     {
-        $payload = ['name' => 'Spress'];
-        $event = new RenderEvent($this->renderizer, $payload, $this->item);
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
 
-        $this->assertTrue(is_array($event->getPayload()));
-        $this->assertCount(1, $event->getPayload());
-        $this->assertArrayHasKey('name', $event->getPayload());
-    }
-
-    public function testSetPayload()
-    {
-        $event = new RenderEvent($this->renderizer, [], $this->item);
-        $event->setPayload(['name' => 'Spress']);
-
-        $this->assertTrue(is_array($event->getPayload()));
-        $this->assertCount(1, $event->getPayload());
-        $this->assertArrayHasKey('name', $event->getPayload());
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
+        $event->setRelativeUrl('index.html');
     }
 }

@@ -20,10 +20,12 @@ use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ResourceWatcher\ResourceWatcher;
 use Yosymfony\ResourceWatcher\ResourceCacheMemory;
 use Yosymfony\Spress\IO\ConsoleIO;
+use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Spress;
 use Yosymfony\Spress\HttpServer\HttpServer;
 
 /**
- * Build command
+ * Build command.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -46,77 +48,49 @@ class SiteBuildCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $timezone = $input->getOption('timezone');
-        $drafts = $input->getOption('drafts');
-        $safe = $input->getOption('safe');
-        $env = $input->getOption('env');
         $server = $input->getOption('server');
         $watch = $input->getOption('watch');
-        $sourceDir = $input->getOption('source');
 
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
-        $app = new SpressCLI($io);
 
-        $config = $app['spress.config'];
-        $config->loadLocal($sourceDir, $env);
-        $env = $config->getEnvironmentName();
-        $serverWatchExtension = $config->getRepository()->get('server_watch_ext');
+        $spress = $this->buildSpress($io, $input);
 
-        if (true === $config->getRepository()->get('debug')) {
+        $env = $spress['spress.config.values']['env'];
+        $drafts = $spress['spress.config.values']['drafts'];
+        $safe = $spress['spress.config.values']['safe'];
+        $debug = $spress['spress.config.values']['debug'];
+        $host = $spress['spress.config.values']['host'];
+        $port = $spress['spress.config.values']['port'];
+        $serverWatchExtension = $spress['spress.config.values']['server_watch_ext'];
+
+        if ($debug === true) {
             $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
 
-        $parse = function () use (&$app, $env, $timezone, $drafts, $safe) {
-            return $app->parseDefault(
-                $env,
-                $timezone,
-                $drafts,
-                $safe,
-                null);
-        };
-
         $this->startingMessage($io, $env, $drafts, $safe);
-        $resultData = $parse();
+
+        $resultData = $spress->parse();
 
         $this->resultMessage($io, $resultData);
 
-        $contentLocator = $app['spress.content_locator'];
-        $rw = $this->buildResourceWatcher($contentLocator->getSourceDir(), $contentLocator->getDestinationDir());
+        $sourceDir = $spress['spress.config.site_dir'];
+        $destinationDir = $spress['spress.config.build_dir'];
+        $rw = $this->buildResourceWatcher($sourceDir, $destinationDir);
 
-        $findChangesAndParse = function () use ($io, $rw, $parse, $config, $sourceDir, $env) {
-            $rw->findChanges();
-
-            if ($rw->hasChanges()) {
-                $io->write(sprintf(
-                    '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
-                    count($rw->getNewResources()),
-                    count($rw->getUpdatedResources()),
-                    count($rw->getDeletedResources())));
-
-                $config->loadLocal($sourceDir, $env);
-
-                $parse();
-
-                $io->write('<comment>Site ready.</comment>');
-            }
-        };
-
-        if ($server) {
-            $port = $config->getRepository()->get('port');
-            $host = $config->getRepository()->get('host');
-            $documentroot = $contentLocator->getDestinationDir();
-            $serverroot = $app['spress.paths']['http_server_root'];
+        if ($server === true) {
+            $documentroot = $destinationDir;
+            $serverroot = __DIR__.'/../../app/httpServer';
 
             $server = new HttpServer($io, $serverroot, $documentroot, $port, $host);
 
-            if ($watch) {
+            if ($watch === true) {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
 
-                $server->onBeforeHandleRequest(function ($request, $resourcePath, $io) use ($findChangesAndParse, $serverWatchExtension) {
+                $server->onBeforeHandleRequest(function ($request, $resourcePath, $io) use ($io, $input, $rw, $serverWatchExtension) {
                     $resourceExtension = pathinfo($resourcePath, PATHINFO_EXTENSION);
 
                     if (in_array($resourceExtension, $serverWatchExtension)) {
-                        $findChangesAndParse();
+                        $this->reParse($io, $input, $rw);
                     }
                 });
             }
@@ -128,12 +102,59 @@ class SiteBuildCommand extends Command
             do {
                 sleep(2);
 
-                $findChangesAndParse();
+                $this->reParse($io, $input, $rw);
             } while (true);
         }
     }
 
-    private function buildResourceWatcher($sourceDir, $destinationDir)
+    protected function buildSpress(IOInterface $io, InputInterface $input)
+    {
+        $timezone = $input->getOption('timezone');
+        $drafts = $input->getOption('drafts');
+        $safe = $input->getOption('safe');
+        $env = $input->getOption('env');
+        $sourceDir = $input->getOption('source');
+
+        $spress = new Spress();
+        $spress['spress.config.default_filename'] = __DIR__.'/../../app/config/config.yml';
+
+        if (is_null($sourceDir) === false) {
+            if (($realDir = realpath($sourceDir)) === false) {
+                throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
+            }
+
+            $spress['spress.config.site_dir'] = $realDir;
+        }
+
+        $spress['spress.config.env'] = $env;
+        $spress['spress.config.safe'] = $safe;
+        $spress['spress.config.drafts'] = $drafts;
+        $spress['spress.config.timezone'] = $timezone;
+
+        return $spress;
+    }
+
+    protected function reParse(IOInterface $io, InputInterface $input, ResourceWatcher $rw)
+    {
+        $rw->findChanges();
+
+        if ($rw->hasChanges() === false) {
+            return;
+        }
+
+        $io->write(sprintf(
+            '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
+            count($rw->getNewResources()),
+            count($rw->getUpdatedResources()),
+            count($rw->getDeletedResources())));
+
+        $spress = $this->buildSpress($io, $input);
+        $spress->parse();
+
+        $io->write('<comment>Site ready.</comment>');
+    }
+
+    protected function buildResourceWatcher($sourceDir, $destinationDir)
     {
         $fs = new Filesystem();
         $relativeDestination = rtrim($fs->makePathRelative($destinationDir, $sourceDir), '/');
@@ -154,7 +175,7 @@ class SiteBuildCommand extends Command
         return $rw;
     }
 
-    private function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
+    protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
     {
         $io->write('<comment>Starting...</comment>');
         $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
@@ -172,13 +193,8 @@ class SiteBuildCommand extends Command
         }
     }
 
-    private function resultMessage(ConsoleIO $io, array $resultData)
+    protected function resultMessage(ConsoleIO $io, array $items)
     {
-        $io->write(sprintf('Total posts: %d', $resultData['total_post']));
-        $io->write(sprintf('Processed posts: %d', $resultData['processed_post']));
-        $io->write(sprintf('Drafts post: %d', $resultData['drafts_post']));
-        $io->write(sprintf('Total pages: %d', $resultData['total_pages']));
-        $io->write(sprintf('Processed pages: %d', $resultData['processed_pages']));
-        $io->write(sprintf('Other resources: %d', $resultData['other_resources']));
+        $io->write(sprintf('Total items: %d', count($items)));
     }
 }

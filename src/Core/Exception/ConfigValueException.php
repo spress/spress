@@ -13,7 +13,7 @@ namespace Yosymfony\Spress\Core\Exception;
 
 /**
  * Exception class throw when the type or value of configuration file
- * is invalid
+ * is not invalid
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -72,16 +72,16 @@ class ConfigValueException extends \DomainException
 
         $dot = false;
 
-        if ('.' === substr($this->message, -1)) {
+        if (substr($this->message, -1) === '.') {
             $this->message = substr($this->message, 0, -1);
             $dot = true;
         }
 
-        if (null !== $this->filename) {
+        if (empty($this->filename) === false) {
             $this->message .= sprintf(' in %s', json_encode($this->filename));
         }
 
-        if ($this->key >= 0) {
+        if (empty($this->key) === false) {
             $this->message .= sprintf(' at key "%s"', $this->key);
         }
 

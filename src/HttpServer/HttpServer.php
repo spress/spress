@@ -15,10 +15,9 @@ use Dflydev\ApacheMimeTypes\PhpRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\HttpServer\RequestHandler;
-use Yosymfony\Spress\Core\TwigFactory;
 
 /**
- * Built-in server
+ * Built-in server.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -35,7 +34,7 @@ class HttpServer
     private $errorDocument = 'error.html.twig';
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param IOInterface $io
      * @param TwigFactory $twigFactory
@@ -46,6 +45,8 @@ class HttpServer
      */
     public function __construct(IOInterface $io, $serverroot, $documentroot, $port, $host)
     {
+        \Twig_Autoloader::register();
+
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;
@@ -85,7 +86,7 @@ class HttpServer
     }
 
     /**
-     * Runs before handle a request
+     * Runs before handle a request.
      *
      * @param callabe $callback
      */
@@ -95,7 +96,7 @@ class HttpServer
     }
 
     /**
-     * Run the built-in server
+     * Run the built-in server.
      */
     public function start()
     {
@@ -136,7 +137,7 @@ class HttpServer
         return [
             'content' => $content,
             'headers' => ['Content-Type' => $contentType],
-            'status_code' => 200
+            'status_code' => 200,
         ];
     }
 
@@ -147,7 +148,7 @@ class HttpServer
         return [
             'content' => $this->twig->render($this->errorDocument, $model),
             'headers' => ['Content-Type' => 'text/html'],
-            'status_code' => $statusCode
+            'status_code' => $statusCode,
         ];
     }
 
@@ -171,12 +172,15 @@ class HttpServer
 
     private function buildTwig($templateDir)
     {
-        $twigFactory = new TwigFactory();
-        $this->twig = $twigFactory
-            ->withAutoescape(false)
-            ->withCache(false)
-            ->addLoaderFilesystem($templateDir)
-            ->create();
+        $options = [
+            'cache' => false,
+            'autoescape' => false,
+        ];
+
+        $loader = new \Twig_Loader_Filesystem();
+        $loader->addPath($templateDir);
+
+        $this->twig = new \Twig_Environment($loader, $options);
     }
 
     private function getErrorModel($statusCode, $data)

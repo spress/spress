@@ -11,11 +11,9 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
-use Yosymfony\Spress\Core\TwigFactory;
-
 /**
  * Base class for generators.
- * Inspired by {@link https://github.com/sensiolabs/SensioGeneratorBundle/blob/master/Generator/Generator.php Symfony Generator}
+ * Inspired by {@link https://github.com/sensiolabs/SensioGeneratorBundle/blob/master/Generator/Generator.php Symfony Generator}.
  *
  * @author Victor Puertas <vpuertas@gmail.com>
  */
@@ -24,8 +22,13 @@ class Generator
     private $files = [];
     private $skeletonDirs;
 
+    public function __construct()
+    {
+        \Twig_Autoloader::register();
+    }
+
     /**
-     * Set a string or array of directories
+     * Set a string or array of directories.
      *
      * @param array $value
      */
@@ -43,13 +46,15 @@ class Generator
 
     protected function getTwig()
     {
-        $factory = new TwigFactory();
+        $options = [
+            'cache' => false,
+            'strict_variables' => true,
+        ];
 
-        return $factory
-            ->withCache(false)
-            ->addLoaderFilesystem($this->skeletonDirs)
-            ->withStrictVariables(true)
-            ->create();
+        $loader = new \Twig_Loader_Filesystem();
+        $loader->addPath($this->skeletonDirs);
+
+        return new \Twig_Environment($loader, $options);
     }
 
     protected function renderFile($template, $target, $model)

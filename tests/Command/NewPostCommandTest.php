@@ -27,7 +27,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
-        $this->fs->mirror('./src/Core/tests/fixtures/project', $this->tmpDir);
+        $this->fs->mirror(__DIR__.'/../../src/Core/tests/fixtures/project', $this->tmpDir);
 
         $this->currentDir = getcwd();
 
@@ -101,7 +101,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->assertRegExp('/2014-01-01-my-first-post.md/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir.'/_posts/2014-01-01-my-first-post.md');
+        $fileContent = file_get_contents($this->tmpDir.'/src/content/posts/2014-01-01-my-first-post.md');
 
         $this->assertRegExp('/tags: \[\]/', $fileContent);
         $this->assertRegExp('/categories: \[\]/', $fileContent);
@@ -119,19 +119,19 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $helper->setInputStream($this->getInputStream("\n\n\n\n\n"));
 
         $commandTester->execute([
-            'command'       => $command->getName(),
-            '--title'         => 'My second post',
-            '--layout'        => 'post',
-            '--date'          => '2015-01-01',
-            '--tags'          => 'tag1 tag2',
-            '--categories'    => 'category1 category2',
+            'command' => $command->getName(),
+            '--title' => 'My second post',
+            '--layout' => 'post',
+            '--date' => '2015-01-01',
+            '--tags' => 'tag1 tag2',
+            '--categories' => 'category1 category2',
         ]);
 
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/2015-01-01-my-second-post.md/', $output);
 
-        $fileContent = file_get_contents($this->tmpDir.'/_posts/2015-01-01-my-second-post.md');
+        $fileContent = file_get_contents($this->tmpDir.'/src/content/posts/2015-01-01-my-second-post.md');
 
         $this->assertRegExp('/title: "My second post"/', $fileContent);
         $this->assertRegExp('/layout: post/', $fileContent);

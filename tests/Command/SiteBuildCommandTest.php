@@ -16,24 +16,19 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Command\SiteBuildCommand;
 
-/**
- * Build a site
- *
- * @author Victor Puertas <vpgugr@gmail.com>
- */
 class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 {
     protected $sourceDir;
 
     public function setUp()
     {
-        $this->sourceDir = './src/Core/tests/fixtures/project';
+        $this->sourceDir = __DIR__.'/../../src/Core/tests/fixtures/project';
     }
 
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove($this->sourceDir.'/_site');
+        $fs->remove($this->sourceDir.'/build');
     }
 
     public function testBuildCommand()
@@ -51,8 +46,10 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Environment: dev/', $output);
+        $this->assertNotRegExp('/Posts drafts enabled/', $output);
         $this->assertRegExp('/Debug mode enabled/', $output);
-        $this->assertRegExp('/Total post/', $output);
+        $this->assertRegExp('/Total items: 15/', $output);
     }
 
     public function testBuildCommandDraft()
@@ -71,8 +68,9 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Environment: dev/', $output);
         $this->assertRegExp('/Posts drafts enabled/', $output);
-        $this->assertRegExp('/Total post/', $output);
+        $this->assertRegExp('/Total items: 15/', $output);
     }
 
     public function testBuildCommandSafe()
@@ -91,6 +89,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/Starting.../', $output);
+        $this->assertRegExp('/Environment: dev/', $output);
         $this->assertRegExp('/Plugins disabled/', $output);
     }
 

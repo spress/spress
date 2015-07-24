@@ -20,7 +20,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Scaffolding\NewSite;
 
 /**
- * New site command
+ * New site command.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -40,6 +40,9 @@ class NewSiteCommand extends Command
         ->setHelp('The <info>new:site</info> command helps you generates new sites.');
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
@@ -48,9 +51,7 @@ class NewSiteCommand extends Command
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
-        $app = new SpressCLI($io);
-
-        $operation = new NewSite($app['spress.paths']['templates']);
+        $operation = new NewSite($this->getTemplatesPath());
         $operation->newSite($path, $template, $force, $completeScaffold);
 
         $io->write(sprintf('<comment>New site created at %s.</comment>', $path));
@@ -60,5 +61,16 @@ class NewSiteCommand extends Command
         } else {
             $io->write(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $path));
         }
+    }
+
+    protected function getTemplatesPath()
+    {
+        $spressPath = __DIR__.'/../../';
+
+        if (file_exists($spressPath.'app/templates/')) {
+            return $spressPath.'app/templates';
+        }
+
+        return $spressPath.'../spress-templates';
     }
 }

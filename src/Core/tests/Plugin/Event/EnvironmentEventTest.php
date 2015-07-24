@@ -9,109 +9,52 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Plugin\Event;
+namespace Yosymfony\Spress\tests\Plugin\Event;
 
-use Yosymfony\Spress\Core\Application;
-use Yosymfony\Spress\Plugin\Event\EnvironmentEvent;
+use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
 
 class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
 {
-    protected $app;
-    protected $event;
-
-    public function setUp()
+    public function testEnvironmentEvent()
     {
-        $this->app = new Application();
-        $this->app['spress.config']->loadLocal(__DIR__.'/../../../fixtures/project');
-        $this->app['spress.content_locator']->initialize();
-        $this->app['spress.cms.renderizer']->initialize();
-        $this->event = new EnvironmentEvent(
-            $this->app['spress.config'],
-            $this->app['spress.cms.converter'],
-            $this->app['spress.cms.renderizer'],
-            $this->app['spress.content_locator'],
-            $this->app['spress.io']
-        );
-    }
+        $dsm = $this->getMockBuilder('\Yosymfony\Spress\Core\DataSource\DataSourceManager')
+                     ->getMock();
+        $cm = $this->getMockBuilder('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager')
+                     ->getMock();
+        $renderizer = $this->getMockBuilder('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface')
+                     ->getMock();
+        $io = $this->getMockBuilder('\Yosymfony\Spress\Core\IO\IOInterface')
+                     ->getMock();
+        $dw = $this->getMockBuilder('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface')
+                     ->getMock();
 
-    public function testGetConfigRepository()
-    {
-        $this->assertInstanceOf(
-            'Yosymfony\ConfigLoader\Repository',
-            $this->event->getConfigRepository());
-    }
+        $configValues = ['name' => 'Yo! Symfony'];
 
-    public function testGetTemplateManager()
-    {
-        $this->assertInstanceOf(
-            'Yosymfony\Spress\Core\Plugin\Api\TemplateManager',
-            $this->event->getTemplateManager());
-    }
+        $event = new EnvironmentEvent(
+            $dsm,
+            $dw,
+            $cm,
+            $renderizer,
+            $io,
+            $configValues);
 
-    public function testGetIO()
-    {
-        $this->assertInstanceOf(
-            'Yosymfony\Spress\Core\IO\IOInterface',
-            $this->event->getIO());
-    }
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $event->getDataSourceManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface', $event->getDataWriter());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager', $event->getConverterManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface', $event->getRenderizer());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\IO\IOInterface', $event->getIO());
 
-    public function testGetSourceDir()
-    {
-        $this->assertTrue(strlen($this->event->getSourceDir()) > 0);
-    }
+        $values = $event->getConfigValues();
 
-    public function testGetPostsDir()
-    {
-        $this->assertTrue(strlen($this->event->getPostsDir()) > 0);
-    }
+        $this->assertTrue(is_array($values));
+        $this->assertArrayHasKey('name', $values);
+        $this->assertEquals('Yo! Symfony', $values['name']);
 
-    public function testGetLayoutsDir()
-    {
-        $this->assertTrue(strlen($this->event->getLayoutsDir()) > 0);
-    }
+        $values['title'] = 'My blog page';
 
-    public function testGetDestinationDir()
-    {
-        $this->assertTrue(strlen($this->event->getDestinationDir()) > 0);
-    }
+        $event->setConfigValues($values);
 
-    public function testGetIncludesDir()
-    {
-        $this->assertTrue(strlen($this->event->getIncludesDir()) > 0);
-    }
-
-    public function testAddTwigFunction()
-    {
-        $this->event->addTwigFunction('fTest', function ($param) {
-            return $param;
-        });
-    }
-
-    public function testAddTwigFunctionWithOptions()
-    {
-        $this->event->addTwigFunction('fTest', function (\Twig_Environment $env, $context, $param) {
-            return $param;
-        }, ['needs_context' => true, 'needs_environment' => true]);
-    }
-
-    public function testAddTwigFilter()
-    {
-        $this->event->addTwigFilter('fTest', function ($param) {
-            return $param;
-        });
-    }
-
-    public function testAddTwigFilterWithOptions()
-    {
-        $this->event->addTwigFilter('fTest', function (\Twig_Environment $env, $context, $param) {
-            return $param;
-        }, ['needs_context' => true, 'needs_environment' => true]);
-    }
-
-    public function testAddTwigTest()
-    {
-        $this->event->addTwigFilter('tTest', function ($param) {
-            return true;
-        });
+        $this->assertArrayHasKey('name', $configValues);
+        $this->assertEquals('My blog page', $configValues['title']);
     }
 }

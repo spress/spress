@@ -11,15 +11,20 @@
 
 namespace Yosymfony\Spress\Core\Plugin;
 
+/**
+ * Event subscriber.
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
+ */
 class EventSubscriber
 {
     private $listener = [];
 
     /**
-     * Add a listener for one event
+     * Add a listener for one event.
      *
      * @param string   $eventName
-     * @param callable $listener
+     * @param \closure $listener
      */
     public function addEventListener($eventName, $listener)
     {
@@ -27,7 +32,7 @@ class EventSubscriber
     }
 
     /**
-     * Get event listeners
+     * Get event listeners.
      *
      * @return array
      */

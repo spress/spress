@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\ContentManager\Generator;
+namespace Yosymfony\Spress\Core\ContentManager\Generator\Pagination;
 
+use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Support\ArrayWrapper;
@@ -39,7 +40,7 @@ class PaginationGenerator implements GeneratorInterface
      *
      * @throws Yosymfony\Spress\Core\Exception\AttributeValueException if bad attribute value
      */
-    public function generateItems(ItemInterface $templateItem, array $siteAttributes)
+    public function generateItems(ItemInterface $templateItem, array $collections)
     {
         $result = [];
 
@@ -49,10 +50,14 @@ class PaginationGenerator implements GeneratorInterface
             throw new AttributeValueException('Items per page value must be great than 0.', 'max_page', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $arr = new ArrayWrapper($siteAttributes);
+        $arr = new ArrayWrapper($collections);
+        $providerName = $this->providerToCollection($options['provider']);
 
-        if ($arr->has($options['provider']) === false || is_array($provider = $arr->get($options['provider'])) === false) {
-            throw new AttributeValueException('Provider for pagination not found.', 'provider', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        if ($arr->has($providerName) === false || is_array($provider = $arr->get($providerName)) === false) {
+            throw new AttributeValueException(
+                sprintf('Provider: "%s" for pagination not found.', $options['provider']),
+                'provider',
+                $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         $arr->setArray($provider);
@@ -63,7 +68,7 @@ class PaginationGenerator implements GeneratorInterface
         $totalItems = count($provider);
         $templatePath = dirname($templateItem->getPath(Item::SNAPSHOT_PATH_RELATIVE));
 
-        foreach ($pages as $page => $elements) {
+        foreach ($pages as $page => $items) {
             $previousPage = $page > 1 ? $page - 1 : null;
             $previousPagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $previousPage);
             $previousPageUrl = $this->getPagePermalink($previousPagePath);
@@ -72,7 +77,6 @@ class PaginationGenerator implements GeneratorInterface
             $nextPageUrl = $this->getPagePermalink($nextPagePath);
 
             $pageAttr = new ArrayWrapper($templateItem->getAttributes());
-            $pageAttr->set('pagination.items', $elements);
             $pageAttr->set('pagination.per_page', $options['max_page']);
             $pageAttr->set('pagination.total_items', $totalItems);
             $pageAttr->set('pagination.total_pages', $totalPages);
@@ -87,7 +91,8 @@ class PaginationGenerator implements GeneratorInterface
             $pagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $page);
             $permalink = $this->getPagePermalink($pagePath);
 
-            $item = new Item($templateItem->getContent(), $pagePath, $pageAttr->getArray());
+            $item = new PaginationItem($templateItem->getContent(), $pagePath, $pageAttr->getArray());
+            $item->setPageItems($items);
             $item->setPath($pagePath, Item::SNAPSHOT_PATH_RELATIVE);
             $item->setPath($permalink, Item::SNAPSHOT_PATH_PERMALINK);
 
@@ -147,5 +152,10 @@ class PaginationGenerator implements GeneratorInterface
         $attributes = $templateItem->getAttributes();
 
         return $resolver->resolve($attributes);
+    }
+
+    protected function providerToCollection($providerName)
+    {
+        return str_replace('site.', '', $providerName);
     }
 }

@@ -53,6 +53,7 @@ class ContentManager
     private $spressAttributes;
 
     private $items;
+    private $itemsByCollection;
 
     /**
      * Constructor.
@@ -96,6 +97,7 @@ class ContentManager
         $this->spressAttributes = [];
 
         $this->items = [];
+        $this->itemsByCollection = [];
     }
 
     /**
@@ -231,6 +233,8 @@ class ContentManager
 
         $newAttributes = array_merge($collection->getAttributes(), $attributes);
 
+        $this->itemsByCollection[$collectionName][$item->getId()] = $item;
+
         $item->setAttributes($newAttributes);
         $item->setCollection($collectionName);
 
@@ -278,7 +282,7 @@ class ContentManager
         $attributes = $item->getAttributes();
 
         $generator = $this->generatorManager->getGenerator($attributes['generator']);
-        $items = $generator->generateItems($item, $this->siteAttribute->getAttributes());
+        $items = $generator->generateItems($item, $this->itemsByCollection);
 
         foreach ($items as $item) {
             if (array_key_exists($item->getId(), $this->items) === true) {

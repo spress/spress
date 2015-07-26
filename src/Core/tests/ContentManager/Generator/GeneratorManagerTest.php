@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\tests\ContentManager\Generator;
 
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
-use Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator;
+use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
 use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class GeneratorManagerTest extends \PHPUnit_Framework_TestCase

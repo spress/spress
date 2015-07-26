@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\tests\ContentManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
-use Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator;
+use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManagerBuilder;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;

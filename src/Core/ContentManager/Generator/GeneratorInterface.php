@@ -26,10 +26,10 @@ interface GeneratorInterface
     /**
      * Generate items.
      *
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $templateItem   The template item.
-     * @param array                                           $siteAttributes The attribute of the site.
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $templateItem The template item.
+     * @param array                                           $collecions   An array with the collection name as a key and collection's item as value.
      *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface[]
      */
-    public function generateItems(ItemInterface $templateItem, array $siteAttributes);
+    public function generateItems(ItemInterface $templateItem, array $collecions);
 }

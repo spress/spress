@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Generator;
+namespace Yosymfony\Spress\Core\tests\ContentManager\Generator\Pagination;
 
 use Yosymfony\Spress\Core\DataSource\Item;
-use Yosymfony\Spress\Core\ContentManager\Generator\PaginationGenerator;
+use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
 
 class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,24 +25,17 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPaginateWithDefaulPermalink()
     {
-        $content = 'Paginator content';
-        $attributes = [
-            'site' => [
-                'posts' => [
-                    '_posts/2015-05-26-hi' => [
-                        'content' => 'My content 1',
-                    ],
-                    '_posts/2015-05-26-welcome' => [
-                        'content' => 'My content 2',
-                    ],
-                ],
-            ],
+        $post1 = new Item('Post 1', 'posts/2015-05-26-hi', []);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-welcome', []);
+
+        $collections = [
+            'posts' => [$post1, $post2],
         ];
 
-        $templateItem = new Item($content, 'blog/index.html', ['max_page' => 1]);
+        $templateItem = new Item('Paginator content', 'blog/index.html', ['max_page' => 1]);
         $templateItem->setPath('blog/index.html', Item::SNAPSHOT_PATH_RELATIVE);
 
-        $pageItems = $this->pagination->generateItems($templateItem, $attributes);
+        $pageItems = $this->pagination->generateItems($templateItem, $collections);
 
         $this->assertTrue(is_array($pageItems));
         $this->assertCount(2, $pageItems);
@@ -119,24 +112,17 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testPaginateWithCustomPermalink()
     {
-        $content = 'Paginator content';
-        $attributes = [
-            'site' => [
-                'posts' => [
-                    '_posts/2015-05-26-hi' => [
-                        'content' => 'My content 1',
-                    ],
-                    '_posts/2015-05-26-welcome' => [
-                        'content' => 'My content 2',
-                    ],
-                ],
-            ],
+        $post1 = new Item('Post 1', 'posts/2015-05-26-hi', []);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-welcome', []);
+
+        $collections = [
+            'posts' => [$post1, $post2],
         ];
 
-        $templateItem = new Item($content, 'blog/index.html', ['max_page' => 1, 'permalink' => '/page:num.html']);
+        $templateItem = new Item('Paginator content', 'blog/index.html', ['max_page' => 1, 'permalink' => '/page:num.html']);
         $templateItem->setPath('blog/index.html', Item::SNAPSHOT_PATH_RELATIVE);
 
-        $pageItems = $this->pagination->generateItems($templateItem, $attributes);
+        $pageItems = $this->pagination->generateItems($templateItem, $collections);
 
         $this->assertTrue(is_array($pageItems));
         $this->assertCount(2, $pageItems);

@@ -61,7 +61,6 @@ class FilesystemDataSource extends AbstractDataSource
     private $items;
     private $layouts;
     private $includes;
-    private $orgDir;
     private $attributeParser;
 
     /**

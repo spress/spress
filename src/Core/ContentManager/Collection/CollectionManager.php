@@ -21,7 +21,6 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 class CollectionManager
 {
     private $collections;
-    private $defaultCollection;
 
     /**
      * Constructor.

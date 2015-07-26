@@ -93,7 +93,6 @@ class Spress extends Container
         $this['spress.config.timezone'] = null;
         $this['spress.config.values'] = function ($c) {
             $configLoader = $c['spress.config'];
-            $realSiteDir = realpath($c['spress.config.site_dir']);
 
             $attributes = $configLoader->loadConfiguration($c['spress.config.site_dir'], $c['spress.config.env']);
 

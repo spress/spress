@@ -149,7 +149,9 @@ class ArrayWrapper
             $array = $this->get($key);
         }
 
-        for ($offset = 0; $offset < count($array);) {
+        $arrCount = count($array);
+        
+        for ($offset = 0; $offset < $arrCount;) {
             $slice = array_slice($array, $offset, $maxPerPage, true);
             $result[$page] = $slice;
 

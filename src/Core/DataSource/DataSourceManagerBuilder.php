@@ -105,7 +105,7 @@ class DataSourceManagerBuilder
     protected function resolveArgumentsParameters(array $arguments)
     {
         foreach ($arguments as $argument => &$value) {
-            if (is_string($value) === false || preg_match('/%[\S_\-]+%/', $value, $matches) == false) {
+            if (is_string($value) === false || preg_match('/%[\S_\-]+%/', $value, $matches) === false) {
                 continue;
             }
 

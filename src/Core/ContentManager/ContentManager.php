@@ -121,7 +121,7 @@ class ContentManager
 
         $this->reset();
         $this->setUp();
-        $this->InitializePlugins();
+        $this->initializePlugins();
         $this->process();
         $this->finish();
 
@@ -138,7 +138,7 @@ class ContentManager
         $this->configureTimezone($this->timezone);
     }
 
-    private function InitializePlugins()
+    private function initializePlugins()
     {
         if ($this->safe === false) {
             $this->pluginManager->callInitialize();

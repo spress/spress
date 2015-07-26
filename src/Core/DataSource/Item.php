@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * File information.
+ * Item.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

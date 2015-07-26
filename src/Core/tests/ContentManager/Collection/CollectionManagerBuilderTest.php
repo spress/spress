@@ -20,7 +20,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $config = [
             'events' => [
                 'output' => true,
-                'title'  => 'Events',
+                'title' => 'Events',
             ],
         ];
 

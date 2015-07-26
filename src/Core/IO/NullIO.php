@@ -92,11 +92,11 @@ class NullIO implements IOInterface
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
-        return null;
+        return;
     }
 
     public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
     {
-        return null;
+        return;
     }
 }

@@ -12,14 +12,14 @@
 namespace Yosymfony\Spress\Core\ContentManager\Collection;
 
 /**
- * Iterface for a collection
+ * Iterface for a collection.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface CollectionInterface
 {
     /**
-     * The collection's name
+     * The collection's name.
      *
      * @return string
      */
@@ -27,14 +27,14 @@ interface CollectionInterface
 
     /**
      * The collection attributes. Each item of the collection
-     * will automatically receive this attributes
+     * will automatically receive this attributes.
      *
      * return array
      */
     public function getAttributes();
 
     /**
-     * The collection's relative path. e.g: "_events" or "books/top"
+     * The collection's relative path. e.g: "_events" or "books/top".
      *
      * return @string
      */

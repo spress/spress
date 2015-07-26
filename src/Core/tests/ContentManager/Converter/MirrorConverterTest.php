@@ -22,7 +22,7 @@ class MirrorConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface', $converter);
         $this->assertEquals(0, $converter->getPriority());
         $this->assertTrue($converter->matches('myExt'));
-        $this->assertEquals("<h1>hi</h1>", $converter->convert('<h1>hi</h1>'));
+        $this->assertEquals('<h1>hi</h1>', $converter->convert('<h1>hi</h1>'));
         $this->assertEquals('md', $converter->getOutExtension('md'));
         $this->assertEquals('myExt', $converter->getOutExtension('myExt'));
     }

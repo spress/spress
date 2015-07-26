@@ -25,7 +25,7 @@ abstract class AbstractDataSource
     protected $isConfigured;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $params Params for initialize the data source
      */
@@ -37,7 +37,7 @@ abstract class AbstractDataSource
     }
 
     /**
-     * Returns the list of items
+     * Returns the list of items.
      *
      * @return array
      */
@@ -58,7 +58,7 @@ abstract class AbstractDataSource
     abstract public function getIncludes();
 
     /**
-     * Creates a new item or layout in the data source
+     * Creates a new item or layout in the data source.
      *
      * @param Item $item
      */
@@ -67,7 +67,7 @@ abstract class AbstractDataSource
     }
 
     /**
-     * Loads the data source
+     * Loads the data source.
      */
     public function load()
     {
@@ -139,7 +139,7 @@ abstract class AbstractDataSource
     }
 
     /**
-     * All data source data manipulations and queries
+     * All data source data manipulations and queries.
      */
     public function process()
     {

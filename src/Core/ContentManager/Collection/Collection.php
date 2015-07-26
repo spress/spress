@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Collection;
 
 /**
- * Collection
+ * Collection.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -23,7 +23,7 @@ class Collection implements CollectionInterface
     private $attributes;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $name       The collection's name
      * @param string $path       The collection's relative path

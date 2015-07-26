@@ -18,7 +18,7 @@ use Yosymfony\ConfigLoader\Loaders\JsonLoader;
 
 /**
  * Attribute parser using Yosymfony\ConfigLoader.
- * syntaxes supported: YAML and JSON
+ * syntaxes supported: YAML and JSON.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -32,7 +32,7 @@ class AttributeParser
     private $pattern = '/^---\r*\n(.*)\r*\n?---\r*\n?/isU';
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param $type Type of parser: yaml or json.
      *
@@ -59,7 +59,7 @@ class AttributeParser
     }
 
     /**
-     * Get the attributes of an item from string
+     * Get the attributes of an item from string.
      *
      * @return array
      */
@@ -70,7 +70,7 @@ class AttributeParser
         return $repository->getArray();
     }
 
-     /**
+    /**
      * Get the attributes from the fronmatter of an item. Front-matter
      * block let you specify certain attributes of the page and define
      * new variables that will be available in the content.
@@ -94,7 +94,7 @@ class AttributeParser
     }
 
     /**
-     * Get the content without frontmatter block
+     * Get the content without frontmatter block.
      *
      * @return string
      */

@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
 /**
- * Converter result
+ * Converter result.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -22,7 +22,7 @@ class ConverterResult
     private $result;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $result    Result of converter data
      * @param string $extension Extension of result
@@ -34,7 +34,7 @@ class ConverterResult
     }
 
     /**
-     * Get Result of converter data
+     * Get Result of converter data.
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class ConverterResult
     }
 
     /**
-     * Extension of result
+     * Extension of result.
      *
      * @return string
      */

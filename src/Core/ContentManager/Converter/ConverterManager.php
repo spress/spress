@@ -21,7 +21,7 @@ class ConverterManager
     private $queue;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {

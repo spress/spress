@@ -97,7 +97,7 @@ interface IOInterface
      *
      * @param string|array $question  The question to ask
      * @param callback     $validator A PHP callback
-     * @param bool|integer $attempts  Max number of times to ask before giving up (false by default, which means infinite)
+     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite)
      * @param string       $default   The default answer if none is given by the user
      *
      * @return mixed
@@ -125,7 +125,7 @@ interface IOInterface
      *
      * @param string|array $question  The question to ask
      * @param callback     $validator A PHP callback
-     * @param bool|integer $attempts  Max number of times to ask before giving up (false by default, which means infinite)
+     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite)
      * @param bool         $fallback  In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
      * @return mixed

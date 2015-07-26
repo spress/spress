@@ -19,7 +19,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 class MirrorConverter implements ConverterInterface
 {
     /**
-     * Get the converter priority
+     * Get the converter priority.
      *
      * @return int
      */
@@ -29,11 +29,11 @@ class MirrorConverter implements ConverterInterface
     }
 
     /**
-     * If file's extension is support by converter
+     * If file's extension is support by converter.
      *
      * @param string $extension Extension without dot
      *
-     * @return boolean
+     * @return bool
      */
     public function matches($extension)
     {
@@ -41,7 +41,7 @@ class MirrorConverter implements ConverterInterface
     }
 
     /**
-     * Convert the input data
+     * Convert the input data.
      *
      * @param string $input The raw content without Front-matter
      *

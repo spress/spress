@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Collection;
 
 /**
- * Build a Collection manager
+ * Build a Collection manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

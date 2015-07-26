@@ -24,7 +24,7 @@ class CollectionManager
     private $defaultCollection;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {

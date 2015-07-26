@@ -13,7 +13,7 @@ namespace Yosymfony\Spress\Core\Exception;
 
 /**
  * Exception class throw when the type or value of configuration file
- * is not invalid
+ * is not invalid.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -24,7 +24,7 @@ class ConfigValueException extends \DomainException
     protected $filename;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string    $message
      * @param string    $key

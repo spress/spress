@@ -12,14 +12,14 @@
 namespace Yosymfony\Spress\Command;
 
 /**
- * Validators
+ * Validators.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class Validators
 {
     /**
-     * Validator for the name of a plugin
+     * Validator for the name of a plugin.
      *
      * @param string $name
      *
@@ -37,7 +37,7 @@ class Validators
     }
 
     /**
-     * Validator for the title of a post
+     * Validator for the title of a post.
      *
      * @param string $title
      *
@@ -53,7 +53,7 @@ class Validators
     }
 
     /**
-     * Validator for a Email
+     * Validator for a Email.
      *
      * @param string $email
      *
@@ -73,7 +73,7 @@ class Validators
     }
 
     /**
-     * List of PHP reserved words
+     * List of PHP reserved words.
      *
      * @return array
      */

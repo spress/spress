@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 /**
- * Permanlink
+ * Permanlink.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

@@ -21,9 +21,9 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  */
 class PaginationItem extends Item
 {
-	protected $pageItems = [];
+    protected $pageItems = [];
 
-	/**
+    /**
      * @inheritDoc
      */
     public function getAttributes()
@@ -31,13 +31,13 @@ class PaginationItem extends Item
         $attributes = parent::getAttributes();
 
         if (isset($attributes['pagination']) === false) {
-        	return $attributes;
+            return $attributes;
         }
 
         $attributes['pagination']['items'] = [];
 
         foreach ($this->pageItems as $item) {
-			$attributes['pagination']['items'][$item->getId()] = $this->getItemAttributes($item);       	
+            $attributes['pagination']['items'][$item->getId()] = $this->getItemAttributes($item);
         }
 
         return $attributes;
@@ -45,21 +45,21 @@ class PaginationItem extends Item
 
     /**
      * Sets the items of a page.
-     * 
+     *
      * @param ItemInterface[] $items
      */
     public function setPageItems(array $items)
-	{
-		$this->pageItems = $items;
-	}
+    {
+        $this->pageItems = $items;
+    }
 
-	/**
-	 * Gets the attributes of an item.
-	 * 
-	 * @param  ItemInterface $item
-	 * 
-	 * @return array
-	 */
+    /**
+     * Gets the attributes of an item.
+     *
+     * @param ItemInterface $item
+     *
+     * @return array
+     */
     protected function getItemAttributes(ItemInterface $item)
     {
         $result = $item->getAttributes();

@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Exception;
 
 /**
- * Exception class throw when an attribute or option is missing
+ * Exception class throw when an attribute or option is missing.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

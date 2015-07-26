@@ -21,23 +21,23 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 interface ConverterInterface
 {
     /**
-     * Get the priority of converter
+     * Get the priority of converter.
      *
      * @return int Value between 0 to 10 with great is more priority
      */
     public function getPriority();
 
     /**
-     * If file's extension is support by converter
+     * If file's extension is support by converter.
      *
      * @param string $extension Extension without dot
      *
-     * @return boolean
+     * @return bool
      */
     public function matches($extension);
 
     /**
-     * Convert the input data
+     * Convert the input data.
      *
      * @param string $input The raw content without Front-matter
      *

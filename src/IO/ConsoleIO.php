@@ -19,7 +19,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Console implementation
+ * Console implementation.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

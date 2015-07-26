@@ -32,7 +32,7 @@ class DataSourceManager
         $this->initialize();
     }
 
-     /**
+    /**
      * Returns the list of items.
      *
      * @return array

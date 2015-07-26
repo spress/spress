@@ -13,7 +13,7 @@ namespace Yosymfony\Spress\Core\Exception;
 
 /**
  * Exception class throw when the type or value of Front-matter
- * is invalid
+ * is invalid.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

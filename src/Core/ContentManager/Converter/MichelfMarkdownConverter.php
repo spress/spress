@@ -15,7 +15,7 @@ use Michelf\MarkdownExtra;
 
 /**
  * Markdown converter implementation using a Markdown parser from
- * Miche Fortin: https://github.com/michelf/php-markdown
+ * Miche Fortin: https://github.com/michelf/php-markdown.
  *
  * @author Victor Pueras <vpgugr@gmail.com>
  */
@@ -24,7 +24,7 @@ class MichelfMarkdownConverter implements ConverterInterface
     private $supportedExtension;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $supportedExtension File extesion supported by the converter. Extension without dot.
      */
@@ -34,7 +34,7 @@ class MichelfMarkdownConverter implements ConverterInterface
     }
 
     /**
-     * Get the converter priority
+     * Get the converter priority.
      *
      * @return int
      */
@@ -44,11 +44,11 @@ class MichelfMarkdownConverter implements ConverterInterface
     }
 
     /**
-     * If file's extension is support by converter
+     * If file's extension is support by converter.
      *
      * @param string $extension Extension without dot
      *
-     * @return boolean
+     * @return bool
      */
     public function matches($extension)
     {
@@ -56,7 +56,7 @@ class MichelfMarkdownConverter implements ConverterInterface
     }
 
     /**
-     * Convert the input data
+     * Convert the input data.
      *
      * @param string $input The raw content without Front-matter
      *

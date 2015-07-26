@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 /**
- * Iterface for a permanlink
+ * Iterface for a permanlink.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -20,7 +20,7 @@ interface PermalinkInterface
 {
     /**
      * Relative URL path. The path must start with "/".
-     * e.g: "/" or "/my-page"
+     * e.g: "/" or "/my-page".
      *
      * @return string
      */
@@ -28,7 +28,7 @@ interface PermalinkInterface
 
     /**
      * Relative file path. The path must not start with "/".
-     * e.g: "index.html" or "my-page/index.html"
+     * e.g: "index.html" or "my-page/index.html".
      *
      * @return string
      */

@@ -27,7 +27,8 @@ interface GeneratorInterface
      * Generate items.
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $templateItem The template item.
-     * @param array                                           $collecions   An array with the collection name as a key and collection's item as value.
+     * @param array                                           $collecions   An array with the collection name
+     *                                                                      as a key and collection's item as value.
      *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface[]
      */

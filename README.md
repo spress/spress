@@ -151,6 +151,6 @@ Unit tests
 You can run the unit tests with the following command:
 ```bash
 $ cd your-path
-$ composer.phar install --dev
+$ composer.phar install
 $ phpunit
 ```

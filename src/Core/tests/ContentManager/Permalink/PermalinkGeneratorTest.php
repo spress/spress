@@ -13,7 +13,6 @@ namespace Yosymfony\Spress\Core\tests\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\DataSource\Item;
-use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -249,7 +248,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrettyBadDateAttribute()
     {
-        $pmg = new PermalinkGenerator(new SupportFacade(), 'pretty');
+        $pmg = new PermalinkGenerator('pretty');
         $permalink = $pmg->getPermalink($this->createItem('index.html', [
             'date' => [],
         ]));

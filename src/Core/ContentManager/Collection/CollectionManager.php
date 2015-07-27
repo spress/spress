@@ -41,7 +41,9 @@ class CollectionManager
     public function addCollection(CollectionInterface $collection)
     {
         if ($this->hasCollection($collection->getName()) === true) {
-            throw new \RuntimeException(sprintf('A previous collection exists with the same name: "%s".', $collection->getName()));
+            throw new \RuntimeException(sprintf(
+                'A previous collection exists with the same name: "%s".',
+                $collection->getName()));
         }
 
         $this->collections[$collection->getName()] = $collection;

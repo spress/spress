@@ -14,3 +14,4 @@ CHANGELOG for 2.x.x
 * [Deleted] methods initialize and getSupportExtension of ConverterInterface.
 * [Deleted] TemplateManager class of plugin API.
 * [Deleted] events: "spress.after_convert_posts", "spress.after_render_pagination", "spress.before_render_pagination".
+* [Deleted] configuration attributes: "baseurl", "paginate", "paginate_path", "limit_posts", "processable_ext", "destination", "posts", "includes", "layouts", "plugins".

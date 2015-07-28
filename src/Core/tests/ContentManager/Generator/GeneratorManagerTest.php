@@ -13,13 +13,12 @@ namespace Yosymfony\Spress\Core\tests\ContentManager\Generator;
 
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
-use Yosymfony\Spress\Core\Support\SupportFacade;
 
 class GeneratorManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testGeneratorManager()
     {
-        $generator = new PaginationGenerator(new SupportFacade());
+        $generator = new PaginationGenerator();
 
         $gm = new GeneratorManager();
         $gm->addGenerator('paginator', $generator);
@@ -49,7 +48,7 @@ class GeneratorManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddWithSomeName()
     {
-        $generator = new PaginationGenerator(new SupportFacade());
+        $generator = new PaginationGenerator();
 
         $gm = new GeneratorManager();
         $gm->addGenerator('paginator', $generator);
@@ -61,7 +60,7 @@ class GeneratorManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGeneratorNotFound()
     {
-        $generator = new PaginationGenerator(new SupportFacade());
+        $generator = new PaginationGenerator();
 
         $gm = new GeneratorManager();
         $gm->addGenerator('paginator', $generator);

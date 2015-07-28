@@ -79,7 +79,7 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('blog/page2/index.html', $page2->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/blog/page2', $page2->getPath(Item::SNAPSHOT_PATH_PERMALINK));
-        $this->assertEquals('Paginator content', $page1->getContent());
+        $this->assertEquals('Paginator content', $page2->getContent());
 
         $attrPage2 = $page2->getAttributes();
 
@@ -134,5 +134,57 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
         $page2 = $pageItems[1];
         $this->assertEquals('blog/page2.html', $page2->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/blog/page2.html', $page2->getPath(Item::SNAPSHOT_PATH_PERMALINK));
+    }
+
+    public function testPaginateRootDir()
+    {
+        $post1 = new Item('Post 1', 'posts/2015-05-26-hi', []);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-welcome', []);
+
+        $collections = [
+            'posts' => [$post1, $post2],
+        ];
+
+        $templateItem = new Item('Paginator content', 'index.html', ['max_page' => 1]);
+        $templateItem->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $pageItems = $this->pagination->generateItems($templateItem, $collections);
+
+        $this->assertTrue(is_array($pageItems));
+        $this->assertCount(2, $pageItems);
+
+        $page2 = $pageItems[1];
+
+        $this->assertEquals('page2/index.html', $page2->getPath(Item::SNAPSHOT_PATH_RELATIVE));
+        $this->assertEquals('/page2', $page2->getPath(Item::SNAPSHOT_PATH_PERMALINK));
+        $this->assertEquals('Paginator content', $page2->getContent());
+
+        $attrPage2 = $page2->getAttributes();
+
+        $this->assertArrayHasKey('pagination', $attrPage2);
+        $this->assertArrayHasKey('items', $attrPage2['pagination']);
+        $this->assertArrayHasKey('per_page', $attrPage2['pagination']);
+        $this->assertArrayHasKey('total_items', $attrPage2['pagination']);
+        $this->assertArrayHasKey('total_pages', $attrPage2['pagination']);
+        $this->assertArrayHasKey('page', $attrPage2['pagination']);
+        $this->assertArrayHasKey('previous_page', $attrPage2['pagination']);
+        $this->assertArrayHasKey('previous_page_path', $attrPage2['pagination']);
+        $this->assertArrayHasKey('previous_page_url', $attrPage2['pagination']);
+        $this->assertArrayHasKey('next_page', $attrPage2['pagination']);
+        $this->assertArrayHasKey('next_page_path', $attrPage2['pagination']);
+        $this->assertArrayHasKey('next_page_url', $attrPage2['pagination']);
+
+        $this->assertCount(1, $attrPage2['pagination']['items']);
+        $this->assertEquals(1, $attrPage2['pagination']['per_page']);
+        $this->assertEquals(2, $attrPage2['pagination']['total_items']);
+        $this->assertEquals(2, $attrPage2['pagination']['total_pages']);
+        $this->assertEquals(2, $attrPage2['pagination']['page']);
+        $this->assertEquals(1, $attrPage2['pagination']['previous_page']);
+        $this->assertEquals('index.html', $attrPage2['pagination']['previous_page_path']);
+        $this->assertEquals('/', $attrPage2['pagination']['previous_page_url']);
+
+        $this->assertNull($attrPage2['pagination']['next_page']);
+        $this->assertNull($attrPage2['pagination']['next_page_path']);
+        $this->assertNull($attrPage2['pagination']['next_page_url']);
     }
 }

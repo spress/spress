@@ -68,6 +68,10 @@ class PaginationGenerator implements GeneratorInterface
         $totalItems = count($provider);
         $templatePath = dirname($templateItem->getPath(Item::SNAPSHOT_PATH_RELATIVE));
 
+        if ($templatePath === '.') {
+            $templatePath = '';
+        }
+
         foreach ($pages as $page => $items) {
             $previousPage = $page > 1 ? $page - 1 : null;
             $previousPagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $previousPage);
@@ -123,7 +127,7 @@ class PaginationGenerator implements GeneratorInterface
             $result .= '/index.html';
         }
 
-        return preg_replace('/\/\/+/', '/', $result);
+        return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
     }
 
     protected function getPagePermalink($pageRelativePath)
@@ -137,6 +141,10 @@ class PaginationGenerator implements GeneratorInterface
 
         if ($basename === 'index.html') {
             $result = dirname($pageRelativePath);
+
+            if ($result === '.') {
+                $result = '';
+            }
         }
 
         return '/'.$result;

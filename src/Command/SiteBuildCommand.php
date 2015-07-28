@@ -22,6 +22,7 @@ use Yosymfony\ResourceWatcher\ResourceCacheMemory;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Spress;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\HttpServer\HttpServer;
 
 /**
@@ -31,6 +32,11 @@ use Yosymfony\Spress\HttpServer\HttpServer;
  */
 class SiteBuildCommand extends Command
 {
+    protected $configResolver;
+
+    /**
+     * @inheritDoc
+     */
     protected function configure()
     {
         $this->setDefinition([
@@ -46,6 +52,9 @@ class SiteBuildCommand extends Command
         ->setDescription('Build your site');
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $server = $input->getOption('server');
@@ -107,6 +116,14 @@ class SiteBuildCommand extends Command
         }
     }
 
+    /**
+     * Buils a Spress instance.
+     *
+     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return \Yosymfony\Spress\Core\Spress
+     */
     protected function buildSpress(IOInterface $io, InputInterface $input)
     {
         $timezone = $input->getOption('timezone');
@@ -131,9 +148,19 @@ class SiteBuildCommand extends Command
         $spress['spress.config.drafts'] = $drafts;
         $spress['spress.config.timezone'] = $timezone;
 
+        $resolver = $this->getConfigResolver();
+        $resolver->resolve($spress['spress.config.values']);
+
         return $spress;
     }
 
+    /**
+     * Reparse a site.
+     *
+     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Yosymfony\ResourceWatcher\ResourceWatcher      $rw
+     */
     protected function reParse(IOInterface $io, InputInterface $input, ResourceWatcher $rw)
     {
         $rw->findChanges();
@@ -154,6 +181,14 @@ class SiteBuildCommand extends Command
         $io->write('<comment>Site ready.</comment>');
     }
 
+    /**
+     * Builds a ResourceWatcher instance.
+     *
+     * @param string $sourceDir      Source path.
+     * @param string $destinationDir Destination path.
+     *
+     * @return \Yosymfony\ResourceWatcher\ResourceWatcher
+     */
     protected function buildResourceWatcher($sourceDir, $destinationDir)
     {
         $fs = new Filesystem();
@@ -175,6 +210,14 @@ class SiteBuildCommand extends Command
         return $rw;
     }
 
+    /**
+     * Writes the staring messages.
+     *
+     * @param \Yosymfony\Spress\IO\ConsoleIO $io
+     * @param string                         $env    [description]
+     * @param bool                           $drafts [description]
+     * @param bool                           $safe   [description]
+     */
     protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
     {
         $io->write('<comment>Starting...</comment>');
@@ -193,8 +236,38 @@ class SiteBuildCommand extends Command
         }
     }
 
+    /**
+     * Writes the result of a parsing a site.
+     *
+     * @param \Yosymfony\Spress\IO\ConsoleIO                    $io
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     */
     protected function resultMessage(ConsoleIO $io, array $items)
     {
         $io->write(sprintf('Total items: %d', count($items)));
+    }
+
+    /**
+     * Gets the attributes or option resolver for configuration values.
+     *
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver
+     */
+    protected function getConfigResolver()
+    {
+        if (is_null($this->configResolver) === false) {
+            return $this->configResolver;
+        }
+
+        $resolver = new AttributesResolver();
+        $resolver->setDefault('host', '0.0.0.0', 'string', true)
+            ->setDefault('port', 4000, 'integer', true)
+            ->setValidator('port', function ($value) {
+                return $value >= 0;
+            })
+            ->setDefault('server_watch_ext', ['html'], 'array', true);
+
+        $this->configResolver = $resolver;
+
+        return $this->configResolver;
     }
 }

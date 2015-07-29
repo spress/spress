@@ -153,6 +153,40 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($pageItems));
         $this->assertCount(2, $pageItems);
 
+        $page1 = $pageItems[0];
+
+        $this->assertEquals('index.html', $page1->getPath(Item::SNAPSHOT_PATH_RELATIVE));
+        $this->assertEquals('/', $page1->getPath(Item::SNAPSHOT_PATH_PERMALINK));
+        $this->assertEquals('Paginator content', $page1->getContent());
+
+        $attrPage1 = $page1->getAttributes();
+
+        $this->assertArrayHasKey('pagination', $attrPage1);
+        $this->assertArrayHasKey('items', $attrPage1['pagination']);
+        $this->assertArrayHasKey('per_page', $attrPage1['pagination']);
+        $this->assertArrayHasKey('total_items', $attrPage1['pagination']);
+        $this->assertArrayHasKey('total_pages', $attrPage1['pagination']);
+        $this->assertArrayHasKey('page', $attrPage1['pagination']);
+        $this->assertArrayHasKey('previous_page', $attrPage1['pagination']);
+        $this->assertArrayHasKey('previous_page_path', $attrPage1['pagination']);
+        $this->assertArrayHasKey('previous_page_url', $attrPage1['pagination']);
+        $this->assertArrayHasKey('next_page', $attrPage1['pagination']);
+        $this->assertArrayHasKey('next_page_path', $attrPage1['pagination']);
+        $this->assertArrayHasKey('next_page_url', $attrPage1['pagination']);
+
+        $this->assertCount(1, $attrPage1['pagination']['items']);
+        $this->assertEquals(1, $attrPage1['pagination']['per_page']);
+        $this->assertEquals(2, $attrPage1['pagination']['total_items']);
+        $this->assertEquals(2, $attrPage1['pagination']['total_pages']);
+        $this->assertEquals(1, $attrPage1['pagination']['page']);
+        $this->assertEquals(2, $attrPage1['pagination']['next_page']);
+        $this->assertEquals('page2/index.html', $attrPage1['pagination']['next_page_path']);
+        $this->assertEquals('/page2', $attrPage1['pagination']['next_page_url']);
+
+        $this->assertNull($attrPage1['pagination']['previous_page']);
+        $this->assertNull($attrPage1['pagination']['previous_page_path']);
+        $this->assertNull($attrPage1['pagination']['previous_page_url']);
+
         $page2 = $pageItems[1];
 
         $this->assertEquals('page2/index.html', $page2->getPath(Item::SNAPSHOT_PATH_RELATIVE));

@@ -100,21 +100,17 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             case 'none':
                 $urlTemplate = '/:path/:basename.:extension';
 
-                if ($this->isCustomCollection($item)) {
-                    $urlTemplate = '/:collection'.$urlTemplate;
-                }
-
                 $pathTemplate = $urlTemplate;
                 break;
             case 'ordinal':
                 if ($this->isItemWithDate($item)) {
                     $urlTemplate = '/:categories/:year/:i_day/:title.:extension';
+
+                    if ($this->isCustomCollection($item)) {
+                        $urlTemplate = '/:collection'.$urlTemplate;
+                    }
                 } else {
                     $urlTemplate = '/:path/:basename.:extension';
-                }
-
-                if ($this->isCustomCollection($item)) {
-                    $urlTemplate = '/:collection'.$urlTemplate;
                 }
 
                 $pathTemplate = $urlTemplate;
@@ -122,12 +118,12 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             case 'date':
                 if ($this->isItemWithDate($item)) {
                     $urlTemplate = '/:categories/:year/:month/:day/:title.:extension';
+
+                    if ($this->isCustomCollection($item)) {
+                        $urlTemplate = '/:collection'.$urlTemplate;
+                    }
                 } else {
                     $urlTemplate = '/:path/:basename.:extension';
-                }
-
-                if ($this->isCustomCollection($item)) {
-                    $urlTemplate = '/:collection'.$urlTemplate;
                 }
 
                 $pathTemplate = $urlTemplate;
@@ -136,17 +132,17 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 if ($placeholders[':extension'] !== 'html') {
                     $urlTemplate = '/:path/:basename.:extension';
                     $pathTemplate = $urlTemplate;
-
-                    if ($this->isCustomCollection($item)) {
-                        $urlTemplate = '/:collection'.$urlTemplate;
-                        $pathTemplate = '/:collection'.$pathTemplate;
-                    }
                     break;
                 }
 
                 if ($this->isItemWithDate($item)) {
                     $urlTemplate = '/:categories/:year/:month/:day/:title';
                     $pathTemplate = '/:categories/:year/:month/:day/:title/index.html';
+
+                    if ($this->isCustomCollection($item)) {
+                        $urlTemplate = '/:collection'.$urlTemplate;
+                        $pathTemplate = '/:collection'.$pathTemplate;
+                    }
                 } else {
                     if ($placeholders[':basename'] === 'index') {
                         $urlTemplate = '/:path';
@@ -155,11 +151,6 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                         $urlTemplate = '/:path/:basename';
                         $pathTemplate = '/:path/:basename/index.html';
                     }
-                }
-
-                if ($this->isCustomCollection($item)) {
-                    $urlTemplate = '/:collection'.$urlTemplate;
-                    $pathTemplate = '/:collection'.$pathTemplate;
                 }
                 break;
             default:

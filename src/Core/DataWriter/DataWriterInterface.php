@@ -22,7 +22,7 @@ interface DataWriterInterface
 {
     /**
      * Prepare the place to store.
-     * e.g: clean up the output foler.
+     * e.g: clean up the output folder.
      */
     public function setUp();
 

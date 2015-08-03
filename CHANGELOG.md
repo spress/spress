@@ -12,6 +12,7 @@ CHANGELOG for 2.x.x
 * [New] List of new configuration attributes: "text_extensions", "attribute_syntax", "preserve_path_title", "collections", "data_sources".
 * [Improved] Updated Symfony componentes to 2.7.
 * [Improved] Updated Markdown parser (michelf/php-markdown) from Michel Fortin.
+* [Improved] Updated built-in theme Spresso to 2.0.
 * [Deleted] Methods `initialize` and `getSupportExtension` of ConverterInterface have been deleted.
 * [Deleted] TemplateManager class of plugin API.
 * [Deleted] List of deleted events: "spress.after_convert_posts", "spress.after_render_pagination", "spress.before_render_pagination".

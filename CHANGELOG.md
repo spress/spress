@@ -2,13 +2,14 @@ CHANGELOG for 2.x.x
 ===================
 
 ## 2.0.0
-* [New] Data-sources: data sources can load site data from certain locations like filesystem or database.
-* [New] site structure. See issue #41 (https://github.com/spress/Spress/issues/41).
-* [New] Data-writer: can persist a rendered site.
+* [New] Data-sources: (issue #46) data sources can load site data from certain locations like filesystem or database.
+* [New] Site structure (issue #41).
+* [New] Data-writer (issue #44): The DataWriter's responsibility is to persist the content of the items.
 * [New] Collections (issue #43): collections allow you to define a new type of document like page or post.
+* [New] Generators (issue #45): Generators are used for generating new items of content.
 * [New] These events "spress.before_convert", "spress.after_convert" receive a ContentEvent as an argument.
 * [New] List of new events: "spress.before_render_blocks", "spress.after_render_blocks", "spress.before_render_page", "spress.after_render_page".
-* [New] Established PHP 5.5 as minimum version.
+* [New] Established PHP 5.5 as minimum version (see #42).
 * [New] List of new configuration attributes: "text_extensions", "attribute_syntax", "preserve_path_title", "collections", "data_sources".
 * [Improved] Updated Symfony componentes to 2.7.
 * [Improved] Updated Markdown parser (michelf/php-markdown) from Michel Fortin.

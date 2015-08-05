@@ -1,0 +1,20 @@
+{
+    "name": "my-vendor/hello-plugin",
+    "type": "spress-plugin",
+    "description": "A test plugin for Spress using a namespace",
+    "keywords": ["spress", "plugin"],
+    "license": "MIT",
+    "homepage": "http://spress.yosymfony.com",
+    "authors": [
+        {
+            "name": "Victor Puertas",
+            "email": "vpgugr@gmail.com"
+        }
+    ],
+    "require": {
+        "yosymfony/spress-installer": "~1.0"
+    },
+    "extra": {
+        "spress_class": "MyVendor\\HelloPlugin\\HelloPlugin"
+    }
+}

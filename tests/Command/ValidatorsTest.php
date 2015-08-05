@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Command;
+namespace Yosymfony\Spress\Tests\Command;
 
 use Yosymfony\Spress\Command\Validators;
 

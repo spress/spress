@@ -12,7 +12,7 @@
  * from Nils Adermann <naderman@naderman.de> and Jordi Boggiano <j.boggiano@seld.be>.
  */
 
-namespace Yosymfony\Spress\tests\IO;
+namespace Yosymfony\Spress\Tests\IO;
 
 use Yosymfony\Spress\IO\ConsoleIO;
 

@@ -22,7 +22,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->sourceDir = __DIR__.'/../../src/Core/tests/fixtures/project';
+        $this->sourceDir = __DIR__.'/../../src/Core/Tests/fixtures/project';
     }
 
     public function tearDown()

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Generator\Pagination;
+namespace Yosymfony\Spress\Core\Tests\ContentManager\Generator\Pagination;
 
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests;
+namespace Yosymfony\Spress\Core\Tests;
 
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\Spress;

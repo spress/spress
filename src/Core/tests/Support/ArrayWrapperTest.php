@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\Support;
+namespace Yosymfony\Spress\Core\Tests\Support;
 
 use Yosymfony\Spress\Core\Support\ArrayWrapper;
 

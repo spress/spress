@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\IO;
+namespace Yosymfony\Spress\Core\Tests\IO;
 
 use Yosymfony\Spress\Core\IO\NullIO;
 

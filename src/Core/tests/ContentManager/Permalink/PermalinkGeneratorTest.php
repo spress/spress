@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Permalink;
+namespace Yosymfony\Spress\Core\Tests\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\DataSource\Item;

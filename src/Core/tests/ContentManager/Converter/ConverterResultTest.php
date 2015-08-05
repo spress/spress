@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Converter;
+namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult;
 

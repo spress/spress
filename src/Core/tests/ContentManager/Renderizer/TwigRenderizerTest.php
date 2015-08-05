@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Renderizer;
+namespace Yosymfony\Spress\Core\Tests\ContentManager\Renderizer;
 
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 

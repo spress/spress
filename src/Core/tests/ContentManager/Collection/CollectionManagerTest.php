@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager\Collection;
+namespace Yosymfony\Spress\Core\Tests\ContentManager\Collection;
 
 use Yosymfony\Spress\Core\ContentManager\Collection\Collection;
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager;

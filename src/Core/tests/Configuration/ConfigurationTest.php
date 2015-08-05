@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\Configuration;
+namespace Yosymfony\Spress\Core\Tests\Configuration;
 
 use Symfony\Component\Config\FileLocator;
 use Yosymfony\ConfigLoader\Config;

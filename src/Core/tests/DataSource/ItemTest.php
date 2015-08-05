@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\DataSource;
+namespace Yosymfony\Spress\Core\Tests\DataSource;
 
 use Yosymfony\Spress\Core\DataSource\Item;
 

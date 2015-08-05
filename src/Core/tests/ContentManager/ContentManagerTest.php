@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\ContentManager;
+namespace Yosymfony\Spress\Core\Tests\ContentManager;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;

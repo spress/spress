@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\tests\Plugin;
+namespace Yosymfony\Spress\Core\Tests\Plugin;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\Plugin\PluginManager;

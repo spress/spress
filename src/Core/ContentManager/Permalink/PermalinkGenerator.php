@@ -265,15 +265,19 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     {
         $attributes = $item->getAttributes();
 
-        if (isset($attributes['date']) === true) {
-            try {
-                return new \DateTime($attributes['date']);
-            } catch (\Exception $e) {
-                throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-            }
+        if (isset($attributes['date']) === false) {
+            return new \DateTime();
         }
 
-        return new \DateTime();
+        if (is_string($attributes['date']) === false) {
+            throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
+
+        try {
+            return new \DateTime($attributes['date']);
+        } catch (\Exception $e) {
+            throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
     }
 
     private function isCustomCollection(ItemInterface $item)

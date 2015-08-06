@@ -8,15 +8,17 @@ php:
 
 before_script:
   - composer self-update
-  - composer install --no-interaction
+  - composer install --no-interaction --no-dev
+  - curl -LSs https://box-project.github.io/box2/installer.php | php
 
 script: 
-  - phpunit --coverage-text --verbose
+  - phpunit
+  - php box.phar build
+  - php spress.phar --version
 
 matrix:
   allow_failures:
     - php: hhvm
-    - php: 7.0
   fast_finish: true
 
 notifications:

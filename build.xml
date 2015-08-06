@@ -50,7 +50,7 @@
     </target>
 
     <target name="update-vendors">
-        <exec passthru="true" command="${cmd.composer} update" checkreturn="true"/>
+        <exec passthru="true" command="${cmd.composer} update --no-dev" checkreturn="true"/>
     </target>
 
     <target name="check-git-branch-status">

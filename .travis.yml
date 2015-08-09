@@ -9,11 +9,11 @@ php:
 before_script:
   - composer self-update
   - composer install --no-interaction --no-dev
-  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7" ]]; then curl -LSs https://box-project.github.io/box2/installer.php | php; fi
+  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7.0" ]]; then curl -LSs https://box-project.github.io/box2/installer.php | php; fi
 
 script: 
   - phpunit
-  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7" ]]; then php box.phar build; php spress.phar --version; fi
+  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7.0" ]]; then php box.phar build; php spress.phar --version; fi
 
 matrix:
   allow_failures:

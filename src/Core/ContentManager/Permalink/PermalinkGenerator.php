@@ -232,7 +232,9 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
     private function generatePath($template, array $placeholders = [])
     {
-        return ltrim($this->generateUrlPath($template, $placeholders), '/');
+        $path = $this->generateUrlPath($template, $placeholders);
+
+        return ltrim(ltrim($path, '.'), '/');
     }
 
     private function generateUrlPath($template, array $placeholders = [])

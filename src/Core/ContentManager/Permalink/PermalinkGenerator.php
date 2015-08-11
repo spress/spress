@@ -171,7 +171,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $time = $this->getDateAttribute($item);
 
         $result = [
-            ':path' => $fileInfo->getPath(),
+            ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('./'),
             ':extension' => $fileInfo->getExtension(),
             ':basename' => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
             ':collection' => $item->getCollection(),
@@ -234,7 +234,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     {
         $path = $this->generateUrlPath($template, $placeholders);
 
-        return ltrim(ltrim($path, '.'), '/');
+        return ltrim($path, '/');
     }
 
     private function generateUrlPath($template, array $placeholders = [])

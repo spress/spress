@@ -173,7 +173,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $result = [
             ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('./'),
             ':extension' => $fileInfo->getExtension(),
-            ':basename' => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
+            ':basename' => (new StringWrapper($fileInfo->getBasename('.'.$fileInfo->getExtension())))->deletePrefix('./'),
             ':collection' => $item->getCollection(),
             ':categories' => $this->getCategoriesPath($item),
             ':title' => $this->getTitleSlugified($item),

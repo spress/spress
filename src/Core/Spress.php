@@ -178,8 +178,11 @@ class Spress extends Container
         $this['spress.plugin.finder'] = function ($c) {
             $finder = new Finder();
             $finder->files()
-                ->in($c['spress.config.plugin_dir'])
                 ->name('/(\.php|composer\.json)$/');
+
+            if (file_exists($c['spress.config.plugin_dir'])) {
+                $finder->in($c['spress.config.plugin_dir']);
+            }
 
             return $finder;
         };

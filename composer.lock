@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "a979cc78ed141855a76b7f196d24205c41107bbc"
+                "reference": "a4fb4dbcea018af0493d648db11f5f2720fb7fa2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/a979cc78ed141855a76b7f196d24205c41107bbc",
-                "reference": "a979cc78ed141855a76b7f196d24205c41107bbc",
+                "url": "https://api.github.com/repos/composer/composer/zipball/a4fb4dbcea018af0493d648db11f5f2720fb7fa2",
+                "reference": "a4fb4dbcea018af0493d648db11f5f2720fb7fa2",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-08-11 10:20:39"
+            "time": "2015-08-12 11:50:07"
         },
         {
             "name": "composer/spdx-licenses",
@@ -979,12 +979,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
+                "reference": "547582fa5c445a167a5ad6ffd88be14798efb4f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
-                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/547582fa5c445a167a5ad6ffd88be14798efb4f0",
+                "reference": "547582fa5c445a167a5ad6ffd88be14798efb4f0",
                 "shasum": ""
             },
             "require": {
@@ -1028,7 +1028,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-28 15:18:12"
+            "time": "2015-08-11 20:08:57"
         },
         {
             "name": "symfony/debug",
@@ -1478,12 +1478,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "61d45b3e24598605211a2d9eb453082d12d2f766"
+                "reference": "37553291e6217f2a7507020d73dbe3923e087851"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/61d45b3e24598605211a2d9eb453082d12d2f766",
-                "reference": "61d45b3e24598605211a2d9eb453082d12d2f766",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/37553291e6217f2a7507020d73dbe3923e087851",
+                "reference": "37553291e6217f2a7507020d73dbe3923e087851",
                 "shasum": ""
             },
             "require": {
@@ -1527,7 +1527,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-08-11 13:57:52"
+            "time": "2015-08-12 16:01:39"
         },
         {
             "name": "yosymfony/config-loader",

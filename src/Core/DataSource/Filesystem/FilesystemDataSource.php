@@ -150,8 +150,14 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function processLayoutFiles()
     {
+        $path = $this->composeSubPath('layouts');
+
+        if (file_exists($path) === false) {
+            return;
+        }
+
         $finder = new Finder();
-        $finder->in($this->composeSubPath('layouts'))
+        $finder->in($path)
             ->files();
 
         $this->processItems($finder, Item::TYPE_LAYOUT);
@@ -159,8 +165,14 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function processIncludeFiles()
     {
+        $path = $this->composeSubPath('includes');
+
+        if (file_exists($path) === false) {
+            return;
+        }
+
         $finder = new Finder();
-        $finder->in($this->composeSubPath('includes'))
+        $finder->in($path)
             ->files();
 
         $this->processItems($finder, Item::TYPE_INCLUDE);

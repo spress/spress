@@ -13,23 +13,17 @@ namespace Yosymfony\Spress\Core\Tests\Plugin;
 
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Finder\Finder;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 
 class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $finder;
+    protected $pluginDir;
     protected $embeddedComposer;
 
     public function setUp()
     {
-        $dir = __DIR__.'/../fixtures/project/src/plugins';
+        $this->pluginDir = __DIR__.'/../fixtures/project/src/plugins';
         $vendorDir = __DIR__.'/../fixtures/project/vendor';
-
-        $this->finder = new Finder();
-        $this->finder->files()
-            ->in($dir)
-            ->name('/(\.php|composer\.json)$/');
 
         $autoloaders = spl_autoload_functions();
 
@@ -43,7 +37,7 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $builder = new PluginManagerBuilder($this->finder, new EventDispatcher());
+        $builder = new PluginManagerBuilder($this->pluginDir, new EventDispatcher());
         $pm = $builder->build();
 
         $this->assertEquals(2, $pm->countPlugins());

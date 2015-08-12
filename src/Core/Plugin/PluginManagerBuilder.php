@@ -23,7 +23,7 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
  */
 class PluginManagerBuilder
 {
-    protected $finder;
+    protected $path;
     protected $resolver;
     protected $eventDispatcher;
     protected $composerFilename;
@@ -31,14 +31,14 @@ class PluginManagerBuilder
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\Finder\Finder                   $finder          Finder to locate plugins.
+     * @param string                                             $path            Path to plugin folder.
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
      */
     public function __construct(
-        Finder $finder,
+        $path,
         EventDispatcher $eventDispatcher)
     {
-        $this->finder = $finder;
+        $this->path = $path;
         $this->eventDispatcher = $eventDispatcher;
         $this->resolver = $this->getResolver();
         $this->setComposerFilename('composer.json');
@@ -65,9 +65,16 @@ class PluginManagerBuilder
     public function build()
     {
         $pm = new PluginManager($this->eventDispatcher);
+
+        if (empty($this->path) === true || file_exists($this->path) === false) {
+            return $pm;
+        }
+
         $composerClassname = [];
 
-        foreach ($this->finder as $file) {
+        $finder = $this->buildFinder();
+
+        foreach ($finder as $file) {
             $classname = $this->getClassname($file);
 
             if (empty($classname) === true) {
@@ -208,5 +215,15 @@ class PluginManagerBuilder
             ->setDefault('license', '', 'string');
 
         return $resolver;
+    }
+
+    protected function buildFinder()
+    {
+        $finder = new Finder();
+        $finder->files()
+            ->name('/(\.php|composer\.json)$/')
+            ->in($this->path);
+
+        return $finder;
     }
 }

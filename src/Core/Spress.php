@@ -16,7 +16,6 @@ use Pimple\Container;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Yosymfony\ConfigLoader\Config;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
@@ -175,23 +174,11 @@ class Spress extends Container
             return $autoloaders[0][0];
         };
 
-        $this['spress.plugin.finder'] = function ($c) {
-            $finder = new Finder();
-            $finder->files()
-                ->name('/(\.php|composer\.json)$/');
-
-            if (file_exists($c['spress.config.plugin_dir'])) {
-                $finder->in($c['spress.config.plugin_dir']);
-            }
-
-            return $finder;
-        };
-
         $this['spress.plugin.pluginManager'] = function ($c) {
             $embeddedComposer = $c['lib.embeddedComposer'];
             $embeddedComposer->processAdditionalAutoloads();
 
-            $builder = new PluginManagerBuilder($c['spress.plugin.finder'], $c['lib.eventDispatcher']);
+            $builder = new PluginManagerBuilder($c['spress.config.plugin_dir'], $c['lib.eventDispatcher']);
 
             return $builder->build();
         };

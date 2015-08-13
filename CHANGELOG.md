@@ -17,5 +17,6 @@ CHANGELOG for 2.x.x
 * [Improved] Updated built-in theme Spresso to 2.0.
 * [Deleted] Methods `initialize` and `getSupportExtension` of ConverterInterface have been deleted.
 * [Deleted] TemplateManager class of plugin API.
+* [Deleted] EnviromentEvent class.
 * [Deleted] List of deleted events: "spress.after_convert_posts", "spress.before_render_pagination", "spress.after_render_pagination", "spress.before_render", "spress.after_render". See #49.
 * [Deleted] List of configuration attributes (config.yml) deleted because they have been marked as deprecated: "baseurl", "paginate", "paginate_path", "limit_posts", "processable_ext", "destination", "posts", "includes", "layouts", "plugins".

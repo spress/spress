@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Command;
+namespace Yosymfony\Spress\tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -36,7 +36,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add(new NewSiteCommand());
 
-        $command = $app->find('site:new');
+        $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -58,7 +58,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add(new NewSiteCommand());
 
-        $command = $app->find('site:new');
+        $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -78,7 +78,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add(new NewSiteCommand());
 
-        $command = $app->find('site:new');
+        $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -96,7 +96,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add(new NewSiteCommand());
 
-        $command = $app->find('site:new');
+        $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -117,7 +117,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add(new NewSiteCommand());
 
-        $command = $app->find('site:new');
+        $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),

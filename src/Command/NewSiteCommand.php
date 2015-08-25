@@ -36,7 +36,6 @@ class NewSiteCommand extends Command
         ])
         ->setName('new:site')
         ->setDescription('Create a new site')
-        ->setAliases(['site:new'])
         ->setHelp('The <info>new:site</info> command helps you generates new sites.');
     }
 

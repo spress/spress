@@ -43,6 +43,8 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  *  - "spress.dataSourceManager.parameters": (array) Parameters accesibles by arguments
  *    at Datasources declaration.
  *
+ *  - "spress.cms.converterManager.converters" (array) List of predefined converters.
+ *
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -216,12 +218,22 @@ class Spress extends Container
             return $manager;
         };
 
-        $this['spress.cms.converterManager'] = function ($c) {
+        $this['spress.cms.converterManager.converters'] = function ($c) {
             $markdownExts = $c['spress.config.values']['markdown_ext'];
 
+            return [
+                new \Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter(),
+                new \Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter($markdownExts),
+            ];
+        };
+
+        $this['spress.cms.converterManager'] = function ($c) {
             $cm = new ConverterManager();
-            $cm->addConverter(new \Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter());
-            $cm->addConverter(new \Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter($markdownExts));
+            $converters = $c['spress.cms.converterManager.converters'];
+
+            foreach ($converters as $converter) {
+                $cm->addConverter($converter);
+            }
 
             return $cm;
         };

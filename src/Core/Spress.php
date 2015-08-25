@@ -48,12 +48,12 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  */
 class Spress extends Container
 {
-    const VERSION = '2.0.0-alpha';
+    const VERSION = '2.0.0-beta';
     const VERSION_ID = '20000';
     const MAJOR_VERSION = '2';
     const MINOR_VERSION = '0';
     const RELEASE_VERSION = '0';
-    const EXTRA_VERSION = 'alpha';
+    const EXTRA_VERSION = 'beta';
 
     public function __construct()
     {

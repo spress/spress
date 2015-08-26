@@ -14,8 +14,8 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 use Michelf\MarkdownExtra;
 
 /**
- * Markdown converter implementation using a Markdown parser from
- * Miche Fortin: https://github.com/michelf/php-markdown.
+ * Markdown converter implementation using a Markdown (extra) parser
+ * by Michel Fortin: https://github.com/michelf/php-markdown.
  *
  * @author Victor Pueras <vpgugr@gmail.com>
  */

@@ -222,8 +222,8 @@ class Spress extends Container
             $markdownExts = $c['spress.config.values']['markdown_ext'];
 
             return [
-                new \Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter(),
-                new \Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter($markdownExts),
+                'MirrorConverter' => new \Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter(),
+                'MichelfMarkdownConverter' => new \Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter($markdownExts),
             ];
         };
 

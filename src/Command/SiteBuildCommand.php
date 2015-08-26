@@ -19,6 +19,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ResourceWatcher\ResourceWatcher;
 use Yosymfony\ResourceWatcher\ResourceCacheMemory;
+use Yosymfony\Spress\Converter\ParsedownConverter;
 use Yosymfony\Spress\IO\ConsoleIO;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Spress;
@@ -151,6 +152,19 @@ class SiteBuildCommand extends Command
         $resolver = $this->getConfigResolver();
         $resolver->resolve($spress['spress.config.values']);
 
+        if ($spress['spress.config.values']['parsedown_actived'] === true) {
+            $spress->extend('spress.cms.converterManager.converters', function ($predefinedConverters, $c) {
+                unset($predefinedConverters['MichelfMarkdownConverter']);
+
+                $markdownExts = $c['spress.config.values']['markdown_ext'];
+                $predefinedConverters['ParsedownConverter'] = new ParsedownConverter($markdownExts);
+
+                return $predefinedConverters;
+            });
+
+            $io->write('<comment>Parsedown converter: enabled.</comment>');
+        }
+
         return $spress;
     }
 
@@ -264,7 +278,8 @@ class SiteBuildCommand extends Command
             ->setValidator('port', function ($value) {
                 return $value >= 0;
             })
-            ->setDefault('server_watch_ext', ['html'], 'array', true);
+            ->setDefault('server_watch_ext', ['html'], 'array', true)
+            ->setDefault('parsedown_actived', false, 'bool', true);
 
         $this->configResolver = $resolver;
 

@@ -9,7 +9,9 @@ php:
 before_script:
   - composer self-update
   - composer install --no-interaction --no-dev
-  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7.0" ]]; then curl -LSs https://box-project.github.io/box2/installer.php | php; fi
+  - curl -LSs https://github.com/box-project/box2/releases/download/2.5.2/box-2.5.2.phar
+  - mv box-2.5.2.phar box.phar
+  - chmod +x box.phar
 
 script: 
   - phpunit

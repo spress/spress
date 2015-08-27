@@ -153,14 +153,7 @@ class SiteBuildCommand extends Command
         $resolver->resolve($spress['spress.config.values']);
 
         if ($spress['spress.config.values']['parsedown_actived'] === true) {
-            $spress->extend('spress.cms.converterManager.converters', function ($predefinedConverters, $c) {
-                unset($predefinedConverters['MichelfMarkdownConverter']);
-
-                $markdownExts = $c['spress.config.values']['markdown_ext'];
-                $predefinedConverters['ParsedownConverter'] = new ParsedownConverter($markdownExts);
-
-                return $predefinedConverters;
-            });
+            $this->enableParsedown($spress);
 
             $io->write('<comment>Parsedown converter: enabled.</comment>');
         }
@@ -284,5 +277,22 @@ class SiteBuildCommand extends Command
         $this->configResolver = $resolver;
 
         return $this->configResolver;
+    }
+
+    /**
+     * Enables Parsedown converter.
+     *
+     * @param Spress $spress
+     */
+    protected function enableParsedown(Spress $spress)
+    {
+        $spress->extend('spress.cms.converterManager.converters', function ($predefinedConverters, $c) {
+            unset($predefinedConverters['MichelfMarkdownConverter']);
+
+            $markdownExts = $c['spress.config.values']['markdown_ext'];
+            $predefinedConverters['ParsedownConverter'] = new ParsedownConverter($markdownExts);
+
+            return $predefinedConverters;
+        });
     }
 }

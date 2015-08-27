@@ -29,6 +29,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
     {
         $fs = new Filesystem();
         $fs->remove($this->sourceDir.'/build');
+        $fs->remove($this->sourceDir.'/config_test.yml');
     }
 
     public function testBuildCommand()
@@ -110,5 +111,26 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Environment: prod/', $output);
+    }
+
+    public function testParsedownActived()
+    {
+        $fs = new Filesystem();
+        $fs->dumpFile($this->sourceDir.'/config_test.yml', 'parsedown_actived: true');
+
+        $app = new Application();
+        $app->add(new SiteBuildCommand());
+
+        $command = $app->find('site:build');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            '--source' => $this->sourceDir,
+            '--env' => 'test',
+        ]);
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Parsedown converter: enabled/', $output);
     }
 }

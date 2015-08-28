@@ -116,7 +116,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
     public function testParsedownActived()
     {
         $fs = new Filesystem();
-        $fs->dumpFile($this->sourceDir.'/config_test.yml', 'parsedown_actived: true');
+        $fs->dumpFile($this->sourceDir.'/config_test.yml', 'parsedown_activated: true');
 
         $app = new Application();
         $app->add(new SiteBuildCommand());

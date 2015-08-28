@@ -152,7 +152,7 @@ class SiteBuildCommand extends Command
         $resolver = $this->getConfigResolver();
         $resolver->resolve($spress['spress.config.values']);
 
-        if ($spress['spress.config.values']['parsedown_actived'] === true) {
+        if ($spress['spress.config.values']['parsedown_activated'] === true) {
             $this->enableParsedown($spress);
 
             $io->write('<comment>Parsedown converter: enabled.</comment>');
@@ -272,7 +272,7 @@ class SiteBuildCommand extends Command
                 return $value >= 0;
             })
             ->setDefault('server_watch_ext', ['html'], 'array', true)
-            ->setDefault('parsedown_actived', false, 'bool', true);
+            ->setDefault('parsedown_activated', false, 'bool', true);
 
         $this->configResolver = $resolver;
 

@@ -10,7 +10,7 @@ attribute_syntax: 'yaml'
 
 # Markdown converters
 markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
-parsedown_actived: false
+parsedown_activated: false
 
 # Outputting
 include: ['.htaccess']

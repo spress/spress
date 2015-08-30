@@ -35,8 +35,8 @@ class NewPostCommand extends Command
             new InputOption('title', '', InputOption::VALUE_REQUIRED, 'The name of the post'),
             new InputOption('layout', '', InputOption::VALUE_REQUIRED, 'The layout of the post'),
             new InputOption('date', '', InputOption::VALUE_REQUIRED, 'The date assigned to the post'),
-            new InputOption('tags', '', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tags list separed by white spaces'),
-            new InputOption('categories', '', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Categories list separed by white spaces'),
+            new InputOption('tags', '', InputOption::VALUE_REQUIRED, 'Comma separated list of tags'),
+            new InputOption('categories', '', InputOption::VALUE_REQUIRED, 'Comma separated list of categories'),
         ])
         ->setName('new:post')
         ->setDescription('Generate a post')
@@ -59,8 +59,8 @@ EOT
         $title = Validators::validatePostTitle($input->getOption('title'));
         $layout = $input->getOption('layout');
         $date = $input->getOption('date') ?: $this->getDateFormated();
-        $tags = explode(' ', $input->getOption('tags') ?: '');
-        $categories = explode(' ', $input->getOption('categories') ?: '');
+        $tags = array_map('trim', explode(',', $input->getOption('tags') ?: ''));
+        $categories = array_map('trim', explode(',', $input->getOption('categories') ?: ''));
 
         $postsDir = './src/content/posts';
 
@@ -103,12 +103,12 @@ EOT
         $input->setOption('date', $date);
 
         $tags = $input->getOption('tags') ?: '';
-        $question = new Question('List of post tags separed by white space: ', $tags);
+        $question = new Question('Comma separated list of post tags: ', $tags);
         $tags = $helper->ask($input, $output, $question);
         $input->setOption('tags', $tags);
 
         $categories = $input->getOption('categories') ?: '';
-        $question = new Question('List of post categories separed by white space: ', $categories);
+        $question = new Question('Comma separated list of post categories: ', $categories);
         $categories = $helper->ask($input, $output, $question);
         $input->setOption('categories', $categories);
     }

@@ -50,7 +50,7 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
 
         $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("My first post\n\n\ntag1 tag2\ncategory1 category2\n"));
+        $helper->setInputStream($this->getInputStream("My first post\n\n\ntag1, tag2\ncategory1, category2\n"));
 
         $commandTester->execute([
             'command' => $command->getName(),
@@ -123,8 +123,8 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
             '--title' => 'My second post',
             '--layout' => 'post',
             '--date' => '2015-01-01',
-            '--tags' => 'tag1 tag2',
-            '--categories' => 'category1 category2',
+            '--tags' => 'tag1, tag2',
+            '--categories' => 'category1, category2',
         ]);
 
         $output = $commandTester->getDisplay();

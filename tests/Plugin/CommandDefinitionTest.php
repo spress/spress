@@ -15,12 +15,52 @@ use Yosymfony\Spress\Plugin\CommandDefinition;
 
 class CommandDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCommandDefinition()
+    public function testCommandDefinitionSimple()
     {
-        $definition = new CommandDefinition('i18:texts');
-        $definition->addArgument('file');
+        $definition = new CommandDefinition('self-update');
 
-        $this->assertEquals('i18:texts', $definition->getName());
+        $this->assertTrue(is_array($definition->getArguments()));
+        $this->assertCount(0, $definition->getArguments());
+
+        $this->assertTrue(is_array($definition->getOptions()));
+        $this->assertCount(0, $definition->getOptions());
+    }
+
+    public function testCommandDefinitionWithArgumentsAndOptions()
+    {
+        $definition = new CommandDefinition('i18:extracts');
+        $definition->setDescription('List of texts extracted from your site');
+        $definition->setHelp('The <info>i18n:extracts</info> command help you to extract texts.');
+        $definition->addArgument('file', null, 'File or directory', './');
+        $definition->addOption('filter', 'f', null, 'Filter expression');
+
+        $this->assertEquals('i18:extracts', $definition->getName());
+        $this->assertEquals('List of texts extracted from your site', $definition->getDescription());
+        $this->assertEquals('The <info>i18n:extracts</info> command help you to extract texts.', $definition->getHelp());
+
+        $this->assertTrue(is_array($definition->getArguments()));
         $this->assertCount(1, $definition->getArguments());
+
+        $argument = $definition->getArguments()[0];
+
+        $this->assertCount(4, $argument);
+
+        $this->assertEquals('file', $argument[0]);
+        $this->assertEquals(CommandDefinition::OPTIONAL, $argument[1]);
+        $this->assertEquals('File or directory', $argument[2]);
+        $this->assertEquals('./', $argument[3]);
+
+        $this->assertTrue(is_array($definition->getOptions()));
+        $this->assertCount(1, $definition->getOptions());
+
+        $option = $definition->getOptions()[0];
+
+        $this->assertCount(5, $option);
+
+        $this->assertEquals('filter', $option[0]);
+        $this->assertEquals('f', $option[1]);
+        $this->assertEquals(CommandDefinition::VALUE_NONE, $option[2]);
+        $this->assertEquals('Filter expression', $option[3]);
+        $this->assertNull($option[4]);
     }
 }

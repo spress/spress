@@ -4,16 +4,14 @@
 namespace {{ namespace }};
 {% endif %}
 
-use Symfony\Component\EventDispatcher\Event;
-use Yosymfony\Spress\Plugin\EventSubscriber;
-use Yosymfony\Spress\Plugin\Event\AfterConvertPostsEvent;
-use Yosymfony\Spress\Plugin\Event\ConvertEvent;
-use Yosymfony\Spress\Plugin\Event\EnvironmentEvent;
-use Yosymfony\Spress\Plugin\Event\FinishEvent;
-use Yosymfony\Spress\Plugin\Event\RenderEvent;
-use Yosymfony\Spress\Plugin\Plugin;
+use Yosymfony\Spress\Plugin\CommandPlugin;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
+use Yosymfony\Spress\Core\Plugin\Event\ContentEvent;
+use Yosymfony\Spress\Core\Plugin\Event\FinishEvent;
+use Yosymfony\Spress\Core\Plugin\Event\RenderEvent;
 
-class {{ classname }} extends Plugin
+class {{ classname }} extends CommandPlugin
 {
     private $io;
 
@@ -22,11 +20,10 @@ class {{ classname }} extends Plugin
         $subscriber->addEventListener('spress.start', 'onStart');
         $subscriber->addEventListener('spress.before_convert', 'onBeforeConvert');
         $subscriber->addEventListener('spress.after_convert', 'onAfterConvert');
-        $subscriber->addEventListener('spress.after_convert_posts', 'onAfterConvertPosts');
-        $subscriber->addEventListener('spress.before_render', 'onBeforeRender');
-        $subscriber->addEventListener('spress.after_render', 'onAfterRender');
-        $subscriber->addEventListener('spress.before_render_pagination', 'onBeforeRenderPagination');
-        $subscriber->addEventListener('spress.after_render_pagination', 'onAfterRenderPagination');
+        $subscriber->addEventListener('spress.before_render_blocks', 'onBeforeRenderBlocks');
+        $subscriber->addEventListener('spress.after_render_blocks', 'onAfterRenderBlocks');
+        $subscriber->addEventListener('spress.before_render_page', 'onBeforeRenderPage');
+        $subscriber->addEventListener('spress.after_render_page', 'onAfterRenderPage');
         $subscriber->addEventListener('spress.finish', 'onFinish');
     }
 
@@ -35,43 +32,38 @@ class {{ classname }} extends Plugin
         $this->io = $event->getIO();
     }
 
-    public function onBeforeConvert(ConvertEvent $event)
+    public function onBeforeConvert(ContentEvent $event)
     {
 
     }
 
-    public function onAfterConvert(ConvertEvent $event)
+    public function onAfterConvert(ContentEvent $event)
     {
 
     }
 
-    public function onAfterConvertPosts(AfterConvertPostsEvent $event)
+    public function onBeforeRenderBlocks(RenderEvent $event)
     {
 
     }
 
-    public function onBeforeRender(RenderEvent $event)
+    public function onAfterRenderBlocks(RenderEvent $event)
     {
 
     }
 
-    public function onAfterRender(RenderEvent $event)
+    public function onBeforeRenderPage(RenderEvent $event)
     {
 
     }
 
-    public function onBeforeRenderPagination(RenderEvent $event)
-    {
-
-    }
-
-    public function onAfterRenderPagination(RenderEvent $event)
+    public function onAfterRenderPage(RenderEvent $event)
     {
 
     }
 
     public function onFinish(FinishEvent $event)
     {
-
+        
     }
 }

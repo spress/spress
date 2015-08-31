@@ -11,8 +11,6 @@
 
 namespace Yosymfony\Spress\Plugin;
 
-use Symfony\Component\Console\Command\Command;
-
 /**
  * Definition of a command.
  *

@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\Plugin;
 
-use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\Plugin\PluginInterface;
 
 /**
  * Command plugin interface.

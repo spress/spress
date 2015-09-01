@@ -26,7 +26,7 @@ class CommandPlugin implements CommandPluginInterface
      */
     public function getCommandDefinition()
     {
-        throw new \RuntimeException('You must override the getCommandDefinition() method in the concrete command plugin class');
+        throw new \RuntimeException('You must override the getCommandDefinition() method in the concrete command plugin class.');
     }
 
     /**
@@ -34,7 +34,7 @@ class CommandPlugin implements CommandPluginInterface
      */
     public function executeCommand(IOInterface $io)
     {
-        throw new \RuntimeException('You must override the getCommandDefinition() method in the concrete command plugin class');
+        throw new \RuntimeException('You must override the getCommandDefinition() method in the concrete command plugin class.');
     }
 
     /**

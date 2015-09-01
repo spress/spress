@@ -36,6 +36,7 @@ class {{ classname }} implements PluginInterface
             'license' => '{{ license }}',
         ];
     }
+    
     public function onStart(EnvironmentEvent $event)
     {
         $this->io = $event->getIO();

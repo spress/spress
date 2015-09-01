@@ -150,7 +150,7 @@ class ArrayWrapper
         }
 
         $arrCount = count($array);
-        
+
         for ($offset = 0; $offset < $arrCount;) {
             $slice = array_slice($array, $offset, $maxPerPage, true);
             $result[$page] = $slice;

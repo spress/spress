@@ -1,8 +1,9 @@
-CHANGELOG for 2.x.x
+CHANGELOG for 2.0.x
 ===================
 ## 2.0.0-beta
 * [New] Added a new converter for Markdown: ParsedownConverter. This converter are based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.
 * [Fix] The separator for tags and categories of `new:post` command has been changed from space to comma. See issue #51.
+* [Fix] New template for spress plugin scaffold (`new:plugin` command) - fixed for 2.0 release. See issue #55.
 * [Deleted] Deleted the `site:new` alias for command `new:site`.
 
 ## 2.0.0-alpha (2015-08-12)

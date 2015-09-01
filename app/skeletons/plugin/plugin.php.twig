@@ -4,14 +4,14 @@
 namespace {{ namespace }};
 {% endif %}
 
-use Yosymfony\Spress\Plugin\CommandPlugin;
+use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
 use Yosymfony\Spress\Core\Plugin\Event\ContentEvent;
 use Yosymfony\Spress\Core\Plugin\Event\FinishEvent;
 use Yosymfony\Spress\Core\Plugin\Event\RenderEvent;
 
-class {{ classname }} extends CommandPlugin
+class {{ classname }} implements PluginInterface
 {
     private $io;
 
@@ -27,6 +27,15 @@ class {{ classname }} extends CommandPlugin
         $subscriber->addEventListener('spress.finish', 'onFinish');
     }
 
+    public function getMetas()
+    {
+        return [
+            'name' => '{{ name }}',
+            'description' => '{{ description }}',
+            'author' => '{{ author }}',
+            'license' => '{{ license }}',
+        ];
+    }
     public function onStart(EnvironmentEvent $event)
     {
         $this->io = $event->getIO();
@@ -64,6 +73,6 @@ class {{ classname }} extends CommandPlugin
 
     public function onFinish(FinishEvent $event)
     {
-        
+
     }
 }

@@ -131,7 +131,7 @@ class CommandDefinition
      *                                  by | or an array of shortcuts.
      * @param int          $mode        The option mode: One of the VALUE_* constants.
      * @param string       $description A description text.
-     * @param mixed        $default     The default value (must be null for self::REQUIRED or self::VALUE_NONE).
+     * @param mixed        $default     The default value (must be null for self::VALUE_REQUIRED or self::VALUE_NONE).
      *
      * @throws \InvalidArgumentException If name is empty or option mode is invalid or incompatible.
      */

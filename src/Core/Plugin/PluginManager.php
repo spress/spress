@@ -88,6 +88,16 @@ class PluginManager
     }
 
     /**
+     * Gets the plugins registered.
+     *
+     * @return Yosymfony\Spress\Core\Plugin\PluginInterface[] A key-value array with the name of the plugin as key.
+     */
+    public function getPlugins()
+    {
+        return $this->plugins;
+    }
+
+    /**
      * Checks if a plugin exists.
      *
      * @param string $name The plugin identifier.

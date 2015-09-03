@@ -33,6 +33,8 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
         $pm->setPlugin('plugin2', $plugin2);
 
         $this->assertEquals(2, $pm->countPlugins());
+        $this->assertCount(2, $pm->getPlugins());
+        $this->assertContainsOnlyInstancesOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugins());
         $this->assertTrue($pm->hasPlugin('plugin1'));
         $this->assertFalse($pm->hasPlugin('plugin3'));
         $this->assertInstanceOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugin('plugin1'));

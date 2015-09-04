@@ -26,7 +26,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 /**
- * Symfony Console Command builder.
+ * Symfony Console Command builder for command plugins.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

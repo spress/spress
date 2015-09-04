@@ -1,0 +1,36 @@
+<?php
+
+{% if namespace %}
+namespace {{ namespace }};
+{% endif %}
+
+use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Plugin\CommandDefinition;
+use Yosymfony\Spress\Plugin\CommandPlugin;
+
+class {{ classname }} extends CommandPlugin
+{
+    public function getCommandDefinition()
+    {
+        $definition = new CommandDefinition('{{ command-name }}');
+        $definition->setDescription('{{ command-description }}');
+        $definition->setHelp('{{ command-help }}');
+
+        return $definition;
+    }
+
+    public function executeCommand(IOInterface $io)
+    {
+        $io->write("It work!");
+    }
+
+    public function getMetas()
+    {
+        return [
+            'name' => '{{ name }}',
+            'description' => '{{ description }}',
+            'author' => '{{ author }}',
+            'license' => '{{ license }}',
+        ];
+    }
+}

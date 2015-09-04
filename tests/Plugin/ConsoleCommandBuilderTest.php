@@ -20,7 +20,7 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuildCommands()
     {
-        $definition = $definition = new CommandDefinition('self-update');
+        $definition = new CommandDefinition('self-update');
 
         $input = $this->getMockBuilder('\Symfony\Component\Console\Input\InputInterface')
             ->getMock();

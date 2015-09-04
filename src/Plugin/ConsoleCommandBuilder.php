@@ -78,6 +78,8 @@ class ConsoleCommandBuilder
         $argumentsAndOptions = [];
 
         $consoleComand = new Command($definition->getName());
+        $consoleComand->setDescription($definition->getDescription());
+        $consoleComand->setHelp($definition->getHelp());
 
         foreach ($definition->getArguments() as list($name, $mode, $description, $defaultValue)) {
             $argumentsAndOptions[] = new InputArgument($name, $mode, $description, $defaultValue);

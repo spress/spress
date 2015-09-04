@@ -21,6 +21,10 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildCommands()
     {
         $definition = new CommandDefinition('self-update');
+        $definition->setDescription('Update spress.phar to the latest version.');
+        $definition->setHelp('The self-update command replace your spress.phar by the latest version.');
+        $definition->addOption('all');
+        $definition->addArgument('dir');
 
         $input = $this->getMockBuilder('\Symfony\Component\Console\Input\InputInterface')
             ->getMock();
@@ -45,6 +49,18 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($symfonyConsoleCommands));
         $this->assertCount(1, $symfonyConsoleCommands);
 
-        $symfonyConsoleCommands[0]->run($input, $output);
+        $this->assertContainsOnlyInstancesOf('Symfony\Component\Console\Command\Command', $symfonyConsoleCommands);
+
+        $symfonyConsoleCommand = $symfonyConsoleCommands[0];
+
+        $this->assertCount(1, $symfonyConsoleCommand->getDefinition()->getOptions());
+        $this->assertCount(1, $symfonyConsoleCommand->getDefinition()->getArguments());
+
+        $this->assertEquals('Update spress.phar to the latest version.', $symfonyConsoleCommand->getDescription());
+        $this->assertEquals(
+            'The self-update command replace your spress.phar by the latest version.',
+            $symfonyConsoleCommand->getHelp());
+
+        $symfonyConsoleCommand->run($input, $output);
     }
 }

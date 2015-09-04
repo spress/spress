@@ -13,11 +13,13 @@ if ((!$classloader = @include_once __DIR__.'/../vendor/autoload.php') &&
 }
 
 use Symfony\Component\Console\Application;
-use Yosymfony\Spress\Command\WelcomeCommand;
-use Yosymfony\Spress\Command\SiteBuildCommand;
-use Yosymfony\Spress\Command\NewSiteCommand;
-use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewPluginCommand;
+use Yosymfony\Spress\Command\NewPostCommand;
+use Yosymfony\Spress\Command\NewSiteCommand;
+use Yosymfony\Spress\Command\SiteBuildCommand;
+use Yosymfony\Spress\Command\WelcomeCommand;
+use Yosymfony\Spress\Core\Spress;
+use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
 
 $app = new Application('Spress - The static site generator', Yosymfony\Spress\Core\Spress::VERSION);
 
@@ -30,5 +32,15 @@ $app->add(new NewPostCommand());
 $app->add(new NewPluginCommand());
 
 $app->setDefaultCommand($welcomeCommand->getName());
+
+$spress = new Spress();
+$pm = $spress['spress.plugin.pluginManager'];
+
+$commandBuilder = new ConsoleCommandBuilder($pm);
+$consoleCommandFromPlugins = $commandBuilder->buildCommands();
+
+foreach ($consoleCommandFromPlugins as $consoleCommand) {
+    $app->add($consoleCommand);
+}
 
 $app->run();

@@ -48,7 +48,7 @@ class CommandPlugin implements CommandPluginInterface
     /**
      * {@inheritDoc}
      *
-     * Override this method in case you need a regular plugin behaviour.
+     * Override this method in case you need a regular plugin behavior.
      */
     public function initialize(EventSubscriber $subscriber)
     {

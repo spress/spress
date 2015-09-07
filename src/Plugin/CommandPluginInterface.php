@@ -31,9 +31,11 @@ interface CommandPluginInterface extends PluginInterface
     /**
      * Executes the current command.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface $io Input/output interface.
+     * @param \Yosymfony\Spress\Core\IO\IOInterface $io        Input/output interface.
+     * @param array                                 $arguments Arguments passed to the command.
+     * @param array                                 $options   Options passed to the command.
      *
      * @return null|int null or 0 if everything went fine, or an error code.
      */
-    public function executeCommand(IOInterface $io);
+    public function executeCommand(IOInterface $io, array $arguments, array $options);
 }

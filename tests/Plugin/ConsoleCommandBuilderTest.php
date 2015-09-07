@@ -28,11 +28,17 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
 
         $input = $this->getMockBuilder('\Symfony\Component\Console\Input\InputInterface')
             ->getMock();
+        $input->expects($this->once())
+            ->method('getArguments')
+            ->will($this->returnValue([]));
+        $input->expects($this->once())
+            ->method('getOptions')
+            ->will($this->returnValue([]));
+
         $output = $this->getMockBuilder('\Symfony\Component\Console\Output\OutputInterface')
             ->getMock();
 
         $commandPluginMock = $this->getMockBuilder('\Yosymfony\Spress\Plugin\CommandPlugin')
-            ->setMethods(['getCommandDefinition', 'executeCommand'])
             ->getMock();
         $commandPluginMock->expects($this->once())
             ->method('getCommandDefinition')

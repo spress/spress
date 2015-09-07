@@ -40,6 +40,6 @@ class CommandPluginTest extends \PHPUnit_Framework_TestCase
         $io = $this->getMockBuilder('\Yosymfony\Spress\Core\IO\IOInterface')->getMock();
 
         $commandPlugin = new CommandPlugin();
-        $commandPlugin->executeCommand($io);
+        $commandPlugin->executeCommand($io, [], []);
     }
 }

@@ -92,7 +92,10 @@ class ConsoleCommandBuilder
         $consoleComand->setDefinition($argumentsAndOptions);
         $consoleComand->setCode(function (InputInterface $input, OutputInterface $output) use ($commandPlugin, $helperSet) {
             $io = new ConsoleIO($input, $output, $helperSet);
-            $commandPlugin->executeCommand($io);
+            $arguments = $input->getArguments();
+            $options = $input->getOptions();
+
+            $commandPlugin->executeCommand($io, $arguments, $options);
         });
 
         return $consoleComand;

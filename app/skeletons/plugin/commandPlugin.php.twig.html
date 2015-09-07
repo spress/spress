@@ -10,6 +10,11 @@ use Yosymfony\Spress\Plugin\CommandPlugin;
 
 class {{ classname }} extends CommandPlugin
 {
+    /**
+     * Gets the command's definition.
+     *
+     * @return \Yosymfony\Spress\Plugin\CommandDefinition Definition of the command.
+     */
     public function getCommandDefinition()
     {
         $definition = new CommandDefinition('{{ command_name }}');
@@ -19,7 +24,16 @@ class {{ classname }} extends CommandPlugin
         return $definition;
     }
 
-    public function executeCommand(IOInterface $io)
+    /**
+     * Executes the current command.
+     *
+     * @param \Yosymfony\Spress\Core\IO\IOInterface $io Input/output interface.
+     * @param array $arguments Arguments passed to the command.
+     * @param array $options Options passed to the command.
+     *
+     * @return null|int null or 0 if everything went fine, or an error code.
+     */
+    public function executeCommand(IOInterface $io, array $arguments, array $options)
     {
         $io->write("It work!");
     }

@@ -32,7 +32,7 @@ class CommandPlugin implements CommandPluginInterface
     /**
      * @inheritDoc
      */
-    public function executeCommand(IOInterface $io)
+    public function executeCommand(IOInterface $io, array $arguments, array $options)
     {
         throw new \RuntimeException('You must override the getCommandDefinition() method in the concrete command plugin class.');
     }

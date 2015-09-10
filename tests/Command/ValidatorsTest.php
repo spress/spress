@@ -9,12 +9,35 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Command;
+namespace Yosymfony\Spress\tests\Command;
 
 use Yosymfony\Spress\Command\Validators;
 
 class ValidatorsTest extends \PHPUnit_Framework_TestCase
 {
+    public function testValidateCommandName()
+    {
+        $this->assertEquals('selfupdate', Validators::validateCommandName('selfupdate'));
+        $this->assertEquals('self-update', Validators::validateCommandName('self-update'));
+        $this->assertEquals('self:update', Validators::validateCommandName('self:update'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyCommandName()
+    {
+        $this->assertEquals('', Validators::validateCommandName(''));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testWhitespaceCommandName()
+    {
+        $this->assertEquals(' ', Validators::validateCommandName(' '));
+    }
+
     public function testValidatePluginName()
     {
         $this->assertEquals('yosymfony/testplugin', Validators::validatePluginName('yosymfony/testplugin'));

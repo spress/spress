@@ -19,6 +19,22 @@ namespace Yosymfony\Spress\Command;
 class Validators
 {
     /**
+     * Validator for the name of a command (command plugins).
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function validateCommandName($name)
+    {
+        if (strlen(trim($name)) === 0 || !preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
+            throw new \InvalidArgumentException(sprintf('Command name "%s" is invalid.', $name));
+        }
+
+        return $name;
+    }
+
+    /**
      * Validator for the name of a plugin.
      *
      * @param string $name
@@ -61,7 +77,7 @@ class Validators
      */
     public static function validateEmail($email, $allowEmptyValue = false)
     {
-        if (0 === strlen($email) && $allowEmptyValue) {
+        if (strlen($email) === 0 && $allowEmptyValue) {
             return $email;
         }
 

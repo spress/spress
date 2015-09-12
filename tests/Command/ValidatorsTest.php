@@ -22,6 +22,11 @@ class ValidatorsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('self:update', Validators::validateCommandName('self:update'));
     }
 
+    public function testAllowEmptyCommandName()
+    {
+        $this->assertEquals('', Validators::validateCommandName('', true));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */

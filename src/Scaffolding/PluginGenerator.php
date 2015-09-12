@@ -18,6 +18,16 @@ namespace Yosymfony\Spress\Scaffolding;
  */
 class PluginGenerator extends Generator
 {
+    protected $name;
+    protected $targetDir;
+    protected $namespace;
+    protected $commandName;
+    protected $commandDescription;
+    protected $commandHelp;
+    protected $author;
+    protected $email;
+    protected $description;
+    protected $license;
     protected $dirctoryName;
     protected $licenses = [
         'MIT' => 'plugin/MIT.twig',
@@ -28,19 +38,12 @@ class PluginGenerator extends Generator
     ];
 
     /**
-     * Generates a plugin.
+     * Constructor.
      *
-     * @param $targetDir string
-     * @param $name string
-     * @param $namespace string
-     * @param $author string
-     * @param $email string
-     * @param $description string
-     * @param $license string
-     *
-     * @return array
+     * @param string $targetDir The target dir.
+     * @param string $name      The name of the plugin.
      */
-    public function generate($targetDir, $name, $namespace = '', $author = '', $email = '', $description = '', $license = 'MIT')
+    public function __construct($targetDir, $name)
     {
         if (0 === strlen(trim($name))) {
             throw new \RuntimeException('Unable to generate the plugin as the name is empty.');
@@ -56,41 +59,65 @@ class PluginGenerator extends Generator
             }
         }
 
-        $this->dirctoryName = $this->getPluginDir($name);
+        $this->name = $name;
+        $this->namespace = '';
+        $this->targetDir = $targetDir;
+        $this->license = 'MIT';
+    }
 
-        $pluginDir = $targetDir.'/'.$this->dirctoryName;
+    /**
+     * Sets the namespace of the plugin.
+     *
+     * @param string $value
+     */
+    public function setNamespace($value)
+    {
+        $this->namespace = $value;
+    }
 
-        if (file_exists($pluginDir)) {
-            throw new \RuntimeException(sprintf('Unable to generate the plugin as the plugin directory "%s" exists.', $pluginDir));
-        }
+    /**
+     * Sets the command's data in case of command plugin.
+     *
+     * @param string $name        The name of the command.
+     * @param string $description The description of the command.
+     */
+    public function setCommandData($name, $description = '', $help = '')
+    {
+        $this->commandName = $name;
+        $this->commandDescription = $description;
+        $this->commandHelp = $help;
+    }
 
-        $model = [
-            'name' => $name,
-            'classname' => $this->getClassname($name),
-            'namespace' => $namespace,
-            'namespace_psr4' => $this->getNamespacePsr4($namespace),
-            'author' => $author,
-            'email' => $email,
-            'description' => $description,
-            'license' => $license,
-        ];
+    /**
+     * Sets the author of the plugin.
+     *
+     * @param string $name  The name of the author.
+     * @param string $email The Email of the author.
+     */
+    public function setAuthor($name, $email = '')
+    {
+        $this->author = $name;
+        $this->email = $email;
+    }
 
-        $this->cleanFilesAffected();
+    /**
+     * Sets the description of the plugin.
+     *
+     * @param string $value
+     */
+    public function setDescription($value)
+    {
+        $this->description = $value;
+    }
 
-        $this->renderFile('plugin/plugin.php.twig', $pluginDir.'/'.$this->getPluginFilename($name), $model);
-        $this->renderFile('plugin/composer.json.twig', $pluginDir.'/composer.json', $model);
-
-        $licenseFile = $this->getLicenseFile($license);
-
-        if ($licenseFile) {
-            $model = [
-                'author' => $author,
-            ];
-
-            $this->renderFile($licenseFile, $pluginDir.'/LICENSE', $model);
-        }
-
-        return $this->getFilesAffected();
+    /**
+     * Sets the license of the plugin. MIT by default.
+     *
+     * @param string $value
+     */
+    public function setLicense($name)
+    {
+        $this->license = $name;
     }
 
     /**
@@ -101,6 +128,60 @@ class PluginGenerator extends Generator
     public function getPluginDirName()
     {
         return $this->dirctoryName;
+    }
+
+    /**
+     * Generates a plugin.
+     *
+     * @return array
+     */
+    public function generate()
+    {
+        $this->dirctoryName = $this->getPluginDir($this->name);
+
+        $pluginDir = $this->targetDir.'/'.$this->dirctoryName;
+
+        if (file_exists($pluginDir)) {
+            throw new \RuntimeException(sprintf('Unable to generate the plugin as the plugin directory "%s" exists.', $pluginDir));
+        }
+
+        $model = [
+            'name' => $this->name,
+            'classname' => $this->getClassname($this->name),
+            'namespace' => $this->namespace,
+            'namespace_psr4' => $this->getNamespacePsr4($this->namespace),
+            'author' => $this->author,
+            'email' => $this->email,
+            'description' => $this->description,
+            'license' => $this->license,
+        ];
+
+        $this->cleanFilesAffected();
+
+        $pluginTemplateFile = 'plugin/plugin.php.twig';
+
+        if (empty($this->commandName) === false) {
+            $pluginTemplateFile = 'plugin/commandPlugin.php.twig';
+
+            $model['command_name'] = $this->commandName;
+            $model['command_description'] = $this->commandDescription;
+            $model['command_help'] = $this->commandHelp;
+        }
+
+        $this->renderFile($pluginTemplateFile, $pluginDir.'/'.$this->getPluginFilename($this->name), $model);
+        $this->renderFile('plugin/composer.json.twig', $pluginDir.'/composer.json', $model);
+
+        $licenseFile = $this->getLicenseFile($this->license);
+
+        if ($licenseFile) {
+            $model = [
+                'author' => $this->author,
+            ];
+
+            $this->renderFile($licenseFile, $pluginDir.'/LICENSE', $model);
+        }
+
+        return $this->getFilesAffected();
     }
 
     /**
@@ -169,7 +250,7 @@ class PluginGenerator extends Generator
     /**
      * Gets the license filename.
      *
-     * @param string $licenseName [description]
+     * @param string $licenseName
      *
      * @return string Filename or empty-string if not exists.
      */

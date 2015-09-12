@@ -22,12 +22,19 @@ class Validators
      * Validator for the name of a command (command plugins).
      *
      * @param string $name
+     * @param bool   $allowEmptyValue
      *
      * @return string
      */
-    public static function validateCommandName($name)
+    public static function validateCommandName($name, $allowEmptyValue = false)
     {
-        if (strlen(trim($name)) === 0 || !preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
+        $name = trim($name);
+
+        if (strlen($name) === 0 && $allowEmptyValue === true) {
+            return $name;
+        }
+
+        if (!preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
             throw new \InvalidArgumentException(sprintf('Command name "%s" is invalid.', $name));
         }
 
@@ -72,12 +79,15 @@ class Validators
      * Validator for a Email.
      *
      * @param string $email
+     * @param bool   $allowEmptyValue
      *
      * @return string
      */
     public static function validateEmail($email, $allowEmptyValue = false)
     {
-        if (strlen($email) === 0 && $allowEmptyValue) {
+        $email = trim($email);
+
+        if (strlen($email) === 0 && $allowEmptyValue === true) {
             return $email;
         }
 

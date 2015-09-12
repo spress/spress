@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
@@ -33,6 +34,9 @@ class NewPluginCommand extends Command
     {
         $this->setDefinition([
             new InputOption('name', '', InputOption::VALUE_REQUIRED, 'The name of the plugins should follow the pattern "vendor-name/plugin-name"'),
+            new InputOption('command-name', '', InputOption::VALUE_REQUIRED, 'The name of the command. e.g: "foo" or "foo:bar" namespace separated by colon (:)'),
+            new InputOption('command-description', '', InputOption::VALUE_REQUIRED, 'The description of the command'),
+            new InputOption('command-help', '', InputOption::VALUE_REQUIRED, 'The help of the command'),
             new InputOption('author', '', InputOption::VALUE_REQUIRED, 'The author of the plugin'),
             new InputOption('email', '', InputOption::VALUE_REQUIRED, 'The Email of the author'),
             new InputOption('description', '', InputOption::VALUE_REQUIRED, 'The description of your plugin'),
@@ -54,17 +58,22 @@ EOT
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
 
         $name = Validators::validatePluginName($input->getOption('name'));
+        $commandName = Validators::validateCommandName($input->getOption('command-name'), true);
+        $commandDescription = $input->getOption('command-description');
+        $commandHelp = $input->getOption('command-help');
         $author = $input->getOption('author');
         $email = Validators::validateEmail($input->getOption('email'), true);
         $description = $input->getOption('description');
         $license = $input->getOption('license') ?: 'MIT';
 
-        $generator = new PluginGenerator();
+        $generator = new PluginGenerator('./src/plugins', $name);
         $generator->setSkeletonDirs(__DIR__.'/../../app/skeletons');
+        $generator->setCommandData($commandName, $commandDescription, $commandHelp);
+        $generator->setAuthor($author, $email);
+        $generator->setDescription($description);
+        $generator->setLicense($license);
 
-        $pluginDir = './src/plugins';
-
-        $files = $generator->generate($pluginDir, $name, '', $author, $email, $description, $license);
+        $files = $generator->generate();
 
         $this->resultMessage($io, $files);
     }
@@ -89,6 +98,30 @@ EOT
         $name = $helper->ask($input, $output, $question);
         $input->setOption('name', $name);
 
+        $question = new ConfirmationQuestion('Is it a command plugin?[<comment>n</comment>]: ', false);
+        $isCommandPlugin = $helper->ask($input, $output, $question);
+
+        if ($isCommandPlugin === true) {
+            $commandName = $input->getOption('command-name');
+            $question = new Question('Name of the command: ', $commandName);
+            $question->setMaxAttempts(null);
+            $question->setValidator(function ($answer) {
+                return Validators::validateCommandName($answer);
+            });
+            $commandName = $helper->ask($input, $output, $question);
+            $input->setOption('command-name', $commandName);
+
+            $commandDescription = $input->getOption('command-description');
+            $question = new Question('Description for the command: ', $commandDescription);
+            $commandDescription = $helper->ask($input, $output, $question);
+            $input->setOption('command-description', $commandDescription);
+
+            $commandHelp = $input->getOption('command-help');
+            $question = new Question('Help for the command: ', $commandHelp);
+            $commandHelp = $helper->ask($input, $output, $question);
+            $input->setOption('command-help', $commandHelp);
+        }
+
         $author = $input->getOption('author');
         $question = new Question('Plugin author: ', $author);
         $author = $helper->ask($input, $output, $question);
@@ -110,7 +143,7 @@ EOT
         $this->licenseMessage($io);
 
         $license = $input->getOption('license');
-        $question = new Question('Plugin license (MIT): ', $license);
+        $question = new Question('Plugin license [<comment>MIT</comment>]: ', $license);
         $license = $helper->ask($input, $output, $question);
         $input->setOption('license', $license);
     }
@@ -143,6 +176,8 @@ EOT
     protected function resultMessage($io, $files)
     {
         $io->write([
+            '',
+            '<fg=white;bg=blue>The plugin was generated successfully!</>',
             '',
             '<comment>Files afected:</comment>',
             '',

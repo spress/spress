@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Command;
+namespace Yosymfony\Spress\tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -72,7 +72,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
 
         $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\n\n\n\n"));
+        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\n\n\n\n\n"));
 
         $commandTester->execute([
             'command' => $command->getName(),
@@ -96,6 +96,37 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $fileContent = file_get_contents($this->tmpDir.'/src/plugins/Yosymfonytestplugin/LICENSE');
 
         $this->assertNotRegExp('/The MIT License (MIT)/', $fileContent);
+    }
+
+    public function testCommandPlugin()
+    {
+        $app = new Application();
+        $app->add(new NewPluginCommand());
+
+        $command = $app->find('new:plugin');
+        $commandTester = new CommandTester($command);
+
+        $helper = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\ny\nselfupdate\nCommand description\nCommand help\n\n\n\n\n"));
+
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Spress plugin generator/', $output);
+        $this->assertRegExp('/Yosymfonytestplugin\.php/', $output);
+        $this->assertRegExp('/composer\.json/', $output);
+        $this->assertRegExp('/LICENSE/', $output);
+
+        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/Yosymfonytestplugin/Yosymfonytestplugin.php');
+
+        $this->assertNotRegExp('/namespace/', $fileContent);
+        $this->assertRegExp('/CommandPlugin/', $fileContent);
+        $this->assertRegExp('/selfupdate/', $fileContent);
+        $this->assertRegExp('/Command description/', $fileContent);
+        $this->assertRegExp('/Command help/', $fileContent);
     }
 
     public function testDefaultValues()

@@ -38,6 +38,17 @@ class {{ classname }} extends CommandPlugin
         $io->write("It work!");
     }
 
+    /**
+     * Gets the metas of a plugin.
+     * 
+     * Standard metas:
+     *   - name: (string) The name of plugin.
+     *   - description: (string) A short description of the plugin.
+     *   - author: (string) The author of the plugin.
+     *   - license: (string) The license of the plugin.
+     * 
+     * @return array
+     */
     public function getMetas()
     {
         return [

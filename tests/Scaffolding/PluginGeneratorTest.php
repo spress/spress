@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Scaffolding;
+namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
@@ -33,9 +33,24 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-        $generator = new PluginGenerator();
+        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/myplugin');
         $generator->setSkeletonDirs($this->skeletonDir);
-        $files = $generator->generate($this->tmpDir, 'yosymfony/myplugin');
+        $files = $generator->generate();
+
+        $this->assertCount(3, $files);
+        $this->assertFileExists($files[0]);
+        $this->assertFileExists($files[1]);
+        $this->assertRegExp('/Yosymfonymyplugin.php/', $files[0]);
+        $this->assertRegExp('/composer.json/', $files[1]);
+        $this->assertRegExp('/LICENSE/', $files[2]);
+    }
+
+    public function testGenerateCommand()
+    {
+        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/myplugin');
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->setCommandData('selfupdate');
+        $files = $generator->generate();
 
         $this->assertCount(3, $files);
         $this->assertFileExists($files[0]);
@@ -47,9 +62,10 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testLicenseNotExists()
     {
-        $generator = new PluginGenerator();
+        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/myplugin');
         $generator->setSkeletonDirs($this->skeletonDir);
-        $files = $generator->generate($this->tmpDir, 'yosymfony/myplugin', '', '', '', '', 'My-license');
+        $generator->setLicense('My-license');
+        $files = $generator->generate();
 
         $this->assertCount(2, $files);
         $this->assertFileExists($files[0]);
@@ -63,7 +79,7 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testNameEmpty()
     {
-        $generator = new PluginGenerator();
+        $generator = new PluginGenerator($this->tmpDir, '');
         $generator->setSkeletonDirs($this->skeletonDir);
         $files = $generator->generate($this->tmpDir, '');
     }

@@ -177,7 +177,7 @@ EOT
     {
         $io->write([
             '',
-            '<fg=white;bg=blue>The plugin was generated successfully!</>',
+            '<success>The plugin was generated successfully!</success>',
             '',
             '<comment>Files afected:</comment>',
             '',

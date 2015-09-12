@@ -11,15 +11,16 @@
 
 namespace Yosymfony\Spress\IO;
 
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Console implementation.
+ * Symfony Console implementation.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -35,6 +36,10 @@ class ConsoleIO implements IOInterface
         $this->input = $input;
         $this->output = $output;
         $this->helperSet = $helperSet;
+
+        $successStyle = new OutputFormatterStyle('white', 'blue', ['bold']);
+
+        $this->output->getFormatter()->setStyle('success', $successStyle);
     }
 
     public function isInteractive()

@@ -133,6 +133,8 @@ EOT
     {
         $io->write([
             '',
+            '<success>The post was generated successfully!</success>',
+            '',
             '<comment>File afected:</comment>',
             '',
         ]);

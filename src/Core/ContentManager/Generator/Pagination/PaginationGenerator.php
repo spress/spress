@@ -38,7 +38,7 @@ class PaginationGenerator implements GeneratorInterface
     /**
      * @inheritDoc
      *
-     * @throws Yosymfony\Spress\Core\Exception\AttributeValueException if bad attribute value
+     * @throws Yosymfony\Spress\Core\Exception\AttributeValueException if bad attribute value.
      */
     public function generateItems(ItemInterface $templateItem, array $collections)
     {

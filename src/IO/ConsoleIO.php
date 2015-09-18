@@ -20,7 +20,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Symfony Console implementation.
+ * Symfony Console implementation. This implementation requires
+ * "dialog" and "dialog" helpers.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -31,17 +32,28 @@ class ConsoleIO implements IOInterface
     protected $helperSet;
     protected $lastMessage;
 
+    /**
+     * Constructor.
+     *
+     * @param Symfony\Component\Console\Input\InputInterface   $input     Input operations.
+     * @param Symfony\Component\Console\Output\OutputInterface $output    Ouputs operations.
+     * @param Symfony\Component\Console\Helper\HelperSet       $helperSet A set of helpers used by this implementation.
+     */
     public function __construct(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
         $this->input = $input;
         $this->output = $output;
         $this->helperSet = $helperSet;
 
-        $successStyle = new OutputFormatterStyle('white', 'blue', ['bold']);
-
-        $this->output->getFormatter()->setStyle('success', $successStyle);
+        if (is_null($formatter = $this->output->getFormatter()) === false) {
+            $successStyle = new OutputFormatterStyle('white', 'blue', ['bold']);
+            $formatter->setStyle('success', $successStyle);
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function isInteractive()
     {
         return $this->input->isInteractive();
@@ -52,7 +64,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVerbose()
     {
-        return OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity();
+        return $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
     }
 
     /**
@@ -60,7 +72,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVeryVerbose()
     {
-        return OutputInterface::VERBOSITY_VERY_VERBOSE <= $this->output->getVerbosity();
+        return $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
     }
 
     /**
@@ -89,6 +101,8 @@ class ConsoleIO implements IOInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException if the "question" helper is not defined.
      */
     public function ask($question, $default = null)
     {
@@ -101,6 +115,8 @@ class ConsoleIO implements IOInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException if the "question" helper is not defined.
      */
     public function askConfirmation($question, $default = true)
     {
@@ -113,6 +129,8 @@ class ConsoleIO implements IOInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException if the "question" helper is not defined.
      */
     public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
@@ -129,12 +147,19 @@ class ConsoleIO implements IOInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException if the "dialog" helper is not defined.
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
         return $this->helperSet->get('dialog')->askHiddenResponse($this->output, $question, $fallback);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException if the "dialog" helper is not defined.
+     */
     public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
     {
         return $this->helperSet->get('dialog')->askHiddenResponseAndValidate($this->output, $question, $validator, $attempts, $fallback);

@@ -12,7 +12,7 @@
  * from Nils Adermann <naderman@naderman.de> and Jordi Boggiano <j.boggiano@seld.be>.
  */
 
-namespace Yosymfony\Spress\Tests\IO;
+namespace Yosymfony\Spress\tests\IO;
 
 use Yosymfony\Spress\IO\ConsoleIO;
 
@@ -20,14 +20,16 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsInteractive()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
         $inputMock->expects($this->at(0))
             ->method('isInteractive')
             ->will($this->returnValue(true));
         $inputMock->expects($this->at(1))
             ->method('isInteractive')
             ->will($this->returnValue(false));
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
+            ->getMock();
         $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
@@ -38,15 +40,19 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVerbose()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
+             ->setMethods(['getVerbosity', 'doWrite'])
+             ->getMock();
         $outputMock->expects($this->at(0))
             ->method('getVerbosity')
             ->will($this->returnValue(2));
         $outputMock->expects($this->at(1))
             ->method('getVerbosity')
             ->will($this->returnValue(0));
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
 
@@ -56,15 +62,19 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVeryVerbose()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
+             ->setMethods(['getVerbosity', 'doWrite'])
+             ->getMock();
         $outputMock->expects($this->at(0))
             ->method('getVerbosity')
             ->will($this->returnValue(3));
         $outputMock->expects($this->at(1))
             ->method('getVerbosity')
             ->will($this->returnValue(2));
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
 
@@ -74,15 +84,19 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testIsDebug()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
+             ->setMethods(['getVerbosity', 'doWrite'])
+             ->getMock();
         $outputMock->expects($this->at(0))
             ->method('getVerbosity')
             ->will($this->returnValue(4));
         $outputMock->expects($this->at(1))
             ->method('getVerbosity')
             ->will($this->returnValue(3));
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
 
@@ -92,15 +106,19 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testIsDecorated()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
+             ->setMethods(['isDecorated', 'doWrite'])
+             ->getMock();
         $outputMock->expects($this->at(0))
             ->method('isDecorated')
             ->will($this->returnValue(true));
         $outputMock->expects($this->at(1))
             ->method('isDecorated')
             ->will($this->returnValue(false));
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
 
@@ -110,12 +128,15 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testWrite()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
+            ->getMock();
         $outputMock->expects($this->once())
             ->method('write')
             ->with($this->equalTo('Hi IO API'));
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
         $consoleIO->write('Hi IO API', false);
@@ -123,10 +144,14 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testAsk()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
+            ->getMock();
+        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+            ->getMock();
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $question = new \Symfony\Component\Console\Question\Question('Your name?', '');
 
@@ -146,10 +171,14 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testAskConfirmation()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
+            ->getMock();
+        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+            ->getMock();
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Is valid?', true);
 
@@ -169,10 +198,14 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testAskAndValidate()
     {
-        $inputMock = $this->getMock('Symfony\Component\Console\Input\InputInterface');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $questionHelperMock = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper');
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
+            ->getMock();
+        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
+            ->getMock();
+        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+            ->getMock();
+        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
+            ->getMock();
 
         $question = new \Symfony\Component\Console\Question\Question('Is valid?', true);
         $question->setMaxAttempts(10);

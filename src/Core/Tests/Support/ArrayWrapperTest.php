@@ -28,6 +28,20 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('The content', $a->get('site.pages.index[.]html'));
     }
 
+    public function testFlatten()
+    {
+        $a = new ArrayWrapper([
+            'item 1' => [1, 2, 3],
+            'item 2' => [4, 5, 6],
+        ]);
+
+        $arraySingleLevel = $a->flatten();
+
+        $this->assertTrue(is_array($arraySingleLevel));
+        $this->assertCount(6, $arraySingleLevel);
+        $this->assertTrue($arraySingleLevel === [1, 2, 3, 4, 5, 6]);
+    }
+
     public function testGet()
     {
         $a = new ArrayWrapper([

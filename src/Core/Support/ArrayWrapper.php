@@ -51,6 +51,22 @@ class ArrayWrapper
     }
 
     /**
+     * Flatten a multi-dimensional array into a single level.
+     *
+     * @return array A single level array.
+     */
+    public function flatten()
+    {
+        $array = [];
+
+        array_walk_recursive($this->array, function ($element) use (&$array) {
+            $array[] = $element;
+        });
+
+        return $array;
+    }
+
+    /**
      * Get a value from a deeply nested array using "dot" notation.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *

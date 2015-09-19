@@ -227,18 +227,26 @@ class ArrayWrapper
     }
 
     /**
-     * Filter using the given callback.
+     * Filter using the given closure function.
      *
-     * @param callable $callback
+     * @param Closure $filter The filter function should be a closure with the
+     *                        following signature:
+     *
+     * ```php
+     * function($key, $value)
+     * {
+     *     // returns true if the value is matching your criteria.
+     * }
+     * ```
      *
      * @return array
      */
-    public function where(callable $callback)
+    public function where(\Closure $filter)
     {
         $filtered = [];
 
         foreach ($this->array as $key => $value) {
-            if (call_user_func($callback, $key, $value)) {
+            if ($filter($key, $value) === true) {
                 $filtered[$key] = $value;
             }
         }

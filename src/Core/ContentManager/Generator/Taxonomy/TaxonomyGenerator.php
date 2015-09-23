@@ -64,12 +64,17 @@ class TaxonomyGenerator implements GeneratorInterface
             $taxa = (array) $attributes[$taxonomyAttribute];
 
             foreach ($taxa as $taxon) {
+                if (empty(trim($taxon)) === true) {
+                    continue;
+                }
+
                 $taxonomyCollection[$taxon][] = $item;
             }
         }
 
         foreach ($taxonomyCollection as $taxon => $items) {
             $templateAttributes['provider'] = 'site.'.$taxon;
+            $templateAttributes['taxon'] = $taxon;
             $templateItem->setAttributes($templateAttributes);
             $taxonPath = $this->getTaxonRelativePath($templatePath, $permalink, $taxon);
             $templateItem->setPath($taxonPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);

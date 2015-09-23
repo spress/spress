@@ -23,10 +23,10 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->taxonomy = new TaxonomyGenerator();
     }
 
-    public function testPaginateWithDefaulValues()
+    public function testTaxonomyWithDefaulValues()
     {
         $post1 = new Item('Post 1', 'posts/2015-05-26-new-release', ['categories' => ['news', 'releases']]);
-        $post2 = new Item('Post 2', 'posts/2015-05-26-new-feature', ['categories' => ['news']]);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-new-feature', ['categories' => ['news', '']]);
 
         $collections = [
             'posts' => [$post1, $post2],
@@ -43,18 +43,27 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $item = $catetoriesItems[0];
 
+        $this->assertArrayHasKey('pagination', $item->getAttributes());
+        $this->assertArrayHasKey('taxon', $item->getAttributes());
+        $this->assertEquals('news', $item->getAttributes()['taxon']);
         $this->assertEquals('categories/news/index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/categories/news', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('Categories content', $item->getContent());
 
         $item = $catetoriesItems[1];
 
+        $this->assertArrayHasKey('pagination', $item->getAttributes());
+        $this->assertArrayHasKey('taxon', $item->getAttributes());
+        $this->assertEquals('news', $item->getAttributes()['taxon']);
         $this->assertEquals('categories/news/page2/index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/categories/news/page2', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('Categories content', $item->getContent());
 
         $item = $catetoriesItems[2];
 
+        $this->assertArrayHasKey('pagination', $item->getAttributes());
+        $this->assertArrayHasKey('taxon', $item->getAttributes());
+        $this->assertEquals('releases', $item->getAttributes()['taxon']);
         $this->assertEquals('categories/releases/index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/categories/releases', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('Categories content', $item->getContent());

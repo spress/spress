@@ -18,7 +18,8 @@ use Yosymfony\Spress\Core\Support\ArrayWrapper;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
- * Taxonomy generator.
+ * Taxonomy generator. This generator uses PaginationGenerator for
+ * generating multiples pages around each of taxon.
  *
  * How to configure? (frontmatter of the template page):
  *
@@ -45,7 +46,7 @@ class TaxonomyGenerator implements GeneratorInterface
         $result = [];
         $taxonomyCollection = [];
         $templateAttributes = $templateItem->getAttributes();
-        $options = $this->getAttributeResolver($templateItem);
+        $options = $this->getAttributesResolver($templateItem);
         $taxonomyAttribute = $options['taxonomy_attribute'];
         $permalink = $options['permalink'];
         $templateAttributes['permalink'] = $options['pagination_permalink'];
@@ -90,7 +91,7 @@ class TaxonomyGenerator implements GeneratorInterface
         return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
     }
 
-    protected function getAttributeResolver(ItemInterface $templateItem)
+    protected function getAttributesResolver(ItemInterface $templateItem)
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('taxonomy_attribute', 'categories', 'string')

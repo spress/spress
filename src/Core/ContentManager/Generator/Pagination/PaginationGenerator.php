@@ -44,7 +44,7 @@ class PaginationGenerator implements GeneratorInterface
     {
         $result = [];
 
-        $options = $this->getConfig($templateItem);
+        $options = $this->getAttributesResolver($templateItem);
 
         if ($options['max_page'] < 1) {
             throw new AttributeValueException('Items per page value must be great than 0.', 'max_page', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
@@ -150,7 +150,7 @@ class PaginationGenerator implements GeneratorInterface
         return '/'.$result;
     }
 
-    protected function getConfig(ItemInterface $templateItem)
+    protected function getAttributesResolver(ItemInterface $templateItem)
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('max_page', 5, 'int')

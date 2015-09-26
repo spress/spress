@@ -50,6 +50,7 @@ class TaxonomyGenerator implements GeneratorInterface
         $options = $this->getAttributesResolver($templateItem);
         $taxonomyAttribute = $options['taxonomy_attribute'];
         $permalink = $options['permalink'];
+
         $templateAttributes['permalink'] = $options['pagination_permalink'];
         $templatePath = dirname($templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
 
@@ -92,7 +93,7 @@ class TaxonomyGenerator implements GeneratorInterface
     protected function getTaxonRelativePath($basePath, $permalinkTemplate, $taxon)
     {
         $result = $basePath;
-        $result .= '/'.str_replace(':name', $taxon, $permalinkTemplate);
+        $result .= '/'.str_replace(':name', $taxon, $permalinkTemplate).'/index.html';
 
         return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
     }
@@ -101,7 +102,7 @@ class TaxonomyGenerator implements GeneratorInterface
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('taxonomy_attribute', 'categories', 'string')
-            ->setDefault('permalink', '/:name/page:num')
+            ->setDefault('permalink', '/:name')
             ->setDefault('pagination_permalink', '/page:num', 'string');
 
         $attributes = $templateItem->getAttributes();

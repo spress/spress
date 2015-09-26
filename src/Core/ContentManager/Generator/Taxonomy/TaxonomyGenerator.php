@@ -18,8 +18,9 @@ use Yosymfony\Spress\Core\Support\ArrayWrapper;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
- * Taxonomy generator. This generator uses PaginationGenerator for
- * generating multiples pages around each of taxon.
+ * Taxonomy generator lets you group items around a term.
+ * This generator uses PaginationGenerator for generating
+ * multiples pages for each term.
  *
  * How to configure? (frontmatter of the template page):
  *
@@ -61,26 +62,26 @@ class TaxonomyGenerator implements GeneratorInterface
                 continue;
             }
 
-            $taxa = (array) $attributes[$taxonomyAttribute];
+            $terms = (array) $attributes[$taxonomyAttribute];
 
-            foreach ($taxa as $taxon) {
-                if (empty(trim($taxon)) === true) {
+            foreach ($terms as $term) {
+                if (empty(trim($term)) === true) {
                     continue;
                 }
 
-                $taxonomyCollection[$taxon][] = $item;
+                $taxonomyCollection[$term][] = $item;
             }
         }
 
-        foreach ($taxonomyCollection as $taxon => $items) {
-            $templateAttributes['provider'] = 'site.'.$taxon;
-            $templateAttributes['taxon'] = $taxon;
+        foreach ($taxonomyCollection as $term => $items) {
+            $templateAttributes['provider'] = 'site.'.$term;
+            $templateAttributes['term'] = $term;
             $templateItem->setAttributes($templateAttributes);
-            $taxonPath = $this->getTaxonRelativePath($templatePath, $permalink, $taxon);
+            $taxonPath = $this->getTaxonRelativePath($templatePath, $permalink, $term);
             $templateItem->setPath($taxonPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
             $paginationGenerator = new PaginationGenerator();
-            $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$taxon => $items]);
+            $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$term => $items]);
 
             $result = array_merge($result, $itemsGenerated);
         }

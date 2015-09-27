@@ -19,7 +19,13 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 
 /**
- * Pagination generator.
+ * Pagination generator lets you generate multiples
+ * pages around a set of items.
+ *
+ * Example of URLs generated:
+ *  /
+ *  /page2
+ *  ...
  *
  * How to configure? (frontmatter of the template page):
  *

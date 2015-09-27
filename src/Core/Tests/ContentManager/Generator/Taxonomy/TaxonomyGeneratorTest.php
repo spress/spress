@@ -67,5 +67,11 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('categories/releases/index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
         $this->assertEquals('/categories/releases', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('Categories content', $item->getContent());
+
+        $attributes = $post1->getAttributes();
+        $this->assertArrayHasKey('terms_url', $attributes);
+        $this->assertCount(2, $attributes['terms_url']);
+        $this->assertEquals('/categories/news', $attributes['terms_url']['news']);
+        $this->assertEquals('/categories/releases', $attributes['terms_url']['releases']);
     }
 }

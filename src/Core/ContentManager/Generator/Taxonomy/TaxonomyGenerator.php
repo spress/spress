@@ -22,6 +22,14 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
  * This generator uses PaginationGenerator for generating
  * multiples pages for each term.
  *
+ * Example of URLs generated:
+ *  /categories/news
+ *  /categories/news/page2
+ *  ...
+ *
+ * This generator adds an attribute "terms_url" to each
+ * items processed with the permalinks of the terms.
+ *
  * How to configure? (frontmatter of the template page):
  *
  * ---
@@ -78,11 +86,13 @@ class TaxonomyGenerator implements GeneratorInterface
             $templateAttributes['provider'] = 'site.'.$term;
             $templateAttributes['term'] = $term;
             $templateItem->setAttributes($templateAttributes);
-            $taxonPath = $this->getTaxonRelativePath($templatePath, $permalink, $term);
-            $templateItem->setPath($taxonPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
+            $termPath = $this->getTermRelativePath($templatePath, $permalink, $term);
+            $templateItem->setPath($termPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
             $paginationGenerator = new PaginationGenerator();
             $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$term => $items]);
+
+            $this->setTermsPermalink($items, $term, $termPath);
 
             $result = array_merge($result, $itemsGenerated);
         }
@@ -90,12 +100,47 @@ class TaxonomyGenerator implements GeneratorInterface
         return $result;
     }
 
-    protected function getTaxonRelativePath($basePath, $permalinkTemplate, $taxon)
+    protected function setTermsPermalink(array $items, $term, $termRelativePath)
+    {
+        foreach ($items as $item) {
+            $attributes = $item->getAttributes();
+
+            if (isset($attributes['term_urls'])) {
+                $attributes['term_urls'] = [];
+            }
+
+            $attributes['terms_url'][$term] = $this->getTermPermalink($termRelativePath);
+
+            $item->setAttributes($attributes);
+        }
+    }
+
+    protected function getTermRelativePath($basePath, $permalinkTemplate, $taxon)
     {
         $result = $basePath;
         $result .= '/'.str_replace(':name', $taxon, $permalinkTemplate).'/index.html';
 
         return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
+    }
+
+    protected function getTermPermalink($TermRelativePath)
+    {
+        if (is_null($TermRelativePath)) {
+            return;
+        }
+
+        $result = $TermRelativePath;
+        $basename = basename($TermRelativePath);
+
+        if ($basename === 'index.html') {
+            $result = dirname($TermRelativePath);
+
+            if ($result === '.') {
+                $result = '';
+            }
+        }
+
+        return '/'.$result;
     }
 
     protected function getAttributesResolver(ItemInterface $templateItem)

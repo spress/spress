@@ -210,10 +210,12 @@ class Spress extends Container
         };
 
         $this['spress.cms.generatorManager'] = function ($c) {
-            $generator = new \Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator();
+            $pagination = new \Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator();
+            $taxonomy = new \Yosymfony\Spress\Core\ContentManager\Generator\Taxonomy\TaxonomyGenerator();
 
             $manager = new GeneratorManager();
-            $manager->addGenerator('pagination', $generator);
+            $manager->addGenerator('pagination', $pagination);
+            $manager->addGenerator('taxonomy', $taxonomy);
 
             return $manager;
         };

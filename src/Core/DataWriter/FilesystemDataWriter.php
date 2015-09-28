@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Core\DataWriter;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
@@ -32,7 +33,7 @@ class FilesystemDataWriter implements DataWriterInterface
      * Constructor.
      *
      * @param Symfony\Component\Filesystem\Filesystem $filesystem
-     * @param string                                  $outputDir  The output folder. e.g: "_site"
+     * @param string                                  $outputDir  The output folder. e.g: "build".
      */
     public function __construct(Filesystem $filesystem, $outputDir)
     {
@@ -42,10 +43,20 @@ class FilesystemDataWriter implements DataWriterInterface
 
     /**
      * @inheritDoc
+     *
+     * Removes the whole content of the output dir but VCS files.
      */
     public function setUp()
     {
-        $this->filesystem->remove($this->outputDir);
+        if ($this->filesystem->exists($this->outputDir) === false) {
+            return;
+        }
+
+        $finder = new Finder();
+        $finder->in($this->outputDir)
+            ->depth('== 0');
+
+        $this->filesystem->remove($finder);
     }
 
     /**

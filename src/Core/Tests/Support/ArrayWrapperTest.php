@@ -142,6 +142,16 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value 1', $pages[1]['element 1']);
     }
 
+    public function testRemove()
+    {
+        $a = new ArrayWrapper();
+        $a->add('site.name', 'Yo! Symfony');
+        $a->add('site.pages.index[.]html', 'The content');
+        $a->remove('site.name');
+
+        $this->assertFalse($a->has('site.name'));
+    }
+
     public function testSet()
     {
         $a = new ArrayWrapper();

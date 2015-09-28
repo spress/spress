@@ -33,7 +33,7 @@ class ArrayWrapper
     }
 
     /**
-     * Add an element using "dot" notation if doesn't exists.
+     * Adds an element using "dot" notation if doesn't exists.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param $key
@@ -67,7 +67,7 @@ class ArrayWrapper
     }
 
     /**
-     * Get a value from a deeply nested array using "dot" notation.
+     * Gets a value from a deeply nested array using "dot" notation.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * e.g: $a->get('site.data') or $a->get('site.pages.index[.]html')
@@ -100,7 +100,7 @@ class ArrayWrapper
     }
 
     /**
-     * Get the working array.
+     * Gets the working array.
      *
      * @return array
      */
@@ -110,7 +110,7 @@ class ArrayWrapper
     }
 
     /**
-     * Check if an item exists in using "dot" notation.
+     * Checks if an item exists in using "dot" notation.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $key
@@ -143,7 +143,7 @@ class ArrayWrapper
     }
 
     /**
-     * Paginate the array.
+     * Paginates the array.
      *
      * @param int    $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array.
      * @param int    $initialPage Initial page. Page 1 by default.
@@ -179,7 +179,39 @@ class ArrayWrapper
     }
 
     /**
-     * Set an item using "dot" notation.
+     * Removes an item using "dot" notation.
+     *
+     * @param string $key
+     *
+     * @return array
+     */
+    public function remove($key)
+    {
+        $array = &$this->array;
+
+        if (is_null($key)) {
+            return $array;
+        }
+
+        $keys = explode('.', $this->escapedDotKeyToUnderscore($key));
+
+        while (count($keys) > 1) {
+            $key = $this->underscoreDotKeyToDot(array_shift($keys));
+
+            if (isset($array[$key]) === false || is_array($array[$key]) === false) {
+                $array[$key] = [];
+            }
+
+            $array = &$array[$key];
+        }
+
+        unset($array[$this->underscoreDotKeyToDot(array_shift($keys))]);
+
+        return $this->array;
+    }
+
+    /**
+     * Sets an item using "dot" notation.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
      * @param string $key
@@ -213,7 +245,7 @@ class ArrayWrapper
     }
 
     /**
-     * Set the working array.
+     * Sets the working array.
      *
      * @param array $array
      *

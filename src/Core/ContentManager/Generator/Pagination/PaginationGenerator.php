@@ -98,6 +98,8 @@ class PaginationGenerator implements GeneratorInterface
             $pageAttr->set('pagination.next_page_path', $nextPagePath);
             $pageAttr->set('pagination.next_page_url', $nextPageUrl);
 
+            $pageAttr->remove('permalink');
+
             $pagePath = $this->getPageRelativePath($templatePath, $options['permalink'], $page);
             $permalink = $this->getPagePermalink($pagePath);
 

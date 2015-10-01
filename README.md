@@ -132,7 +132,7 @@ Any passed option will be used as a default value for the interaction.
 
 How to make spress.phar
 -----------------------
-We are using [Box roject](http://box-project.org/) for generating `.phar` file.
+We are using [Box Project](http://box-project.org/) for generating the `.phar` file.
 
 You may download Box:
 

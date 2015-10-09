@@ -3,9 +3,10 @@ CHANGELOG for 2.0.x
 ## 2.0.0-beta
 * [New] Added a new converter for Markdown: ParsedownConverter. This converter are based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.
 * [New] Added command plugins: a new kind of plugins witch provides subcommand for `spress` executable. See #56.
-* [New] Taxonomy generator for grouping content around a set of terms. Serr #57.
+* [New] Taxonomy generator for grouping content around a set of terms. See #57.
 * [Fix] The separator for tags and categories of `new:post` command has been changed from space to comma. See issue #51.
 * [Fix] New template for spress plugin scaffold (`new:plugin` command) - fixed for 2.0 release. See issue #55.
+* [Fix] The `setUp` method of `FilesystemDataWriter removes the whole content of the output dir but VCS files. This means that `site:build` command doesn't remove the VCS files.
 * [Deleted] Deleted the `site:new` alias for command `new:site`.
 
 ## 2.0.0-alpha (2015-08-12)

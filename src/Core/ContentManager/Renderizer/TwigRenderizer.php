@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
 
 /**
  * Twig renderizer.
@@ -45,23 +46,23 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Add a new layout.
      *
-     * @param string $name       The name of the layout. e.g: id, path...
+     * @param string $id         The identifier of the layout. e.g: path.
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout.
      *                           "layout" attribute has a special meaning.
      */
-    public function addLayout($name, $content, array $attributes = [])
+    public function addLayout($id, $content, array $attributes = [])
     {
-        $key = $this->getLayoutNameWithNamespace($name);
-        $this->layouts[$key] = [$name, $content, $attributes];
+        $key = $this->getLayoutNameWithNamespace($id);
+        $this->layouts[$key] = [$id, $content, $attributes];
     }
 
     /**
      * @inheritDoc
      */
-    public function addInclude($name, $content, array $attributes = [])
+    public function addInclude($id, $content, array $attributes = [])
     {
-        $this->arrayLoader->setTemplate($name, $content);
+        $this->arrayLoader->setTemplate($id, $content);
     }
 
     /**
@@ -77,24 +78,31 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Render a blocks of content (layout NOT included).
      *
-     * @param string $name       The path of the item
-     * @param string $content    The content
-     * @param array  $attributes The attributes for using inside the content
+     * @param string $id         The path of the item.
+     * @param string $content    The content.
+     * @param array  $attributes The attributes for using inside the content.
      *
-     * @return string The block rendered
+     * @return string The block rendered.
+     *
+     * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
+     *                                                                                   rendering the content.
      */
-    public function renderBlocks($name, $content, array $attributes)
+    public function renderBlocks($id, $content, array $attributes)
     {
-        $this->arrayLoader->setTemplate('@dynamic/content', $content);
+        try {
+            $this->arrayLoader->setTemplate('@dynamic/content', $content);
 
-        return $this->twig->render('@dynamic/content', $attributes);
+            return $this->twig->render('@dynamic/content', $attributes);
+        } catch (\Twig_Error_Syntax $e) {
+            throw new RenderException('Error during lexing or parsing of a template.', $id);
+        }
     }
 
     /**
      * Render a page completely (layout included). The value of $content
      * param will be placed at "page.content" attribute.
      *
-     * @param string $name           The path of the item.
+     * @param string $id             The path of the item.
      * @param string $content        The page content.
      * @param string $layoutName     The layout name.
      * @param array  $siteAttributes The attributes for using inside the content.
@@ -103,9 +111,11 @@ class TwigRenderizer implements RenderizerInterface
      * @return string The page rendered
      *
      * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value
-     *                                                                  or layout not found
+     *                                                                  or layout not found.
+     * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
+     *                                                                  rendering the content.
      */
-    public function renderPage($name, $content, $layoutName, array $siteAttributes)
+    public function renderPage($id, $content, $layoutName, array $siteAttributes)
     {
         if ($this->isLayoutsProcessed === false) {
             $this->processLayouts();
@@ -113,7 +123,7 @@ class TwigRenderizer implements RenderizerInterface
 
         if ($layoutName) {
             $layout = $this->getLayoutNameWithNamespace($layoutName);
-            $fullLayout = $this->getLayoutWithExtension($layout, $name);
+            $fullLayout = $this->getLayoutWithExtension($layout, $id);
 
             if (isset($siteAttributes['page']) === false) {
                 $siteAttributes['page'] = [];
@@ -124,7 +134,7 @@ class TwigRenderizer implements RenderizerInterface
             $content = sprintf('{%% extends "%s" %%}', $fullLayout);
         }
 
-        return $this->renderBlocks($name, $content, $siteAttributes);
+        return $this->renderBlocks($id, $content, $siteAttributes);
     }
 
     /**

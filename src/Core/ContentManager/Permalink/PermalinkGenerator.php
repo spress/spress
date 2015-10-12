@@ -16,8 +16,13 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
- * Iterface for a permalink generator.
- * e.g: /my-page/about-me.html.
+ * Iterface for a permalink generator. e.g: /my-page/about-me.html.
+ *
+ * Attributes with special meaning:
+ *  - permalink: (string) The permalink template.
+ *  - preserve_path_title: (bool)
+ *  - date: (string)
+ *  - categories: (array)
  *
  * Placeholders:
  *  - ":path"		: /my-page

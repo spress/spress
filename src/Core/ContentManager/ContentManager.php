@@ -30,6 +30,13 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
 /**
  * Content manager.
  *
+ * Attributes with special meaning:
+ *  - layout: (string) layout used for rendering an item.
+ *  - avoid_renderizer: (bool) Avoids the renderizer phase.
+ *  - generator: (string) The name of the generator.
+ *  - draft: (bool) Indicates if the item's content is a draft.
+ *  - output: (bool) Avoid the persistence of an item.
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentManager
@@ -355,6 +362,10 @@ class ContentManager
 
     private function renderBlocks(ItemInterface $item)
     {
+        if ($this->isRenderizerExcluded($item) === true) {
+            return;
+        }
+
         $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_CONVERT,
@@ -376,6 +387,10 @@ class ContentManager
 
     private function renderPage(ItemInterface $item)
     {
+        if ($this->isRenderizerExcluded($item) === true) {
+            return;
+        }
+
         $this->eventDispatcher->dispatch('spress.before_render_page', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
@@ -436,6 +451,21 @@ class ContentManager
         }
 
         return $attributes['layout'];
+    }
+
+    private function isRenderizerExcluded(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (array_key_exists('avoid_renderizer', $attributes) === false) {
+            return false;
+        }
+
+        if (is_bool($attributes['avoid_renderizer']) === false) {
+            throw new AttributeValueException('Invalid value. Expected bolean.', 'avoid_renderizer', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        }
+
+        return $attributes['avoid_renderizer'];
     }
 
     private function escapeDot($key)

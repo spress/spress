@@ -45,7 +45,10 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * If the filename is a date filename (a filename that mathed a patter yyyy-mm-dd-title.extension)
  * receive some extra attributes:
  *  - title
+ *  - title_path
  *  - date
+ *
+ * If the filename is located in a subfolder of "posts/" receive an extra attribute "categories".
  *
  * Params:
  *  - source_root       : the root directory.

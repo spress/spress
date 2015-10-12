@@ -5,6 +5,7 @@ CHANGELOG for 2.0.x
 * [New] Added command plugins: a new kind of plugins witch provides subcommand for `spress` executable. See #56.
 * [New] Taxonomy generator for grouping content around a set of terms. See #57.
 * [New] Modified RenderizerInterface for throwing a `Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException` if an error occurred during redering the content. Method affected: `renderBlocks` and `renderPage`.
+* [New] Added a new special attributte `avoid_renderizer` for avoiding the renderizer phase over an item.
 * [Fix] The separator for tags and categories of `new:post` command has been changed from space to comma. See issue #51.
 * [Fix] New template for spress plugin scaffold (`new:plugin` command) - fixed for 2.0 release. See issue #55.
 * [Fix] The `setUp` method of `FilesystemDataWriter removes the whole content of the output dir but VCS files. This means that `site:build` command doesn't remove the VCS files.

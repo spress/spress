@@ -94,7 +94,7 @@ class TwigRenderizer implements RenderizerInterface
 
             return $this->twig->render('@dynamic/content', $attributes);
         } catch (\Twig_Error_Syntax $e) {
-            throw new RenderException('Error during lexing or parsing of a template.', $id);
+            throw new RenderException('Error during lexing or parsing of a template.', $id, $e);
         }
     }
 
@@ -110,10 +110,10 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string The page rendered
      *
-     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException if "layout" attribute has an invalid value
-     *                                                                  or layout not found.
+     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException                  if "layout" attribute has an invalid value
+     *                                                                                   or layout not found.
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
-     *                                                                  rendering the content.
+     *                                                                                   rendering the content.
      */
     public function renderPage($id, $content, $layoutName, array $siteAttributes)
     {

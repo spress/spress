@@ -76,10 +76,6 @@ class RenderException extends \RuntimeException
             $this->message .= sprintf(' in %s', json_encode($this->id));
         }
 
-        if (is_null($previous = $this->getPrevious()) === false) {
-            $this->message .= sprintf('. Details: "%s"', $previous->getMessage());
-        }
-
         if ($dot) {
             $this->message .= '.';
         }

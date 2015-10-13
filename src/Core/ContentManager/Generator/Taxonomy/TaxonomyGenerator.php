@@ -16,6 +16,7 @@ use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerato
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\Support\ArrayWrapper;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
+use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Taxonomy generator lets you group items around a term.
@@ -123,10 +124,11 @@ class TaxonomyGenerator implements GeneratorInterface
         }
     }
 
-    protected function getTermRelativePath($basePath, $permalinkTemplate, $taxon)
+    protected function getTermRelativePath($basePath, $permalinkTemplate, $term)
     {
         $result = $basePath;
-        $result .= '/'.str_replace(':name', $taxon, $permalinkTemplate).'/index.html';
+        $slugedTerm = (new StringWrapper($term))->slug();
+        $result .= '/'.str_replace(':name', $slugedTerm, $permalinkTemplate).'/index.html';
 
         return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
     }

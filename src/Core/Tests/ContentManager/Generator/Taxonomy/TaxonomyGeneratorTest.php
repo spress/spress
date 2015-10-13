@@ -70,8 +70,9 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $attributes = $post1->getAttributes();
         $this->assertArrayHasKey('terms_url', $attributes);
-        $this->assertCount(2, $attributes['terms_url']);
-        $this->assertEquals('/categories/news', $attributes['terms_url']['news']);
-        $this->assertEquals('/categories/releases', $attributes['terms_url']['releases']);
+        $this->assertArrayHasKey('categories', $attributes['terms_url']);
+        $this->assertCount(2, $attributes['terms_url']['categories']);
+        $this->assertEquals('/categories/news', $attributes['terms_url']['categories']['news']);
+        $this->assertEquals('/categories/releases', $attributes['terms_url']['categories']['releases']);
     }
 }

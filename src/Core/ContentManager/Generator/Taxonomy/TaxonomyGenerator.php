@@ -28,7 +28,11 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
  *  ...
  *
  * This generator adds an attribute "terms_url" to each
- * items processed with the permalinks of the terms.
+ * items processed with the permalinks of the terms. The patter
+ * follows is $attributes['terms_url'][$taxonomy_attribute][$term].
+ *
+ * e.g: for "categories" as taxonomy_attribute and "news" as term
+ *  $attributes['terms_url']['categories']['news']
  *
  * How to configure? (frontmatter of the template page):
  *
@@ -92,7 +96,7 @@ class TaxonomyGenerator implements GeneratorInterface
             $paginationGenerator = new PaginationGenerator();
             $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$term => $items]);
 
-            $this->setTermsPermalink($items, $term, $termPath);
+            $this->setTermsPermalink($items, $taxonomyAttribute, $term, $termPath);
 
             $result = array_merge($result, $itemsGenerated);
         }
@@ -100,7 +104,7 @@ class TaxonomyGenerator implements GeneratorInterface
         return $result;
     }
 
-    protected function setTermsPermalink(array $items, $term, $termRelativePath)
+    protected function setTermsPermalink(array $items, $taxonomyAttribute, $term, $termRelativePath)
     {
         foreach ($items as $item) {
             $attributes = $item->getAttributes();
@@ -109,7 +113,11 @@ class TaxonomyGenerator implements GeneratorInterface
                 $attributes['term_urls'] = [];
             }
 
-            $attributes['terms_url'][$term] = $this->getTermPermalink($termRelativePath);
+            if (isset($attributes['term_urls'][$taxonomyAttribute])) {
+                $attributes['term_urls'][$taxonomyAttribute] = [];
+            }
+
+            $attributes['terms_url'][$taxonomyAttribute][$term] = $this->getTermPermalink($termRelativePath);
 
             $item->setAttributes($attributes);
         }

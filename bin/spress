@@ -16,6 +16,7 @@ use Symfony\Component\Console\Application;
 use Yosymfony\Spress\Command\NewPluginCommand;
 use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
+use Yosymfony\Spress\Command\SelfUpdateCommand;
 use Yosymfony\Spress\Command\SiteBuildCommand;
 use Yosymfony\Spress\Command\WelcomeCommand;
 use Yosymfony\Spress\Core\Spress;
@@ -29,6 +30,7 @@ $app->add($welcomeCommand);
 $app->add(new SiteBuildCommand());
 $app->add(new NewSiteCommand());
 $app->add(new NewPostCommand());
+$app->add(new SelfUpdateCommand());
 $app->add(new NewPluginCommand());
 
 $app->setDefaultCommand($welcomeCommand->getName());

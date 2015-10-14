@@ -26,6 +26,9 @@ use Yosymfony\Spress\Scaffolding\NewSite;
  */
 class NewSiteCommand extends Command
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setDefinition([

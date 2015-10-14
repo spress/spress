@@ -24,12 +24,18 @@ use Yosymfony\Spress\Core\Spress;
  */
 class WelcomeCommand extends Command
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName('welcome')
             ->setDescription('Welcome to Spress message');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([

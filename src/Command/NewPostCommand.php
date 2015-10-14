@@ -27,7 +27,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
 class NewPostCommand extends Command
 {
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -50,7 +50,7 @@ EOT
     }
 
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -73,7 +73,7 @@ EOT
     }
 
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {

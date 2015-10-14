@@ -28,7 +28,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
 class NewPluginCommand extends Command
 {
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -53,6 +53,9 @@ EOT
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new ConsoleIO($input, $output, $this->getHelperSet());
@@ -79,7 +82,7 @@ EOT
     }
 
     /**
-     * @see Symfony\Component\Console\Command\Command
+     * {@inheritdoc}
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {

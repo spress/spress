@@ -43,7 +43,7 @@ class NewSite
         $existsPath = $this->fs->exists($path);
         $isEmpty = $this->isEmptyDir($path);
 
-        if ($existsPath && false === $force && false === $isEmpty) {
+        if ($existsPath === true && $force === false && $isEmpty === false) {
             throw new \RuntimeException(sprintf('Path "%s" exists and is not empty.', $path));
         }
 
@@ -58,7 +58,7 @@ class NewSite
 
     private function createSite($path, $templateName, $completeScaffold = false)
     {
-        if ('blank' == $templateName) {
+        if ($templateName === 'blank') {
             $this->createBlankSite($path, $completeScaffold);
         } else {
             $this->copyTemplate($path, $templateName);
@@ -76,7 +76,7 @@ class NewSite
         $this->fs->dumpFile('composer.json', $this->getContentComposerJsonFile());
         $this->fs->dumpFile('src/content/index.html', '');
 
-        if (true === $completeScaffold) {
+        if ($completeScaffold === true) {
             $this->fs->mkdir(['src/includes', 'src/plugins']);
         }
 
@@ -87,7 +87,7 @@ class NewSite
     {
         $templatePath = $this->getTemplatePath($templateName);
 
-        if (false === $this->fs->exists($templatePath)) {
+        if ($this->fs->exists($templatePath) === false) {
             throw new \InvalidArgumentException(sprintf('The template "%s" not exists.', $templateName));
         }
 
@@ -96,14 +96,14 @@ class NewSite
 
     private function isEmptyDir($path)
     {
-        if ($this->fs->exists($path)) {
+        if ($this->fs->exists($path) === true) {
             $finder = new Finder();
             $finder->in($path);
 
             $iterator = $finder->getIterator();
             $iterator->next();
 
-            return !$iterator->valid();
+            return iterator_count($iterator) === 0;
         }
 
         return true;

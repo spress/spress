@@ -21,7 +21,7 @@ use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
  * Symfony Console implementation. This implementation requires
- * "dialog" and "dialog" helpers.
+ * "dialog" and "question" helpers.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

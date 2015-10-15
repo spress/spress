@@ -177,8 +177,12 @@ class Spress extends Container
         };
 
         $this['spress.plugin.pluginManager'] = function ($c) {
-            $embeddedComposer = $c['lib.embeddedComposer'];
-            $embeddedComposer->processAdditionalAutoloads();
+            $pathComposerFilename = $c['spress.config.site_dir'].'/'.$c['spress.config.composer_filename'];
+
+            if (file_exists($pathComposerFilename) === true) {
+                $embeddedComposer = $c['lib.embeddedComposer'];
+                $embeddedComposer->processAdditionalAutoloads();
+            }
 
             $builder = new PluginManagerBuilder($c['spress.config.plugin_dir'], $c['lib.eventDispatcher']);
 

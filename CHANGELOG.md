@@ -1,9 +1,9 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.0.0-beta
-* [New] Added a new converter for Markdown: ParsedownConverter. This converter are based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.
+* [New] Added a new converter for Markdown: ParsedownConverter. This converter is based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.
 * [New] Added command plugins: a new kind of plugins witch provides subcommand for `spress` executable. See #56.
-* [New] Added command `self-update` with an alias `selfupdate` for keeping Spress up to date. See #60.
+* [New] Added `self-update` command with an alias `selfupdate` for keeping Spress up to date. See #60.
 * [New] Taxonomy generator for grouping content around a set of terms. See #57.
 * [New] Modified RenderizerInterface for throwing a `Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException` if an error occurred during redering the content. Method affected: `renderBlocks` and `renderPage`.
 * [New] Added a new special attributte `avoid_renderizer` for avoiding the renderizer phase over an item.

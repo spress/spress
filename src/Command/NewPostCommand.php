@@ -135,7 +135,7 @@ EOT
             '',
             '<success>The post was generated successfully!</success>',
             '',
-            '<comment>File afected:</comment>',
+            '<info>File afected:</info>',
             '',
         ]);
         $io->write($files);

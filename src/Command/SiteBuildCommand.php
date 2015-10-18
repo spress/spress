@@ -185,7 +185,7 @@ class SiteBuildCommand extends Command
         $spress = $this->buildSpress($io, $input);
         $spress->parse();
 
-        $io->write('<comment>Site ready.</comment>');
+        $io->write('<success>Site ready.</success>');
     }
 
     /**
@@ -227,19 +227,22 @@ class SiteBuildCommand extends Command
      */
     protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
     {
-        $io->write('<comment>Starting...</comment>');
-        $io->write(sprintf('<comment>Environment: %s.</comment>', $env));
+        $io->write([
+            '',
+            '<info>Starting...</info>',
+        ]);
+        $io->write(sprintf('<info>Environment: %s.</info>', $env));
 
         if ($io->isDebug()) {
-            $io->write('<comment>Debug mode enabled.</comment>');
+            $io->write('<info>Debug mode enabled.</info>');
         }
 
         if ($drafts) {
-            $io->write('<comment>Posts drafts enabled.</comment>');
+            $io->write('<info>Posts drafts enabled.</info>');
         }
 
         if ($safe) {
-            $io->write('<comment>Plugins disabled.</comment>');
+            $io->write('<info>Plugins disabled.</info>');
         }
     }
 
@@ -251,7 +254,7 @@ class SiteBuildCommand extends Command
      */
     protected function resultMessage(ConsoleIO $io, array $items)
     {
-        $io->write(sprintf('Total items: %d', count($items)));
+        $io->write(sprintf('<info>Total items: %d.</info>', count($items)));
     }
 
     /**

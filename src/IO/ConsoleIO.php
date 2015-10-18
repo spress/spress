@@ -23,6 +23,8 @@ use Yosymfony\Spress\Core\IO\IOInterface;
  * Symfony Console implementation. This implementation requires
  * "dialog" and "question" helpers.
  *
+ * ConsoleIO defines "success" formatter style. e.g: $consoleIO->write('<success>Ready!</success>');
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConsoleIO implements IOInterface

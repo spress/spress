@@ -19,7 +19,7 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
- * Data source for the filesystem. Binary items don’t have their content
+ * Filesystem data source. Binary items don’t have their content
  * loaded in-memory. getPath() returns the path to the binary filename.
  *
  * Source-root structure:

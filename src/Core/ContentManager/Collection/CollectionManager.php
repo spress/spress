@@ -112,7 +112,7 @@ class CollectionManager
      *
      * @param string $name The collection's name.
      */
-    public function remove($name)
+    public function removeCollection($name)
     {
         unset($this->collections[$name]);
     }

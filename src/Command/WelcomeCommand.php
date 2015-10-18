@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Yosymfony\Spress\Core\Spress;
+use Yosymfony\Spress\IO\ConsoleIO;
 
 /**
  * Welcome to Spress command.
@@ -38,7 +39,9 @@ class WelcomeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln([
+        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+
+        $io->write([
             '',
             $this->getSpressAsciiArt(),
             '',
@@ -49,7 +52,7 @@ class WelcomeCommand extends Command
         ]);
 
         if ($this->isUnstableVersion()) {
-            $output->writeln([
+            $io->write([
                 '',
                 '<error>Warning: this is a unstable version.</error>',
                 ``,

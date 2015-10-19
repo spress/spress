@@ -65,7 +65,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cm->hasCollection('events'));
         $this->assertEquals(3, $cm->countCollection());
 
-        $cm->remove('events');
+        $cm->removeCollection('events');
 
         $this->assertEquals(2, $cm->countCollection());
 

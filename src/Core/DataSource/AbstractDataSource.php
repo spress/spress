@@ -29,7 +29,7 @@ abstract class AbstractDataSource
      *
      * @param array $params Params for initialize the data source
      */
-    public function __construct(array $params)
+    public function __construct(array $params = [])
     {
         $this->params = $params;
         $this->referenceCounter = 0;
@@ -60,9 +60,9 @@ abstract class AbstractDataSource
     /**
      * Creates a new item or layout in the data source.
      *
-     * @param Item $item
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      */
-    public function addItem(Item $item)
+    public function addItem(ItemInterface $item)
     {
     }
 

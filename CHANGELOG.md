@@ -1,6 +1,7 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.0.0-rc
+* [New] Added MemoryDataSource, a datasource for generating dynamic content.
 * [Improved] Minor changes over output styles.
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
 

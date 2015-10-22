@@ -1,5 +1,7 @@
 <?php
 
+use Yosymfony\Spress\Core\DataSource\Item;
+use Yosymfony\Spress\Core\DataSource\Memory\MemoryDataSource;
 use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
@@ -30,6 +32,15 @@ class TestPlugin implements PluginInterface
 
     public function onStart(EnvironmentEvent $event)
     {
+        $dsm = $event->getDataSourceManager();
+
+        $item = new Item('Content from item in memory data source', 'memory-datasource.txt');
+        $item->setPath('memory-datasource.txt', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $memoryDataSource = new MemoryDataSource();
+        $memoryDataSource->addItem($item);
+
+        $dsm->setDataSource('memory-plugin', $memoryDataSource);
     }
 
     public function onBeforeConvert(ContentEvent $event)

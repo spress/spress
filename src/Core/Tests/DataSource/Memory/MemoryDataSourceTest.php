@@ -70,16 +70,6 @@ class MemoryDataSourceTest extends \PHPUnit_Framework_TestCase
         $memoryDataSource->setItem(new Item('Content', 'index.html'));
         $memoryDataSource->setLayout(new Item('<div>{{ page.content }}</div>', 'layouts/default.html'));
         $memoryDataSource->setInclude(new Item('<p>Hi {{ name }}', 'includes/name.html'));
-
-        $memoryDataSource->configure();
-
-        $this->assertCount(0, $memoryDataSource->getItems());
-        $this->assertCount(0, $memoryDataSource->getLayouts());
-        $this->assertCount(0, $memoryDataSource->getIncludes());
-
-        $this->assertEquals(0, $memoryDataSource->countItem());
-        $this->assertEquals(0, $memoryDataSource->countLayout());
-        $this->assertEquals(0, $memoryDataSource->countInclude());
     }
 
     /**

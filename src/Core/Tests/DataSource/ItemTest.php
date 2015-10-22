@@ -83,7 +83,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testNullContent()
     {
-        $item = new Item(null, '/index.html', []);
+        $item = new Item(null, 'index.html', []);
 
         $this->assertEquals('', $item->getContent());
     }
@@ -92,10 +92,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $item = new Item('Raw content', 'index.html', []);
         $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
-        $item->setPath('/index.html', Item::SNAPSHOT_PATH_PERMALINK);
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_PERMALINK);
 
-        $this->assertEquals('/index.html', $item->getPath());
-        $this->assertEquals('/index.html', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
+        $this->assertEquals('index.html', $item->getPath());
+        $this->assertEquals('index.html', $item->getPath(Item::SNAPSHOT_PATH_PERMALINK));
         $this->assertEquals('index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
     }
 

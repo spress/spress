@@ -311,6 +311,11 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     private function sanitize($url)
     {
         $count = 0;
+
+        if ((new StringWrapper($url))->startWith('/') === false) {
+            $url = '/'.$url;
+        }
+
         $result = preg_replace('/\/\/+/', '/', $url);
         $result = str_replace(':/', '://', $result, $count);
 

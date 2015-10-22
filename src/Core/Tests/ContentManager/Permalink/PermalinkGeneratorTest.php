@@ -190,6 +190,15 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('my-path/2015-04-17-my-first-post.html', $permalink->getPath());
         $this->assertEquals('/my-path/2015-04-17-my-first-post.html', $permalink->getUrlPath());
+
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'permalink' => 'my-path/:year-:month-:day-:title.:extension',
+            'date' => '2015-04-17',
+            'title' => 'my first post',
+        ]));
+
+        $this->assertEquals('my-path/2015-04-17-my-first-post.html', $permalink->getPath());
+        $this->assertEquals('/my-path/2015-04-17-my-first-post.html', $permalink->getUrlPath());
     }
 
     public function testPreservePathTitle()

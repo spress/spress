@@ -4,6 +4,7 @@ CHANGELOG for 2.0.x
 * [New] Added MemoryDataSource, a datasource for generating dynamic content.
 * [Improved] Minor changes over output styles.
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
+* [Fixed] `PermalinkGenerator` adds an initial slash if the permalink doesn't start with it.
 
 ## 2.0.0-beta (2015-1015)
 * [New] Added a new converter for Markdown: ParsedownConverter. This converter is based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.

@@ -21,9 +21,9 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  */
 class MemoryDataSource extends AbstractDataSource
 {
-    private $items;
-    private $layouts;
-    private $includes;
+    private $items = [];
+    private $layouts = [];
+    private $includes = [];
 
     /**
      * @inheritDoc
@@ -47,16 +47,6 @@ class MemoryDataSource extends AbstractDataSource
     public function getIncludes()
     {
         return $this->includes;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function configure()
-    {
-        $this->clearItem();
-        $this->clearLayout();
-        $this->clearInclude();
     }
 
     /**

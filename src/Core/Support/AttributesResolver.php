@@ -102,8 +102,8 @@ class AttributesResolver
      *
      * @return array The merged and validated options
      *
-     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException   If the attributes don't validate the rules
-     * @throws \Yosymfony\Spress\Core\Exception\MissingAttributeException If a required values is missing
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If a required values is missing
      */
     public function resolve(array $attributes)
     {

@@ -110,7 +110,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string The page rendered
      *
-     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException                  If "layout" attribute has an invalid value
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If "layout" attribute has an invalid value
      *                                                                                   or layout not found.
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
      *                                                                                   rendering the content.

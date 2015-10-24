@@ -6,6 +6,7 @@ CHANGELOG for 2.0.x
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
 * [Fixed] `PermalinkGenerator` adds an initial slash if the permalink doesn't start with it.
 * [Fixed] `MissingAttributeException` and `AttributeValueException` has been moved to `Core\ContentManager\Exception.
+* [Deleted] `ConfigValueException` has been deleted.
 
 ## 2.0.0-beta (2015-1015)
 * [New] Added a new converter for Markdown: ParsedownConverter. This converter is based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.

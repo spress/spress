@@ -93,8 +93,8 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * @inheritDoc
      *
-     * @throws \Yosymfony\Spress\Core\Exception\AttributeValueException   If the attributes don't validate the rules.
-     * @throws \Yosymfony\Spress\Core\Exception\MissingAttributeException If missing attribute.
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules.
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute.
      */
     public function configure()
     {

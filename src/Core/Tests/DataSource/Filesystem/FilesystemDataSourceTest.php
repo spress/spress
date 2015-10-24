@@ -144,7 +144,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\MissingAttributeException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
     public function testConfigNoParams()
     {
@@ -153,7 +153,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\MissingAttributeException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
     public function testNoParamTextExtensions()
     {
@@ -164,7 +164,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamSourceRoot()
     {
@@ -176,7 +176,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamInclude()
     {
@@ -189,7 +189,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamExclude()
     {

@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 
-use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
 
 /**

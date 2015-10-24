@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Core\Exception;
+namespace Yosymfony\Spress\Core\ContentManager\Exception;
 
 /**
  * Exception class throw when an attribute or option is missing.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class MissingAttributeException extends ConfigValueException
+class MissingAttributeException extends AttributeValueException
 {
 }

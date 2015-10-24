@@ -86,7 +86,7 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadType()
     {
@@ -99,7 +99,7 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\MissingAttributeException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
     public function testRequired()
     {
@@ -113,7 +113,7 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testNotNullable()
     {
@@ -126,7 +126,7 @@ class AttributesResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testInvalidValue()
     {

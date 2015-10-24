@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\Core\Support;
 
-use Yosymfony\Spress\Core\Exception\AttributeValueException;
-use Yosymfony\Spress\Core\Exception\MissingAttributeException;
+use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException;
 
 /**
  * It allows you to create an attribute or option set with required,

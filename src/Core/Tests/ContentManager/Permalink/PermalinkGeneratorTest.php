@@ -242,7 +242,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testPrettyBadTypeForCategoriesAttribute()
     {
@@ -253,7 +253,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\Exception\AttributeValueException
+     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testPrettyBadDateAttribute()
     {

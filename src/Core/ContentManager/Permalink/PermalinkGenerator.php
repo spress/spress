@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
-use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**

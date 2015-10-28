@@ -67,15 +67,15 @@ $ composer.phar update
 Spress command are located in `bin/spress` and you can use this command to create a new site or process your
 site.
 
-#### site:new
-
-This command has been declared as **deprecated since Spress 1.1.0**. See `new:site` command.
-
 #### site:build
 
 Build your site in your configured destination, typically `_site`. 
 
-`site:build [-s|--source="./"] [--timezone="..."] [--env="dev"] [--server] [--watch] [--drafts] [--safe]`
+```bash
+site:Build 	[-s|--source="./"] [--timezone="..."] [--env="dev"]
+			[--server] [--watch] [--drafts]
+			[--safe]
+``
 
 * `--server` The built-in server will run.
 * `--watch` Watch for changes and regenerate your site automatically.
@@ -108,8 +108,10 @@ The `new:post` command helps you generates new posts.
 By default, the command interacts with the developer to tweak the generation.
 Any passed option will be used as a default value for the interaction.
 
-`new:post [--title="..."] [--layout="default"] [--date="..."] [--tags="..."] [--categories="..."]`
-
+```bash
+new:post 	[--title="..."] [--layout="default"] [--date="..."]
+			[--tags="..."] [--categories="..."]`
+``
 * `--title`: The title of the post.
 * `--layout`: The layout of the post.
 * `--date`: he date assigned to the post.
@@ -144,7 +146,7 @@ latest version from spress.yosymfony.com.
 
 How to make spress.phar
 -----------------------
-We are using [Box Project](http://box-project.org/) for generating the `.phar` file.
+We are using [Box Project](http://box-project.github.io/box2/) for generating the `.phar` file.
 
 You may download Box:
 

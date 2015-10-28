@@ -75,7 +75,7 @@ Build your site in your configured destination, typically `_site`.
 site:Build 	[-s|--source="./"] [--timezone="..."] [--env="dev"]
 			[--server] [--watch] [--drafts]
 			[--safe]
-``
+```
 
 * `--server` The built-in server will run.
 * `--watch` Watch for changes and regenerate your site automatically.

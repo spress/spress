@@ -167,7 +167,6 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/"name": "Victor Puertas"/', $fileContent);
         $this->assertRegExp('/"email": "vpgugr@gmail.com"/', $fileContent);
         $this->assertRegExp('/"license": "BSD-2-Clause"/', $fileContent);
-        $this->assertRegExp('/"spress_name": "Yosymfonytestplugin"/', $fileContent);
     }
 
     public function testOnlyAuthorName()

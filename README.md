@@ -115,7 +115,7 @@ new:post 	[--title="..."] [--layout="default"] [--date="..."]
 * `--title`: The title of the post.
 * `--layout`: The layout of the post.
 * `--date`: The date assigned to the post.
-* `--tags`: Comma separated list of categories.
+* `--tags`: Comma separated list of tags.
 * `--categories`: Comma separated list of categories.
 
 ##### new:plugin

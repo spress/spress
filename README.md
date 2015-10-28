@@ -111,7 +111,7 @@ Any passed option will be used as a default value for the interaction.
 ```bash
 new:post 	[--title="..."] [--layout="default"] [--date="..."]
 			[--tags="..."] [--categories="..."]`
-``
+```
 * `--title`: The title of the post.
 * `--layout`: The layout of the post.
 * `--date`: he date assigned to the post.

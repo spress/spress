@@ -122,13 +122,25 @@ The `new:plugin` command helps you generates new plugins.
 By default, the command interacts with the developer to tweak the generation.
 Any passed option will be used as a default value for the interaction.
 
-`new:plugin [--name="..."] [--author="..."] [--email="..."] [--description="..."] [--license="MIT"]`
+```bash
+new:plugin 	[--name="..."] [--command-name="..."] [--command-description="..."]
+			[--command-help="..."] [--author="..."] [--email="..."]
+			[--description="..."] [--license="MIT"]
+```
 
 * `--name`: The name of the plugins should follow the pattern `vendor-name/plugin-name`.
+* `--command-name`: In case of you want to create a command plugin this is the name of the command.
+* `--command-description`: The description of command in case of command plugin.
+* `--command-help`: The description of command in case of command plugin.
 * `--author`: The author of the plugin.
 * `--email`: The Email of the author.
 * `--description`: The description of your plugin.
 * `--license`: The license under you publish your plugin. MIT by default.
+
+##### self-update
+
+`self-update` or `selfupdate` command replace your `spress.phar` by the
+latest version from spress.yosymfony.com.
 
 How to make spress.phar
 -----------------------

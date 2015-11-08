@@ -32,7 +32,7 @@ Discuss and share your opinions in Gitter chat:
 ### Contributing
 
 When Contributing code to Spress, you must follow its coding standards. Spress follows 
-[Symfony coding style](http://symfony.com/doc/current/contributing/code/standards.html).
+[PSR-2 coding style](http://www.php-fig.org/psr/psr-2/).
 
 Keep in mind a golden rule: **Imitate the existing Spress code**.
 

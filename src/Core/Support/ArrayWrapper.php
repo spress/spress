@@ -171,7 +171,7 @@ class ArrayWrapper
             $slice = array_slice($array, $offset, $maxPerPage, true);
             $result[$page] = $slice;
 
-            $page++;
+            ++$page;
             $offset += count($slice);
         }
 
@@ -259,10 +259,34 @@ class ArrayWrapper
     }
 
     /**
+     * Sorts the array.
+     * 
+     * @param callable $callback Callback should be a function with
+     *                           the following signature:
+     *
+     * ```php
+     * function($element1, $element2)
+     * {
+     *     // returns 
+     * }
+     * ```
+     *
+     * @return static
+     */
+    public function sort(callable $callback)
+    {
+        $elements = $this->array;
+
+        uasort($elements, $callback);
+
+        return new static($elements);
+    }
+
+    /**
      * Filter using the given closure function.
      *
-     * @param Closure $filter The filter function should be a closure with the
-     *                        following signature:
+     * @param callable $filter The filter function should be a function with the
+     *                         following signature:
      *
      * ```php
      * function($key, $value)
@@ -273,7 +297,7 @@ class ArrayWrapper
      *
      * @return array
      */
-    public function where(\Closure $filter)
+    public function where(callable $filter)
     {
         $filtered = [];
 

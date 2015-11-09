@@ -162,6 +162,28 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('The content', $a->get('site.pages.index[.]html'));
     }
 
+    public function testSortDescendant()
+    {
+        $a = new ArrayWrapper([
+            'a' => '2015-11-01',
+            'b' => '2015-11-02',
+        ]);
+
+        $b = $a->sort(function ($element1, $element2) {
+            $dateA = new \Datetime($element1);
+            $dateB = new \Datetime($element2);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA < $dateB) ? 1 : -1;
+        });
+
+        $this->assertCount(2, $b->getArray());
+        $this->assertEquals('2015-11-02', array_values($b->getArray())[0]);
+    }
+
     public function testWhere()
     {
         $data = [];

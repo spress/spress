@@ -31,10 +31,13 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
  *
  * ---
  * layout: default
+ * 
  * generator: pagination
  * max_page: 5
- * provider: 'site.posts'
- * permalink: '/page:num'
+ * provider: site.posts
+ * permalink: "/page:num"
+ * sort_by: date
+ * sort_type: descendant
  * ---
  *
  * @author Victor Puertas <vpgugr@gmail.com>
@@ -42,7 +45,7 @@ use Yosymfony\Spress\Core\Exception\AttributeValueException;
 class PaginationGenerator implements GeneratorInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException if bad attribute value.
      */
@@ -56,22 +59,19 @@ class PaginationGenerator implements GeneratorInterface
             throw new AttributeValueException('Items per page value must be great than 0.', 'max_page', $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        $arr = new ArrayWrapper($collections);
         $providerName = $this->providerToCollection($options['provider']);
+        $templateItemPath = $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
-        if ($arr->has($providerName) === false || is_array($provider = $arr->get($providerName)) === false) {
-            throw new AttributeValueException(
-                sprintf('Provider: "%s" for pagination not found.', $options['provider']),
-                'provider',
-                $templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        $providerItems = $this->getProviderItems($collections, $providerName, $templateItemPath);
+
+        if (empty($options['sort_by']) === false) {
+            $providerItems = $this->sortItemsByAttribute($providerItems, $options['sort_by'], $options['sort_type']);
         }
 
-        $arr->setArray($provider);
-
-        $pages = $arr->paginate($options['max_page']);
+        $pages = (new ArrayWrapper($providerItems))->paginate($options['max_page']);
 
         $totalPages = count($pages);
-        $totalItems = count($provider);
+        $totalItems = count($providerItems);
         $templatePath = dirname($templateItem->getPath(Item::SNAPSHOT_PATH_RELATIVE));
 
         if ($templatePath === '.') {
@@ -158,20 +158,58 @@ class PaginationGenerator implements GeneratorInterface
         return '/'.$result;
     }
 
-    protected function getAttributesResolver(ItemInterface $templateItem)
+    protected function getProviderItems(array $collections, $providerName, $templateItemPath)
     {
-        $resolver = new AttributesResolver();
-        $resolver->setDefault('max_page', 5, 'int')
-            ->setDefault('provider', 'site.posts', 'string')
-            ->setDefault('permalink', '/page:num');
+        $arr = new ArrayWrapper($collections);
 
-        $attributes = $templateItem->getAttributes();
+        if ($arr->has($providerName) === false || is_array($provider = $arr->get($providerName)) === false) {
+            throw new AttributeValueException(
+                sprintf('Provider: "%s" for pagination not found.', $providerName),
+                'provider',
+                $templateItemPath);
+        }
 
-        return $resolver->resolve($attributes);
+        return $provider;
+    }
+
+    protected function sortItemsByAttribute(array $items, $attribute, $sortType)
+    {
+        $arr = new ArrayWrapper($items);
+
+        $callback = function ($key, ItemInterface $item) use ($attribute) {
+            $attributes = $item->getAttributes();
+
+            return isset($attributes[$attribute]) === true ? $attributes[$attribute] : null;
+        };
+
+        return $arr->sortBy($callback, null, SORT_REGULAR, $sortType === 'descending');
     }
 
     protected function providerToCollection($providerName)
     {
         return str_replace('site.', '', $providerName);
+    }
+
+    protected function getAttributesResolver(ItemInterface $templateItem)
+    {
+        $resolver = new AttributesResolver();
+        $resolver->setDefault('max_page', 5, 'int')
+            ->setDefault('provider', 'site.posts', 'string')
+            ->setDefault('permalink', '/page:num')
+            ->setDefault('sort_by', '', 'string')
+            ->setDefault('sort_type', 'descending', 'string')
+            ->setValidator('sort_type', function ($value) {
+                switch ($value) {
+                    case 'descending':
+                    case 'ascending':
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+
+        $attributes = $templateItem->getAttributes();
+
+        return $resolver->resolve($attributes);
     }
 }

@@ -221,4 +221,54 @@ class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($attrPage2['pagination']['next_page_path']);
         $this->assertNull($attrPage2['pagination']['next_page_url']);
     }
+
+    public function testPaginateAscending()
+    {
+        $post1 = new Item('Post 1', 'posts/2015-05-26-hi', ['date' => '2015-11-02']);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-welcome', ['date' => '2015-11-01']);
+
+        $collections = [
+            'posts' => [$post1, $post2],
+        ];
+
+        $templateItem = new Item('Paginator content', 'blog/index.html', [
+            'sort_by' => 'date',
+            'sort_type' => 'ascending',
+        ]);
+
+        $pageItems = $this->pagination->generateItems($templateItem, $collections);
+
+        $this->assertTrue(is_array($pageItems));
+        $this->assertCount(1, $pageItems);
+
+        $pageItems = $pageItems[0]->getAttributes()['pagination']['items'];
+
+        $this->assertEquals('2015-11-01', array_values($pageItems)[0]['date']);
+        $this->assertEquals('2015-11-02', array_values($pageItems)[1]['date']);
+    }
+
+    public function testPaginateDescending()
+    {
+        $post1 = new Item('Post 1', 'posts/2015-05-26-hi', ['date' => '2015-11-02']);
+        $post2 = new Item('Post 2', 'posts/2015-05-26-welcome', ['date' => '2015-11-01']);
+
+        $collections = [
+            'posts' => [$post1, $post2],
+        ];
+
+        $templateItem = new Item('Paginator content', 'blog/index.html', [
+            'sort_by' => 'date',
+            'sort_type' => 'descending',
+        ]);
+
+        $pageItems = $this->pagination->generateItems($templateItem, $collections);
+
+        $this->assertTrue(is_array($pageItems));
+        $this->assertCount(1, $pageItems);
+
+        $pageItems = $pageItems[0]->getAttributes()['pagination']['items'];
+
+        $this->assertEquals('2015-11-02', array_values($pageItems)[0]['date']);
+        $this->assertEquals('2015-11-01', array_values($pageItems)[1]['date']);
+    }
 }

@@ -162,26 +162,94 @@ class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('The content', $a->get('site.pages.index[.]html'));
     }
 
-    public function testSortDescendant()
+    public function testSort()
     {
         $a = new ArrayWrapper([
             'a' => '2015-11-01',
-            'b' => '2015-11-02',
+            'b' => '2015-11-03',
+            'c' => '2015-11-02',
         ]);
 
-        $b = $a->sort(function ($element1, $element2) {
-            $dateA = new \Datetime($element1);
-            $dateB = new \Datetime($element2);
+        $b = $a->sort();
 
-            if ($dateA == $dateB) {
-                return 0;
-            }
+        $this->assertCount(3, $b);
+        $this->assertEquals('2015-11-01', array_values($b)[0]);
+        $this->assertEquals('2015-11-02', array_values($b)[1]);
+        $this->assertEquals('2015-11-03', array_values($b)[2]);
+    }
 
-            return ($dateA < $dateB) ? 1 : -1;
+    public function testSortKey()
+    {
+        $a = new ArrayWrapper([
+            'level1' => [
+                'a' => '2015-11-01',
+                'b' => '2015-11-03',
+                'c' => '2015-11-02',
+            ],
+        ]);
+
+        $b = $a->sort('level1');
+
+        $this->assertCount(3, $b);
+        $this->assertEquals('2015-11-01', array_values($b)[0]);
+        $this->assertEquals('2015-11-02', array_values($b)[1]);
+        $this->assertEquals('2015-11-03', array_values($b)[2]);
+    }
+
+    public function testSortBy()
+    {
+        $a = new ArrayWrapper([
+            'a' => ['date' => '2015-11-01', 'id' => 3],
+            'b' => ['date' => '2015-11-02', 'id' => 2],
+            'c' => ['date' => '2015-11-03', 'id' => 1],
+        ]);
+
+        $b = $a->sortBy(function ($key, $value) {
+            return $value['id'];
         });
 
-        $this->assertCount(2, $b->getArray());
-        $this->assertEquals('2015-11-02', array_values($b->getArray())[0]);
+        $this->assertCount(3, $b);
+        $this->assertEquals(1, array_values($b)[0]['id']);
+        $this->assertEquals(2, array_values($b)[1]['id']);
+        $this->assertEquals(3, array_values($b)[2]['id']);
+    }
+
+    public function testSortByDescending()
+    {
+        $a = new ArrayWrapper([
+            'a' => ['date' => '2015-11-01', 'id' => 3],
+            'b' => ['date' => '2015-11-02', 'id' => 2],
+            'c' => ['date' => '2015-11-03', 'id' => 1],
+        ]);
+
+        $b = $a->sortBy(function ($key, $value) {
+            return $value['id'];
+        }, null, SORT_REGULAR, true);
+
+        $this->assertCount(3, $b);
+        $this->assertEquals(3, array_values($b)[0]['id']);
+        $this->assertEquals(2, array_values($b)[1]['id']);
+        $this->assertEquals(1, array_values($b)[2]['id']);
+    }
+
+    public function testSortByKey()
+    {
+        $a = new ArrayWrapper([
+            'level1' => [
+                'a' => ['date' => '2015-11-01', 'id' => 3],
+                'b' => ['date' => '2015-11-02', 'id' => 2],
+                'c' => ['date' => '2015-11-03', 'id' => 1],
+            ],
+        ]);
+
+        $b = $a->sortBy(function ($key, $value) {
+            return $value['id'];
+        }, 'level1');
+
+        $this->assertCount(3, $b);
+        $this->assertEquals(1, array_values($b)[0]['id']);
+        $this->assertEquals(2, array_values($b)[1]['id']);
+        $this->assertEquals(3, array_values($b)[2]['id']);
     }
 
     public function testWhere()

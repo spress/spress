@@ -259,31 +259,79 @@ class ArrayWrapper
     }
 
     /**
-     * Sorts the array.
-     * 
+     * Sorts the array (ascendant by default).
+     *
+     * @param string   $key      Element to sort using "dot" notation.
+     *                           You can to escape a dot in a key surrendering with brackets: "[.]".
      * @param callable $callback Callback should be a function with
      *                           the following signature:
      *
      * ```php
      * function($element1, $element2)
      * {
-     *     // returns 
+     *     // returns -1, 0 or 1
      * }
      * ```
      *
-     * @return static
+     * @return array
      */
-    public function sort(callable $callback)
+    public function sort($key = null, callable $callback = null)
     {
-        $elements = $this->array;
+        $elements = is_null($key) === true ? $this->array : $this->get($key);
 
-        uasort($elements, $callback);
+        $sortCallback = is_null($callback) === false ? $callback : function ($element1, $element2) {
+            if ($element1 == $element2) {
+                return 0;
+            }
 
-        return new static($elements);
+            return ($element1 < $element2) ? -1 : 1;
+        };
+
+        uasort($elements, $sortCallback);
+
+        return $elements;
     }
 
     /**
-     * Filter using the given closure function.
+     * Sort the array sing the given callback.
+     *
+     * @param callable $callback Callback should be a function with
+     *                           the following signature:
+     *
+     * ```php
+     * function($key, $value)
+     * {
+     *     // return $processedValue;
+     * }
+     * ```
+     * @param string $key          Element to sort using "dot" notation.
+     *                             You can to escape a dot in a key surrendering with brackets: "[.]".
+     * @param int    $options      See sort_flags at http://php.net/manual/es/function.sort.php
+     * @param bool   $isDescending
+     * 
+     * @return array
+     */
+    public function sortBy(callable $callback, $key = null, $options = SORT_REGULAR, $isDescending = false)
+    {
+        $elements = [];
+        $sourceElements = is_null($key) === true ? $this->array : $this->get($key);
+
+        foreach ($sourceElements as $key => $value) {
+            $elements[$key] = $callback($key, $value);
+        }
+
+        $isDescending ? arsort($elements, $options)
+                    : asort($elements, $options);
+
+        foreach (array_keys($elements) as $key) {
+            $elements[$key] = $sourceElements[$key];
+        }
+
+        return $elements;
+    }
+
+    /**
+     * Filter using the given callback function.
      *
      * @param callable $filter The filter function should be a function with the
      *                         following signature:

@@ -3,6 +3,7 @@ CHANGELOG for 2.0.x
 ## 2.0.0-rc
 * [New] Added MemoryDataSource, a datasource for generating dynamic content.
 * [New] Support to sort items at `PaginationGenerator` with attributes `sort_by` and `sort_type. See #61.
+* [New] Added `getGeneratorManager` method to `EnvironmentEvent` for managing generators at plugins.
 * [Improved] Minor changes over output styles.
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
 * [Fixed] `PermalinkGenerator` adds an initial slash if the permalink doesn't start with it.

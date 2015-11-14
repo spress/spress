@@ -21,6 +21,8 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
                      ->getMock();
         $cm = $this->getMockBuilder('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager')
                      ->getMock();
+        $gm = $this->getMockBuilder('\Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager')
+                     ->getMock();
         $renderizer = $this->getMockBuilder('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface')
                      ->getMock();
         $io = $this->getMockBuilder('\Yosymfony\Spress\Core\IO\IOInterface')
@@ -34,6 +36,7 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
             $dsm,
             $dw,
             $cm,
+            $gm,
             $renderizer,
             $io,
             $configValues);
@@ -41,6 +44,7 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $event->getDataSourceManager());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface', $event->getDataWriter());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager', $event->getConverterManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager', $event->getGeneratorManager());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface', $event->getRenderizer());
         $this->assertInstanceOf('\Yosymfony\Spress\Core\IO\IOInterface', $event->getIO());
 

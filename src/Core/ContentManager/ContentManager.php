@@ -160,6 +160,7 @@ class ContentManager
             $this->dataSourceManager,
             $this->dataWriter,
             $this->converterManager,
+            $this->generatorManager,
             $this->renderizer,
             $this->io,
             $this->attributes));

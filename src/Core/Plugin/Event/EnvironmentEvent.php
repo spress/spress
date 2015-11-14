@@ -16,6 +16,7 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
+use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
@@ -30,20 +31,34 @@ class EnvironmentEvent extends Event
 {
     protected $dataSourceManager;
     protected $converterManager;
+    protected $generatorManager;
     protected $dataWriter;
     protected $renderizer;
     protected $io;
 
+    /**
+     * Constructor.
+     * 
+     * @param DataSourceManager   $dataSourceManager
+     * @param DataWriterInterface $dataWriter
+     * @param ConverterManager    $converterManager
+     * @param GeneratorManager    $generatorManager
+     * @param RenderizerInterface $renderizer
+     * @param IOInterface         $io
+     * @param array               &$configValues
+     */
     public function __construct(
         DataSourceManager $dataSourceManager,
         DataWriterInterface $dataWriter,
         ConverterManager $converterManager,
+        GeneratorManager $generatorManager,
         RenderizerInterface $renderizer,
         IOInterface $io,
         array &$configValues)
     {
         $this->dataSourceManager = $dataSourceManager;
         $this->converterManager = $converterManager;
+        $this->generatorManager = $generatorManager;
         $this->dataWriter = $dataWriter;
         $this->renderizer = $renderizer;
         $this->io = $io;
@@ -53,7 +68,7 @@ class EnvironmentEvent extends Event
     /**
      * Gets the data source manager.
      *
-     * @return \Yosymfony\Spress\Core\DataSource\DataSourceManager
+     * @return Yosymfony\Spress\Core\DataSource\DataSourceManager
      */
     public function getDataSourceManager()
     {
@@ -63,7 +78,7 @@ class EnvironmentEvent extends Event
     /**
      * Gets the converter manager.
      *
-     * @return \Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager
+     * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager
      */
     public function getConverterManager()
     {
@@ -71,9 +86,19 @@ class EnvironmentEvent extends Event
     }
 
     /**
+     * Gets the generator manager.
+     * 
+     * @return Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager
+     */
+    public function getGeneratorManager()
+    {
+        return $this->generatorManager;
+    }
+
+    /**
      * Gets the renderizer.
      *
-     * @return \Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface
+     * @return Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface
      */
     public function getRenderizer()
     {
@@ -83,7 +108,7 @@ class EnvironmentEvent extends Event
     /**
      * Sets a custom renderizer.
      *
-     * @param \Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer The renderizer.
+     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer The renderizer.
      */
     public function setRenderizer(RenderizerInterface $renderizer)
     {
@@ -93,7 +118,7 @@ class EnvironmentEvent extends Event
     /**
      * Gets the data writer.
      *
-     * @return \Yosymfony\Spress\Core\DataWriter\DataWriterInterface
+     * @return Yosymfony\Spress\Core\DataWriter\DataWriterInterface
      */
     public function getDataWriter()
     {
@@ -103,7 +128,7 @@ class EnvironmentEvent extends Event
     /**
      * Sets the data writer.
      *
-     * @param \Yosymfony\Spress\Core\DataWriter\DataWriterInterface $dataWriter
+     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface $dataWriter
      */
     public function setDataWriter(DataWriterInterface $dataWriter)
     {
@@ -113,7 +138,7 @@ class EnvironmentEvent extends Event
     /**
      * Gets IO.
      *
-     * @return \Yosymfony\Spress\IO\IOInterface
+     * @return Yosymfony\Spress\IO\IOInterface
      */
     public function getIO()
     {

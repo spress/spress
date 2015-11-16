@@ -8,6 +8,7 @@ CHANGELOG for 2.0.x
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
 * [Fixed] `PermalinkGenerator` adds an initial slash if the permalink doesn't start with it.
 * [Fixed] `MissingAttributeException` and `AttributeValueException` has been moved to `Core\ContentManager\Exception.
+* [Fixed] `ConsoleIO` passed to `spress.io` key (DI container) when `SiteBuildCommand` builds `Spress instance.
 * [Fixed] Updated `spress-installer` version to ~2.0 at `composer.json.twig`.
 * [Deleted] `ConfigValueException` has been deleted.
 

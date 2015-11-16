@@ -36,7 +36,7 @@ class SiteBuildCommand extends Command
     protected $configResolver;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -54,7 +54,7 @@ class SiteBuildCommand extends Command
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -157,6 +157,8 @@ class SiteBuildCommand extends Command
 
             $io->write('<comment>Parsedown converter: enabled.</comment>');
         }
+
+        $spress['spress.io'] = $io;
 
         return $spress;
     }

@@ -200,6 +200,9 @@ class ContentManager
         foreach ($this->items as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
+        }
+
+        foreach ($this->items as $item) {
             $this->renderBlocks($item);
         }
 

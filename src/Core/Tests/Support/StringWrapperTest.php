@@ -21,6 +21,7 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('welcome-to-spress', $str->slug());
         $this->assertEquals('bienvenido-a-espana', $str->setString('Bienvenido a España')->slug());
+        $this->assertEquals('version-2-0-0', $str->setString('version 2.0.0')->slug());
         $this->assertEquals('hello-spress', $str->setString('hello  spress')->slug());
         $this->assertEquals('hello-spress', $str->setString('-hello-spress-')->slug());
         $this->assertEquals('12-cheese', $str->setString('1\2 cheese')->slug());

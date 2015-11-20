@@ -81,6 +81,7 @@ class StringWrapper
         $str = $this->toAscii();
 
         $flip = $separator == '-' ? '_' : '-';
+        $str = str_replace('.', $separator, $str);
         $str = preg_replace('!['.preg_quote($flip).']+!u', $separator, $str);
         $str = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($str));
         $str = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $str);

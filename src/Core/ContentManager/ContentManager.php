@@ -297,7 +297,10 @@ class ContentManager
 
         foreach ($items as $item) {
             if (array_key_exists($item->getId(), $this->items) === true) {
-                throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s". Generator: "%s".', $id, $attributes['generator']));
+                throw new \RuntimeException(
+                    sprintf('A previous item exists with the same id: "%s". Generator: "%s".',
+                        $item->getId(),
+                        $attributes['generator']));
             }
 
             $this->processCollection($item);

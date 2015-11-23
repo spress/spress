@@ -5,13 +5,14 @@ CHANGELOG for 2.0.x
 * [New] Support to sort items at `PaginationGenerator` with attributes `sort_by` and `sort_type. See #61.
 * [New] Added `getGeneratorManager` method to `EnvironmentEvent` for managing generators at plugins.
 * [Improved] Minor changes over output styles.
-* [Fixed] Now, `slug` method transform dot character to dash character.
+* [Fixed] Now, `slug` method transform dot characters into dash characters.
 * [Fixed] Fixed lifecycle: render phase starts after converter phase has been finished for all items.
 * [Fixed] Changed the method `remove` by `removeCollection` in CollectionManager class.
 * [Fixed] `PermalinkGenerator` adds an initial slash if the permalink doesn't start with it.
 * [Fixed] `MissingAttributeException` and `AttributeValueException` has been moved to `Core\ContentManager\Exception.
 * [Fixed] `ConsoleIO` passed to `spress.io` key (DI container) when `SiteBuildCommand` builds `Spress instance.
 * [Fixed] Updated `spress-installer` version to ~2.0 at `composer.json.twig`.
+* [Fixed] Fixed the message of the exception threw when a previous item exists.
 * [Deleted] `ConfigValueException` has been deleted.
 
 ## 2.0.0-beta (2015-1015)

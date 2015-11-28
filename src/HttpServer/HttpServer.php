@@ -17,7 +17,7 @@ use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\HttpServer\RequestHandler;
 
 /**
- * Built-in server.
+ * A simple built-in server.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -29,7 +29,8 @@ class HttpServer
     private $host;
     private $documentroot;
     private $requestHandler;
-    private $onBeforeHandleRequestFunction;
+    private $onBeforeRequestFunction;
+    private $onAfterRequestFunction;
     private $defatultMimeType = 'application/octet-stream';
     private $errorDocument = 'error.html.twig';
 
@@ -54,45 +55,37 @@ class HttpServer
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler(function (Request $request) {
 
-            $resourcePath = $this->resolvePath($request);
+            $statusCode = 200;
+            $content = '';
+            $contentType = 'text/html';
+            $resourcePath = $this->resolvePath($request->getPathInfo());
 
-            if ($this->onBeforeHandleRequestFunction) {
-                try {
-                    call_user_func($this->onBeforeHandleRequestFunction, $request, $resourcePath, $this->io);
-                } catch (\Exception $e) {
-                    $this->logRequest($request, 500);
+            try {
+                $this->handleOnBeforeRequestFunction($request, $resourcePath);
 
-                    return $this->getResponseError(500, $e->getMessage());
+                if (file_exists($resourcePath) === true) {
+                    $content = file_get_contents($resourcePath);
+                    $contentType = $this->getMimeTypeFile($resourcePath);
+                } else {
+                    $statusCode = 404;
+                    $content = $resourcePath;
                 }
+
+                $this->handleOnAfterRequestFunction($content, $statusCode);
+            } catch (\Exception $e) {
+                $this->logRequest($request, 500);
+
+                return $this->buildResponse($e->getMessage(), 500, $contentType);
             }
 
-            if (false === file_exists($resourcePath)) {
-                $this->logRequest($request, 404);
+            $this->logRequest($request, $statusCode);
 
-                return $this->getResponseError(404, $resourcePath);
-            }
-
-            $content = file_get_contents($resourcePath);
-            $contentType = $this->getMimeTypeFile($resourcePath);
-
-            $this->logRequest($request, 200);
-
-            return $this->getResponseOk($content, $contentType);
+            return $this->buildResponse($content, $statusCode, $contentType);
         });
 
         $this->requestHandler
             ->listen($port, $host)
             ->enableHttpFoundationRequest();
-    }
-
-    /**
-     * Runs before handle a request.
-     *
-     * @param callabe $callback
-     */
-    public function onBeforeHandleRequest(callable $callback)
-    {
-        $this->onBeforeHandleRequestFunction = $callback;
     }
 
     /**
@@ -105,15 +98,55 @@ class HttpServer
         $server->start();
     }
 
-    private function initialMessage()
+    /**
+     * Runs before handle a request.
+     *
+     * @param callabe $callback
+     */
+    public function onBeforeRequest(callable $callback)
     {
-        $this->io->write('');
-        $this->io->write('<comment>Spress server running... press ctrl-c to stop</comment>');
-        $this->io->write(sprintf(
-            '<comment>Port: %s Host: %s Document root: %s</comment>',
-            $this->port,
-            $this->host,
-            $this->documentroot));
+        $this->onBeforeRequestFunction = $callback;
+    }
+
+    /**
+     * Runs after handle a request.
+     *
+     * @param callabe $callback
+     */
+    public function onAfterRequest(callable $callback)
+    {
+        $this->onAfterRequestFunction = $callback;
+    }
+
+    private function handleOnBeforeRequestFunction(Request $request, $resourcePath)
+    {
+        if ($this->onBeforeRequestFunction) {
+            call_user_func($this->onBeforeRequestFunction, $request, $resourcePath, $this->io);
+        }
+    }
+
+    private function handleOnAfterRequestFunction($content, $statusCode)
+    {
+        if ($this->onAfterRequestFunction) {
+            call_user_func($this->onAfterRequestFunction, $content, $statusCode, $this->io);
+        }
+    }
+
+    private function buildResponse($content, $statusCode = 200, $contentType = 'text/html')
+    {
+        $response = [
+            'content' => $content,
+            'headers' => ['Content-Type' => $contentType],
+            'status_code' => $statusCode,
+        ];
+
+        if ($statusCode >= 400) {
+            $model = $this->getErrorModel($statusCode, $content);
+
+            $response['content'] = $this->twig->render($this->errorDocument, $model);
+        }
+
+        return $response;
     }
 
     private function logRequest(Request $request, $statusCode)
@@ -132,29 +165,9 @@ class HttpServer
         $this->io->write($data);
     }
 
-    private function getResponseOk($content, $contentType)
+    private function resolvePath($resourcePath)
     {
-        return [
-            'content' => $content,
-            'headers' => ['Content-Type' => $contentType],
-            'status_code' => 200,
-        ];
-    }
-
-    private function getResponseError($statusCode, $data)
-    {
-        $model = $this->getErrorModel($statusCode, $data);
-
-        return [
-            'content' => $this->twig->render($this->errorDocument, $model),
-            'headers' => ['Content-Type' => 'text/html'],
-            'status_code' => $statusCode,
-        ];
-    }
-
-    private function resolvePath(Request $request)
-    {
-        $path = $this->documentroot.$request->getPathInfo();
+        $path = $this->documentroot.$resourcePath;
 
         if (is_dir($path)) {
             $path .= '/index.html';
@@ -202,5 +215,16 @@ class HttpServer
             'status_code' => $statusCode,
             'message' => $message,
         ];
+    }
+
+    private function initialMessage()
+    {
+        $this->io->write('');
+        $this->io->write('<comment>Spress server running... press ctrl-c to stop</comment>');
+        $this->io->write(sprintf(
+            '<comment>Port: %s Host: %s Document root: %s</comment>',
+            $this->port,
+            $this->host,
+            $this->documentroot));
     }
 }

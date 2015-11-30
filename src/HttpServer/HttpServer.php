@@ -11,13 +11,12 @@
 
 namespace Yosymfony\Spress\HttpServer;
 
-use Dflydev\ApacheMimeTypes\PhpRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\HttpServer\RequestHandler;
 
 /**
- * A simple built-in server.
+ * A simple HTTP server.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -31,7 +30,6 @@ class HttpServer
     private $requestHandler;
     private $onBeforeRequestFunction;
     private $onAfterRequestFunction;
-    private $defatultMimeType = 'application/octet-stream';
     private $errorDocument = 'error.html.twig';
 
     /**
@@ -54,33 +52,30 @@ class HttpServer
         $this->documentroot = $documentroot;
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler(function (Request $request) {
-
-            $statusCode = 200;
-            $content = '';
-            $contentType = 'text/html';
-            $resourcePath = $this->resolvePath($request->getPathInfo());
+            $serverResponse = new ServerResponse('');
+            $serverRequest = new ServerRequest($request, $this->documentroot);
 
             try {
-                $this->handleOnBeforeRequestFunction($request, $resourcePath);
+                $this->handleOnBeforeRequestFunction($serverRequest);
+                $resourcePath = $serverRequest->getAbsolutePath();
 
                 if (file_exists($resourcePath) === true) {
-                    $content = file_get_contents($resourcePath);
-                    $contentType = $this->getMimeTypeFile($resourcePath);
+                    $serverResponse->setContent(file_get_contents($resourcePath));
+                    $serverResponse->setContentType($serverRequest->getMimeType());
                 } else {
-                    $statusCode = 404;
-                    $content = $resourcePath;
+                    $serverResponse->setStatusCode(404);
+                    $serverResponse->setContent($resourcePath);
                 }
 
-                $this->handleOnAfterRequestFunction($content, $statusCode);
+                $this->handleOnAfterRequestFunction($serverResponse);
             } catch (\Exception $e) {
-                $this->logRequest($request, 500);
-
-                return $this->buildResponse($e->getMessage(), 500, $contentType);
+                $serverResponse->setStatusCode(500);
+                $serverResponse->setContent($e->getMessage());
             }
 
-            $this->logRequest($request, $statusCode);
+            $this->logRequest($serverRequest->getIp(), $serverRequest->getPath(), $serverResponse->getStatusCode());
 
-            return $this->buildResponse($content, $statusCode, $contentType);
+            return $this->buildFinalResponse($serverResponse);
         });
 
         $this->requestHandler
@@ -101,7 +96,15 @@ class HttpServer
     /**
      * Runs before handle a request.
      *
-     * @param callabe $callback
+     * @param callable $callback Callback should be a function with
+     *                           the following signature:
+     *
+     * ```php
+     * function(ServerRequest $request)
+     * {
+     *     // ...
+     * }
+     * ```
      */
     public function onBeforeRequest(callable $callback)
     {
@@ -111,76 +114,66 @@ class HttpServer
     /**
      * Runs after handle a request.
      *
-     * @param callabe $callback
+     * @param callable $callback Callback should be a function with
+     *                           the following signature:
+     *
+     * ```php
+     * function(ServerResponse $response)
+     * {
+     *     // ...
+     * }
+     * ```
      */
     public function onAfterRequest(callable $callback)
     {
         $this->onAfterRequestFunction = $callback;
     }
 
-    private function handleOnBeforeRequestFunction(Request $request, $resourcePath)
+    private function handleOnBeforeRequestFunction(ServerRequest $request)
     {
         if ($this->onBeforeRequestFunction) {
-            call_user_func($this->onBeforeRequestFunction, $request, $resourcePath, $this->io);
+            call_user_func($this->onBeforeRequestFunction, $request);
         }
     }
 
-    private function handleOnAfterRequestFunction($content, $statusCode)
+    private function handleOnAfterRequestFunction(ServerResponse $response)
     {
         if ($this->onAfterRequestFunction) {
-            call_user_func($this->onAfterRequestFunction, $content, $statusCode, $this->io);
+            call_user_func($this->onAfterRequestFunction, $response);
         }
     }
 
-    private function buildResponse($content, $statusCode = 200, $contentType = 'text/html')
+    private function buildFinalResponse(ServerResponse $response)
     {
-        $response = [
-            'content' => $content,
-            'headers' => ['Content-Type' => $contentType],
-            'status_code' => $statusCode,
+        $finalResponse = [
+            'content' => $response->getContent(),
+            'headers' => ['Content-Type' => $response->getContentType()],
+            'status_code' => $response->getStatusCode(),
         ];
 
-        if ($statusCode >= 400) {
-            $model = $this->getErrorModel($statusCode, $content);
+        if ($finalResponse['status_code'] >= 400) {
+            $model = $this->getErrorModel($finalResponse['status_code'], $finalResponse['content']);
 
-            $response['content'] = $this->twig->render($this->errorDocument, $model);
+            $finalResponse['content'] = $this->twig->render($this->errorDocument, $model);
         }
 
-        return $response;
+        return $finalResponse;
     }
 
-    private function logRequest(Request $request, $statusCode)
+    private function logRequest($ip, $path, $statusCode)
     {
         $date = new \Datetime();
         $data = sprintf('[%s] %s [%s] %s',
             $date->format('Y-m-d h:i:s'),
-            $request->getClientIp(),
+            $ip,
             $statusCode,
-            $request->getPathInfo());
+            $path);
 
         if ($statusCode >= 400) {
             $data = '<error>'.$data.'</error>';
         }
 
         $this->io->write($data);
-    }
-
-    private function resolvePath($resourcePath)
-    {
-        $path = $this->documentroot.$resourcePath;
-
-        if (is_dir($path)) {
-            $path .= '/index.html';
-        }
-
-        return $path;
-    }
-
-    private function getMimeTypeFile($path)
-    {
-        $mimetypeRepo = new PhpRepository();
-
-        return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: $this->defatultMimeType;
     }
 
     private function buildTwig($templateDir)

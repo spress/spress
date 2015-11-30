@@ -96,8 +96,8 @@ class SiteBuildCommand extends Command
             if ($watch === true) {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
 
-                $server->onBeforeRequest(function ($request, $resourcePath, $io) use ($io, $input, $rw, $serverWatchExtension) {
-                    $resourceExtension = pathinfo($resourcePath, PATHINFO_EXTENSION);
+                $server->onBeforeRequest(function ($request) use ($io, $input, $rw, $serverWatchExtension) {
+                    $resourceExtension = pathinfo($request->getAbsolutePath(), PATHINFO_EXTENSION);
 
                     if (in_array($resourceExtension, $serverWatchExtension)) {
                         $this->reParse($io, $input, $rw);

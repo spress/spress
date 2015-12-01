@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\HttpServer;
 
 use Dflydev\ApacheMimeTypes\PhpRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Server request.
@@ -22,18 +23,16 @@ use Symfony\Component\HttpFoundation\Request;
 class ServerRequest
 {
     private $request;
-    private $documentroot;
+    private $internalPrefix = '/@internal';
 
     /**
      * Constructor.
      * 
      * @param Symfony\Component\HttpFoundation\Request $request
-     * @param string                                   $documentroot
      */
-    public function __construct(Request $request, $documentroot)
+    public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->documentroot = $documentroot;
     }
 
     /**
@@ -43,23 +42,35 @@ class ServerRequest
      */
     public function getPath()
     {
-        return $this->request->getPathInfo();
+        return str_replace($this->internalPrefix, '', $this->request->getPathInfo());
     }
 
     /**
-     * Gets the absolute path.
+     * Gets the path with "index.html" append.
      * 
      * @return string Absolute path using the document root.
      */
-    public function getAbsolutePath()
+    public function getPathFilename()
     {
-        $path = $this->documentroot.$this->getPath();
+        $path = $this->getPath();
 
-        if (is_dir($path)) {
+        $basename = basename($path);
+
+        if (preg_match('/^(.+?)\.(.+)$/', $basename) !== 1) {
             $path .= '/index.html';
         }
 
         return $path;
+    }
+
+    /**
+     * Is internal resource?
+     * 
+     * @return bool
+     */
+    public function isIternal()
+    {
+        return (new StringWrapper($this->request->getPathInfo()))->startWith($this->internalPrefix);
     }
 
     /**
@@ -80,7 +91,7 @@ class ServerRequest
     public function getMimeType()
     {
         $mimetypeRepo = new PhpRepository();
-        $path = $this->getAbsolutePath();
+        $path = $this->getPathFilename();
 
         return $mimetypeRepo->findType(pathinfo($path, PATHINFO_EXTENSION)) ?: 'application/octet-stream';
     }

@@ -27,6 +27,7 @@ class HttpServer
     private $port;
     private $host;
     private $documentroot;
+    private $serverroot;
     private $requestHandler;
     private $onBeforeRequestFunction;
     private $onAfterRequestFunction;
@@ -49,6 +50,7 @@ class HttpServer
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;
+        $this->serverroot = $serverroot;
         $this->documentroot = $documentroot;
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler(function (Request $request) {
@@ -57,7 +59,7 @@ class HttpServer
 
             try {
                 $this->handleOnBeforeRequestFunction($serverRequest);
-                $resourcePath = $serverRequest->getAbsolutePath();
+                $resourcePath = $this->getRequestPath($serverRequest);
 
                 if (file_exists($resourcePath) === true) {
                     $serverResponse->setContent(file_get_contents($resourcePath));
@@ -158,6 +160,15 @@ class HttpServer
         }
 
         return $finalResponse;
+    }
+
+    private function getRequestPath(ServerRequest $request)
+    {
+        if ($request->isIternal()) {
+            return $this->serverroot.$request->getPathFilename();
+        }
+
+        return $this->documentroot.$request->getPathFilename();
     }
 
     private function logRequest($ip, $path, $statusCode)

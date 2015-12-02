@@ -68,7 +68,7 @@ class ServerRequest
      * 
      * @return bool
      */
-    public function isIternal()
+    public function isInternal()
     {
         return (new StringWrapper($this->request->getPathInfo()))->startWith($this->internalPrefix);
     }

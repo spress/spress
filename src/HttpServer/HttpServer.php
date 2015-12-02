@@ -164,7 +164,7 @@ class HttpServer
 
     private function getRequestPath(ServerRequest $request)
     {
-        if ($request->isIternal()) {
+        if ($request->isInternal()) {
             return $this->serverroot.$request->getPathFilename();
         }
 

@@ -231,20 +231,20 @@ class SiteBuildCommand extends Command
     {
         $io->write([
             '',
-            '<info>Starting...</info>',
+            '<comment>Starting...</comment>',
         ]);
-        $io->write(sprintf('<info>Environment: %s.</info>', $env));
+        $io->write(sprintf('<comment>Environment: <info>%s</info>.</comment> ', $env));
 
         if ($io->isDebug()) {
-            $io->write('<info>Debug mode enabled.</info>');
+            $io->write('<comment>Debug mode <info>enabled</info>.</comment>');
         }
 
         if ($drafts) {
-            $io->write('<info>Posts drafts enabled.</info>');
+            $io->write('<comment>Posts drafts <info>enabled</info></comment>.');
         }
 
         if ($safe) {
-            $io->write('<info>Plugins disabled.</info>');
+            $io->write('<info>Plugins <comment>disabled</comment>.</info>');
         }
     }
 
@@ -256,7 +256,12 @@ class SiteBuildCommand extends Command
      */
     protected function resultMessage(ConsoleIO $io, array $items)
     {
-        $io->write(sprintf('<info>Total items: %d.</info>', count($items)));
+        $io->write([
+            '',
+            '<info>Success!</info>',
+            '',
+        ]);
+        $io->write(sprintf('<info>Total items: <comment>%d</comment>.</info>', count($items)));
     }
 
     /**

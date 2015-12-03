@@ -58,7 +58,7 @@ EOT
         $localVersion = $this->getApplication()->getVersion();
 
         if ($localVersion === $remoteVersion) {
-            $io->write('<info>Spress is already up to date.</info>');
+            $io->write('<comment>Spress is already up to date.</comment>');
 
             return;
         }
@@ -78,10 +78,10 @@ EOT
             unset($phar);
             rename($tempFilename, $localFilename);
 
-            $io->write(sprintf('<success>Spress updated from %s to %s.</success>', $localVersion, $remoteVersion));
+            $io->write(sprintf('<comment>Spress updated from <info>%s</info> to <info>%s</info>.</comment>', $localVersion, $remoteVersion));
 
             if (isset($manifest['changelog_url']) === true) {
-                $io->write(sprintf('<info>Go to %s for more details.</info>', $manifest['changelog_url']));
+                $io->write(sprintf('<comment>Go to <info>%s</info> for more details.</comment>', $manifest['changelog_url']));
             }
         } catch (\Exception $e) {
             if ($e instanceof \UnexpectedValueException === false && $e instanceof \PharException === false) {

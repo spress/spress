@@ -98,7 +98,7 @@ EOT
         $input->setOption('layout', $layout);
 
         $date = $input->getOption('date') ?: $this->getDateFormated();
-        $question = new Question("Post date ($date): ", $date);
+        $question = new Question("Post date [<comment>$date</comment>]: ", $date);
         $date = $helper->ask($input, $output, $question);
         $input->setOption('date', $date);
 
@@ -124,7 +124,7 @@ EOT
     {
         $io->write([
             '',
-            'Welcome to <comment>Spress post generator</comment>',
+            '<comment>Welcome to Spress <info>post generator</info></comment>',
             '',
         ]);
     }
@@ -135,9 +135,10 @@ EOT
             '',
             '<success>The post was generated successfully!</success>',
             '',
-            '<info>File afected:</info>',
+            '<comment>File afected:</comment>',
             '',
         ]);
         $io->write($files);
+        $io->write('');
     }
 }

@@ -43,7 +43,7 @@ class NewSiteCommand extends Command
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -74,14 +74,14 @@ class NewSiteCommand extends Command
     {
         $io->write([
             '',
-            sprintf('<success>New site created at %s.</success>', $sitePath),
+            sprintf('<success>New site created at "%s" folder.</success>', $sitePath),
             '',
         ]);
 
         if ('./' == $sitePath) {
             $io->write('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
         } else {
-            $io->write(sprintf('<comment>Go to %s folder and edit composer.json file to add your theme data and plugins required.</comment>', $sitePath));
+            $io->write(sprintf('<comment>Go to "<info>%s</info>" folder and edit composer.json file to add your theme data and plugins required.</comment>', $sitePath));
         }
     }
 }

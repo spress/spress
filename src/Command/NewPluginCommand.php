@@ -93,7 +93,7 @@ EOT
         $this->welcomeMessage($io);
 
         $name = $input->getOption('name');
-        $question = new Question('Plugin name <info>(follow the pattern</info> <comment>"vendor-name/plugin-name"</comment><info>)</info>: ', $name);
+        $question = new Question('Plugin name (follow the pattern <comment>"vendor-name/plugin-name"</comment>): ', $name);
         $question->setMaxAttempts(null);
         $question->setValidator(function ($answer) {
             return Validators::validatePluginName($answer);
@@ -155,7 +155,7 @@ EOT
     {
         $io->write([
             '',
-            'Welcome to <comment>Spress plugin generator</comment>',
+            'Welcome to Spress <comment>plugin generator</comment>',
             '',
         ]);
     }
@@ -190,7 +190,7 @@ EOT
 
         $io->write([
             '',
-            '<comment>Finally you can add your plugin to the add-on list at http://spress.yosymfony.com/add-ons/</comment>',
+            '<comment>Finally you can add your plugin to the add-on list at <info>http://spress.yosymfony.com/add-ons/</info></comment>',
             '',
         ]);
     }

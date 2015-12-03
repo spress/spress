@@ -95,7 +95,7 @@ class SiteBuildCommand extends Command
             $server = new HttpServer($io, $serverroot, $documentroot, $port, $host);
 
             if ($watch === true) {
-                $io->write('<comment>Auto-regeneration: enabled.</comment>');
+                $io->write('<comment>Auto-regeneration: <info>enabled</info>.</comment>');
 
                 $server->onBeforeRequest(function (ServerRequest $request) use ($io, $input, $rw, $serverWatchExtension) {
                     $resourceExtension = pathinfo($request->getPathFilename(), PATHINFO_EXTENSION);
@@ -108,7 +108,7 @@ class SiteBuildCommand extends Command
 
             $server->start();
         } elseif ($watch) {
-            $io->write('<comment>Auto-regeneration: enabled. Press ctrl-c to stop.</comment>');
+            $io->write('<comment>Auto-regeneration: <info>enabled</info>. Press ctrl-c to stop.</comment>');
 
             do {
                 sleep(2);
@@ -156,7 +156,7 @@ class SiteBuildCommand extends Command
         if ($spress['spress.config.values']['parsedown_activated'] === true) {
             $this->enableParsedown($spress);
 
-            $io->write('<comment>Parsedown converter: enabled.</comment>');
+            $io->write('<comment>Parsedown converter: <info>enabled</info>.</comment>');
         }
 
         $spress['spress.io'] = $io;

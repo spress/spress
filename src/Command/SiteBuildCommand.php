@@ -25,6 +25,7 @@ use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Spress;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\HttpServer\HttpServer;
+use Yosymfony\Spress\HttpServer\ServerRequest;
 
 /**
  * Build command.
@@ -96,7 +97,7 @@ class SiteBuildCommand extends Command
             if ($watch === true) {
                 $io->write('<comment>Auto-regeneration: enabled.</comment>');
 
-                $server->onBeforeRequest(function ($request) use ($io, $input, $rw, $serverWatchExtension) {
+                $server->onBeforeRequest(function (ServerRequest $request) use ($io, $input, $rw, $serverWatchExtension) {
                     $resourceExtension = pathinfo($request->getPathFilename(), PATHINFO_EXTENSION);
 
                     if (in_array($resourceExtension, $serverWatchExtension)) {

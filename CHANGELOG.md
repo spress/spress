@@ -4,6 +4,7 @@ CHANGELOG for 2.0.x
 * [New] Added MemoryDataSource, a datasource for generating dynamic content.
 * [New] Support to sort items at `PaginationGenerator` with attributes `sort_by` and `sort_type. See #61.
 * [New] Added `getGeneratorManager` method to `EnvironmentEvent` for managing generators at plugins.
+* [Improved] Improved the way of generating the classname in PluginGenerator.
 * [Improved] Minor changes over output styles.
 * [Improved] Improved HttpServer with support to load internal resources (used with error page). Added a new hook: `handleOnAfterRequestFunction`. Bootstrap file has been included for using with internal pages like error page.
 * [Improved] Minor improvements over the Spress application output.

@@ -40,14 +40,14 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $files);
         $this->assertFileExists($files[0]);
         $this->assertFileExists($files[1]);
-        $this->assertRegExp('/Yosymfonymyplugin.php/', $files[0]);
+        $this->assertRegExp('/YosymfonyMyplugin.php/', $files[0]);
         $this->assertRegExp('/composer.json/', $files[1]);
         $this->assertRegExp('/LICENSE/', $files[2]);
     }
 
     public function testGenerateCommand()
     {
-        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/myplugin');
+        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/my-plugin');
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->setCommandData('selfupdate');
         $files = $generator->generate();
@@ -55,14 +55,14 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $files);
         $this->assertFileExists($files[0]);
         $this->assertFileExists($files[1]);
-        $this->assertRegExp('/Yosymfonymyplugin.php/', $files[0]);
+        $this->assertRegExp('/YosymfonyMyPlugin.php/', $files[0]);
         $this->assertRegExp('/composer.json/', $files[1]);
         $this->assertRegExp('/LICENSE/', $files[2]);
     }
 
     public function testLicenseNotExists()
     {
-        $generator = new PluginGenerator($this->tmpDir, 'yosymfony/myplugin');
+        $generator = new PluginGenerator($this->tmpDir, 'yo-symfony/my-plugin');
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->setLicense('My-license');
         $files = $generator->generate();
@@ -70,7 +70,7 @@ class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $files);
         $this->assertFileExists($files[0]);
         $this->assertFileExists($files[1]);
-        $this->assertRegExp('/Yosymfonymyplugin.php/', $files[0]);
+        $this->assertRegExp('/YoSymfonyMyPlugin.php/', $files[0]);
         $this->assertRegExp('/composer.json/', $files[1]);
     }
 

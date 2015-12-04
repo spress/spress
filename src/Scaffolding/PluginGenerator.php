@@ -41,7 +41,7 @@ class PluginGenerator extends Generator
      * Constructor.
      *
      * @param string $targetDir The target dir.
-     * @param string $name      The name of the plugin.
+     * @param string $name      The name of the plugin. Could you follow the pattern "vendor/class-name".
      */
     public function __construct($targetDir, $name)
     {
@@ -193,8 +193,13 @@ class PluginGenerator extends Generator
      */
     protected function getClassname($name)
     {
+        $result = implode(' ', explode('/', $name));
+        $result = implode(' ', explode('-', $result));
+
+        $result = ucwords($result);
+
         // replace non letter or digits by empty string
-        $result = preg_replace('/[^\\pL\d]+/u', '', $name);
+        $result = preg_replace('/[^\\pL\d]+/u', '', $result);
 
         // trim
         $result = trim($result, '-');
@@ -202,13 +207,10 @@ class PluginGenerator extends Generator
         // transliterate
         $result = iconv('UTF-8', 'US-ASCII//TRANSLIT', $result);
 
-        // lowercase
-        $result = strtolower($result);
-
         // remove unwanted characters
         $result = preg_replace('/[^-\w]+/', '', $result);
 
-        return ucfirst($result);
+        return $result;
     }
 
     /**

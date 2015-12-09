@@ -23,16 +23,22 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
 class ServerRequest
 {
     private $request;
+    private $documentRoot;
+    private $serverRoot;
     private $internalPrefix = '/@internal';
 
     /**
      * Constructor.
      * 
      * @param Symfony\Component\HttpFoundation\Request $request
+     * @param string                                   $documentRoot Path to the document root.
+     * @param string                                   $serverRoot   Path to the server root.
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, $documentRoot, $serverRoot)
     {
         $this->request = $request;
+        $this->documentRoot = $documentRoot;
+        $this->serverRoot = $serverRoot;
     }
 
     /**
@@ -48,19 +54,23 @@ class ServerRequest
     /**
      * Gets the path with "index.html" append.
      * 
-     * @return string Absolute path using the document root.
+     * @return string Absolute path using either document root or server root (iternal requests).
      */
     public function getPathFilename()
     {
         $path = $this->getPath();
 
-        $basename = basename($path);
+        if ($this->isInternal()) {
+            return $this->serverRoot.$path;
+        }
 
-        if (preg_match('/^(.+?)\.(.+)$/', $basename) !== 1) {
+        $path = $this->documentRoot.$path;
+
+        if (is_dir($path)) {
             $path .= '/index.html';
         }
 
-        return $path;
+        return preg_replace('/\/\/+/', '/', $path);
     }
 
     /**

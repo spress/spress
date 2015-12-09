@@ -55,11 +55,11 @@ class HttpServer
         $this->buildTwig($serverroot);
         $this->requestHandler = new RequestHandler(function (Request $request) {
             $serverResponse = new ServerResponse('');
-            $serverRequest = new ServerRequest($request, $this->documentroot);
+            $serverRequest = new ServerRequest($request, $this->documentroot, $this->serverroot);
 
             try {
                 $this->handleOnBeforeRequestFunction($serverRequest);
-                $resourcePath = $this->getRequestPath($serverRequest);
+                $resourcePath = $serverRequest->getPathFilename();
 
                 if (file_exists($resourcePath) === true) {
                     $serverResponse->setContent(file_get_contents($resourcePath));
@@ -160,15 +160,6 @@ class HttpServer
         }
 
         return $finalResponse;
-    }
-
-    private function getRequestPath(ServerRequest $request)
-    {
-        if ($request->isInternal()) {
-            return $this->serverroot.$request->getPathFilename();
-        }
-
-        return $this->documentroot.$request->getPathFilename();
     }
 
     private function logRequest($ip, $path, $statusCode)

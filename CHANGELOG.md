@@ -1,6 +1,9 @@
 CHANGELOG for 2.0.x
 ===================
-## 2.0.0-rc
+## 2.0.0
+* [Fixed] Fixed a bug with the built-in server by which a relative URL that contains a dot inside the trailing component throws a 404 not found error. e.g: `/doc/2.0`.
+
+## 2.0.0-rc (2015-12-07)
 * [New] Added MemoryDataSource, a datasource for generating dynamic content.
 * [New] Support to sort items at `PaginationGenerator` with attributes `sort_by` and `sort_type. See #61.
 * [New] Added `getGeneratorManager` method to `EnvironmentEvent` for managing generators at plugins.
@@ -18,7 +21,7 @@ CHANGELOG for 2.0.x
 * [Fixed] Fixed the message of the exception threw when a previous item exists.
 * [Deleted] `ConfigValueException` has been deleted.
 
-## 2.0.0-beta (2015-1015)
+## 2.0.0-beta (2015-10-15)
 * [New] Added a new converter for Markdown: ParsedownConverter. This converter is based on Parsedown by Emanuil Rusev. See http://parsedown.org/. Deals with issue #40.
 * [New] Added command plugins: a new kind of plugins witch provides subcommand for `spress` executable. See #56.
 * [New] Added `self-update` command with an alias `selfupdate` for keeping Spress up to date. See #60.

@@ -66,7 +66,7 @@ class ServerRequest
 
         $path = $this->documentRoot.$path;
 
-        if (is_dir($path)) {
+        if (is_dir($path) === true) {
             $path .= '/index.html';
         }
 

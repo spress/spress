@@ -20,7 +20,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->documentRoot = __DIR__.'/../fixtures/httpserver';
+        $this->documentRoot = __DIR__.'/../fixtures/httpServer';
         $this->serverRoot = __DIR__.'/../../app/httpServer';
     }
 

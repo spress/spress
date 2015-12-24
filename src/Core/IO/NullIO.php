@@ -24,7 +24,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVerbose()
     {
@@ -32,7 +32,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVeryVerbose()
     {
@@ -40,7 +40,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDebug()
     {
@@ -48,7 +48,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDecorated()
     {
@@ -56,7 +56,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($messages, $newline = true)
     {
@@ -64,7 +64,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function ask($question, $default = null)
     {
@@ -72,7 +72,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function askConfirmation($question, $default = true)
     {
@@ -80,7 +80,7 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
@@ -88,14 +88,14 @@ class NullIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
         return;
     }
 
-    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
+    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback = true)
     {
         return;
     }

@@ -114,7 +114,7 @@ interface IOInterface
      *
      * @return string The answer.
      */
-    public function askAndHideAnswer($question, $fallback);
+    public function askAndHideAnswer($question, $fallback = true);
 
     /**
      * Asks for a value, hide and validates the response.
@@ -132,5 +132,5 @@ interface IOInterface
      *
      * @throws \Exception When any of the validators return an error
      */
-    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback);
+    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback = true);
 }

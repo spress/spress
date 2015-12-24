@@ -1,6 +1,7 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.0.0
+* [New] `ConsoleIO` class uses Symfony CLI styles.
 * [Fixed] Fixed a bug with the built-in server by which a relative URL that contains a dot inside the trailing component throws a 404 not found error. e.g: `/doc/2.0`.
 * [Fixed] Added a default value for `$fallback` argument of `askHiddenResponseAndValidate` and `askAndHideAnswer` methods in `IOInterface`.
 

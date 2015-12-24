@@ -11,50 +11,36 @@
 
 namespace Yosymfony\Spress\IO;
 
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Symfony Console implementation. This implementation requires
- * "dialog" and "question" helpers.
- *
- * ConsoleIO defines "success" formatter style. e.g: $consoleIO->write('<success>Ready!</success>');
+ * Symfony Console implementation. This implementation uses the SymfonyStyle.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConsoleIO implements IOInterface
 {
     protected $input;
-    protected $output;
-    protected $helperSet;
-    protected $lastMessage;
+    protected $io;
 
     /**
      * Constructor.
      *
-     * @param Symfony\Component\Console\Input\InputInterface   $input     Input operations.
-     * @param Symfony\Component\Console\Output\OutputInterface $output    Ouputs operations.
-     * @param Symfony\Component\Console\Helper\HelperSet       $helperSet A set of helpers used by this implementation.
+     * @param Symfony\Component\Console\Input\InputInterface   $input  Input operations.
+     * @param Symfony\Component\Console\Output\OutputInterface $output Ouputs operations.
      */
-    public function __construct(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
-        $this->output = $output;
-        $this->helperSet = $helperSet;
-
-        if (is_null($formatter = $this->output->getFormatter()) === false) {
-            $successStyle = new OutputFormatterStyle('white', 'blue', ['bold']);
-            $formatter->setStyle('success', $successStyle);
-        }
+        $this->io = new SymfonyStyle($input, $output);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isInteractive()
     {
@@ -62,108 +48,147 @@ class ConsoleIO implements IOInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVerbose()
     {
-        return $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
+        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isVeryVerbose()
     {
-        return $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
+        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDebug()
     {
-        return OutputInterface::VERBOSITY_DEBUG === $this->output->getVerbosity();
+        return $this->io->getVerbosity() === OutputInterface::VERBOSITY_DEBUG;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDecorated()
     {
-        return $this->output->isDecorated();
+        return $this->io->isDecorated();
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($messages, $newline = true)
     {
-        $this->output->write($messages, $newline);
+        $this->io->write($messages, $newline);
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException if the "question" helper is not defined.
+     * {@inheritdoc}
      */
     public function ask($question, $default = null)
     {
-        $helper = $this->helperSet->get('question');
-
-        $questionObj = new Question($question, $default);
-
-        return $helper->ask($this->input, $this->output, $questionObj);
+        return $this->io->ask($question, $default);
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException if the "question" helper is not defined.
+     * {@inheritdoc}
      */
     public function askConfirmation($question, $default = true)
     {
-        $helper = $this->helperSet->get('question');
-
-        $questionObj = new ConfirmationQuestion($question, $default);
-
-        return $helper->ask($this->input, $this->output, $questionObj);
+        return $this->io->confirm($question, $default);
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException if the "question" helper is not defined.
+     * {@inheritdoc}
      */
     public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
-        $helper = $this->helperSet->get('question');
-
         $attempts = is_int($attempts) ?: null;
 
-        $questionObj = new Question($question, $default);
-        $questionObj->setValidator($validator);
-        $questionObj->setMaxAttempts($attempts);
+        $question = new Question($question, $default);
+        $question->setValidator($validator);
+        $question->setMaxAttempts($attempts);
 
-        return $helper->ask($this->input, $this->output, $questionObj);
+        return $this->io->askQuestion($question);
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException if the "dialog" helper is not defined.
+     * {@inheritdoc}
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
-        return $this->helperSet->get('dialog')->askHiddenResponse($this->output, $question, $fallback);
+        return $this->io->askHidden($question);
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException if the "dialog" helper is not defined.
+     * {@inheritdoc}
      */
-    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback)
+    public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback = true)
     {
-        return $this->helperSet->get('dialog')->askHiddenResponseAndValidate($this->output, $question, $validator, $attempts, $fallback);
+        $attempts = is_int($attempts) ?: null;
+
+        $question = new Question($question);
+        $question->setHidden(true);
+        $question->setValidator($validator);
+        $question->setMaxAttempts($attempts);
+        $question->setHiddenFallback($fallback);
+
+        return $this->askQuestion($question);
+    }
+
+    /**
+     * Formats a success result bar.
+     *
+     * @param string|array $message
+     */
+    public function success($message)
+    {
+        $this->io->success($message);
+    }
+
+    /**
+     * Formats an error result bar.
+     *
+     * @param string|array $message
+     */
+    public function error($message)
+    {
+        $this->io->error($message);
+    }
+
+    /**
+     * Formats an warning result bar.
+     *
+     * @param string|array $message
+     */
+    public function warning($message)
+    {
+        $this->io->warning($message);
+    }
+
+    /**
+     * Formats a pair label-value.
+     *
+     * @param string $label
+     * @param mixed  $value
+     */
+    public function labelValue($label, $value)
+    {
+        $this->write(sprintf('<info>%s</info>: %s', $label, $value));
+    }
+
+    /**
+     * Add newline(s).
+     *
+     * @param int $count The number of newlines.
+     */
+    public function newLine($count = 1)
+    {
+        $this->io->newLine($count);
     }
 }

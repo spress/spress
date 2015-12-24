@@ -7,225 +7,217 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Based on tests: https://github.com/composer/composer/blob/master/tests/Composer/Test/IO/ConsoleIOTest.php
- * from Nils Adermann <naderman@naderman.de> and Jordi Boggiano <j.boggiano@seld.be>.
  */
 
 namespace Yosymfony\Spress\tests\IO;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tester\CommandTester;
 use Yosymfony\Spress\IO\ConsoleIO;
 
 class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 {
+    protected $command;
+    protected $tester;
+
+    protected function setUp()
+    {
+        $this->command = new Command('consoleIO');
+        $this->tester = new CommandTester($this->command);
+    }
+
+    protected function tearDown()
+    {
+        $this->command = null;
+        $this->tester = null;
+    }
+
     public function testIsInteractive()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $inputMock->expects($this->at(0))
-            ->method('isInteractive')
-            ->will($this->returnValue(true));
-        $inputMock->expects($this->at(1))
-            ->method('isInteractive')
-            ->will($this->returnValue(false));
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
-        $helperMock = $this->getMock('Symfony\Component\Console\Helper\HelperSet');
+        $isInteractive = false;
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isInteractive) {
+            $io = new ConsoleIO($input, $output);
 
-        $this->assertTrue($consoleIO->isInteractive());
-        $this->assertFalse($consoleIO->isInteractive());
+            $this->assertEquals($isInteractive, $io->isInteractive());
+        });
+
+        $this->tester->execute([], ['interactive' => false]);
+
+        $isInteractive = true;
+
+        $this->tester->execute([], ['interactive' => true]);
     }
 
     public function testIsVerbose()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
-             ->setMethods(['getVerbosity', 'doWrite'])
-             ->getMock();
-        $outputMock->expects($this->at(0))
-            ->method('getVerbosity')
-            ->will($this->returnValue(2));
-        $outputMock->expects($this->at(1))
-            ->method('getVerbosity')
-            ->will($this->returnValue(0));
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $isVerbose = true;
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isVerbose) {
+            $io = new ConsoleIO($input, $output);
 
-        $this->assertTrue($consoleIO->isVerbose());
-        $this->assertFalse($consoleIO->isVerbose());
+            $this->assertEquals($isVerbose, $io->isVerbose());
+        });
+
+        $this->tester->execute([], ['verbosity' => 2]);
+
+        $isVerbose = false;
+
+        $this->tester->execute([], ['verbosity' => 0]);
     }
 
     public function testIsVeryVerbose()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
-             ->setMethods(['getVerbosity', 'doWrite'])
-             ->getMock();
-        $outputMock->expects($this->at(0))
-            ->method('getVerbosity')
-            ->will($this->returnValue(3));
-        $outputMock->expects($this->at(1))
-            ->method('getVerbosity')
-            ->will($this->returnValue(2));
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $isVeryVerbose = true;
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isVeryVerbose) {
+            $io = new ConsoleIO($input, $output);
 
-        $this->assertTrue($consoleIO->isVeryVerbose());
-        $this->assertFalse($consoleIO->isVeryVerbose());
+            $this->assertEquals($isVeryVerbose, $io->isVeryVerbose());
+        });
+
+        $this->tester->execute([], ['verbosity' => 3]);
+
+        $isVeryVerbose = false;
+
+        $this->tester->execute([], ['verbosity' => 2]);
     }
 
     public function testIsDebug()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
-             ->setMethods(['getVerbosity', 'doWrite'])
-             ->getMock();
-        $outputMock->expects($this->at(0))
-            ->method('getVerbosity')
-            ->will($this->returnValue(4));
-        $outputMock->expects($this->at(1))
-            ->method('getVerbosity')
-            ->will($this->returnValue(3));
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $isDebug = true;
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDebug) {
+            $io = new ConsoleIO($input, $output);
 
-        $this->assertTrue($consoleIO->isDebug());
-        $this->assertFalse($consoleIO->isDebug());
+            $this->assertEquals($isDebug, $io->isDebug());
+        });
+
+        $this->tester->execute([], ['verbosity' => 4]);
+
+        $isDebug = false;
+
+        $this->tester->execute([], ['verbosity' => 3]);
     }
 
     public function testIsDecorated()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\Output')
-             ->setMethods(['isDecorated', 'doWrite'])
-             ->getMock();
-        $outputMock->expects($this->at(0))
-            ->method('isDecorated')
-            ->will($this->returnValue(true));
-        $outputMock->expects($this->at(1))
-            ->method('isDecorated')
-            ->will($this->returnValue(false));
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $isDecorated = true;
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
 
-        $this->assertTrue($consoleIO->isDecorated());
-        $this->assertFalse($consoleIO->isDecorated());
+            $this->assertEquals($isDecorated, $io->isDecorated());
+        });
+
+        $this->tester->execute([], ['decorated' => true]);
+
+        $isDecorated = false;
+
+        $this->tester->execute([], ['decorated' => false]);
     }
 
     public function testWrite()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
-        $outputMock->expects($this->once())
-            ->method('write')
-            ->with($this->equalTo('Hi IO API'));
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->write('Hi IO API');
+        });
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->write('Hi IO API', false);
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertEquals("Hi IO API\n", $this->tester->getDisplay(true));
     }
 
     public function testAsk()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
-        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
-            ->getMock();
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $result = $io->ask('what is your name?', 'Yo! Symfony');
 
-        $question = new \Symfony\Component\Console\Question\Question('Your name?', '');
+            $this->assertEquals('Yo! Symfony', $result);
+        });
 
-        $questionHelperMock->expects($this->once())
-            ->method('ask')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $question);
-        $helperMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('question'))
-            ->will($this->returnValue($questionHelperMock));
-
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->ask('Your name?', '');
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
     }
 
     public function testAskConfirmation()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
-        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
-            ->getMock();
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
 
-        $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Is valid?', true);
+            $this->assertTrue($io->AskConfirmation('Are you sure?'));
+            $this->assertFalse($io->AskConfirmation('Are you sure?', false));
+        });
 
-        $questionHelperMock->expects($this->once())
-            ->method('ask')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $question);
-        $helperMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('question'))
-            ->will($this->returnValue($questionHelperMock));
-
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->askConfirmation('Is valid?', true);
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
     }
 
     public function testAskAndValidate()
     {
-        $inputMock = $this->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $outputMock = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
-        $questionHelperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
-            ->getMock();
-        $helperMock = $this->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->getMock();
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $result = $io->askAndValidate(
+                'what is your name?',
+                function ($value) {
+                    return $value === 'Yo! Symfony';
+                },
+                false,
+                'Yo! Symfony');
 
-        $question = new \Symfony\Component\Console\Question\Question('Is valid?', true);
-        $question->setMaxAttempts(10);
-        $question->setValidator(function ($answer) {
-            return $answer;
+            $this->assertEquals('Yo! Symfony', $result);
         });
 
-        $questionHelperMock->expects($this->once())
-            ->method('ask')
-            ->with($this->isInstanceOf('Symfony\Component\Console\Input\InputInterface'),
-                $this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'),
-                $question);
-        $helperMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('question'))
-            ->will($this->returnValue($questionHelperMock));
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+    }
 
-        $consoleIO = new ConsoleIO($inputMock, $outputMock, $helperMock);
-        $consoleIO->askAndValidate('Is valid?', function ($answer) {
-            return $answer;
-        }, 10, true);
+    public function testSuccess()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->success('success!');
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertRegExp("/\[OK\] success!/", $this->tester->getDisplay(true));
+    }
+
+    public function testWarning()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->warning('warning!');
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertRegExp("/\[WARNING\] warning!/", $this->tester->getDisplay(true));
+    }
+
+    public function testLabelValue()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->labelValue('Items', 20);
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertEquals("Items: 20\n", $this->tester->getDisplay(true));
+    }
+
+    public function testNewLine()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->newLine();
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertEquals("\n", $this->tester->getDisplay(true));
     }
 }

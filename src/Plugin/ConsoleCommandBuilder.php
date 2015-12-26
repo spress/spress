@@ -12,11 +12,6 @@
 namespace Yosymfony\Spress\Plugin;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DebugFormatterHelper;
-use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\ProcessHelper;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -53,11 +48,10 @@ class ConsoleCommandBuilder
     {
         $result = [];
         $plugins = $this->pluginManager->getPlugins();
-        $helperSet = $this->getDefaultHelperSet();
 
         foreach ($plugins as $plugin) {
             if ($this->isValidCommandPlugin($plugin) === true) {
-                $result[] = $this->buildCommand($plugin, $helperSet);
+                $result[] = $this->buildCommand($plugin);
             }
         }
 
@@ -68,11 +62,10 @@ class ConsoleCommandBuilder
      * Build a Symfony Console commands.
      *
      * @param \Yosymfony\Spress\Plugin\CommandPluginInterface $commandPlugin
-     * @param \Symfony\Component\Console\Helper\HelperSet     $helperSet     Helper set.
      *
      * @return \Symfony\Component\Console\Command\Command Symfony Console command.
      */
-    protected function buildCommand(CommandPluginInterface $commandPlugin, HelperSet $helperSet)
+    protected function buildCommand(CommandPluginInterface $commandPlugin)
     {
         $definition = $commandPlugin->getCommandDefinition();
         $argumentsAndOptions = [];
@@ -90,8 +83,8 @@ class ConsoleCommandBuilder
         }
 
         $consoleComand->setDefinition($argumentsAndOptions);
-        $consoleComand->setCode(function (InputInterface $input, OutputInterface $output) use ($commandPlugin, $helperSet) {
-            $io = new ConsoleIO($input, $output, $helperSet);
+        $consoleComand->setCode(function (InputInterface $input, OutputInterface $output) use ($commandPlugin) {
+            $io = new ConsoleIO($input, $output);
             $arguments = $input->getArguments();
             $options = $input->getOptions();
 
@@ -113,20 +106,5 @@ class ConsoleCommandBuilder
         $implements = class_implements($plugin);
 
         return isset($implements['Yosymfony\Spress\Plugin\CommandPluginInterface']);
-    }
-
-    /**
-     * Gets the default helper set with the helpers that should always be available.
-     *
-     * @return HelperSet A HelperSet instance.
-     */
-    protected function getDefaultHelperSet()
-    {
-        return new HelperSet(array(
-            new FormatterHelper(),
-            new DebugFormatterHelper(),
-            new ProcessHelper(),
-            new QuestionHelper(),
-        ));
     }
 }

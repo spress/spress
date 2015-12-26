@@ -12,6 +12,8 @@
 namespace Yosymfony\Spress\tests\Plugin;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\StreamOutput;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Plugin\CommandDefinition;
 use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
@@ -26,17 +28,10 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
         $definition->addOption('all');
         $definition->addArgument('dir');
 
-        $input = $this->getMockBuilder('\Symfony\Component\Console\Input\InputInterface')
-            ->getMock();
-        $input->expects($this->once())
-            ->method('getArguments')
-            ->will($this->returnValue([]));
-        $input->expects($this->once())
-            ->method('getOptions')
-            ->will($this->returnValue([]));
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
 
-        $output = $this->getMockBuilder('\Symfony\Component\Console\Output\OutputInterface')
-            ->getMock();
+        $output = new StreamOutput(fopen('php://memory', 'w', false));
 
         $commandPluginMock = $this->getMockBuilder('\Yosymfony\Spress\Plugin\CommandPlugin')
             ->getMock();

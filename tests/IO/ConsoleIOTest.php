@@ -197,6 +197,18 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp("/\[WARNING\] warning!/", $this->tester->getDisplay(true));
     }
 
+    public function testListing()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->listing(['element 1']);
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+
+        $this->assertRegExp("/\* element 1/", $this->tester->getDisplay(true));
+    }
+
     public function testLabelValue()
     {
         $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {

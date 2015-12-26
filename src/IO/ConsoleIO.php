@@ -108,7 +108,7 @@ class ConsoleIO implements IOInterface
      */
     public function askAndValidate($question, callable $validator, $attempts = false, $default = null)
     {
-        $attempts = is_int($attempts) ?: null;
+        $attempts = is_int($attempts) ? $attempts : null;
 
         $question = new Question($question, $default);
         $question->setValidator($validator);
@@ -169,6 +169,16 @@ class ConsoleIO implements IOInterface
     public function warning($message)
     {
         $this->io->warning($message);
+    }
+
+    /**
+     * Formats a list.
+     *
+     * @param array $elements
+     */
+    public function listing(array $elements)
+    {
+        $this->io->listing($elements);
     }
 
     /**

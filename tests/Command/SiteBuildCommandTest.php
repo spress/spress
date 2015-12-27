@@ -40,7 +40,6 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             '--source' => $this->sourceDir,
         ]);
 
@@ -49,7 +48,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Environment: dev/', $output);
         $this->assertNotRegExp('/Posts drafts enabled/', $output);
-        $this->assertRegExp('/Debug mode enabled/', $output);
+        $this->assertRegExp('/Debug mode: enabled/', $output);
         $this->assertRegExp('/Total items: 16/', $output);
     }
 
@@ -61,7 +60,6 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             '--source' => $this->sourceDir,
             '--drafts' => true,
         ]);
@@ -70,7 +68,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Environment: dev/', $output);
-        $this->assertRegExp('/Posts drafts enabled/', $output);
+        $this->assertRegExp('/Draft posts: enabled/', $output);
         $this->assertRegExp('/Total items: 16/', $output);
     }
 
@@ -82,7 +80,6 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             '--source' => $this->sourceDir,
             '--safe' => true,
         ]);
@@ -91,7 +88,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Environment: dev/', $output);
-        $this->assertRegExp('/Plugins disabled/', $output);
+        $this->assertRegExp('/Plugins: disabled/', $output);
     }
 
     public function testBuildCommandEnv()
@@ -102,7 +99,6 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             '--source' => $this->sourceDir,
             '--env' => 'prod',
         ]);
@@ -124,7 +120,6 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             '--source' => $this->sourceDir,
             '--env' => 'test',
         ]);

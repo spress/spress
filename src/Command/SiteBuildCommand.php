@@ -62,7 +62,7 @@ class SiteBuildCommand extends Command
         $server = $input->getOption('server');
         $watch = $input->getOption('watch');
 
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $spress = $this->buildSpress($io, $input);
 
@@ -95,7 +95,7 @@ class SiteBuildCommand extends Command
             $server = new HttpServer($io, $serverroot, $documentroot, $port, $host);
 
             if ($watch === true) {
-                $io->write('<comment>Auto-regeneration: <info>enabled</info>.</comment>');
+                $io->labelValue('Auto-regeneration', 'enabled');
 
                 $server->onBeforeRequest(function (ServerRequest $request) use ($io, $input, $rw, $serverWatchExtension) {
                     $resourceExtension = pathinfo($request->getPathFilename(), PATHINFO_EXTENSION);
@@ -108,7 +108,9 @@ class SiteBuildCommand extends Command
 
             $server->start();
         } elseif ($watch) {
-            $io->write('<comment>Auto-regeneration: <info>enabled</info>. Press ctrl-c to stop.</comment>');
+            $io->labelValue('Auto-regeneration', 'enabled');
+            $io->write('<comment>Press ctrl-c to stop.</comment>');
+            $io->newLine();
 
             do {
                 sleep(2);
@@ -156,7 +158,7 @@ class SiteBuildCommand extends Command
         if ($spress['spress.config.values']['parsedown_activated'] === true) {
             $this->enableParsedown($spress);
 
-            $io->write('<comment>Parsedown converter: <info>enabled</info>.</comment>');
+            $io->labelValue('Parsedown converter', 'enabled');
         }
 
         $spress['spress.io'] = $io;
@@ -179,16 +181,12 @@ class SiteBuildCommand extends Command
             return;
         }
 
-        $io->write(sprintf(
-            '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
-            count($rw->getNewResources()),
-            count($rw->getUpdatedResources()),
-            count($rw->getDeletedResources())));
+        $this->rebuildingSiteMessage($io, $rw->getNewResources(), $rw->getUpdatedResources(), $rw->getDeletedResources());
 
         $spress = $this->buildSpress($io, $input);
-        $spress->parse();
+        $resultData = $spress->parse();
 
-        $io->write('<success>Site ready.</success>');
+        $this->resultMessage($io, $resultData);
     }
 
     /**
@@ -218,51 +216,6 @@ class SiteBuildCommand extends Command
         $rw->setFinder($finder);
 
         return $rw;
-    }
-
-    /**
-     * Writes the staring messages.
-     *
-     * @param \Yosymfony\Spress\IO\ConsoleIO $io
-     * @param string                         $env    [description]
-     * @param bool                           $drafts [description]
-     * @param bool                           $safe   [description]
-     */
-    protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
-    {
-        $io->write([
-            '',
-            '<comment>Starting...</comment>',
-        ]);
-        $io->write(sprintf('<comment>Environment: <info>%s</info>.</comment> ', $env));
-
-        if ($io->isDebug()) {
-            $io->write('<comment>Debug mode <info>enabled</info>.</comment>');
-        }
-
-        if ($drafts) {
-            $io->write('<comment>Posts drafts <info>enabled</info></comment>.');
-        }
-
-        if ($safe) {
-            $io->write('<info>Plugins <comment>disabled</comment>.</info>');
-        }
-    }
-
-    /**
-     * Writes the result of a parsing a site.
-     *
-     * @param \Yosymfony\Spress\IO\ConsoleIO                    $io
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
-     */
-    protected function resultMessage(ConsoleIO $io, array $items)
-    {
-        $io->write([
-            '',
-            '<info>Success!</info>',
-            '',
-        ]);
-        $io->write(sprintf('<info>Total items: <comment>%d</comment>.</info>', count($items)));
     }
 
     /**
@@ -305,5 +258,64 @@ class SiteBuildCommand extends Command
 
             return $predefinedConverters;
         });
+    }
+
+    /**
+     * Writes the staring messages.
+     *
+     * @param \Yosymfony\Spress\IO\ConsoleIO $io
+     * @param string                         $env    [description]
+     * @param bool                           $drafts [description]
+     * @param bool                           $safe   [description]
+     */
+    protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
+    {
+        $io->newLine();
+        $io->write('<comment>Starting...</comment>');
+        $io->labelValue('Environment', $env);
+
+        if ($io->isDebug() === true) {
+            $io->labelValue('Debug mode', 'enabled');
+        }
+
+        if ($drafts === true) {
+            $io->labelValue('Draft posts', 'enabled');
+        }
+
+        if ($safe === true) {
+            $io->labelValue('Plugins', 'disabled');
+        }
+    }
+
+    /**
+     * Writes the result of a parsing a site.
+     *
+     * @param \Yosymfony\Spress\IO\ConsoleIO                    $io
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     */
+    protected function resultMessage(ConsoleIO $io, array $items)
+    {
+        $io->newLine();
+        $io->labelValue('Total items', count($items));
+        $io->newLine();
+        $io->success('Success!');
+    }
+
+    /**
+     * Write the result of rebuilding a site.
+     * 
+     * @param Yosymfony\Spress\IO\ConsoleIO $io
+     * @param array                         $newResources
+     * @param array                         $updatedResources
+     * @param array                         $deletedResources
+     */
+    protected function rebuildingSiteMessage(ConsoleIO $io, array $newResources, array $updatedResources, array $deletedResources)
+    {
+        $io->write(sprintf(
+            '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
+            count($newResources),
+            count($updatedResources),
+            count($deletedResources)));
+        $io->newLine();
     }
 }

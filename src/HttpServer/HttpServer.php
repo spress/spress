@@ -214,12 +214,13 @@ class HttpServer
 
     private function initialMessage()
     {
-        $this->io->write('');
+        $this->io->newLine();
         $this->io->write('<comment>Spress server running... press ctrl-c to stop</comment>');
         $this->io->write(sprintf(
             '<comment>Port: %s Host: %s Document root: %s</comment>',
             $this->port,
             $this->host,
             $this->documentroot));
+        $this->io->newLine();
     }
 }

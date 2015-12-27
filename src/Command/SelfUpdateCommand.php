@@ -45,10 +45,10 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         if ($this->isInstalledAsPhar() === false) {
-            $io->write('<error>Self-update is available only for PHAR version.</error>');
+            $io->error('Self-update is available only for PHAR version');
 
             return 1;
         }
@@ -58,7 +58,7 @@ EOT
         $localVersion = $this->getApplication()->getVersion();
 
         if ($localVersion === $remoteVersion) {
-            $io->write('<comment>Spress is already up to date.</comment>');
+            $io->success('Spress is already up to date');
 
             return;
         }
@@ -66,6 +66,10 @@ EOT
         $remoteFilename = $manifest['url'];
         $localFilename = $_SERVER['argv'][0];
         $tempFilename = basename($localFilename, '.phar').'-tmp.phar';
+
+        $io->newLine();
+        $io->write('Downloading Spress...');
+        $io->newLine();
 
         $this->downloadRemoteFilename($remoteFilename);
 
@@ -78,7 +82,7 @@ EOT
             unset($phar);
             rename($tempFilename, $localFilename);
 
-            $io->write(sprintf('<comment>Spress updated from <info>%s</info> to <info>%s</info>.</comment>', $localVersion, $remoteVersion));
+            $io->success(sprintf('Spress updated from %s to %s.', $localVersion, $remoteVersion));
 
             if (isset($manifest['changelog_url']) === true) {
                 $io->write(sprintf('<comment>Go to <info>%s</info> for more details.</comment>', $manifest['changelog_url']));
@@ -90,8 +94,10 @@ EOT
 
             unlink($tempFilename);
 
-            $io->write(sprintf('<error>The download is corrupt (%s).</error>', $e->getMessage()));
-            $io->write('<error>Please re-run the self-update command to try again.</error>');
+            $io->error([
+                sprintf('The download is corrupt (%s).', $e->getMessage()),
+                'Please re-run the self-update command to try again',
+            ]);
 
             return 1;
         }

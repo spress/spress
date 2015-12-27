@@ -39,7 +39,7 @@ class WelcomeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $io->write([
             '',
@@ -52,11 +52,7 @@ class WelcomeCommand extends Command
         ]);
 
         if ($this->isUnstableVersion()) {
-            $io->write([
-                '',
-                '<error>Warning: this is a unstable version.</error>',
-                ``,
-            ]);
+            $io->warning('This is a unstable version');
         }
 
         $command = $this->getApplication()->find('list');

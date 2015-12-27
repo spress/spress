@@ -39,7 +39,6 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
         ]);
 
@@ -61,7 +60,6 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
         ]);
 
@@ -81,12 +79,10 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
         ]);
 
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
         ]);
     }
@@ -99,7 +95,6 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
         ]);
 
@@ -120,7 +115,6 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'path' => $this->tmpDir,
             '--all' => true,
         ]);

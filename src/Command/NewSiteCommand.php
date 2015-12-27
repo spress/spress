@@ -51,7 +51,7 @@ class NewSiteCommand extends Command
         $template = $input->getArgument('template');
         $force = $input->getOption('force');
         $completeScaffold = $input->getOption('all');
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $operation = new NewSite($this->getTemplatesPath());
         $operation->newSite($path, $template, $force, $completeScaffold);
@@ -72,16 +72,6 @@ class NewSiteCommand extends Command
 
     protected function successMessage($io, $sitePath)
     {
-        $io->write([
-            '',
-            sprintf('<success>New site created at "%s" folder.</success>', $sitePath),
-            '',
-        ]);
-
-        if ('./' == $sitePath) {
-            $io->write('<comment>Edit composer.json file to add your theme data and plugins required.</comment>');
-        } else {
-            $io->write(sprintf('<comment>Go to "<info>%s</info>" folder and edit composer.json file to add your theme data and plugins required.</comment>', $sitePath));
-        }
+        $io->success(sprintf('New site created at "%s" folder', $sitePath));
     }
 }

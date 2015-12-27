@@ -60,11 +60,23 @@ EOT
         $io = new ConsoleIO($input, $output);
 
         $name = Validators::validatePluginName($input->getOption('name'));
-        $commandName = Validators::validateCommandName($input->getOption('command-name'), true);
+
+        $commandName = $input->getOption('command-name');
+
+        if (empty($commandName) === false) {
+            $commandName = Validators::validateCommandName($commandName);
+        }
+
         $commandDescription = $input->getOption('command-description');
         $commandHelp = $input->getOption('command-help');
         $author = $input->getOption('author');
-        $email = Validators::validateEmail($input->getOption('email'), true);
+
+        $email = $input->getOption('email');
+
+        if (empty($email) === false) {
+            $email = Validators::validateEmail($email);
+        }
+
         $description = $input->getOption('description');
         $license = $input->getOption('license') ?: 'MIT';
 
@@ -127,7 +139,7 @@ EOT
         $email = $io->askAndValidate(
             'Email author',
             function ($answer) {
-                return Validators::validateEmail($answer, true);
+                return Validators::validateEmail($answer);
             },
             false,
             $input->getOption('email')

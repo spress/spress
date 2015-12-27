@@ -49,83 +49,13 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:post');
         $commandTester = new CommandTester($command);
 
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("My first post\n\n\ntag1, tag2\ncategory1, category2\n"));
-
         $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Spress post generator/', $output);
-        $this->assertRegExp('/my-first-post\.md/', $output);
-    }
-
-    public function testOnlyTitle()
-    {
-        $app = new Application();
-        $app->add(new NewPostCommand());
-
-        $command = $app->find('new:post');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("My first post\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/my-first-post.md/', $output);
-    }
-
-    public function testWithDate()
-    {
-        $app = new Application();
-        $app->add(new NewPostCommand());
-
-        $command = $app->find('new:post');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("My first post\n\n2014-01-01\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/2014-01-01-my-first-post.md/', $output);
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/content/posts/2014-01-01-my-first-post.md');
-
-        $this->assertRegExp('/tags: \[\]/', $fileContent);
-        $this->assertRegExp('/categories: \[\]/', $fileContent);
-    }
-
-    public function testDefaultValues()
-    {
-        $app = new Application();
-        $app->add(new NewPostCommand());
-
-        $command = $app->find('new:post');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
             '--title' => 'My second post',
             '--layout' => 'post',
             '--date' => '2015-01-01',
             '--tags' => 'tag1, tag2',
             '--categories' => 'category1, category2',
-        ]);
+        ], ['interactive' => false]);
 
         $output = $commandTester->getDisplay();
 
@@ -137,14 +67,5 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/layout: post/', $fileContent);
         $this->assertRegExp('/tags: \[tag1,tag2\]/', $fileContent);
         $this->assertRegExp('/categories: \[category1,category2\]/', $fileContent);
-    }
-
-    protected function getInputStream($input)
-    {
-        $stream = fopen('php://memory', 'r+', false);
-        fputs($stream, $input);
-        rewind($stream);
-
-        return $stream;
     }
 }

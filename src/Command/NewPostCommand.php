@@ -54,7 +54,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $title = Validators::validatePostTitle($input->getOption('title'));
         $layout = $input->getOption('layout');
@@ -79,38 +79,41 @@ EOT
     {
         $helper = $this->getHelper('question');
 
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $this->welcomeMessage($io);
 
-        $title = $input->getOption('title');
-        $question = new Question('Post title: ', $title);
-        $question->setMaxAttempts(null);
-        $question->setValidator(function ($answer) {
-            return Validators::validatePostTitle($answer);
-        });
-        $title = $helper->ask($input, $output, $question);
+        $title = $io->askAndValidate(
+            'Post title',
+            function ($answer) {
+                return Validators::validatePostTitle($answer);
+            },
+            false,
+            $input->getOption('title')
+        );
         $input->setOption('title', $title);
 
-        $layout = $input->getOption('layout');
-        $question = new Question('Post layout: ', $layout);
-        $layout = $helper->ask($input, $output, $question);
+        $layout = $io->ask('Post layout', $input->getOption('layout'));
         $input->setOption('layout', $layout);
 
-        $date = $input->getOption('date') ?: $this->getDateFormated();
-        $question = new Question("Post date [<comment>$date</comment>]: ", $date);
-        $date = $helper->ask($input, $output, $question);
+        $defaultDate = $input->getOption('date');
+
+        if (empty($defaultDate) === true) {
+            $defaultDate = $this->getDateFormated();
+        }
+
+        $date = $io->ask('Post date', $defaultDate);
         $input->setOption('date', $date);
 
-        $tags = $input->getOption('tags') ?: '';
-        $question = new Question('Comma separated list of post tags: ', $tags);
-        $tags = $helper->ask($input, $output, $question);
-        $input->setOption('tags', $tags);
+        if ($io->askConfirmation('Do you want to use tags?', empty($input->getOption('tags')) === false)) {
+            $tags = $io->ask('Comma separated list of post tags', $input->getOption('tags'));
+            $input->setOption('tags', $tags);
+        }
 
-        $categories = $input->getOption('categories') ?: '';
-        $question = new Question('Comma separated list of post categories: ', $categories);
-        $categories = $helper->ask($input, $output, $question);
-        $input->setOption('categories', $categories);
+        if ($io->askConfirmation('Do you want to use categories?', empty($input->getOption('categories')) === false)) {
+            $categories = $io->ask('Comma separated list of post categories', $input->getOption('categories'));
+            $input->setOption('categories', $categories);
+        }
     }
 
     protected function getDateFormated()
@@ -122,23 +125,16 @@ EOT
 
     protected function welcomeMessage($io)
     {
-        $io->write([
-            '',
-            '<comment>Welcome to Spress <info>post generator</info></comment>',
-            '',
-        ]);
+        $io->newLine();
+        $io->write('Welcome to Spress <comment>post generator</comment>');
+        $io->newLine();
     }
 
     protected function resultMessage($io, $files)
     {
-        $io->write([
-            '',
-            '<success>The post was generated successfully!</success>',
-            '',
-            '<comment>File afected:</comment>',
-            '',
-        ]);
-        $io->write($files);
-        $io->write('');
+        $io->success('The post was generated successfully!');
+        $io->write('<comment>Files afected:</comment>');
+        $io->listing($files);
+        $io->newLine();
     }
 }

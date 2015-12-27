@@ -22,11 +22,6 @@ class ValidatorsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('self:update', Validators::validateCommandName('self:update'));
     }
 
-    public function testAllowEmptyCommandName()
-    {
-        $this->assertEquals('', Validators::validateCommandName('', true));
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -88,5 +83,13 @@ class ValidatorsTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvalidEmail()
     {
         Validators::validateEmail('@example.com');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testValidateEmptyEmail()
+    {
+        Validators::validateEmail('');
     }
 }

@@ -49,109 +49,16 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:plugin');
         $commandTester = new CommandTester($command);
 
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\n\nVictor\nvpgugr@gmail.com\nMy description\nMIT\n"));
-
         $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Spress plugin generator/', $output);
-        $this->assertRegExp('/YosymfonyTestplugin\.php/', $output);
-        $this->assertRegExp('/composer\.json/', $output);
-    }
-
-    public function testOnlyName()
-    {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
-
-        $command = $app->find('new:plugin');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/test-plugin\n\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Spress plugin generator/', $output);
-        $this->assertRegExp('/YosymfonyTestPlugin\.php/', $output);
-        $this->assertRegExp('/composer\.json/', $output);
-        $this->assertRegExp('/LICENSE/', $output);
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestPlugin/YosymfonyTestPlugin.php');
-
-        $this->assertNotRegExp('/namespace/', $fileContent);
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestPlugin/composer.json');
-
-        $this->assertNotRegExp('/"psr-4":/', $fileContent);
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestPlugin/LICENSE');
-
-        $this->assertNotRegExp('/The MIT License (MIT)/', $fileContent);
-    }
-
-    public function testCommandPlugin()
-    {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
-
-        $command = $app->find('new:plugin');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("yosymfony/testplugin\ny\nselfupdate\nCommand description\nCommand help\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Spress plugin generator/', $output);
-        $this->assertRegExp('/YosymfonyTestplugin\.php/', $output);
-        $this->assertRegExp('/composer\.json/', $output);
-        $this->assertRegExp('/LICENSE/', $output);
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/YosymfonyTestplugin.php');
-
-        $this->assertNotRegExp('/namespace/', $fileContent);
-        $this->assertRegExp('/CommandPlugin/', $fileContent);
-        $this->assertRegExp('/selfupdate/', $fileContent);
-        $this->assertRegExp('/Command description/', $fileContent);
-        $this->assertRegExp('/Command help/', $fileContent);
-    }
-
-    public function testDefaultValues()
-    {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
-
-        $command = $app->find('new:plugin');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("\n\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
             '--name' => 'yosymfony/testplugin',
             '--author' => 'Victor Puertas',
             '--email' => 'vpgugr@gmail.com',
             '--description' => 'My Spress plugin',
             '--license' => 'BSD-2-Clause',
-        ]);
+        ], ['interactive' => false]);
 
         $output = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Spress plugin generator/', $output);
         $this->assertRegExp('/YosymfonyTestplugin\.php/', $output);
         $this->assertRegExp('/composer\.json/', $output);
         $this->assertRegExp('/LICENSE/', $output);
@@ -159,6 +66,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/YosymfonyTestplugin.php');
 
         $this->assertRegExp('/class YosymfonyTestplugin/', $fileContent);
+        $this->assertRegExp('/implements PluginInterface/', $fileContent);
 
         $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/composer.json');
 
@@ -169,7 +77,7 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/"license": "BSD-2-Clause"/', $fileContent);
     }
 
-    public function testOnlyAuthorName()
+    public function testNewCommandPlugin()
     {
         $app = new Application();
         $app->add(new NewPluginCommand());
@@ -177,52 +85,34 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
         $command = $app->find('new:plugin');
         $commandTester = new CommandTester($command);
 
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("\n\n\n\n\n\n"));
-
         $commandTester->execute([
-            'command' => $command->getName(),
             '--name' => 'yosymfony/testplugin',
+            '--command-name' => 'Accme',
+            '--command-description' => 'Short description',
+            '--command-help' => 'Help of the command',
             '--author' => 'Victor Puertas',
-        ]);
-
-        $output = $commandTester->getDisplay();
-
-        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/composer.json');
-
-        $this->assertNotRegExp('/"authors":/', $fileContent);
-    }
-
-    public function testOnlyEmailAuthor()
-    {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
-
-        $command = $app->find('new:plugin');
-        $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream("\n\n\n\n\n\n"));
-
-        $commandTester->execute([
-            'command' => $command->getName(),
-            '--name' => 'yosymfony/testplugin',
             '--email' => 'vpgugr@gmail.com',
-        ]);
+            '--description' => 'My Spress plugin',
+            '--license' => 'BSD-2-Clause',
+        ], ['interactive' => false]);
 
         $output = $commandTester->getDisplay();
 
+        $this->assertRegExp('/YosymfonyTestplugin\.php/', $output);
+        $this->assertRegExp('/composer\.json/', $output);
+        $this->assertRegExp('/LICENSE/', $output);
+
+        $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/YosymfonyTestplugin.php');
+
+        $this->assertRegExp('/class YosymfonyTestplugin/', $fileContent);
+        $this->assertRegExp('/extends CommandPlugin/', $fileContent);
+
         $fileContent = file_get_contents($this->tmpDir.'/src/plugins/YosymfonyTestplugin/composer.json');
 
-        $this->assertNotRegExp('/"authors":/', $fileContent);
-    }
-
-    protected function getInputStream($input)
-    {
-        $stream = fopen('php://memory', 'r+', false);
-        fputs($stream, $input);
-        rewind($stream);
-
-        return $stream;
+        $this->assertRegExp('/"name": "yosymfony\/testplugin"/', $fileContent);
+        $this->assertRegExp('/"description": "My Spress plugin"/', $fileContent);
+        $this->assertRegExp('/"name": "Victor Puertas"/', $fileContent);
+        $this->assertRegExp('/"email": "vpgugr@gmail.com"/', $fileContent);
+        $this->assertRegExp('/"license": "BSD-2-Clause"/', $fileContent);
     }
 }

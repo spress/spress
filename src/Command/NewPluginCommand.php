@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
@@ -58,7 +57,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $name = Validators::validatePluginName($input->getOption('name'));
         $commandName = Validators::validateCommandName($input->getOption('command-name'), true);
@@ -88,110 +87,88 @@ EOT
     {
         $helper = $this->getHelper('question');
 
-        $io = new ConsoleIO($input, $output, $this->getHelperSet());
+        $io = new ConsoleIO($input, $output);
 
         $this->welcomeMessage($io);
 
-        $name = $input->getOption('name');
-        $question = new Question('Plugin name (follow the pattern <comment>"vendor-name/plugin-name"</comment>): ', $name);
-        $question->setMaxAttempts(null);
-        $question->setValidator(function ($answer) {
-            return Validators::validatePluginName($answer);
-        });
-        $name = $helper->ask($input, $output, $question);
+        $name = $io->askAndValidate(
+            'Plugin name (follow the pattern <comment>"vendor-name/plugin-name"</comment>)',
+            function ($answer) {
+                return Validators::validatePluginName($answer);
+            },
+            false,
+            $input->getOption('name')
+        );
+
         $input->setOption('name', $name);
 
-        $question = new ConfirmationQuestion('Is it a command plugin?[<comment>n</comment>]: ', false);
-        $isCommandPlugin = $helper->ask($input, $output, $question);
+        if ($io->askConfirmation('Is it a command plugin?', empty($input->getOption('name')) === false)) {
+            $commandName = $io->askAndValidate(
+                'Name of the command',
+                function ($answer) {
+                    return Validators::validateCommandName($answer);
+                },
+                false,
+                $input->getOption('command-name')
+            );
 
-        if ($isCommandPlugin === true) {
-            $commandName = $input->getOption('command-name');
-            $question = new Question('Name of the command: ', $commandName);
-            $question->setMaxAttempts(null);
-            $question->setValidator(function ($answer) {
-                return Validators::validateCommandName($answer);
-            });
-            $commandName = $helper->ask($input, $output, $question);
             $input->setOption('command-name', $commandName);
 
-            $commandDescription = $input->getOption('command-description');
-            $question = new Question('Description for the command: ', $commandDescription);
-            $commandDescription = $helper->ask($input, $output, $question);
+            $commandDescription = $io->ask('Description for the command', $input->getOption('command-description'));
             $input->setOption('command-description', $commandDescription);
 
-            $commandHelp = $input->getOption('command-help');
-            $question = new Question('Help for the command: ', $commandHelp);
-            $commandHelp = $helper->ask($input, $output, $question);
+            $commandHelp = $io->ask('Help for the command', $input->getOption('command-help'));
             $input->setOption('command-help', $commandHelp);
         }
 
-        $author = $input->getOption('author');
-        $question = new Question('Plugin author: ', $author);
-        $author = $helper->ask($input, $output, $question);
+        $author = $io->ask('Plugin author', $input->getOption('author'));
         $input->setOption('author', $author);
 
-        $email = $input->getOption('email');
-        $question = new Question('Email author: ', $email);
-        $question->setValidator(function ($answer) {
-            return Validators::validateEmail($answer, true);
-        });
-        $email = $helper->ask($input, $output, $question);
+        $email = $io->askAndValidate(
+            'Email author',
+            function ($answer) {
+                return Validators::validateEmail($answer, true);
+            },
+            false,
+            $input->getOption('email')
+        );
         $input->setOption('email', $email);
 
-        $description = $input->getOption('description');
-        $question = new Question('Plugin description: ', $description);
-        $description = $helper->ask($input, $output, $question);
+        $description = $io->ask('Plugin description', $input->getOption('description'));
         $input->setOption('description', $description);
 
         $this->licenseMessage($io);
 
-        $license = $input->getOption('license');
-        $question = new Question('Plugin license [<comment>MIT</comment>]: ', $license);
-        $license = $helper->ask($input, $output, $question);
+        $defaultLicense = $input->getOption('license');
+
+        if (is_null($defaultLicense) === true) {
+            $defaultLicense = 'MIT';
+        }
+
+        $license = $io->ask('Plugin license', $defaultLicense);
         $input->setOption('license', $license);
     }
 
     protected function welcomeMessage($io)
     {
-        $io->write([
-            '',
-            'Welcome to Spress <comment>plugin generator</comment>',
-            '',
-        ]);
+        $io->newLine();
+        $io->write('Welcome to Spress <comment>plugin generator</comment>');
+        $io->newLine();
     }
 
     protected function licenseMessage($io)
     {
-        $io->write([
-            '',
-            '<comment>The most common licenses:</comment>',
-            ' * Apache-2.0',
-            ' * BSD-2-Clause',
-            ' * GPL-3.0',
-            ' * LGPL-3.0',
-            ' * MIT',
-            '',
-            '<comment>You can find more information at http://spdx.org/licenses/</comment>',
-            '',
-        ]);
+        $io->write('<comment>The most common licenses:</comment>');
+        $io->listing(['Apache-2.0', 'BSD-2-Clause', 'GPL-3.0', 'LGPL-3.0', 'MIT']);
+        $io->write('<comment>You can find more information at http://spdx.org/licenses/</comment>');
     }
 
     protected function resultMessage($io, $files)
     {
-        $io->write([
-            '',
-            '<success>The plugin was generated successfully!</success>',
-            '',
-            '<comment>Files afected:</comment>',
-            '',
-        ]);
-
-        $io->write($files);
-
-        $io->write([
-            '',
-            '<comment>Finally you can add your plugin to the add-on list at <info>http://spress.yosymfony.com/add-ons/</info></comment>',
-            '',
-        ]);
+        $io->success('The plugin was generated successfully!');
+        $io->write('<comment>Files afected:</comment>');
+        $io->listing($files);
+        $io->write('<comment>Finally you can add your plugin to the add-on list at <info>http://spress.yosymfony.com/add-ons/</info></comment>');
+        $io->newLine();
     }
 }

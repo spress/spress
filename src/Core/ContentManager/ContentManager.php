@@ -365,6 +365,7 @@ class ContentManager
         $attributes['url'] = $permalink->getUrlPath();
 
         $item->setAttributes($attributes);
+        $this->siteAttribute->setItem($item);
     }
 
     private function renderBlocks(ItemInterface $item)

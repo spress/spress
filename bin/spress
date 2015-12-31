@@ -8,8 +8,21 @@ set_time_limit(0);
 if ((!$classloader = @include_once __DIR__.'/../vendor/autoload.php') &&
     (!$classloader = @include_once __DIR__.'/../../../autoload.php')
 ) {
-    die("You must set up the Spress dependencies with Composer.\n"
-    ."Run the following command at the Spress root folder:\n\n composer update\n\n");
+    file_put_contents('php://stderr', "You must set up the Spress dependencies with Composer.\n".
+        "Run the following command at the Spress root folder:\n\n composer update\n\n"
+    );
+
+    exit(1);
+}
+
+if (PHP_VERSION_ID < 50500) {
+    file_put_contents('php://stderr', sprintf(
+        "Spress requires PHP 5.5 version or higher and your system has\n".
+        "PHP %s version installed.\n\n",
+        PHP_VERSION
+    ));
+
+    exit(1);
 }
 
 use Symfony\Component\Console\Application;

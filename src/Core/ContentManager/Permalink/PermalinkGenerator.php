@@ -176,7 +176,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $time = $this->getDateAttribute($item);
 
         $result = [
-            ':path' => $fileInfo->getPath(),
+            ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('.'),
             ':extension' => $fileInfo->getExtension(),
             ':basename' => $fileInfo->getBasename('.'.$fileInfo->getExtension()),
             ':collection' => $item->getCollection(),

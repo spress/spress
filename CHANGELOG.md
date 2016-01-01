@@ -2,6 +2,8 @@ CHANGELOG for 2.0.x
 ===================
 ## 2.0.0
 * [New] `ConsoleIO` class uses Symfony CLI styles.
+* [Improved] 100% tests passed in HHVM.
+* [Fixed] Renamed the package `yosymfony/spress-installer` to `spress/spress-installer`.
 * [Fixed] Fixed a race condition with the `url` attribute of items before dispatch `spress.before_render_blocks` event.
 * [Fixed] Questions made by commands are using `ConsoleIO` methods.
 * [Fixed] Fixed a bug with the built-in server by which a relative URL that contains a dot inside the trailing component throws a 404 not found error. e.g: `/doc/2.0`.

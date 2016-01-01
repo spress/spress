@@ -1,5 +1,5 @@
 {
-    "name": "yosymfony/spress",
+    "name": "spress/spress",
     "description": "Static site generator with blogs support",
     "keywords": ["cms","blog","web","markdown","twig","silex","html"],
     "license": "MIT",
@@ -33,7 +33,7 @@
         "phpunit/phpunit": "4.5.*"
     },
     "replace": {
-        "yosymfony/spress-core": "self.version"
+        "spress/spress-core": "self.version"
     },
     "bin": [
         "bin/spress"

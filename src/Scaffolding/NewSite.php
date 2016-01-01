@@ -138,7 +138,7 @@ class NewSite
     "license": "MIT",
     "type": "spress-theme",
     "require": {
-            "yosymfony/spress-installer": "2.0.*"
+            "spress/spress-installer": "2.0.*"
     }
 }
 eot;

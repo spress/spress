@@ -14,7 +14,7 @@ printf "Repository cloned.\n"
 
 pushd spress-split.tmp
 
-git subtree split --prefix=src/Yosymfony/Spress/Core/ --branch split-branch
+git subtree split --prefix=src/Core/ --branch split-branch
 git checkout split-branch
 git remote add rewrite git@github.com:spress/Spress-core.git
 

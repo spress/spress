@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
 use Yosymfony\Spress\IO\ConsoleIO;
 
@@ -97,8 +96,6 @@ EOT
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $helper = $this->getHelper('question');
-
         $io = new ConsoleIO($input, $output);
 
         $this->welcomeMessage($io);

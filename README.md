@@ -5,8 +5,7 @@ Spress - PHP Static site generator
 [![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
-Spress is a static site generator built with Symfony components and inspired by 
-[Jekyll](https://github.com/mojombo/jekyll). See [demo](http://yosymfony.github.io/Spress-example/).
+Spress is a static site generator built with Symfony components. See [demo](http://yosymfony.github.io/Spress-example/).
 
 License: [MIT](https://github.com/spress/Spress/blob/master/LICENSE).
 

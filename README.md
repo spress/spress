@@ -10,8 +10,6 @@ Spress is a static site generator built with Symfony components and inspired by
 
 License: [MIT](https://github.com/spress/Spress/blob/master/LICENSE).
 
-**This branch contains the development of Spress 2.0. Go to [1.1](https://github.com/spress/Spress/tree/1.1) for stable branch**.
-
 Requirements
 ------------
 

@@ -45,7 +45,7 @@ All pull requests must be accompanied by passing unit tests. Spress uses [phpuni
 Getting Started
 ---------------
 
-* Download the last [release](https://github.com/yosymfony/Spress/releases) or clone repository `git clone https://github.com/yosymfony/Spress.git`.
+* Download the last [release](https://github.com/spress/Spress/releases) or clone repository `git clone https://github.com/spress/Spress.git`.
 * Get vendors
 * Create a blank site.
 * Build your site.

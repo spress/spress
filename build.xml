@@ -13,6 +13,7 @@
     <target name="package-phar">
         <echo msg="Creating a phar file" />
         <exec passthru="true" command="${cmd.box} build" checkreturn="true"/>
+        <copy file="spress.phar" todir="${dir.output}" overwrite="true"/>
     </target>
 
     <target name="package-zip">
@@ -51,6 +52,10 @@
 
     <target name="update-vendors">
         <exec passthru="true" command="${cmd.composer} update --no-dev" checkreturn="true"/>
+    </target>
+
+    <target name="update-vendors-dev">
+        <exec passthru="true" command="${cmd.composer} update" checkreturn="true"/>
     </target>
 
     <target name="check-git-branch-status">

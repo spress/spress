@@ -1,8 +1,8 @@
 Spress - PHP Static site generator
 ==============================
-[![Build Status](https://travis-ci.org/spress/Spress.svg?branch=2.0)](https://travis-ci.org/spress/Spress)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=2.0)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.0)
-[![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=2.0)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.0)
+[![Build Status](https://travis-ci.org/spress/Spress.svg?branch=master)](https://travis-ci.org/spress/Spress)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
 Spress is a static site generator built with Symfony components. See [demo](http://yosymfony.github.io/Spress-example/).

@@ -1,5 +1,8 @@
 CHANGELOG for 2.0.x
 ===================
+## 2.0.1
+* Fixed the file's extension `twig.html` in configuration files.
+
 ## 2.0.0 (2016-01-02)
 * [New] `ConsoleIO` class uses Symfony CLI styles.
 * [Improved] 100% tests passed in HHVM.

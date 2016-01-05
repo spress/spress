@@ -25,7 +25,7 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testTaxonomyWithDefaulValues()
     {
-        $post1 = new Item('Post 1', 'posts/2015-05-26-new-release', ['categories' => ['news', 'releases']]);
+        $post1 = new Item('Post 1', 'posts/2015-05-26-new-release', ['categories' => ['NEWS', 'releases']]);
         $post2 = new Item('Post 2', 'posts/2015-05-26-new-feature', ['categories' => ['news', '']]);
 
         $collections = [

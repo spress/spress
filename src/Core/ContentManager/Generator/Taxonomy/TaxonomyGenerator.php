@@ -19,9 +19,11 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
- * Taxonomy generator lets you group items around a term.
+ * TaxonomyGenerator lets you group items around a term.
  * This generator uses PaginationGenerator for generating
- * multiples pages for each term.
+ * multiples pages for each term. This means that
+ * PaginationGenerator's attributes are available with 
+ * TaxonomyGenerator.
  *
  * Example of URLs generated:
  *  /categories/news
@@ -35,11 +37,11 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * e.g: for "categories" as taxonomy_attribute and "news" as term
  *  $attributes['terms_url']['categories']['news']
  *
- * How to configure? (frontmatter of the template page):
+ * How to configure? (Front matter block of the template page):
  *
  * ---
- * layout: default
- * generator: taxonomy
+ * layout: 'default'
+ * generator: 'taxonomy'
  * max_page: 5
  * taxonomy_attribute: 'categories'
  * permalink: '/:name'
@@ -51,7 +53,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
 class TaxonomyGenerator implements GeneratorInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException if bad attribute value.
      */
@@ -82,6 +84,8 @@ class TaxonomyGenerator implements GeneratorInterface
                 if (empty(trim($term)) === true) {
                     continue;
                 }
+
+                $term = $this->normalizeTerm($term);
 
                 $taxonomyCollection[$term][] = $item;
             }
@@ -151,6 +155,11 @@ class TaxonomyGenerator implements GeneratorInterface
         }
 
         return '/'.$result;
+    }
+
+    protected function normalizeTerm($term)
+    {
+        return strtolower(trim($term));
     }
 
     protected function getAttributesResolver(ItemInterface $templateItem)

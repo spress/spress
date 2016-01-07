@@ -9,7 +9,6 @@ cache:
 
 init:
     - SET PATH=c:\php;%PATH%
-    - SET COMPOSER_NO_INTERACTION=1
     - SET PHP=1
     - SET ANSICON=121x90 (121x90)
 
@@ -37,7 +36,7 @@ install:
     - ren phpunit-4.8.21.phar phpunit.phar
     - copy /Y php.ini-max php.ini
     - cd c:\projects\spress
-    - composer update --prefer-dist --no-progress --ansi
+    - composer install --no-interaction --no-dev --no-progress --ansi
 
 test_script:
     - cd c:\projects\spress

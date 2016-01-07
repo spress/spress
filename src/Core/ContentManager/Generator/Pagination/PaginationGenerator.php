@@ -16,7 +16,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Support\ArrayWrapper;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
-use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
 
 /**
  * Pagination generator lets you generate multiples

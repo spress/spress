@@ -21,8 +21,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->sourcePath = realpath(__dir__.'/../../fixtures/project/src');
-        $this->extraPagesPath = realpath(__dir__.'/../../fixtures/extra_pages');
+        $this->sourcePath = __dir__.'/../../fixtures/project/src';
+        $this->extraPagesPath = __dir__.'/../../fixtures/extra_pages';
         $this->textExtensions = ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml'];
     }
 

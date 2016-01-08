@@ -27,18 +27,20 @@ use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
  *  /page2
  *  ...
  *
- * How to configure? (frontmatter of the template page):
- *
- * ---
- * layout: default
+ * How to configure? (Front matter block of the template page):
  * 
- * generator: pagination
- * max_page: 5
- * provider: site.posts
- * permalink: "/page:num"
- * sort_by: date
- * sort_type: descendant
+ *```
  * ---
+ * layout: "default"
+ * 
+ * generator: "pagination"
+ * max_page: 5
+ * provider: "site.posts"
+ * permalink: "/page:num"
+ * sort_by: "date"
+ * sort_type: "descendant"
+ * ---
+ *```
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */

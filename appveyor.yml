@@ -5,7 +5,6 @@ clone_folder: c:\projects\spress
 
 cache:
     - c:\php -> appveyor.yml
-    - .phpunit -> phpunit
 
 init:
     - SET PATH=c:\php;%PATH%

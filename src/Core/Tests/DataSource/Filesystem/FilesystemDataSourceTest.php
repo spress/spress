@@ -15,17 +15,21 @@ use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
 
 class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 {
+    protected $sourcePath;
+    protected $extraPagesPath;
     protected $textExtensions;
 
     public function setUp()
     {
+        $this->sourcePath = realpath(__dir__.'/../../fixtures/project/src');
+        $this->extraPagesPath = realpath(__dir__.'/../../fixtures/extra_pages');
         $this->textExtensions = ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml'];
     }
 
     public function testProcessItems()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
             'text_extensions' => $this->textExtensions,
         ]);
 
@@ -99,8 +103,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
-            'include' => [__dir__.$this->normalizeDirectorySeparator('/../../fixtures/extra_pages/extra-page1.html')],
+            'source_root' => $this->sourcePath,
+            'include' => [$this->extraPagesPath.'/extra-page1.html'],
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
@@ -110,8 +114,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
-            'include' => [__dir__.$this->normalizeDirectorySeparator('/../../fixtures/extra_pages')],
+            'source_root' => $this->sourcePath,
+            'include' => [$this->extraPagesPath],
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
@@ -122,7 +126,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
             'exclude' => ['robots.txt'],
             'text_extensions' => $this->textExtensions,
         ]);
@@ -134,7 +138,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
             'exclude' => ['about'],
             'text_extensions' => $this->textExtensions,
         ]);
@@ -158,7 +162,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testNoParamTextExtensions()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
         ]);
         $fsDataSource->load();
     }
@@ -181,7 +185,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamInclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
             'include' => './',
             'text_extensions' => $this->textExtensions,
         ]);
@@ -194,15 +198,10 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamExclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'source_root' => $this->sourcePath,
             'exclude' => './',
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
-    }
-
-    protected function normalizeDirectorySeparator($path)
-    {
-        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 }

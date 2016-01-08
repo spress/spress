@@ -25,7 +25,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testProcessItems()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
             'text_extensions' => $this->textExtensions,
         ]);
 
@@ -99,8 +99,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
-            'include' => [__dir__.'/../../fixtures/extra_pages/extra-page1.html'],
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'include' => [__dir__.$this->normalizeDirectorySeparator('/../../fixtures/extra_pages/extra-page1.html')],
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
@@ -110,8 +110,8 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testIncludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
-            'include' => [__dir__.'/../../fixtures/extra_pages'],
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
+            'include' => [__dir__.$this->normalizeDirectorySeparator('/../../fixtures/extra_pages')],
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
@@ -122,7 +122,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFile()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
             'exclude' => ['robots.txt'],
             'text_extensions' => $this->textExtensions,
         ]);
@@ -134,7 +134,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testExcludeFolder()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
             'exclude' => ['about'],
             'text_extensions' => $this->textExtensions,
         ]);
@@ -158,7 +158,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testNoParamTextExtensions()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
         ]);
         $fsDataSource->load();
     }
@@ -181,7 +181,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamInclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
             'include' => './',
             'text_extensions' => $this->textExtensions,
         ]);
@@ -194,10 +194,15 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
     public function testBadParamExclude()
     {
         $fsDataSource = new FilesystemDataSource([
-            'source_root' => __dir__.'/../../fixtures/project/src',
+            'source_root' => __dir__.$this->normalizeDirectorySeparator('/../../fixtures/project/src'),
             'exclude' => './',
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
+    }
+
+    protected function normalizeDirectorySeparator($path)
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 }

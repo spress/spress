@@ -164,7 +164,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
                     'source_root' => __dir__.'/../fixtures/project/src',
-                    'text_extensions' => ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
+                    'text_extensions' => ['htm', 'html', 'html.twig', 'twig.html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
                 ],
             ],
         ];

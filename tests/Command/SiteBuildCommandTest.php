@@ -41,7 +41,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,
-        ]);
+        ], ['decorated' => false]);
 
         $output = $commandTester->getDisplay();
 
@@ -62,7 +62,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             '--source' => $this->sourceDir,
             '--drafts' => true,
-        ]);
+        ], ['decorated' => false]);
 
         $output = $commandTester->getDisplay();
 
@@ -82,7 +82,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             '--source' => $this->sourceDir,
             '--safe' => true,
-        ]);
+        ], ['decorated' => false]);
 
         $output = $commandTester->getDisplay();
 
@@ -101,7 +101,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             '--source' => $this->sourceDir,
             '--env' => 'prod',
-        ]);
+        ], ['decorated' => false]);
 
         $output = $commandTester->getDisplay();
 
@@ -122,7 +122,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([
             '--source' => $this->sourceDir,
             '--env' => 'test',
-        ]);
+        ], ['decorated' => false]);
 
         $output = $commandTester->getDisplay();
 

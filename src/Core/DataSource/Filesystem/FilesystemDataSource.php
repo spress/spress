@@ -21,6 +21,8 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
 /**
  * Filesystem data source. Binary items don’t have their content
  * loaded in-memory. getPath() returns the path to the binary filename.
+ * 
+ * The directory separator is '/' in any case.
  *
  * Source-root structure:
  * |- includes
@@ -67,7 +69,7 @@ class FilesystemDataSource extends AbstractDataSource
     private $attributeParser;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getItems()
     {
@@ -75,7 +77,7 @@ class FilesystemDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLayouts()
     {
@@ -83,7 +85,7 @@ class FilesystemDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIncludes()
     {
@@ -91,7 +93,7 @@ class FilesystemDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules.
      * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute.
@@ -116,7 +118,7 @@ class FilesystemDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function process()
     {
@@ -184,15 +186,15 @@ class FilesystemDataSource extends AbstractDataSource
     private function processItems(Finder $finder, $type)
     {
         foreach ($finder as $file) {
-            $id = $file->getRelativePathname();
+            $id = $this->normalizeDirSeparator($file->getRelativePathname());
             $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();
 
             $item = new Item($contentRaw, $id, [], $isBinary, $type);
-            $item->setPath($file->getRelativePathname(), Item::SNAPSHOT_PATH_RELATIVE);
+            $item->setPath($this->normalizeDirSeparator($file->getRelativePathname()), Item::SNAPSHOT_PATH_RELATIVE);
 
             if ($isBinary === true) {
-                $item->setPath($file->getRealPath(), Item::SNAPSHOT_PATH_SOURCE);   
+                $item->setPath($this->normalizeDirSeparator($file->getRealPath()), Item::SNAPSHOT_PATH_SOURCE);
             }
 
             switch ($type) {
@@ -241,7 +243,7 @@ class FilesystemDataSource extends AbstractDataSource
             }
         }
 
-        $str = new StringWrapper($file->getRelativePath());
+        $str = new StringWrapper($this->normalizeDirSeparator($file->getRelativePath()));
 
         if ($str->startWith('posts/') === true && array_key_exists('categories', $attributes) === false) {
             $categories = explode('/', $str->deletePrefix('posts/'));
@@ -265,7 +267,7 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function isDateFilename(SplFileInfo $file)
     {
-        $filename = $file->getFilename();
+        $filename = $this->normalizeDirSeparator($file->getFilename());
 
         if (preg_match('/(\d{4})-(\d{2})-(\d{2})-(.+?)(\.[^\.]+|\.[^\.]+\.[^\.]+)$/', $filename, $matches)) {
             return [$matches[1], $matches[2], $matches[3], $matches[4]];
@@ -282,7 +284,9 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function getAttributesFilename(splfileinfo $file)
     {
-        return $this->composeSubPath(sprintf('content/%s.meta', $file->getRelativePathname()));
+        $relativePathname = $this->normalizeDirSeparator($file->getRelativePathname());
+
+        return $this->composeSubPath(sprintf('content/%s.meta', $relativePathname));
     }
 
     private function getResolver()
@@ -311,5 +315,14 @@ class FilesystemDataSource extends AbstractDataSource
     private function composeSubPath($path)
     {
         return $this->params['source_root'].'/'.$path;
+    }
+
+    private function normalizeDirSeparator($path)
+    {
+        if (DIRECTORY_SEPARATOR === '/') {
+            return $path;
+        }
+
+        return str_replace(DIRECTORY_SEPARATOR, '/', $path);
     }
 }

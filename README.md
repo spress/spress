@@ -1,7 +1,7 @@
 Spress - PHP Static site generator
 ==============================
 [![Build Status](https://travis-ci.org/spress/Spress.svg?branch=2.0)](https://travis-ci.org/spress/Spress)
-[![Build status](https://ci.appveyor.com/api/projects/status/mjsjdgauj7ks3ogn?svg=true)](https://ci.appveyor.com/project/yosymfony/spress)
+[![Build status](https://ci.appveyor.com/api/projects/status/mjsjdgauj7ks3ogn/branch/2.0?svg=true)](https://ci.appveyor.com/project/yosymfony/spress/branch/2.0)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=2.0)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.0)
 [![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=2.0)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.0)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
@@ -13,7 +13,7 @@ License: [MIT](https://github.com/spress/Spress/blob/master/LICENSE).
 Requirements
 ------------
 
-* Linux, Unix or Mac OS X.
+* Linux, Unix, Mac OS X or Windows.
 * PHP >= 5.5.
 * [Composer](http://getcomposer.org/).
 

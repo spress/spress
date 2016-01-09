@@ -1,6 +1,6 @@
 CHANGELOG for 2.0.x
 ===================
-## 2.0.1
+## 2.0.1 (2016-01-09)
 * [Improved] Normalized the directory separator to '/' irrespective of the operating system.
 * [Fixed] Fixed the file's extension `twig.html` in configuration files.
 * [Fixed] Fixed the exception "A previous item exists with the same id" thrown by Taxonomy generator due to a key sensitive issue. A normalize method has been added. e.g: "news", "NEWS", " News " are the same term: "news".

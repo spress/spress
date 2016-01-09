@@ -26,14 +26,11 @@ install:
     - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - appveyor DownloadFile https://getcomposer.org/composer.phar
-    - appveyor DownloadFile https://phar.phpunit.de/phpunit-4.8.21.phar
-    - ren phpunit-4.8.21.phar phpunit.phar
+    - appveyor DownloadFile https://phar.phpunit.de/phpunit-4.8.21.phar -FileName phpunit.phar
     - cd c:\projects\spress
     - composer install --no-interaction --no-dev --no-progress --ansi
 
 test_script:
     - cd c:\projects\spress
     - Setlocal EnableDelayedExpansion
-    - SET X=0
     - phpunit
-    - exit %X%

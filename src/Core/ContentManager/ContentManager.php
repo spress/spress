@@ -411,11 +411,11 @@ class ContentManager
 
         $snapshotPage = $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttribute->getAttributes());
 
-        $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_PAGE);
+        $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_RENDER_PAGE);
 
         $this->eventDispatcher->dispatch('spress.after_render_page', new Event\RenderEvent(
             $item,
-            ItemInterface::SNAPSHOT_AFTER_PAGE,
+            ItemInterface::SNAPSHOT_AFTER_RENDER_PAGE,
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
     }

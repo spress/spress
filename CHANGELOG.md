@@ -3,6 +3,7 @@ CHANGELOG for 2.0.x
 ## 2.0.2
 * [New] `PluginTester` class has been added to the core for testing plugins easily.
 * [Fixed] Fixed an issue with the content retrieved by "after_render_page" event.
+* [Fixed] A constant name of `ItemInterface` has been changed: `SNAPSHOT_AFTER_PAGE` -> `SNAPSHOT_AFTER_RENDER_PAGE`.
 
 ## 2.0.1 (2016-01-09)
 * [Improved] Normalized the directory separator to '/' irrespective of the operating system.

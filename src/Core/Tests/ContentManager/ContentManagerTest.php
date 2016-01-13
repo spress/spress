@@ -26,6 +26,7 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
+use Yosymfony\Spress\Core\Tester\PluginTester;
 
 class ContentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +51,20 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dw = new MemoryDataWriter();
-        $cm = $this->getContentManager($dw);
+
+        $testPlugin = new PluginTester('acme');
+        $testPlugin->setListenerToBeforeRenderPageEvent(function ($event) {
+            if ($event->getId() === 'about/index.html') {
+                $this->assertStringEndsNotWith('</html>', $event->getContent());
+            }
+        });
+        $testPlugin->setListenerToAfterRenderPageEvent(function ($event) {
+            if ($event->getId() === 'about/index.html') {
+                $this->assertStringEndsWith('</html>', $event->getContent());
+            }
+        });
+
+        $cm = $this->getContentManager($dw, [$testPlugin]);
         $cm->parseSite($attributes, $spressAttributes);
 
         $this->assertCount(14, $dw->getItems());
@@ -107,7 +121,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('books/2013/09/19/new-book/index.html')->getContent());
     }
 
-    protected function getContentManager($dataWriter)
+    protected function getContentManager($dataWriter, array $plugins = [])
     {
         $dsm = $this->getDataSourceManager();
         $gm = $this->getGeneratorManager();
@@ -117,7 +131,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $renderizer = $this->getRenderizer();
         $siteAttribute = new SiteAttribute();
         $dispatcher = new EventDispatcher();
-        $pm = new PluginManager($dispatcher);
+        $pm = $this->getPluginManager($dispatcher, $plugins);
         $io = new NullIO();
 
         return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher, $io);
@@ -180,5 +194,16 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
 
         return new TwigRenderizer($twig, $twigLoader, ['twig', 'html.twig', 'twig.html', 'html']);
+    }
+
+    private function getPluginManager(EventDispatcher $dispatcher, array $plugins)
+    {
+        $pm = new PluginManager($dispatcher);
+
+        foreach ($plugins as $index => $Plugin) {
+            $pm->addPlugin($index, $Plugin);
+        }
+
+        return $pm;
     }
 }

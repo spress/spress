@@ -253,8 +253,9 @@ class Spress extends Container
         $this['spress.cms.permalinkGenerator'] = function ($c) {
             $permalink = $c['spress.config.values']['permalink'];
             $preservePathTitle = $c['spress.config.values']['preserve_path_title'];
+            $noHtmlExtension = $c['spress.config.values']['no_html_extension'];
 
-            return new PermalinkGenerator($permalink, $preservePathTitle);
+            return new PermalinkGenerator($permalink, $preservePathTitle, $noHtmlExtension);
         };
 
         $this['spress.cms.renderizer'] = function ($c) {

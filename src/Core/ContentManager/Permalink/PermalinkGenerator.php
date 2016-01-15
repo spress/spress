@@ -42,6 +42,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
     private $defaultPermalink;
     private $defaultPreservePathTitle;
+    private $defaultNoHtmlExtension;
 
     /**
      * Constructor.
@@ -65,11 +66,14 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
      * @param bool $defaultPreservePathTitle Default value for Preserve-path-title.
+     * @param bool $defaultNoHtmlExtension Default value for no-html-extension.
      */
-    public function __construct($defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
+    public function __construct($defaultPermalink = 'pretty',
+        $defaultPreservePathTitle = false, $defaultNoHtmlExtension = false)
     {
         $this->defaultPermalink = $defaultPermalink;
         $this->defaultPreservePathTitle = $defaultPreservePathTitle;
+        $this->defaultNoHtmlExtension = $defaultNoHtmlExtension;
     }
 
     /**
@@ -98,6 +102,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         $placeholders = $this->getPlacehoders($item);
         $permalinkStyle = $this->getPermalinkAttribute($item);
+        $noHtmlExtension = $this->getNoHtmlExtensionAttribute($item);
 
         if ($item->isBinary() === true) {
             $urlTemplate = $this::PERMALINK_NONE;
@@ -139,28 +144,19 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 $pathTemplate = $urlTemplate;
                 break;
             case 'pretty':
+                $noHtmlExtension = true;
+
                 if ($this->isItemWithDate($item)) {
                     $urlTemplate = '/:categories/:year/:month/:day/:title';
-                    $pathTemplate = '/:categories/:year/:month/:day/:title/index.html';
 
                     if ($this->isCustomCollection($item)) {
                         $urlTemplate = '/:collection'.$urlTemplate;
-                        $pathTemplate = '/:collection'.$pathTemplate;
                     }
                 } else {
-                    if ($placeholders[':extension'] !== 'html') {
-                        $urlTemplate = $this::PERMALINK_NONE;
-                        $pathTemplate = $urlTemplate;
-                    } else {
-                        if ($placeholders[':basename'] === 'index') {
-                            $urlTemplate = '/:path';
-                            $pathTemplate = '/:path/index.html';
-                        } else {
-                            $urlTemplate = '/:path/:basename';
-                            $pathTemplate = '/:path/:basename/index.html';
-                        }
-                    }
+                    $urlTemplate = $this::PERMALINK_NONE;
                 }
+
+                $pathTemplate = $urlTemplate;
                 break;
             default:
                 if (!$this->templateNeedsDate($permalinkStyle)
@@ -171,6 +167,15 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 }
                 $pathTemplate = $urlTemplate;
                 break;
+        }
+
+        if ($noHtmlExtension && $placeholders[':extension'] === 'html') {
+            if ($placeholders[':basename'] === 'index') {
+                $placeholders[':basename'] = '';
+            }
+            $urlTemplate = str_replace(['.:extension', ':extension'], '', $urlTemplate);
+            $pathTemplate = str_replace(['.:extension', ':extension'], '', $pathTemplate);
+            $pathTemplate .= '/index.html';
         }
 
         $path = $this->generatePath($pathTemplate, $placeholders);
@@ -308,6 +313,21 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         } catch (\Exception $e) {
             throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
+    }
+
+    private function getNoHtmlExtensionAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['no_html_extension']) === true) {
+            if (is_bool($attributes['no_html_extension']) === false) {
+                throw new AttributeValueException('Invalid value. Expected boolean', 'no_html_extension', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            }
+
+            return $attributes['no_html_extension'];
+        }
+
+        return $this->defaultNoHtmlExtension;
     }
 
     private function isCustomCollection(ItemInterface $item)

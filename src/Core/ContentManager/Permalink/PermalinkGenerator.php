@@ -39,6 +39,16 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      * Predefined permalink 'none'
      */
     const PERMALINK_NONE = '/:path/:basename.:extension';
+    /**
+     * Predefined permalink template for 'date' & 'pretty'
+     * '/:collection' gets prepended when in a custom collection.
+     * 'pretty' also forces option 'no_html_extension'
+     */
+    const PERMALINK_DATE = '/:categories/:year/:month/:day/:title.:extension';
+    /**
+     * Predefined permalink 'ordinal'
+     */
+    const PERMALINK_ORDINAL = '/:categories/:year/:i_day/:title.:extension';
 
     private $defaultPermalink;
     private $defaultPreservePathTitle;
@@ -115,11 +125,10 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         switch ($permalinkStyle) {
             case 'none':
                 $urlTemplate = $this::PERMALINK_NONE;
-                $pathTemplate = $urlTemplate;
                 break;
             case 'ordinal':
                 if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:i_day/:title.:extension';
+                    $urlTemplate = $this::PERMALINK_ORDINAL;
 
                     if ($this->isCustomCollection($item)) {
                         $urlTemplate = '/:collection'.$urlTemplate;
@@ -127,27 +136,12 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 } else {
                     $urlTemplate = $this::PERMALINK_NONE;
                 }
-
-                $pathTemplate = $urlTemplate;
-                break;
-            case 'date':
-                if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:month/:day/:title.:extension';
-
-                    if ($this->isCustomCollection($item)) {
-                        $urlTemplate = '/:collection'.$urlTemplate;
-                    }
-                } else {
-                    $urlTemplate = $this::PERMALINK_NONE;
-                }
-
-                $pathTemplate = $urlTemplate;
                 break;
             case 'pretty':
                 $noHtmlExtension = true;
-
+            case 'date':
                 if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:month/:day/:title';
+                    $urlTemplate = $this::PERMALINK_DATE;
 
                     if ($this->isCustomCollection($item)) {
                         $urlTemplate = '/:collection'.$urlTemplate;
@@ -155,8 +149,6 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 } else {
                     $urlTemplate = $this::PERMALINK_NONE;
                 }
-
-                $pathTemplate = $urlTemplate;
                 break;
             default:
                 if (!$this->templateNeedsDate($permalinkStyle)
@@ -165,7 +157,6 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 } else {
                     $urlTemplate = $this::PERMALINK_NONE;
                 }
-                $pathTemplate = $urlTemplate;
                 break;
         }
 
@@ -174,8 +165,9 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 $placeholders[':basename'] = '';
             }
             $urlTemplate = str_replace(['.:extension', ':extension'], '', $urlTemplate);
-            $pathTemplate = str_replace(['.:extension', ':extension'], '', $pathTemplate);
-            $pathTemplate .= '/index.html';
+            $pathTemplate = $urlTemplate . '/index.html';
+        } else {
+            $pathTemplate = $urlTemplate;
         }
 
         $path = $this->generatePath($pathTemplate, $placeholders);

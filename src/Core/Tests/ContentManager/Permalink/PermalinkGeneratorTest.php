@@ -224,6 +224,30 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/title-post/index.html', $permalink->getUrlPath());
     }
 
+    public function testNoHtmlExtension()
+    {
+        $pmg = new PermalinkGenerator('/:year-:month-:day/:title.:extension', false, true);
+        $permalink = $pmg->getPermalink($this->createItem('index.html'));
+
+        $this->assertEquals('index.html', $permalink->getPath());
+        $this->assertEquals('/', $permalink->getUrlPath());
+
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+        ]));
+
+        $this->assertEquals('2015-04-17/index.html', $permalink->getPath());
+        $this->assertEquals('/2015-04-17', $permalink->getUrlPath());
+
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+            'title' => 'my first post',
+        ]));
+
+        $this->assertEquals('2015-04-17/my-first-post/index.html', $permalink->getPath());
+        $this->assertEquals('/2015-04-17/my-first-post', $permalink->getUrlPath());
+    }
+
     public function testPermalinkForBinaryItem()
     {
         $pmg = new PermalinkGenerator('pretty');

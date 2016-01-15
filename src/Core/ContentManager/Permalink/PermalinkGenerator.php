@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
@@ -163,7 +164,12 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 }
                 break;
             default:
-                $urlTemplate = $permalinkStyle;
+                if (!$this->templateNeedsDate($permalinkStyle)
+                    || $this->isItemWithDate($item)) {
+                    $urlTemplate = $permalinkStyle;
+                } else {
+                    $urlTemplate = $this::PERMALINK_NONE;
+                }
                 $pathTemplate = $urlTemplate;
                 break;
         }
@@ -177,7 +183,6 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     private function getPlacehoders(ItemInterface $item)
     {
         $fileInfo = new \SplFileInfo($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-        $time = $this->getDateAttribute($item);
 
         $result = [
             ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('.'),
@@ -186,12 +191,18 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             ':collection' => $item->getCollection(),
             ':categories' => $this->getCategoriesPath($item),
             ':title' => $this->getTitleSlugified($item),
-            ':year' => $time->format('Y'),
-            ':month' => $time->format('m'),
-            ':day' => $time->format('d'),
-            ':i_month' => $time->format('n'),
-            ':i_day' => $time->format('j'),
         ];
+
+        if ($this->isItemWithDate($item)) {
+            $time = $this->getDateAttribute($item);
+            $result += [
+                ':year' => $time->format('Y'),
+                ':month' => $time->format('m'),
+                ':day' => $time->format('d'),
+                ':i_month' => $time->format('n'),
+                ':i_day' => $time->format('j'),
+            ];
+        }
 
         return $result;
     }
@@ -205,6 +216,15 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         }
 
         return false;
+    }
+
+    private function templateNeedsDate($template)
+    {
+        return strpos($template, ':year') !== false
+            || strpos($template, ':month') !== false
+            || strpos($template, ':day') !== false
+            || strpos($template, ':i_month') !== false
+            || strpos($template, ':i_day') !== false;
     }
 
     private function getTitleSlugified(ItemInterface $item)
@@ -277,7 +297,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $attributes = $item->getAttributes();
 
         if (isset($attributes['date']) === false) {
-            return new \DateTime();
+            throw new MissingAttributeException('Attribute date required', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         if (is_string($attributes['date']) === false) {

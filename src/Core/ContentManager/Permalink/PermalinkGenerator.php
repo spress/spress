@@ -34,6 +34,11 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  */
 class PermalinkGenerator implements PermalinkGeneratorInterface
 {
+    /**
+     * Predefined permalink 'none'
+     */
+    const PERMALINK_NONE = '/:path/:basename.:extension';
+
     private $defaultPermalink;
     private $defaultPreservePathTitle;
 
@@ -94,7 +99,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $permalinkStyle = $this->getPermalinkAttribute($item);
 
         if ($item->isBinary() === true) {
-            $urlTemplate = '/:path/:basename.:extension';
+            $urlTemplate = $this::PERMALINK_NONE;
             $path = $this->generatePath($urlTemplate, $placeholders);
             $urlPath = $this->generateUrlPath($urlTemplate, $placeholders);
 
@@ -103,8 +108,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         switch ($permalinkStyle) {
             case 'none':
-                $urlTemplate = '/:path/:basename.:extension';
-
+                $urlTemplate = $this::PERMALINK_NONE;
                 $pathTemplate = $urlTemplate;
                 break;
             case 'ordinal':
@@ -115,7 +119,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                         $urlTemplate = '/:collection'.$urlTemplate;
                     }
                 } else {
-                    $urlTemplate = '/:path/:basename.:extension';
+                    $urlTemplate = $this::PERMALINK_NONE;
                 }
 
                 $pathTemplate = $urlTemplate;
@@ -128,14 +132,14 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                         $urlTemplate = '/:collection'.$urlTemplate;
                     }
                 } else {
-                    $urlTemplate = '/:path/:basename.:extension';
+                    $urlTemplate = $this::PERMALINK_NONE;
                 }
 
                 $pathTemplate = $urlTemplate;
                 break;
             case 'pretty':
                 if ($placeholders[':extension'] !== 'html') {
-                    $urlTemplate = '/:path/:basename.:extension';
+                    $urlTemplate = $this::PERMALINK_NONE;
                     $pathTemplate = $urlTemplate;
                     break;
                 }

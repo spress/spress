@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Core\ContentManager\Permalink;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
@@ -34,8 +35,24 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  */
 class PermalinkGenerator implements PermalinkGeneratorInterface
 {
+    /**
+     * Predefined permalink 'none'
+     */
+    const PERMALINK_NONE = '/:path/:basename.:extension';
+    /**
+     * Predefined permalink template for 'date' & 'pretty'
+     * '/:collection' gets prepended when in a custom collection.
+     * 'pretty' also forces option 'no_html_extension'
+     */
+    const PERMALINK_DATE = '/:categories/:year/:month/:day/:title.:extension';
+    /**
+     * Predefined permalink 'ordinal'
+     */
+    const PERMALINK_ORDINAL = '/:categories/:year/:i_day/:title.:extension';
+
     private $defaultPermalink;
     private $defaultPreservePathTitle;
+    private $defaultNoHtmlExtension;
 
     /**
      * Constructor.
@@ -59,11 +76,14 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
      * @param bool $defaultPreservePathTitle Default value for Preserve-path-title.
+     * @param bool $defaultNoHtmlExtension Default value for no-html-extension.
      */
-    public function __construct($defaultPermalink = 'pretty', $defaultPreservePathTitle = false)
+    public function __construct($defaultPermalink = 'pretty',
+        $defaultPreservePathTitle = false, $defaultNoHtmlExtension = false)
     {
         $this->defaultPermalink = $defaultPermalink;
         $this->defaultPreservePathTitle = $defaultPreservePathTitle;
+        $this->defaultNoHtmlExtension = $defaultNoHtmlExtension;
     }
 
     /**
@@ -92,9 +112,10 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         $placeholders = $this->getPlacehoders($item);
         $permalinkStyle = $this->getPermalinkAttribute($item);
+        $noHtmlExtension = $this->getNoHtmlExtensionAttribute($item);
 
         if ($item->isBinary() === true) {
-            $urlTemplate = '/:path/:basename.:extension';
+            $urlTemplate = $this::PERMALINK_NONE;
             $path = $this->generatePath($urlTemplate, $placeholders);
             $urlPath = $this->generateUrlPath($urlTemplate, $placeholders);
 
@@ -103,65 +124,50 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         switch ($permalinkStyle) {
             case 'none':
-                $urlTemplate = '/:path/:basename.:extension';
-
-                $pathTemplate = $urlTemplate;
+                $urlTemplate = $this::PERMALINK_NONE;
                 break;
             case 'ordinal':
                 if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:i_day/:title.:extension';
+                    $urlTemplate = $this::PERMALINK_ORDINAL;
 
                     if ($this->isCustomCollection($item)) {
                         $urlTemplate = '/:collection'.$urlTemplate;
                     }
                 } else {
-                    $urlTemplate = '/:path/:basename.:extension';
+                    $urlTemplate = $this::PERMALINK_NONE;
                 }
-
-                $pathTemplate = $urlTemplate;
-                break;
-            case 'date':
-                if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:month/:day/:title.:extension';
-
-                    if ($this->isCustomCollection($item)) {
-                        $urlTemplate = '/:collection'.$urlTemplate;
-                    }
-                } else {
-                    $urlTemplate = '/:path/:basename.:extension';
-                }
-
-                $pathTemplate = $urlTemplate;
                 break;
             case 'pretty':
-                if ($placeholders[':extension'] !== 'html') {
-                    $urlTemplate = '/:path/:basename.:extension';
-                    $pathTemplate = $urlTemplate;
-                    break;
-                }
-
+                $noHtmlExtension = true;
+            case 'date':
                 if ($this->isItemWithDate($item)) {
-                    $urlTemplate = '/:categories/:year/:month/:day/:title';
-                    $pathTemplate = '/:categories/:year/:month/:day/:title/index.html';
+                    $urlTemplate = $this::PERMALINK_DATE;
 
                     if ($this->isCustomCollection($item)) {
                         $urlTemplate = '/:collection'.$urlTemplate;
-                        $pathTemplate = '/:collection'.$pathTemplate;
                     }
                 } else {
-                    if ($placeholders[':basename'] === 'index') {
-                        $urlTemplate = '/:path';
-                        $pathTemplate = '/:path/index.html';
-                    } else {
-                        $urlTemplate = '/:path/:basename';
-                        $pathTemplate = '/:path/:basename/index.html';
-                    }
+                    $urlTemplate = $this::PERMALINK_NONE;
                 }
                 break;
             default:
-                $urlTemplate = $permalinkStyle;
-                $pathTemplate = $urlTemplate;
+                if (!$this->templateNeedsDate($permalinkStyle)
+                    || $this->isItemWithDate($item)) {
+                    $urlTemplate = $permalinkStyle;
+                } else {
+                    $urlTemplate = $this::PERMALINK_NONE;
+                }
                 break;
+        }
+
+        if ($noHtmlExtension && $placeholders[':extension'] === 'html') {
+            if ($placeholders[':basename'] === 'index') {
+                $placeholders[':basename'] = '';
+            }
+            $urlTemplate = str_replace(['.:extension', ':extension'], '', $urlTemplate);
+            $pathTemplate = $urlTemplate . '/index.html';
+        } else {
+            $pathTemplate = $urlTemplate;
         }
 
         $path = $this->generatePath($pathTemplate, $placeholders);
@@ -173,7 +179,6 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     private function getPlacehoders(ItemInterface $item)
     {
         $fileInfo = new \SplFileInfo($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
-        $time = $this->getDateAttribute($item);
 
         $result = [
             ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('.'),
@@ -182,12 +187,18 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             ':collection' => $item->getCollection(),
             ':categories' => $this->getCategoriesPath($item),
             ':title' => $this->getTitleSlugified($item),
-            ':year' => $time->format('Y'),
-            ':month' => $time->format('m'),
-            ':day' => $time->format('d'),
-            ':i_month' => $time->format('n'),
-            ':i_day' => $time->format('j'),
         ];
+
+        if ($this->isItemWithDate($item)) {
+            $time = $this->getDateAttribute($item);
+            $result += [
+                ':year' => $time->format('Y'),
+                ':month' => $time->format('m'),
+                ':day' => $time->format('d'),
+                ':i_month' => $time->format('n'),
+                ':i_day' => $time->format('j'),
+            ];
+        }
 
         return $result;
     }
@@ -201,6 +212,15 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         }
 
         return false;
+    }
+
+    private function templateNeedsDate($template)
+    {
+        return strpos($template, ':year') !== false
+            || strpos($template, ':month') !== false
+            || strpos($template, ':day') !== false
+            || strpos($template, ':i_month') !== false
+            || strpos($template, ':i_day') !== false;
     }
 
     private function getTitleSlugified(ItemInterface $item)
@@ -273,7 +293,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $attributes = $item->getAttributes();
 
         if (isset($attributes['date']) === false) {
-            return new \DateTime();
+            throw new MissingAttributeException('Attribute date required', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
         if (is_string($attributes['date']) === false) {
@@ -285,6 +305,21 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         } catch (\Exception $e) {
             throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
+    }
+
+    private function getNoHtmlExtensionAttribute(ItemInterface $item)
+    {
+        $attributes = $item->getAttributes();
+
+        if (isset($attributes['no_html_extension']) === true) {
+            if (is_bool($attributes['no_html_extension']) === false) {
+                throw new AttributeValueException('Invalid value. Expected boolean', 'no_html_extension', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            }
+
+            return $attributes['no_html_extension'];
+        }
+
+        return $this->defaultNoHtmlExtension;
     }
 
     private function isCustomCollection(ItemInterface $item)

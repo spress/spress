@@ -1,5 +1,8 @@
 CHANGELOG for 2.0.x
 ===================
+## 2.1.0
+* [Improved] Improved permalinks customizations. See PR #64.
+
 ## 2.0.2 (2016-01-16)
 * [New] `PluginTester` class has been added to the core for testing plugins easily.
 * [Fixed] Fixed an issue with the content retrieved by "after_render_page" event.

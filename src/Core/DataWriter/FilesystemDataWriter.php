@@ -42,7 +42,7 @@ class FilesystemDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * Removes the whole content of the output dir but VCS files.
      */
@@ -60,7 +60,7 @@ class FilesystemDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function write(ItemInterface $item)
     {
@@ -91,7 +91,7 @@ class FilesystemDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function tearDown()
     {

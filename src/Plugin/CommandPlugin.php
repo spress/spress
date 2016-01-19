@@ -22,7 +22,7 @@ use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 class CommandPlugin implements CommandPluginInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCommandDefinition()
     {
@@ -30,7 +30,7 @@ class CommandPlugin implements CommandPluginInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function executeCommand(IOInterface $io, array $arguments, array $options)
     {
@@ -38,7 +38,7 @@ class CommandPlugin implements CommandPluginInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getMetas()
     {
@@ -46,7 +46,7 @@ class CommandPlugin implements CommandPluginInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * Override this method in case you need a regular plugin behavior.
      */

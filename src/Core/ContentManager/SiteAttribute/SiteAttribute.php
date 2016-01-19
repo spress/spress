@@ -37,7 +37,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addAttribute($name, $value)
     {
@@ -45,7 +45,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttribute($name)
     {
@@ -53,7 +53,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttributes()
     {
@@ -61,7 +61,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function hasAttribute($name)
     {
@@ -69,7 +69,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setAttribute($name, $value)
     {
@@ -77,7 +77,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setItem(ItemInterface $item)
     {
@@ -112,7 +112,7 @@ class SiteAttribute implements SiteAttributeInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function initialize(array $attributes = [])
     {

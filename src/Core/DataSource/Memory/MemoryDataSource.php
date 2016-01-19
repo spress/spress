@@ -26,7 +26,7 @@ class MemoryDataSource extends AbstractDataSource
     private $includes = [];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getItems()
     {
@@ -34,7 +34,7 @@ class MemoryDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLayouts()
     {
@@ -42,7 +42,7 @@ class MemoryDataSource extends AbstractDataSource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIncludes()
     {

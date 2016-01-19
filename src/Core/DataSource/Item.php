@@ -52,7 +52,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -65,7 +65,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setCollection($name)
     {
@@ -77,7 +77,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getContent($snapshotName = '')
     {
@@ -93,7 +93,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setContent($content, $snapshotName)
     {
@@ -102,7 +102,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttributes()
     {
@@ -110,7 +110,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setAttributes(array $values)
     {
@@ -118,7 +118,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPath($snapshotName = '')
     {
@@ -134,7 +134,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setPath($value, $snapshotName)
     {
@@ -143,7 +143,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isBinary()
     {
@@ -151,7 +151,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getType()
     {

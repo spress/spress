@@ -24,7 +24,7 @@ class PaginationItem extends Item
     protected $pageItems = [];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttributes()
     {

@@ -31,7 +31,7 @@ class MemoryDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -39,7 +39,7 @@ class MemoryDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function write(ItemInterface $item)
     {
@@ -55,7 +55,7 @@ class MemoryDataWriter implements DataWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function tearDown()
     {

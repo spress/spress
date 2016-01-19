@@ -45,7 +45,7 @@ class Collection implements CollectionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -53,7 +53,7 @@ class Collection implements CollectionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttributes()
     {
@@ -61,7 +61,7 @@ class Collection implements CollectionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPath()
     {

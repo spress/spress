@@ -58,7 +58,7 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addInclude($id, $content, array $attributes = [])
     {
@@ -66,7 +66,7 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function clear()
     {

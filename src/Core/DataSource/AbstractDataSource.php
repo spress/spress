@@ -97,7 +97,7 @@ abstract class AbstractDataSource
             $this->setUp();
         }
 
-        $this->referenceCounter++;
+        ++$this->referenceCounter;
     }
 
     /**
@@ -108,7 +108,7 @@ abstract class AbstractDataSource
      */
     public function removeUse()
     {
-        $this->referenceCounter--;
+        --$this->referenceCounter;
 
         if ($this->referenceCounter === 0) {
             $this->tearDown();

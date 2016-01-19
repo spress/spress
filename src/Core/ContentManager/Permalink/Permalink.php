@@ -28,7 +28,7 @@ class Permalink implements PermalinkInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getUrlPath()
     {
@@ -36,7 +36,7 @@ class Permalink implements PermalinkInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPath()
     {

@@ -75,7 +75,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function loadConfiguration($sitePath, $envName = null)
     {

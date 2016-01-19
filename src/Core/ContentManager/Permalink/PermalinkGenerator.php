@@ -36,17 +36,17 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
 class PermalinkGenerator implements PermalinkGeneratorInterface
 {
     /**
-     * Predefined permalink 'none'
+     * Predefined permalink 'none'.
      */
     const PERMALINK_NONE = '/:path/:basename.:extension';
     /**
      * Predefined permalink template for 'date' & 'pretty'
      * '/:collection' gets prepended when in a custom collection.
-     * 'pretty' also forces option 'no_html_extension'
+     * 'pretty' also forces option 'no_html_extension'.
      */
     const PERMALINK_DATE = '/:categories/:year/:month/:day/:title.:extension';
     /**
-     * Predefined permalink 'ordinal'
+     * Predefined permalink 'ordinal'.
      */
     const PERMALINK_ORDINAL = '/:categories/:year/:i_day/:title.:extension';
 
@@ -76,7 +76,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
      * @param bool $defaultPreservePathTitle Default value for Preserve-path-title.
-     * @param bool $defaultNoHtmlExtension Default value for no-html-extension.
+     * @param bool $defaultNoHtmlExtension   Default value for no-html-extension.
      */
     public function __construct($defaultPermalink = 'pretty',
         $defaultPreservePathTitle = false, $defaultNoHtmlExtension = false)
@@ -127,7 +127,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 $urlTemplate = $this::PERMALINK_NONE;
                 break;
             case 'ordinal':
-                if ($this->isItemWithDate($item)) {
+                if ($this->isItemWithDate($item) === true) {
                     $urlTemplate = $this::PERMALINK_ORDINAL;
 
                     if ($this->isCustomCollection($item)) {
@@ -140,7 +140,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             case 'pretty':
                 $noHtmlExtension = true;
             case 'date':
-                if ($this->isItemWithDate($item)) {
+                if ($this->isItemWithDate($item) === true) {
                     $urlTemplate = $this::PERMALINK_DATE;
 
                     if ($this->isCustomCollection($item)) {
@@ -151,8 +151,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 }
                 break;
             default:
-                if (!$this->templateNeedsDate($permalinkStyle)
-                    || $this->isItemWithDate($item)) {
+                if ($this->templateNeedsDate($permalinkStyle) === false || $this->isItemWithDate($item) === true) {
                     $urlTemplate = $permalinkStyle;
                 } else {
                     $urlTemplate = $this::PERMALINK_NONE;
@@ -164,8 +163,9 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
             if ($placeholders[':basename'] === 'index') {
                 $placeholders[':basename'] = '';
             }
+
             $urlTemplate = str_replace(['.:extension', ':extension'], '', $urlTemplate);
-            $pathTemplate = $urlTemplate . '/index.html';
+            $pathTemplate = $urlTemplate.'/index.html';
         } else {
             $pathTemplate = $urlTemplate;
         }
@@ -207,11 +207,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     {
         $attributes = $item->getAttributes();
 
-        if (isset($attributes['date']) === true) {
-            return true;
-        }
-
-        return false;
+        return isset($attributes['date']);
     }
 
     private function templateNeedsDate($template)

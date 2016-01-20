@@ -185,6 +185,18 @@ class TwigRenderizer implements RenderizerInterface
         $this->twig->addTest($twigTest);
     }
 
+    /**
+     * Adds a new Twig tag.
+     *
+     * @see http://twig.sensiolabs.org/doc/advanced.html#tags Twig documentation.
+     *
+     * @param \Twig_TokenParser $tokenParser
+     */
+    public function addTwigTag(\Twig_TokenParser $tokenParser)
+    {
+        $this->twig->addTokenParser($tokenParser);
+    }
+
     protected function getLayoutAttribute(array $attributes, $contentName)
     {
         if (isset($attributes['layout']) === false) {

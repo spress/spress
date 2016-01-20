@@ -104,6 +104,12 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         });
     }
 
+    public function testAddTwigTag()
+    {
+        $renderizer = $this->getRenderizer();
+        $renderizer->addTwigTag(new TwigTag);
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
@@ -121,5 +127,18 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
         $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
 
         return new TwigRenderizer($twig, $twigLoader, ['twig']);
+    }
+}
+
+class TwigTag extends \Twig_TokenParser
+{
+    public function parse(\Twig_Token $token)
+    {
+        return new \Twig_Node_Text('test', $token->getLine());
+    }
+
+    public function getTag()
+    {
+        return 'test';
     }
 }

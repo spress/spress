@@ -1,6 +1,7 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.1.0
+* [New] Support to extends TwigRenderizer with tags. See PR #65.
 * [Improved] Improved permalinks customizations. See PR #64.
 
 ## 2.0.2 (2016-01-16)

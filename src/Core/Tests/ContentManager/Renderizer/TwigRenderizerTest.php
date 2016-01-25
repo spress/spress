@@ -107,7 +107,7 @@ class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
     public function testAddTwigTag()
     {
         $renderizer = $this->getRenderizer();
-        $renderizer->addTwigTag(new TwigTag);
+        $renderizer->addTwigTag(new TwigTag());
     }
 
     /**

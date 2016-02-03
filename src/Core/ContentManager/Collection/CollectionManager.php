@@ -88,6 +88,16 @@ class CollectionManager
     }
 
     /**
+     * Gets a list of collections registered.
+     * 
+     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface[]
+     */
+    public function getCollections()
+    {
+        return $this->collections;
+    }
+
+    /**
      * Checks if a collection exists.
      *
      * @param string $name The collection's name

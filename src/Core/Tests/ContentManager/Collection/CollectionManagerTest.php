@@ -25,6 +25,8 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
         $cm->setCollection(new Collection('posts', '_posts', ['output' => true]));
 
         $this->assertEquals(4, $cm->countCollection());
+        $this->assertCount(4, $cm->getCollections());
+        $this->assertContainsOnlyInstancesOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->getCollections());
 
         $item = new Item('Test of content', '_events/event-1.html', []);
         $item->setPath('_events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);

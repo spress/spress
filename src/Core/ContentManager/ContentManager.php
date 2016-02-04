@@ -22,10 +22,12 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
-use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
+use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
+use Yosymfony\Spress\Core\Support\ItemSet;
 
 /**
  * Content manager.
@@ -59,8 +61,7 @@ class ContentManager
     private $attributes;
     private $spressAttributes;
 
-    private $items;
-    private $itemsByCollection;
+    private $itemSet;
 
     /**
      * Constructor.
@@ -86,8 +87,8 @@ class ContentManager
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,
         EventDispatcher $eventDispatcher,
-        IOInterface $io
-        ) {
+        IOInterface $io)
+    {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
         $this->generatorManager = $generatorManager;
@@ -103,8 +104,7 @@ class ContentManager
         $this->attributes = [];
         $this->spressAttributes = [];
 
-        $this->items = [];
-        $this->itemsByCollection = [];
+        $this->itemSet = new ItemSet();
     }
 
     /**
@@ -132,12 +132,12 @@ class ContentManager
         $this->process();
         $this->finish();
 
-        return $this->items;
+        return $this->itemSet->getItems();
     }
 
     private function reset()
     {
-        $this->items = [];
+        $this->itemSet->clearItem();
     }
 
     private function setUp()
@@ -188,25 +188,27 @@ class ContentManager
             $this->processDraftIfPost($item);
             $this->processOutputAttribute($item);
 
-            $this->items[$item->getId()] = $item;
+            $this->itemSet->addItem($item);
         }
 
         foreach ($itemsGenerator as $item) {
             $this->processGenerator($item);
         }
 
+        $this->sortItems();
+
         $this->prepareRenderizer();
 
-        foreach ($this->items as $item) {
+        foreach ($this->itemSet->getItems() as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
         }
 
-        foreach ($this->items as $item) {
+        foreach ($this->itemSet->getItems() as $item) {
             $this->renderBlocks($item);
         }
 
-        foreach ($this->items as $item) {
+        foreach ($this->itemSet->getItems() as $item) {
             $this->renderPage($item);
             $this->dataWriter->write($item);
         }
@@ -216,7 +218,7 @@ class ContentManager
     {
         $this->dataWriter->tearDown();
 
-        $event = new Event\FinishEvent($this->items, $this->siteAttribute->getAttributes());
+        $event = new Event\FinishEvent($this->itemSet->getItems(), $this->siteAttribute->getAttributes());
 
         $this->eventDispatcher->dispatch('spress.finish', $event);
 
@@ -244,13 +246,10 @@ class ContentManager
 
         $newAttributes = array_merge($collection->getAttributes(), $attributes);
 
-        $this->itemsByCollection[$collectionName][$item->getId()] = $item;
-
         $item->setAttributes($newAttributes);
         $item->setCollection($collectionName);
 
         $this->siteAttribute->setAttribute($collectionNamePath, $this->getCollectionAttributes($collection));
-        $this->siteAttribute->setItem($item);
     }
 
     private function processDraftIfPost(ItemInterface $item)
@@ -293,10 +292,10 @@ class ContentManager
         $attributes = $item->getAttributes();
 
         $generator = $this->generatorManager->getGenerator($attributes['generator']);
-        $items = $generator->generateItems($item, $this->itemsByCollection);
+        $items = $generator->generateItems($item, $this->itemSet->getItems([], true));
 
         foreach ($items as $item) {
-            if (array_key_exists($item->getId(), $this->items) === true) {
+            if ($this->itemSet->hasItem($item->getId()) === true) {
                 throw new \RuntimeException(
                     sprintf('A previous item exists with the same id: "%s". Generator: "%s".',
                         $item->getId(),
@@ -304,7 +303,39 @@ class ContentManager
             }
 
             $this->processCollection($item);
-            $this->items[$item->getId()] = $item;
+            $this->itemSet->addItem($item);
+        }
+    }
+
+    private function sortItems()
+    {
+        $resolver = new AttributesResolver();
+        $resolver->setDefault('sort_by', '', 'string')
+            ->setDefault('sort_type', 'descending', 'string')
+            ->setValidator('sort_type', function ($value) {
+                switch ($value) {
+                    case 'descending':
+                    case 'ascending':
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+
+        foreach ($this->CollectionManager->getCollections() as $collection) {
+            $attributes = $resolver->resolve($collection->getAttributes());
+
+            if (empty($attributes['sort_by']) === true) {
+                continue;
+            }
+
+            $sortBy = $attributes['sort_by'];
+            $isDescending = $attributes['sort_type'] === 'descending';
+            $this->itemSet->sortItems($sortBy, $isDescending, [$collection->getName()]);
+        }
+
+        foreach ($this->itemSet->getItems() as $item) {
+            $this->siteAttribute->setItem($item);
         }
     }
 

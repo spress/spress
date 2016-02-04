@@ -1,6 +1,7 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.1.0
+* [New] Sort items of a collection. See issue #67.
 * [New] Support to extends TwigRenderizer with tags. See PR #65.
 * [New] Added `ItemSet` class to Core support classes.
 * [New] Added `getCollections` method to `CollectionManager` class.

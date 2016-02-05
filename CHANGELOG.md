@@ -6,6 +6,7 @@ CHANGELOG for 2.0.x
 * [New] Added `ItemSet` class to Core support classes.
 * [New] Added `getCollections` method to `CollectionManager` class.
 * [Improved] Improved permalinks customizations. See PR #64.
+* [Improved] Eliminated unnecessary calls to `setItem` method of `SiteAttribute` class in `ContentManager` class.
 
 ## 2.0.2 (2016-01-16)
 * [New] `PluginTester` class has been added to the core for testing plugins easily.

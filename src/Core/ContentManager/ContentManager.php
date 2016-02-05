@@ -202,6 +202,7 @@ class ContentManager
         foreach ($this->itemSet->getItems() as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
+            $this->siteAttribute->setItem($item);
         }
 
         foreach ($this->itemSet->getItems() as $item) {
@@ -333,10 +334,6 @@ class ContentManager
             $isDescending = $attributes['sort_type'] === 'descending';
             $this->itemSet->sortItems($sortBy, $isDescending, [$collection->getName()]);
         }
-
-        foreach ($this->itemSet->getItems() as $item) {
-            $this->siteAttribute->setItem($item);
-        }
     }
 
     private function isGenerator(ItemInterface $item)
@@ -382,8 +379,6 @@ class ContentManager
             ItemInterface::SNAPSHOT_AFTER_CONVERT,
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
-
-        $this->siteAttribute->setItem($item);
     }
 
     private function processPermalink(ItemInterface $item)
@@ -396,7 +391,6 @@ class ContentManager
         $attributes['url'] = $permalink->getUrlPath();
 
         $item->setAttributes($attributes);
-        $this->siteAttribute->setItem($item);
     }
 
     private function renderBlocks(ItemInterface $item)

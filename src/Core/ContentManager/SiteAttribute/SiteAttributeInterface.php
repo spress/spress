@@ -14,7 +14,8 @@ namespace Yosymfony\Spress\Core\ContentManager\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * Interface for site attribute.
+ * Interface for managing site attributes availables at compilation time.
+ * e.g: "site.pages.page1".
  *
  * The site atributes is the array structure of attriutes used
  * by your site.
@@ -71,7 +72,9 @@ interface SiteAttributeInterface
     public function setAttribute($name, $value);
 
     /**
-     * Sets an item.
+     * Called in some phase of Spress's lifecycle:
+     *  - invoqued to all items just before first `spress.before_render_block` event.
+     *  - before and after of each `spress.*_render_*` event.
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
      */

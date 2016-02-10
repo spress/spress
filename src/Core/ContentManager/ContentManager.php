@@ -27,7 +27,7 @@ use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
-use Yosymfony\Spress\Core\Support\ItemSet;
+use Yosymfony\Spress\Core\Support\ItemCollection;
 
 /**
  * Content manager.
@@ -61,7 +61,7 @@ class ContentManager
     private $attributes;
     private $spressAttributes;
 
-    private $itemSet;
+    private $itemCollection;
 
     /**
      * Constructor.
@@ -104,7 +104,7 @@ class ContentManager
         $this->attributes = [];
         $this->spressAttributes = [];
 
-        $this->itemSet = new ItemSet();
+        $this->itemCollection = new ItemCollection();
     }
 
     /**
@@ -132,12 +132,12 @@ class ContentManager
         $this->process();
         $this->finish();
 
-        return $this->itemSet->getItems();
+        return $this->itemCollection->all();
     }
 
     private function reset()
     {
-        $this->itemSet->clearItem();
+        $this->itemCollection->clear();
     }
 
     private function setUp()
@@ -188,7 +188,7 @@ class ContentManager
             $this->processDraftIfPost($item);
             $this->processOutputAttribute($item);
 
-            $this->itemSet->addItem($item);
+            $this->itemCollection->add($item);
         }
 
         foreach ($itemsGenerator as $item) {
@@ -199,17 +199,17 @@ class ContentManager
 
         $this->prepareRenderizer();
 
-        foreach ($this->itemSet->getItems() as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
             $this->siteAttribute->setItem($item);
         }
 
-        foreach ($this->itemSet->getItems() as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->renderBlocks($item);
         }
 
-        foreach ($this->itemSet->getItems() as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->renderPage($item);
             $this->dataWriter->write($item);
         }
@@ -219,7 +219,7 @@ class ContentManager
     {
         $this->dataWriter->tearDown();
 
-        $event = new Event\FinishEvent($this->itemSet->getItems(), $this->siteAttribute->getAttributes());
+        $event = new Event\FinishEvent($this->itemCollection->all(), $this->siteAttribute->getAttributes());
 
         $this->eventDispatcher->dispatch('spress.finish', $event);
 
@@ -293,10 +293,10 @@ class ContentManager
         $attributes = $item->getAttributes();
 
         $generator = $this->generatorManager->getGenerator($attributes['generator']);
-        $items = $generator->generateItems($item, $this->itemSet->getItems([], true));
+        $items = $generator->generateItems($item, $this->itemCollection->all([], true));
 
         foreach ($items as $item) {
-            if ($this->itemSet->hasItem($item->getId()) === true) {
+            if ($this->itemCollection->has($item->getId()) === true) {
                 throw new \RuntimeException(
                     sprintf('A previous item exists with the same id: "%s". Generator: "%s".',
                         $item->getId(),
@@ -304,7 +304,7 @@ class ContentManager
             }
 
             $this->processCollection($item);
-            $this->itemSet->addItem($item);
+            $this->itemCollection->add($item);
         }
     }
 
@@ -332,7 +332,7 @@ class ContentManager
 
             $sortBy = $attributes['sort_by'];
             $isDescending = $attributes['sort_type'] === 'descending';
-            $this->itemSet->sortItems($sortBy, $isDescending, [$collection->getName()]);
+            $this->itemCollection->sortItems($sortBy, $isDescending, [$collection->getName()]);
         }
     }
 

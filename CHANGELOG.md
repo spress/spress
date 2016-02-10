@@ -4,7 +4,7 @@ CHANGELOG for 2.0.x
 * [New] Sort items of a collection. See issue #67.
 * [New] Support to extends TwigRenderizer with tags. See PR #65.
 * [New] Relationship collection for items. A new class has been added: `RelationshipCollection`. A new method getRelationshipCollection has been added to `ItemIterface`.
-* [New] Added `ItemSet` class to Core support classes.
+* [New] Added `ItemCollection` class to Core support classes.
 * [New] Added `getCollections` method to `CollectionManager` class.
 * [Improved] Improved permalinks customizations. See PR #64.
 * [Improved] Eliminated unnecessary calls to `setItem` method of `SiteAttribute` class in `ContentManager` class.

@@ -12,9 +12,9 @@
 namespace Yosymfony\Spress\Core\Tests\Support;
 
 use Yosymfony\Spress\Core\DataSource\Item;
-use Yosymfony\Spress\Core\Support\ItemSet;
+use Yosymfony\Spress\Core\Support\ItemCollection;
 
-class ItemSetTest extends \PHPUnit_Framework_TestCase
+class ItemCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testItemSet()
     {
@@ -24,43 +24,43 @@ class ItemSetTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post2.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $itemSet = new ItemSet([$item1, $item2]);
+        $itemSet = new ItemCollection([$item1, $item2]);
 
-        $this->assertEquals(2, $itemSet->countItem());
-        $this->assertTrue($itemSet->hasItem('post1.md'));
-        $this->assertTrue($itemSet->hasItem('post2.md'));
-        $this->assertCount(2, $itemSet->getItems());
-        $this->assertCount(2, $itemSet->getItems(['posts']));
+        $this->assertEquals(2, $itemSet->count());
+        $this->assertTrue($itemSet->has('post1.md'));
+        $this->assertTrue($itemSet->has('post2.md'));
+        $this->assertCount(2, $itemSet->all());
+        $this->assertCount(2, $itemSet->all(['posts']));
 
         $item3 = new Item('', 'page1.md', ['number' => 1]);
         $item2->setCollection('pages');
-        $itemSet->addItem($item3);
+        $itemSet->add($item3);
 
-        $this->assertCount(2, $itemSet->getItems([], true));
-        $this->assertArrayHasKey('posts', $itemSet->getItems([], true));
-        $this->assertArrayNotHasKey('posts', $itemSet->getItems([], false));
-        $this->assertArrayHasKey('pages', $itemSet->getItems([], true));
+        $this->assertCount(2, $itemSet->all([], true));
+        $this->assertArrayHasKey('posts', $itemSet->all([], true));
+        $this->assertArrayNotHasKey('posts', $itemSet->all([], false));
+        $this->assertArrayHasKey('pages', $itemSet->all([], true));
 
         $itemSet->sortItems('date', false);
 
-        $items = $itemSet->getItems(['posts']);
+        $items = $itemSet->all(['posts']);
         $this->assertCount(2, $items);
         $this->assertEquals('post2.md', current($items)->getId());
 
         $itemSet->sortItems('date', true);
 
-        $items = $itemSet->getItems(['posts']);
+        $items = $itemSet->all(['posts']);
         $this->assertCount(2, $items);
         $this->assertEquals('post1.md', current($items)->getId());
 
-        $itemSet->removeItem('post1.md');
+        $itemSet->remove('post1.md');
 
-        $this->assertCount(2, $itemSet->getItems());
-        $this->assertEquals('page1.md', $itemSet->getItem('page1.md')->getId());
+        $this->assertCount(2, $itemSet->all());
+        $this->assertEquals('page1.md', $itemSet->get('page1.md')->getId());
 
-        $itemSet->clearItem();
+        $itemSet->clear();
 
-        $this->assertCount(0, $itemSet->getItems());
+        $this->assertCount(0, $itemSet->all());
     }
 
     /**
@@ -68,8 +68,8 @@ class ItemSetTest extends \PHPUnit_Framework_TestCase
      */
     public function testItemNotFound()
     {
-        $itemSet = new ItemSet();
-        $itemSet->getItem('page1.md');
+        $itemSet = new ItemCollection();
+        $itemSet->get('page1.md');
     }
 
     /**
@@ -83,6 +83,6 @@ class ItemSetTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post1.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $itemSet = new ItemSet([$item1, $item2]);
+        $itemSet = new ItemCollection([$item1, $item2]);
     }
 }

@@ -14,15 +14,15 @@ namespace Yosymfony\Spress\Core\Support;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * Item set.
+ * A ItemCollection represents a set of items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class ItemSet
+class ItemCollection implements \IteratorAggregate, \Countable
 {
-    private $items;
-    private $itemCollections;
-    private $idCollections;
+    private $items = [];
+    private $itemCollections = [];
+    private $idCollections = [];
 
     /**
      * Constructor.
@@ -31,33 +31,47 @@ class ItemSet
      */
     public function __construct(array $items = [])
     {
-        $this->clearItem();
-
         foreach ($items as $item) {
-            $this->addItem($item);
+            $this->add($item);
         }
+    }
+
+    /**
+     * Gets the current ItemCollection as an Iterator that includes all items.
+     * The key is the item's id and the
+     * value is an Yosymfony\Spress\Core\DataSource\ItemInterface object.
+     *
+     * @return \ArrayIterator An \ArrayIterator object for iterating over items.
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
     }
 
     /**
      * Adds an new item.
      * 
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
+     *
+     * @throws \RuntimeException If the item has been registered previously with the some id.
      */
-    public function addItem(ItemInterface $item)
+    public function add(ItemInterface $item)
     {
-        if ($this->hasItem($item->getId()) === true) {
+        if ($this->has($item->getId()) === true) {
             throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $item->getId()));
         }
 
-        $this->setItem($item);
+        $this->set($item);
     }
 
     /**
      * Sets an item.
      * 
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface
+     *
+     * @throws \RuntimeException If the item has been registered previously in another collection.
      */
-    public function setItem(ItemInterface $item)
+    public function set(ItemInterface $item)
     {
         $id = $item->getId();
         $collectionName = $item->getCollection();
@@ -81,7 +95,7 @@ class ItemSet
      *
      * @return int
      */
-    public function countItem()
+    public function count()
     {
         return count($this->items);
     }
@@ -92,10 +106,12 @@ class ItemSet
      * @param string $id Identifier of the item.
      * 
      * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
+     *
+     * @throws \RuntimeException If the item was not found.
      */
-    public function getItem($id)
+    public function get($id)
     {
-        if (false === $this->hasItem($id)) {
+        if (false === $this->has($id)) {
             throw new \RuntimeException(sprintf('Item with id: "%s" not found.', $id));
         }
 
@@ -109,21 +125,21 @@ class ItemSet
      *
      * @return bool
      */
-    public function hasItem($id)
+    public function has($id)
     {
         return isset($this->items[$id]);
     }
 
     /**
-     * Gets a list of items registered.
+     * Returns all items in this collection.
      * 
-     * @param string[] $collections       The name of the collections affected. 
+     * @param string[] $collections       The name of the item collections affected. 
      *                                    Array empty means all.
      * @param bool     $groupByCollection First level of array is the collection name.
      * 
      * @return array
      */
-    public function getItems(array $collections = [], $groupByCollection = false)
+    public function all(array $collections = [], $groupByCollection = false)
     {
         if (count($collections) === 0) {
             if ($groupByCollection === false) {
@@ -153,23 +169,24 @@ class ItemSet
     }
 
     /**
-     * Sorts items.
+     * Sorts items in this collection.
      * e.g:.
      * 
      * ```
-     * $iSet = new ItemSet();
+     * $itemCollection = new ItemCollection();
      * // warm-up...
-     * $iset->sortItems('date', true);
-     * $items = $iSet->getItems();
+     * $items = $itemCollection->sortItems('date', true)->all();
      * ```
      * 
      * @param string   $attribute   The name of the attribute used to sort.
      * @param bool     $descending  Is descending sort?
      * @param string[] $collections Only the items belong to Collections will be affected.
+     *
+     * @return \Yosymfony\Spress\Core\Support\ItemCollection An intance of itself.
      */
     public function sortItems($attribute, $descending = true, array $collections = [])
     {
-        $itemCollections = $this->getItems($collections, true);
+        $itemCollections = $this->all($collections, true);
 
         $callback = function ($key, ItemInterface $item) use ($attribute) {
             $attributes = $item->getAttributes();
@@ -188,6 +205,8 @@ class ItemSet
         foreach ($this->itemCollections as $collection => $items) {
             $this->items = array_merge($this->items, $items);
         }
+
+        return $this;
     }
 
     /**
@@ -195,9 +214,9 @@ class ItemSet
      * 
      * @param string $id Identifier of the item.
      */
-    public function removeItem($id)
+    public function remove($id)
     {
-        if ($this->hasItem($id) === false) {
+        if ($this->has($id) === false) {
             return;
         }
 
@@ -209,9 +228,9 @@ class ItemSet
     }
 
     /**
-     * Clears all items registered.
+     * Clears all items in this collection.
      */
-    public function clearItem()
+    public function clear()
     {
         $this->items = [];
         $this->itemCollections = [];

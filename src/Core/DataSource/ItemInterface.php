@@ -133,4 +133,11 @@ interface ItemInterface
      * @return string
      */
     public function getType();
+
+    /**
+     * Gets the RelationshipCollection instance associated with this item.
+     * 
+     * @return RelationshipCollection A RelationshipCollection instance.
+     */
+    public function getRelationshipCollection();
 }

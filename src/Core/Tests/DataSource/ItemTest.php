@@ -101,9 +101,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testPathNotInitialized()
     {
-        $item = new Item('Raw content', 'index.html', []);
+        $item = new Item('Raw content', 'index.html');
 
         $this->assertEquals('', $item->getPath());
+    }
+
+    public function testGetRelationshipCollection()
+    {
+        $item = new Item('Raw content', 'index.html');
+
+        $this->assertInstanceOf('Yosymfony\Spress\Core\DataSource\RelationshipCollection', $item->getRelationshipCollection());
     }
 
     /**
@@ -111,7 +118,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyCollection()
     {
-        $item = new Item('Raw content', 'index.html', []);
+        $item = new Item('Raw content', 'index.html');
         $item->setCollection('');
     }
 

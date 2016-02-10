@@ -25,6 +25,7 @@ class Item implements ItemInterface
     private $collection;
     private $attributes;
     private $pathSnapshot;
+    private $relationshipCollection;
 
     /**
      * Constructor.
@@ -49,6 +50,8 @@ class Item implements ItemInterface
 
         $this->type = $type;
         $this->isBinary = $isBinary;
+
+        $this->relationshipCollection = new RelationshipCollection();
     }
 
     /**
@@ -156,6 +159,14 @@ class Item implements ItemInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRelationshipCollection()
+    {
+        return $this->relationshipCollection;
     }
 
     /**

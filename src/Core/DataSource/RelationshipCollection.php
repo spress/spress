@@ -27,7 +27,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
      * value is an array of Yosymfony\Spress\Core\DataSource\ItemInterface objects
      * with the item's id as key.
      *
-     * @return \Iterator The iterator
+     * @return \ArrayIterator An \ArrayIterator object for iterating over relationships.
      */
     public function getIterator()
     {

@@ -333,6 +333,29 @@ class ContentManager
             $sortBy = $attributes['sort_by'];
             $isDescending = $attributes['sort_type'] === 'descending';
             $this->itemCollection->sortItems($sortBy, $isDescending, [$collection->getName()]);
+            $this->setRelationships($collection->getName());
+        }
+    }
+
+    private function setRelationships($collection)
+    {
+        $priorItem = null;
+        $items = $this->itemCollection->all([$collection]);
+
+        if (count($items) == 0) {
+            return;
+        }
+
+        while (($item = current($items)) !== false) {
+            if (is_null($priorItem) === false) {
+                $item->getRelationshipCollection()->add('prior', $priorItem);
+            }
+
+            if (($nextItem = next($items)) !== false) {
+                $item->getRelationshipCollection()->add('next', $nextItem);
+            }
+
+            $priorItem = $item;
         }
     }
 

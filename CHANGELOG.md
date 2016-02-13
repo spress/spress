@@ -1,8 +1,9 @@
 CHANGELOG for 2.0.x
 ===================
 ## 2.1.0
-* [New] Sort items of a collection. See issue #67.
+* [New] Sort items of a collection. See feature #67.
 * [New] Support to extends TwigRenderizer with tags. See PR #65.
+* [New] Each item of a sorted collection has `next` and `prior` relationships. At compiled time, you have access through `page.relationships.next` and `page.relationships.prior`. See feature #69.
 * [New] Relationship collection for items. A new class has been added: `RelationshipCollection`. A new method getRelationshipCollection has been added to `ItemIterface`.
 * [New] Added `ItemCollection` class to Core support classes.
 * [New] Added `getCollections` method to `CollectionManager` class.

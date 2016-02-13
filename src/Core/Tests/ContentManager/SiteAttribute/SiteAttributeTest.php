@@ -107,6 +107,29 @@ class SiteAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('index.html', $arr['page']['path']);
     }
 
+    public function testSetItemWithRelationships()
+    {
+        $site = new SiteAttribute();
+        $site->initialize();
+
+        $item = new Item('The content', 'post1.md');
+        $item->setPath('post1.html', Item::SNAPSHOT_PATH_RELATIVE);
+        $item->getRelationshipCollection()->add('next', new Item('The content 2', 'post2.md'));
+
+        $site->setItem($item);
+
+        $siteAttributes = $site->getAttributes();
+
+        $this->assertArrayHasKey('relationships', $siteAttributes['site']['pages']['post1.md']);
+
+        $relationships = $siteAttributes['site']['pages']['post1.md']['relationships'];
+
+        $this->assertCount(1, $relationships);
+
+        $this->assertArrayHasKey('next', $relationships);
+        $this->assertEquals('post2.md', $relationships['next'][0]['id']);
+    }
+
     public function testSetItemPostCollection()
     {
         $site = new SiteAttribute();

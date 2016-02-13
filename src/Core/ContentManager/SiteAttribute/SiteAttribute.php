@@ -136,6 +136,25 @@ class SiteAttribute implements SiteAttributeInterface
         $result['content'] = $item->getContent();
         $result['collection'] = $item->getCollection();
         $result['path'] = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+        $result['relationships'] = [];
+
+        $relationships = $item->getRelationshipCollection();
+
+        foreach ($relationships as $name => $items) {
+            if (isset($result['relationships'][$name]) === false) {
+                $result['relationships'][$name] = [];
+            }
+
+            foreach ($items as $relItem) {
+                $relAttributes = $relItem->getAttributes();
+                $relAttributes['id'] = $relItem->getId();
+                $relAttributes['content'] = $relItem->getContent();
+                $relAttributes['collection'] = $relItem->getCollection();
+                $relAttributes['path'] = $relItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+
+                $result['relationships'][$name][] = $relAttributes;
+            }
+        }
 
         return $result;
     }

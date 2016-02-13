@@ -121,6 +121,53 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('books/2013/09/19/new-book/index.html')->getContent());
     }
 
+    public function testRelationships()
+    {
+        $dw = new MemoryDataWriter();
+
+        $testPlugin = new PluginTester('acme');
+        $testPlugin->setListenerToBeforeRenderPageEvent(function ($event) {
+            if ($event->getId() === 'about/index.html') {
+                $this->assertStringEndsNotWith('</html>', $event->getContent());
+            }
+        });
+        $testPlugin->setListenerToAfterRenderPageEvent(function ($event) {
+            if ($event->getId() === 'about/index.html') {
+                $this->assertStringEndsWith('</html>', $event->getContent());
+            }
+        });
+
+        $cm = $this->getContentManager($dw, [$testPlugin]);
+        $cm->parseSite([], [], true);
+
+        $item = $dw->getItem('category-1/category-2/2020/01/01/new-post-example/index.html');
+
+        $relationshipCollection = $item->getRelationshipCollection();
+
+        $this->assertEquals(1, $relationshipCollection->count());
+        $this->assertEquals(1, count($relationshipCollection->get('next')));
+
+        $nextItem = current($relationshipCollection->get('next'));
+
+        $this->assertEquals('posts/books/2013-09-19-new-book.md', $nextItem->getId());
+
+        $item = $dw->getItem('books/2013/09/19/new-book/index.html');
+
+        $relationshipCollection = $item->getRelationshipCollection();
+
+        $this->assertEquals(2, $relationshipCollection->count());
+        $this->assertEquals(1, count($relationshipCollection->get('prior')));
+        $this->assertEquals(1, count($relationshipCollection->get('next')));
+
+        $priorItem = current($relationshipCollection->get('prior'));
+
+        $this->assertEquals('posts/2013-08-12-post-example-1.md', $priorItem->getId());
+
+        $nextItem = current($relationshipCollection->get('next'));
+
+        $this->assertEquals('posts/2013-08-12-post-example-2.mkd', $nextItem->getId());
+    }
+
     protected function getContentManager($dataWriter, array $plugins = [])
     {
         $dsm = $this->getDataSourceManager();
@@ -143,6 +190,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'posts' => [
                 'output' => true,
                 'author' => 'Yo! Symfony',
+                'sort_by' => 'date',
+                'sort_type' => 'descending',
             ],
         ];
 

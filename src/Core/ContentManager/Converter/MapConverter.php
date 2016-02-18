@@ -12,12 +12,35 @@
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
 /**
- * Mirror converter.
+ * This converter maps an extension to another using the
+ * mapping table passed in the constructor. If the extension not
+ * exists, this converter returns the same input extension.
+ *
+ * This converter does not alter the content.
  *
  * @author Victor Pueras <vpgugr@gmail.com>
  */
-class MirrorConverter implements ConverterInterface
+class MapConverter implements ConverterInterface
 {
+    private $extensionMap = [];
+
+    /**
+     * Constructor.
+     * 
+     * @param array $fileExtensionMap An extension map. e.g:
+     * 
+     * ```php
+     * $converter = new MappingConverter([
+     *   'twig'      => 'html',
+     *   'twig.html' => 'html',
+     * ]);
+     * ```
+     */
+    public function __construct(array $fileExtensionMap = [])
+    {
+        $this->extensionMap = $fileExtensionMap;
+    }
+
     /**
      * Get the converter priority.
      *
@@ -53,7 +76,7 @@ class MirrorConverter implements ConverterInterface
     }
 
     /**
-     * The extension of filename result (without dot). E.g: html.
+     * The extension of filename result (without dot). E.g: 'html'.
      *
      * @param string $extension File's extension
      *
@@ -61,6 +84,10 @@ class MirrorConverter implements ConverterInterface
      */
     public function getOutExtension($extension)
     {
+        if (isset($this->extensionMap[$extension])) {
+            return $this->extensionMap[$extension];
+        }
+
         return $extension;
     }
 }

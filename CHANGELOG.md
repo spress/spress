@@ -5,6 +5,7 @@ CHANGELOG for 2.0.x
 * [New] Support to extends TwigRenderizer with tags. See PR #65.
 * [New] Each item of a sorted collection has `next` and `prior` relationships. At compiled time, you have access through `page.relationships.next` and `page.relationships.prior`. See feature #69.
 * [New] Relationship collection for items. A new class has been added: `RelationshipCollection`. A new method getRelationshipCollection has been added to `ItemIterface`.
+* [New] `MirrorConverter` class has been replaced by `MapConverter`. See feature #73. This fix the ticket #28 "Support .twig extention". 
 * [New] Added `ItemCollection` class to Core support classes.
 * [New] Added `getCollections` method to `CollectionManager` class.
 * [Improved] Improved permalinks customizations. See PR #64.

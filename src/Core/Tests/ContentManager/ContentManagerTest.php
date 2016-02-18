@@ -18,7 +18,7 @@ use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerato
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManagerBuilder;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
-use Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter;
+use Yosymfony\Spress\Core\ContentManager\Converter\MapConverter;
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
@@ -204,7 +204,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     protected function getConverterManager()
     {
         $cm = new ConverterManager();
-        $cm->addConverter(new MirrorConverter());
+        $cm->addConverter(new MapConverter(['twig' => 'html']));
         $cm->addConverter(new MichelfMarkdownConverter(['markdown', 'mkd', 'mkdn', 'md']));
 
         return $cm;

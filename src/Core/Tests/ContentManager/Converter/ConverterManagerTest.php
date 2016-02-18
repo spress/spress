@@ -13,14 +13,14 @@ namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
-use Yosymfony\Spress\Core\ContentManager\Converter\MirrorConverter;
+use Yosymfony\Spress\Core\ContentManager\Converter\MapConverter;
 
 class ConverterManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testConvertertContent()
     {
         $cm = new ConverterManager();
-        $cm->addConverter(new MirrorConverter());
+        $cm->addConverter(new MapConverter());
         $cm->addConverter(new MichelfMarkdownConverter(['md']));
         $result = $cm->convertContent('# My h1 content', 'md');
 

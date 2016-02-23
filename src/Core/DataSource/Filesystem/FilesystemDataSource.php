@@ -20,7 +20,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Filesystem data source. Binary items don’t have their content
- * loaded in-memory. getPath() returns the path to the binary filename.
+ * loaded in-memory. getPath method returns the path to the binary filename.
  * 
  * The directory separator is '/' in any case.
  *
@@ -44,7 +44,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  *  - filename          : the name of the file.
  *  - extension         : the extension of item's filename.
  *
- * If the filename is a date filename (a filename that mathed a patter yyyy-mm-dd-title.extension)
+ * If the filename is a date filename, a filename that matched a patter yyyy-mm-dd-title.extension,
  * receive some extra attributes:
  *  - title
  *  - title_path

@@ -20,7 +20,7 @@ class MemoryDataWriterTest extends \PHPUnit_Framework_TestCase
     {
         $item = new Item('Test content', 'my-id');
         $item->setPath('index.html', Item::SNAPSHOT_PATH_PERMALINK);
-        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);
 
         $dw = new MemoryDataWriter();
         $dw->write($item);

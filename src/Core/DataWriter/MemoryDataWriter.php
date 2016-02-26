@@ -48,7 +48,7 @@ class MemoryDataWriter implements DataWriterInterface
         }
 
         if ($item->isBinary()) {
-            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE)] = $item;
+            $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT)] = $item;
         } else {
             $this->items[$item->getPath(ItemInterface::SNAPSHOT_PATH_PERMALINK)] = $item;
         }
@@ -113,6 +113,6 @@ class MemoryDataWriter implements DataWriterInterface
 
     protected function isWritable(ItemInterface $item)
     {
-        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '' ? false : true;
+        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT) === '' ? false : true;
     }
 }

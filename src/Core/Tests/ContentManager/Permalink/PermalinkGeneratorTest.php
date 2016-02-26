@@ -290,7 +290,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     private function createItem($path, $attributes = [], $binary = false)
     {
         $item = new Item('', $path, $attributes, $binary);
-        $item->setPath($path, Item::SNAPSHOT_PATH_RELATIVE);
+        $item->setPath($path, Item::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);
 
         return $item;
     }

@@ -25,6 +25,7 @@ interface ItemInterface
     const SNAPSHOT_AFTER_RENDER_PAGE = 'after_render_page';
 
     const SNAPSHOT_PATH_RELATIVE = 'relative';
+    const SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT = 'relative_after_convert';
     const SNAPSHOT_PATH_PERMALINK = 'permalink';
     const SNAPSHOT_PATH_LAST = 'last';
     const SNAPSHOT_PATH_SOURCE = 'source';

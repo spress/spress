@@ -106,7 +106,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      */
     public function getPermalink(ItemInterface $item)
     {
-        if ($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '') {
+        if ($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT) === '') {
             return new Permalink('', '');
         }
 
@@ -178,7 +178,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
     private function getPlacehoders(ItemInterface $item)
     {
-        $fileInfo = new \SplFileInfo($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+        $fileInfo = new \SplFileInfo($item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT));
 
         $result = [
             ':path' => (new StringWrapper($fileInfo->getPath()))->deletePrefix('.'),

@@ -382,25 +382,32 @@ class ContentManager
 
     private function convertItem(ItemInterface $item)
     {
+        $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+
+        if ($item->isBinary() === true) {
+            $item->setPath($path, ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);
+
+            return;
+        }
+
         $this->eventDispatcher->dispatch('spress.before_convert', new Event\ContentEvent(
             $item,
             ItemInterface::SNAPSHOT_RAW,
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
 
-        $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
         $result = $this->converterManager->convertContent($item->getContent(), $ext);
         $newPath = preg_replace('/\.'.$ext.'$/', '.'.$result->getExtension(), $path);
 
         $item->setContent($result->getResult(), ItemInterface::SNAPSHOT_AFTER_CONVERT);
-        $item->setPath($newPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
+        $item->setPath($newPath, ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);
 
         $this->eventDispatcher->dispatch('spress.after_convert', new Event\ContentEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_CONVERT,
-            ItemInterface::SNAPSHOT_PATH_RELATIVE
+            ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
     }
 
@@ -425,7 +432,7 @@ class ContentManager
         $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_CONVERT,
-            ItemInterface::SNAPSHOT_PATH_RELATIVE
+            ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
 
         $this->siteAttribute->setItem($item);
@@ -437,7 +444,7 @@ class ContentManager
         $this->eventDispatcher->dispatch('spress.after_render_blocks', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
-            ItemInterface::SNAPSHOT_PATH_RELATIVE
+            ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
     }
 
@@ -450,7 +457,7 @@ class ContentManager
         $this->eventDispatcher->dispatch('spress.before_render_page', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_RENDER_BLOCKS,
-            ItemInterface::SNAPSHOT_PATH_RELATIVE
+            ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
 
         $this->siteAttribute->setItem($item);
@@ -464,7 +471,7 @@ class ContentManager
         $this->eventDispatcher->dispatch('spress.after_render_page', new Event\RenderEvent(
             $item,
             ItemInterface::SNAPSHOT_AFTER_RENDER_PAGE,
-            ItemInterface::SNAPSHOT_PATH_RELATIVE
+            ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
     }
 

@@ -20,7 +20,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  *
  * This data writer uses SNAPSHOT_PATH_PERMALINK for working
  * with the path of the items. In case of binary item this data writer
- * uses SNAPSHOT_PATH_SOURCE and SNAPSHOT_PATH_RELATIVE.
+ * uses SNAPSHOT_PATH_SOURCE and SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -70,7 +70,7 @@ class FilesystemDataWriter implements DataWriterInterface
 
         if ($item->isBinary() === true) {
             $sourcePath = $item->getPath(ItemInterface::SNAPSHOT_PATH_SOURCE);
-            $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+            $outputPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);
 
             if (strlen($sourcePath) > 0) {
                 $this->filesystem->copy($sourcePath, $this->composeOutputPath($outputPath));
@@ -106,6 +106,6 @@ class FilesystemDataWriter implements DataWriterInterface
 
     protected function isWritable(ItemInterface $item)
     {
-        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE) === '' ? false : true;
+        return $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT) === '' ? false : true;
     }
 }

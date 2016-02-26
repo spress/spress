@@ -70,7 +70,7 @@ site.
 Build your site in your configured destination, typically `_site`. 
 
 ```bash
-site:Build 	[-s|--source="./"] [--timezone="..."] [--env="dev"]
+site:build 	[-s|--source="./"] [--timezone="..."] [--env="dev"]
 			[--server] [--watch] [--drafts]
 			[--safe]
 ```

@@ -16,7 +16,7 @@ use Yosymfony\Spress\Core\Plugin\Event\RenderEvent;
 
 class RenderEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRenderEvent()
+    public function testgetRelativeUrl()
     {
         $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
         $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
@@ -24,6 +24,14 @@ class RenderEventTest extends \PHPUnit_Framework_TestCase
         $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
 
         $this->assertEquals('', $event->getRelativeUrl());
+    }
+
+    public function testsetRelativeUrl()
+    {
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+        $item->setPath('index.html', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $event = new RenderEvent($item, Item::SNAPSHOT_RAW, Item::SNAPSHOT_PATH_RELATIVE);
 
         $event->setRelativeUrl('/welcome/index.html');
 

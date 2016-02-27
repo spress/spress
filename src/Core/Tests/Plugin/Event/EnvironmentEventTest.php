@@ -15,7 +15,10 @@ use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
 
 class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testEnvironmentEvent()
+    protected $event;
+    protected $configValues = [];
+
+    public function setUp()
     {
         $dsm = $this->getMockBuilder('\Yosymfony\Spress\Core\DataSource\DataSourceManager')
                      ->getMock();
@@ -30,35 +33,46 @@ class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
         $dw = $this->getMockBuilder('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface')
                      ->getMock();
 
-        $configValues = ['name' => 'Yo! Symfony'];
+        $this->configValues = ['name' => 'Yo! Symfony'];
 
-        $event = new EnvironmentEvent(
+        $this->event = new EnvironmentEvent(
             $dsm,
             $dw,
             $cm,
             $gm,
             $renderizer,
             $io,
-            $configValues);
+            $this->configValues);
+    }
 
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $event->getDataSourceManager());
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface', $event->getDataWriter());
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager', $event->getConverterManager());
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager', $event->getGeneratorManager());
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface', $event->getRenderizer());
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\IO\IOInterface', $event->getIO());
+    public function testGetObjects()
+    {
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $this->event->getDataSourceManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataWriter\DataWriterInterface', $this->event->getDataWriter());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager', $this->event->getConverterManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager', $this->event->getGeneratorManager());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface', $this->event->getRenderizer());
+        $this->assertInstanceOf('\Yosymfony\Spress\Core\IO\IOInterface', $this->event->getIO());
+    }
 
-        $values = $event->getConfigValues();
+    public function testGetConfigValues()
+    {
+        $values = $this->event->getConfigValues();
 
         $this->assertTrue(is_array($values));
         $this->assertArrayHasKey('name', $values);
         $this->assertEquals('Yo! Symfony', $values['name']);
+    }
 
-        $values['title'] = 'My blog page';
+    public function testSetConfigValues()
+    {
+        $this->event->setConfigValues(['title' => 'My blog page']);
 
-        $event->setConfigValues($values);
+        $this->assertArrayHasKey('title', $this->configValues);
+        $this->assertEquals('My blog page', $this->configValues['title']);
 
-        $this->assertArrayHasKey('name', $configValues);
-        $this->assertEquals('My blog page', $configValues['title']);
+        $values = $this->event->getConfigValues();
+
+        $this->assertArrayHasKey('title', $values);
     }
 }

@@ -16,7 +16,7 @@ use Yosymfony\Spress\Core\Plugin\Event\FinishEvent;
 
 class FinishEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFinishTest()
+    public function testGetItems()
     {
         $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
 
@@ -30,9 +30,23 @@ class FinishEventTest extends \PHPUnit_Framework_TestCase
         $event = new FinishEvent($items, $siteAttributes);
 
         $this->assertTrue(is_array($event->getItems()));
-        $this->assertTrue(is_array($event->getSiteAttributes()));
-
         $this->assertCount(1, $event->getItems());
+    }
+
+    public function testGetSiteAttributes()
+    {
+        $item = new Item('Test of content', 'index.html', ['title' => 'My posts']);
+
+        $items = [$item];
+        $siteAttributes = [
+            'site' => [
+                'name' => 'Yo! Symfony',
+            ],
+        ];
+
+        $event = new FinishEvent($items, $siteAttributes);
+
+        $this->assertTrue(is_array($event->getSiteAttributes()));
         $this->assertCount(1, $event->getSiteAttributes());
     }
 }

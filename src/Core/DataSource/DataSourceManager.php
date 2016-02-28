@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\DataSource;
 /**
  * Data source manager.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class DataSourceManager

@@ -17,6 +17,8 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
 /**
  * Twig renderizer.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class TwigRenderizer implements RenderizerInterface

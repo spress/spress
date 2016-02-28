@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\ContentManager\Generator;
 /**
  * Generator manager.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class GeneratorManager

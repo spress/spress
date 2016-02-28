@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 /**
  * Converter manager.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConverterManager
@@ -25,8 +27,7 @@ class ConverterManager
      */
     public function __construct()
     {
-        $this->queue = new \SplPriorityQueue();
-        $this->queue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
+        $this->initializeQueue();
     }
 
     /**
@@ -45,6 +46,24 @@ class ConverterManager
         }
 
         $this->queue->insert($converter, $priority);
+    }
+
+    /**
+     * Clears all converters registered.
+     */
+    public function clearConverter()
+    {
+        $this->initializeQueue();
+    }
+
+    /**
+     * Counts the converters registered.
+     *
+     * @return int
+     */
+    public function countConverter()
+    {
+        return $this->queue->count();
     }
 
     /**
@@ -80,5 +99,11 @@ class ConverterManager
         }
 
         throw new \RuntimeException(sprintf('There\'s no converter for the extension: "%s".', $extension));
+    }
+
+    private function initializeQueue()
+    {
+        $this->queue = new \SplPriorityQueue();
+        $this->queue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
     }
 }

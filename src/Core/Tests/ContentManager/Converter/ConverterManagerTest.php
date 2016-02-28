@@ -31,4 +31,21 @@ class ConverterManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('My custom content', $result->getResult());
         $this->assertEquals('txt', $result->getExtension());
     }
+
+    public function testCount()
+    {
+        $cm = new ConverterManager();
+        $cm->addConverter(new MapConverter());
+
+        $this->assertEquals(1, $cm->countConverter());
+    }
+
+    public function testClearConverter()
+    {
+        $cm = new ConverterManager();
+        $cm->addConverter(new MapConverter());
+        $cm->clearConverter();
+
+        $this->assertEquals(0, $cm->countConverter());
+    }
 }

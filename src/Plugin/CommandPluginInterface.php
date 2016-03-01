@@ -17,6 +17,8 @@ use Yosymfony\Spress\Core\Plugin\PluginInterface;
 /**
  * Command plugin interface.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface CommandPluginInterface extends PluginInterface

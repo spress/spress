@@ -22,6 +22,8 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  *   "spress.before_render_page",
  *   "spress.after_render_page".
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class RenderEvent extends ContentEvent

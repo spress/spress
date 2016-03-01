@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Plugin;
 /**
  * Definition of a command.
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class CommandDefinition

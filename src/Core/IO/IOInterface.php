@@ -17,6 +17,8 @@ namespace Yosymfony\Spress\Core\IO;
  * Based on https://github.com/composer/composer/blob/master/src/Composer/IO/IOInterface.php
  * from François Pluchino <francois.pluchino@opendisplay.com>
  *
+ * @api
+ * 
  * @author Victor Puertas
  */
 interface IOInterface

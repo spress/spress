@@ -25,6 +25,8 @@ use Yosymfony\Spress\Core\IO\IOInterface;
  * Used with events:
  *   - "spress.start".
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class EnvironmentEvent extends Event

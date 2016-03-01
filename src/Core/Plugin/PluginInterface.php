@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\Plugin;
 /**
  * Plugin interface.
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface PluginInterface

@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\DataSource;
 /**
  * Iterface for a data item.
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface ItemInterface

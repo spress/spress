@@ -18,6 +18,10 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * Used with events:
  *   - "spress.finish".
+ *
+ * @api
+ *
+ * @author Victor Puertas <vpgugr@gmail.com>
  */
 class FinishEvent extends Event
 {

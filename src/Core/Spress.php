@@ -45,6 +45,8 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  *
  *  - "spress.cms.converterManager.converters" (array) List of predefined converters.
  *
+ * @api
+ * 
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class Spress extends Container

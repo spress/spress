@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core\Plugin;
 /**
  * Event subscriber.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class EventSubscriber

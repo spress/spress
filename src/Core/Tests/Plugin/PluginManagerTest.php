@@ -16,7 +16,13 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 class PluginManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPluginManager()
+    public function testGetPluginCollection()
+    {
+        $pm = new PluginManager(new EventDispatcher());
+        $this->assertInstanceOf('Yosymfony\Spress\Core\Plugin\PluginCollection', $pm->getPluginCollection());
+    }
+
+    public function testCallInitialize()
     {
         $pm = new PluginManager(new EventDispatcher());
 
@@ -29,24 +35,11 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
         $plugin2->expects($this->once())
             ->method('initialize');
 
-        $pm->addPlugin('plugin1', $plugin1);
-        $pm->setPlugin('plugin2', $plugin2);
+        $pluginCollection = $pm->getPluginCollection();
 
-        $this->assertEquals(2, $pm->countPlugins());
-        $this->assertCount(2, $pm->getPlugins());
-        $this->assertContainsOnlyInstancesOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugins());
-        $this->assertTrue($pm->hasPlugin('plugin1'));
-        $this->assertFalse($pm->hasPlugin('plugin3'));
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\Plugin\PluginInterface', $pm->getPlugin('plugin1'));
+        $pluginCollection->add('plugin1', $plugin1);
+        $pluginCollection->add('plugin2', $plugin2);
 
         $pm->callInitialize();
-
-        $pm->removePlugin('plugin1');
-
-        $this->assertEquals(1, $pm->countPlugins());
-
-        $pm->clearPlugin();
-
-        $this->assertEquals(0, $pm->countPlugins());
     }
 }

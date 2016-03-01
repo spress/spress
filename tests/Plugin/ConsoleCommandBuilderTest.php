@@ -42,7 +42,7 @@ class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('executeCommand');
 
         $pm = new PluginManager(new EventDispatcher());
-        $pm->addPlugin('emptyCommandPlugin', $commandPluginMock);
+        $pm->getPluginCollection()->add('emptyCommandPlugin', $commandPluginMock);
 
         $builder = new ConsoleCommandBuilder($pm);
         $symfonyConsoleCommands = $builder->buildCommands();

@@ -47,9 +47,9 @@ class ConsoleCommandBuilder
     public function buildCommands()
     {
         $result = [];
-        $plugins = $this->pluginManager->getPlugins();
+        $pluginsCollection = $this->pluginManager->getPluginCollection();
 
-        foreach ($plugins as $plugin) {
+        foreach ($pluginsCollection as $plugin) {
             if ($this->isValidCommandPlugin($plugin) === true) {
                 $result[] = $this->buildCommand($plugin);
             }

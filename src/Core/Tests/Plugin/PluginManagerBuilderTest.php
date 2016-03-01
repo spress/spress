@@ -39,20 +39,17 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new PluginManagerBuilder($this->pluginDir, new EventDispatcher());
         $pm = $builder->build();
+        $pluginCollection = $pm->getPluginCollection();
 
-        $this->assertEquals(2, $pm->countPlugins());
+        $this->assertCount(2, $pluginCollection);
 
-        $plugin = $pm->getPlugin('Test plugin');
-
-        $this->assertInstanceOf('Yosymfony\Spress\Core\Plugin\PluginInterface', $plugin);
+        $plugin = $pluginCollection->get('Test plugin');
 
         $metas = $plugin->getMetas();
 
         $this->assertEquals('Test plugin', $metas['name']);
 
-        $plugin = $pm->getPlugin('Hello plugin');
-
-        $this->assertInstanceOf('Yosymfony\Spress\Core\Plugin\PluginInterface', $plugin);
+        $plugin = $pluginCollection->get('Hello plugin');
 
         $metas = $plugin->getMetas();
 

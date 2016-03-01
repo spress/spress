@@ -17,7 +17,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
- * Plugins manager builder.
+ * Plugin manager builder.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -65,6 +65,7 @@ class PluginManagerBuilder
     public function build()
     {
         $pm = new PluginManager($this->eventDispatcher);
+        $pluginCollection = $pm->getPluginCollection();
 
         if (empty($this->path) === true || file_exists($this->path) === false) {
             return $pm;
@@ -97,7 +98,7 @@ class PluginManagerBuilder
 
             $metas = $this->getPluginMetas($plugin);
 
-            $pm->addPlugin($metas['name'], $plugin);
+            $pluginCollection->add($metas['name'], $plugin);
         }
 
         foreach ($composerClassname as $classname) {
@@ -106,7 +107,7 @@ class PluginManagerBuilder
 
                 $metas = $this->getPluginMetas($plugin);
 
-                $pm->addPlugin($metas['name'], $plugin);
+                $pluginCollection->add($metas['name'], $plugin);
             }
         }
 

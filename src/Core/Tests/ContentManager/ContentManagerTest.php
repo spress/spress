@@ -248,9 +248,10 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     private function getPluginManager(EventDispatcher $dispatcher, array $plugins)
     {
         $pm = new PluginManager($dispatcher);
+        $pluginCollection = $pm->getPluginCollection();
 
         foreach ($plugins as $index => $Plugin) {
-            $pm->addPlugin($index, $Plugin);
+            $pluginCollection->add($index, $Plugin);
         }
 
         return $pm;

@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Plugin;
 
 /**
- * Plugin collection.
+ * Plugins collection.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -23,8 +23,7 @@ class PluginCollection implements \IteratorAggregate, \Countable
     /**
      * Returns an iterator over the plugins.
      * The key is the plugin's identifier and the
-     * value is an array of Yosymfony\Spress\Core\Plugin\PluginInterface objects
-     * with the item's id as key.
+     * value is an instance of Yosymfony\Spress\Core\Plugin\PluginInterface.
      *
      * @return \ArrayIterator An \ArrayIterator object for iterating over plugins.
      */
@@ -118,7 +117,7 @@ class PluginCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Clears all plugin in this collection.
+     * Clears all plugins in this collection.
      */
     public function clear()
     {

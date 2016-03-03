@@ -50,7 +50,7 @@ class CollectionManagerBuilder
                 throw new \RuntimeException(sprintf('Expected array at the collection: "%s".', $collectionName));
             }
 
-            $cm->addCollection(new Collection($collectionName, $path, $attributes));
+            $cm->getCollectionItemCollection()->add(new Collection($collectionName, $path, $attributes));
         }
 
         return $cm;

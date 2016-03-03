@@ -17,82 +17,39 @@ use Yosymfony\Spress\Core\DataSource\Item;
 
 class CollectionManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetCollectionItemCollection()
+    {
+        $cm = new CollectionManager();
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\Collection\ColectionItemCollection', $cm->getCollectionItemCollection());
+    }
+
     public function testGetCollectionForItems()
     {
         $cm = new CollectionManager();
-        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
-        $cm->addCollection(new Collection('books', '_books', ['output' => true]));
-        $cm->setCollection(new Collection('posts', '_posts', ['output' => true]));
+        $cm->getCollectionItemCollection()->add(new Collection('events', 'events'));
+        $cm->getCollectionItemCollection()->add(new Collection('books', 'books'));
 
-        $this->assertEquals(4, $cm->countCollection());
-        $this->assertCount(4, $cm->getCollections());
-        $this->assertContainsOnlyInstancesOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->getCollections());
-
-        $item = new Item('Test of content', '_events/event-1.html', []);
-        $item->setPath('_events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);
+        $item = new Item('Test of content', 'events/event-1.html');
+        $item->setPath('events/event-1.html', Item::SNAPSHOT_PATH_RELATIVE);
         $collection = $cm->getCollectionForItem($item);
 
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $collection);
+        $this->assertInstanceOf('Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $collection);
         $this->assertEquals('events', $collection->getName());
-        $this->assertEquals('_events', $collection->getPath());
-        $this->assertCount(1, $collection->getAttributes());
-
-        $item = new Item('Test of content', '_books/symfony-book.html', []);
-        $item->setPath('_books/symfony-book.html', Item::SNAPSHOT_PATH_RELATIVE);
-        $collection = $cm->getCollectionForItem($item);
-
-        $this->assertEquals('books', $collection->getName());
+        $this->assertEquals('events', $collection->getPath());
+        $this->assertCount(0, $collection->getAttributes());
     }
 
     public function testDefaultCollection()
     {
         $cm = new CollectionManager();
-        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
 
-        $item = new Item('Test of content', 'member-1.html', []);
+        $this->assertCount(1, $cm->getCollectionItemCollection());
+
+        $item = new Item('Test of content', 'member-1.html');
         $item->setPath('member-1.html', Item::SNAPSHOT_PATH_RELATIVE);
         $collection = $cm->getCollectionForItem($item);
 
         $this->assertEquals('pages', $collection->getName());
         $this->assertEquals('', $collection->getPath());
-    }
-
-    public function testManageCollection()
-    {
-        $cm = new CollectionManager();
-        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
-        $cm->addCollection(new Collection('books', '_books', ['output' => true]));
-
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface', $cm->getCollection('events'));
-        $this->assertTrue($cm->hasCollection('events'));
-        $this->assertEquals(3, $cm->countCollection());
-
-        $cm->removeCollection('events');
-
-        $this->assertEquals(2, $cm->countCollection());
-
-        $cm->clearCollection();
-
-        $this->assertEquals(0, $cm->countCollection());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetCollectionNotFound()
-    {
-        $cm = new CollectionManager();
-        $cm->addCollection(new Collection('events', '_events', ['output' => true]));
-
-        $cm->getCollection('books');
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testAddExistingCollection()
-    {
-        $cm = new CollectionManager();
-        $cm->addCollection(new Collection('pages', '_pages', ['output' => true]));
     }
 }

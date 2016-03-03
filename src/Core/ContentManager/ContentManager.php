@@ -323,7 +323,7 @@ class ContentManager
                 }
             });
 
-        foreach ($this->CollectionManager->getCollections() as $collection) {
+        foreach ($this->CollectionManager->getCollectionItemCollection() as $collection) {
             $attributes = $resolver->resolve($collection->getAttributes());
 
             if (empty($attributes['sort_by']) === true) {

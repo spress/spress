@@ -20,111 +20,26 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  */
 class CollectionManager
 {
-    private $collections;
+    private $colectionItemCollection;
 
     /**
      * Constructor.
+     * Inserts the "pages" collection as default collection.
      */
     public function __construct()
     {
-        $this->clearCollection();
-        $this->addCollection(new Collection('pages', '', []));
+        $this->colectionItemCollection = new ColectionItemCollection();
+        $this->colectionItemCollection->add(new Collection('pages', ''));
     }
 
     /**
-     * Adds a new collection.
-     *
-     * @param \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface $collection
-     *
-     * @throws RuntimeException If a previous collection exists with the same name.
-     */
-    public function addCollection(CollectionInterface $collection)
-    {
-        if ($this->hasCollection($collection->getName()) === true) {
-            throw new \RuntimeException(sprintf(
-                'A previous collection exists with the same name: "%s".',
-                $collection->getName()));
-        }
-
-        $this->collections[$collection->getName()] = $collection;
-    }
-
-    /**
-     * Counts the collections registered.
-     *
-     * @return int
-     */
-    public function countCollection()
-    {
-        return count($this->collections);
-    }
-
-    /**
-     * Sets a collection.
-     *
-     * @param \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface $collection
-     */
-    public function setCollection(CollectionInterface $collection)
-    {
-        $this->collections[$collection->getName()] = $collection;
-    }
-
-    /**
-     * Gets a collection.
-     *
-     * @param string $name
-     *
-     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface
-     *
-     * @throws \RuntimeException If the collection is not defined.
-     */
-    public function getCollection($name)
-    {
-        if (false === $this->hasCollection($name)) {
-            throw new \RuntimeException(sprintf('Collection: "%s" not found.', $name));
-        }
-
-        return $this->collections[$name];
-    }
-
-    /**
-     * Gets a list of collections registered.
+     * Gets the collection-item collection.
      * 
-     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionInterface[]
+     * @return Yosymfony\Spress\Core\ContentManager\Collection\ColectionItemCollection
      */
-    public function getCollections()
+    public function getCollectionItemCollection()
     {
-        return $this->collections;
-    }
-
-    /**
-     * Checks if a collection exists.
-     *
-     * @param string $name The collection's name
-     *
-     * @return bool
-     */
-    public function hasCollection($name)
-    {
-        return isset($this->collections[$name]);
-    }
-
-    /**
-     * Clears all collections registered.
-     */
-    public function clearCollection()
-    {
-        $this->collections = [];
-    }
-
-    /**
-     * Removes a collection.
-     *
-     * @param string $name The collection's name.
-     */
-    public function removeCollection($name)
-    {
-        unset($this->collections[$name]);
+        return $this->colectionItemCollection;
     }
 
     /**
@@ -134,7 +49,7 @@ class CollectionManager
      */
     public function getCollectionForItem(ItemInterface $item)
     {
-        foreach ($this->collections as $name => $collection) {
+        foreach ($this->colectionItemCollection as $name => $collection) {
             $itemPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE).'/';
             $collectionPath = $collection->getPath().'/';
 
@@ -143,6 +58,6 @@ class CollectionManager
             }
         }
 
-        return $this->getCollection('pages');
+        return $this->colectionItemCollection->get('pages');
     }
 }

@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\Support;
 
 /**
- * A colections of elements.
+ * A colection of elements.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -104,7 +104,7 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Sets a element.
+     * Sets an element.
      *
      * @param mixed $key     The key associated to the element.
      * @param mixed $element The element.

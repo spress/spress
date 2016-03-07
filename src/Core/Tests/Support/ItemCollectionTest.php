@@ -24,65 +24,60 @@ class ItemCollectionTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post2.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $itemSet = new ItemCollection([$item1, $item2]);
+        $collection = new ItemCollection([$item1, $item2]);
 
-        $this->assertEquals(2, $itemSet->count());
-        $this->assertTrue($itemSet->has('post1.md'));
-        $this->assertTrue($itemSet->has('post2.md'));
-        $this->assertCount(2, $itemSet->all());
-        $this->assertCount(2, $itemSet->all(['posts']));
+        $this->assertEquals(2, $collection->count());
+        $this->assertTrue($collection->has('post1.md'));
+        $this->assertTrue($collection->has('post2.md'));
+        $this->assertCount(2, $collection->all());
+        $this->assertCount(2, $collection->all(['posts']));
 
         $item3 = new Item('', 'page1.md', ['number' => 1]);
         $item2->setCollection('pages');
-        $itemSet->add($item3);
+        $collection->add($item3->getId(), $item3);
 
-        $this->assertCount(2, $itemSet->all([], true));
-        $this->assertArrayHasKey('posts', $itemSet->all([], true));
-        $this->assertArrayNotHasKey('posts', $itemSet->all([], false));
-        $this->assertArrayHasKey('pages', $itemSet->all([], true));
+        $this->assertCount(2, $collection->all([], true));
+        $this->assertArrayHasKey('posts', $collection->all([], true));
+        $this->assertArrayNotHasKey('posts', $collection->all([], false));
+        $this->assertArrayHasKey('pages', $collection->all([], true));
 
-        $itemSet->sortItems('date', false);
+        $collection->sortItems('date', false);
 
-        $items = $itemSet->all(['posts']);
+        $items = $collection->all(['posts']);
         $this->assertCount(2, $items);
         $this->assertEquals('post2.md', current($items)->getId());
 
-        $itemSet->sortItems('date', true);
+        $collection->sortItems('date', true);
 
-        $items = $itemSet->all(['posts']);
+        $items = $collection->all(['posts']);
         $this->assertCount(2, $items);
         $this->assertEquals('post1.md', current($items)->getId());
 
-        $itemSet->remove('post1.md');
+        $collection->remove('post1.md');
 
-        $this->assertCount(2, $itemSet->all());
-        $this->assertEquals('page1.md', $itemSet->get('page1.md')->getId());
+        $this->assertCount(2, $collection->all());
+        $this->assertEquals('page1.md', $collection->get('page1.md')->getId());
 
-        $itemSet->clear();
+        $collection->clear();
 
-        $this->assertCount(0, $itemSet->all());
+        $this->assertCount(0, $collection->all());
     }
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage The item with id: "post1.md" has been registered previously with another collection.
      */
-    public function testItemNotFound()
+    public function testRegisterItemInSeveralCollections()
     {
-        $itemSet = new ItemCollection();
-        $itemSet->get('page1.md');
-    }
+        $collection = new ItemCollection();
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testNotUniqueId()
-    {
         $item1 = new Item('', 'post1.md', ['date' => '2016-01-20']);
         $item1->setCollection('posts');
 
-        $item2 = new Item('', 'post1.md', ['order' => '2016-01-19']);
-        $item2->setCollection('posts');
+        $collection->set($item1->getId(), $item1);
 
-        $itemSet = new ItemCollection([$item1, $item2]);
+        $item1->setCollection('events');
+
+        $collection->set($item1->getId(), $item1);
     }
 }

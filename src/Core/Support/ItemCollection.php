@@ -14,124 +14,56 @@ namespace Yosymfony\Spress\Core\Support;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * A ItemCollection represents a set of items.
+ * A ItemCollection represents a collection of items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class ItemCollection implements \IteratorAggregate, \Countable
+class ItemCollection extends Collection
 {
-    private $items = [];
     private $itemCollections = [];
     private $idCollections = [];
 
     /**
      * Constructor.
+     * Initialize the collection using the item's id of each eatem as key.
      *
-     * \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     * Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
      */
     public function __construct(array $items = [])
     {
         foreach ($items as $item) {
-            $this->add($item);
+            $this->add($item->getId(), $item);
         }
     }
 
     /**
-     * Gets the current ItemCollection as an Iterator that includes all items.
-     * The key is the item's id and the
-     * value is an Yosymfony\Spress\Core\DataSource\ItemInterface object.
+     * Sets an element.
      *
-     * @return \ArrayIterator An \ArrayIterator object for iterating over items.
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->items);
-    }
-
-    /**
-     * Adds an new item.
-     * 
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
-     *
-     * @throws \RuntimeException If the item has been registered previously with the some id.
-     */
-    public function add(ItemInterface $item)
-    {
-        if ($this->has($item->getId()) === true) {
-            throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $item->getId()));
-        }
-
-        $this->set($item);
-    }
-
-    /**
-     * Sets an item.
-     * 
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface
+     * @param string $key The key associated to the element.
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item has been registered previously in another collection.
      */
-    public function set(ItemInterface $item)
+    public function set($key, ItemInterface $element)
     {
-        $id = $item->getId();
-        $collectionName = $item->getCollection();
+        $collectionName = $element->getCollection();
 
-        $this->items[$id] = $item;
+        parent::set($key, $element);
 
-        if (isset($this->idCollections[$id]) && $this->idCollections[$id] !== $collectionName) {
-            throw new \RuntimeException(sprintf('The item with id: "%s" has been registered previously with another collection.', $id));
+        if (isset($this->idCollections[$key]) && $this->idCollections[$key] !== $collectionName) {
+            throw new \RuntimeException(sprintf('The item with id: "%s" has been registered previously with another collection.', $key));
         }
 
         if (isset($this->itemCollections[$collectionName]) === false) {
             $this->itemCollections[$collectionName] = [];
         }
 
-        $this->itemCollections[$collectionName][$id] = $item;
-        $this->idCollections[$id] = $collectionName;
+        $this->itemCollections[$collectionName][$key] = $element;
+        $this->idCollections[$key] = $collectionName;
     }
 
     /**
-     * Counts the items registered.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->items);
-    }
-
-    /**
-     * Gets an item.
-     * 
-     * @param string $id Identifier of the item.
-     * 
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
-     *
-     * @throws \RuntimeException If the item was not found.
-     */
-    public function get($id)
-    {
-        if (false === $this->has($id)) {
-            throw new \RuntimeException(sprintf('Item with id: "%s" not found.', $id));
-        }
-
-        return $this->items[$id];
-    }
-
-    /**
-     * Checks if a item exists.
-     *
-     * @param string $id The item's name.
-     *
-     * @return bool
-     */
-    public function has($id)
-    {
-        return isset($this->items[$id]);
-    }
-
-    /**
-     * Returns all items in this collection.
+     * Returns all elemts in this collection.
      * 
      * @param string[] $collections       The name of the item collections affected. 
      *                                    Array empty means all.
@@ -143,7 +75,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     {
         if (count($collections) === 0) {
             if ($groupByCollection === false) {
-                return $this->items;
+                return parent::all();
             }
 
             return $this->itemCollections;
@@ -200,40 +132,40 @@ class ItemCollection implements \IteratorAggregate, \Countable
             $this->itemCollections[$collection] = $itemsSorted;
         }
 
-        $this->items = [];
+        $this->elements = [];
 
         foreach ($this->itemCollections as $collection => $items) {
-            $this->items = array_merge($this->items, $items);
+            $this->elements = array_merge($this->elements, $items);
         }
 
         return $this;
     }
 
     /**
-     * Removes an item.
-     * 
-     * @param string $id Identifier of the item.
+     * {@inheritdoc}
      */
-    public function remove($id)
+    public function remove($key)
     {
-        if ($this->has($id) === false) {
+        if ($this->has($key) === false) {
             return;
         }
 
-        $collection = $this->idCollections[$id];
+        $collection = $this->idCollections[$key];
 
-        unset($this->idCollections[$id]);
+        unset($this->idCollections[$key]);
         unset($this->itemCollections[$collection]);
-        unset($this->items[$id]);
+
+        parent::remove($key);
     }
 
     /**
-     * Clears all items in this collection.
+     * {@inheritdoc}
      */
     public function clear()
     {
-        $this->items = [];
         $this->itemCollections = [];
         $this->idCollections = [];
+
+        parent::clear();
     }
 }

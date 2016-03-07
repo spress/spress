@@ -100,4 +100,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(0, $collection);
     }
+
+    /**
+     * @expectedException \RuntimeException
+     * expectedExceptionMessage Element with key: "page1.md" not found.
+     */
+    public function testElementNotFound()
+    {
+        $itemSet = new Collection();
+        $itemSet->get('page1.md');
+    }
 }

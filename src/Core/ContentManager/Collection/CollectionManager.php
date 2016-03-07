@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Core\ContentManager\Collection;
 
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Support as Support;
 
 /**
  * Collection manager.
@@ -28,14 +29,14 @@ class CollectionManager
      */
     public function __construct()
     {
-        $this->colectionItemCollection = new ColectionItemCollection();
-        $this->colectionItemCollection->add(new Collection('pages', ''));
+        $this->colectionItemCollection = new Support\Collection();
+        $this->colectionItemCollection->add('pages', new Collection('pages', ''));
     }
 
     /**
      * Gets the collection-item collection.
      * 
-     * @return Yosymfony\Spress\Core\ContentManager\Collection\ColectionItemCollection
+     * @return Yosymfony\Spress\Core\Support\Collection The collection.
      */
     public function getCollectionItemCollection()
     {

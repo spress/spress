@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Core\Plugin;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Yosymfony\Spress\Core\Support\Collection;
 
 /**
  * Plugins manager.
@@ -32,7 +33,7 @@ class PluginManager
     public function __construct(EventDispatcher $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->pluginCollection = new PluginCollection();
+        $this->pluginCollection = new Collection();
     }
 
     /**
@@ -53,7 +54,7 @@ class PluginManager
     /**
      * Gets the plugin collection.
      * 
-     * @return Yosymfony\Spress\Core\Plugin\PluginCollection The plugin collection.
+     * @return Yosymfony\Spress\Core\Support\Collection The plugin collection.
      */
     public function getPluginCollection()
     {

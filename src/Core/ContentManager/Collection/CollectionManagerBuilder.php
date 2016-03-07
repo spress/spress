@@ -42,6 +42,7 @@ class CollectionManagerBuilder
     public function buildFromConfigArray(array $config)
     {
         $cm = new CollectionManager();
+        $collectionItemCollection = $cm->getCollectionItemCollection();
 
         foreach ($config as $collectionName => $attributes) {
             $path = $collectionName;
@@ -50,7 +51,13 @@ class CollectionManagerBuilder
                 throw new \RuntimeException(sprintf('Expected array at the collection: "%s".', $collectionName));
             }
 
-            $cm->getCollectionItemCollection()->add(new Collection($collectionName, $path, $attributes));
+            if ($collectionItemCollection->has($collectionName) === true) {
+                throw new \RuntimeException(sprintf(
+                    'A previous collection exists with the same name: "%s".',
+                    $collectionName));
+            }
+
+            $collectionItemCollection->set($collectionName, new Collection($collectionName, $path, $attributes));
         }
 
         return $cm;

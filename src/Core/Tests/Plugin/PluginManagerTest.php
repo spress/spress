@@ -19,7 +19,7 @@ class PluginManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetPluginCollection()
     {
         $pm = new PluginManager(new EventDispatcher());
-        $this->assertInstanceOf('Yosymfony\Spress\Core\Plugin\PluginCollection', $pm->getPluginCollection());
+        $this->assertInstanceOf('Yosymfony\Spress\Core\Support\Collection', $pm->getPluginCollection());
     }
 
     public function testCallInitialize()

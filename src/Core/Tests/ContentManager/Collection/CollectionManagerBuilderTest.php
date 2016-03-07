@@ -58,11 +58,26 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage Expected array at the collection: "events".
      */
     public function testBuildFromConfigArrayWithBadData()
     {
         $config = [
             'events' => true,
+        ];
+
+        $builder = new CollectionManagerBuilder();
+        $cm = $builder->buildFromConfigArray($config);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage A previous collection exists with the same name: "pages".
+     */
+    public function testBuildFromConfigArrayWithRepeatedCollection()
+    {
+        $config = [
+            'pages' => [],
         ];
 
         $builder = new CollectionManagerBuilder();

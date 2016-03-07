@@ -11,8 +11,8 @@ CHANGELOG for 2.x
 * [New] Added `clearConverter` and `countConverter` methods in `ConverterManager` class.
 * [Improved] Improved permalinks customizations. See PR #64.
 * [Improved] Eliminated unnecessary calls to `setItem` method of `SiteAttribute` class in `ContentManager` class.
-* [Improved] The methods for managing the collection of plugins in `PluginManager` class have been extracted to a separated class called `PluginCollection`.
-* [Improved] The methods for managing the collection of collection-item in `CollectionManager` class have been extracted to a separated class called `ColectionItemCollection`.
+* [Improved] The methods for managing the collection of plugins in `PluginManager` class have been moved to a `Collection` class.
+* [Improved] The methods for managing the collection of collection-item in `CollectionManager` class have been moved to a `Collection` class.
 * [Fixed] Fixed the path available at `page.path` variable. Prior to this version, this variable contains the relative path to `src/content/` but with the filename extension changed by the Converter. Now, the original filename extension isn't altered. A new path snapshot has been created in `ItemIterface`.
 
 ## 2.0.2 (2016-01-16)

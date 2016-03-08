@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\Support;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * A ItemCollection represents a set of items.
+ * A ItemCollection represents a collection of items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -27,7 +27,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Constructor.
      *
-     * \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     * Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
      */
     public function __construct(array $items = [])
     {
@@ -38,8 +38,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Gets the current ItemCollection as an Iterator that includes all items.
-     * The key is the item's id and the
-     * value is an Yosymfony\Spress\Core\DataSource\ItemInterface object.
+     * The key of each item is the item's id.
      *
      * @return \ArrayIterator An \ArrayIterator object for iterating over items.
      */
@@ -51,9 +50,9 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Adds an new item.
      * 
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
-     * @throws \RuntimeException If the item has been registered previously with the some id.
+     * @throws \RuntimeException If the item has been registered previously with the same id.
      */
     public function add(ItemInterface $item)
     {
@@ -67,7 +66,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Sets an item.
      * 
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item has been registered previously in another collection.
      */
@@ -103,9 +102,9 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Gets an item.
      * 
-     * @param string $id Identifier of the item.
+     * @param string $id The identifier of the item.
      * 
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
+     * @return Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item was not found.
      */
@@ -121,7 +120,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Checks if a item exists.
      *
-     * @param string $id The item's name.
+     * @param string $id The identifier of the item.
      *
      * @return bool
      */
@@ -182,7 +181,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
      * @param bool     $descending  Is descending sort?
      * @param string[] $collections Only the items belong to Collections will be affected.
      *
-     * @return \Yosymfony\Spress\Core\Support\ItemCollection An intance of itself.
+     * @return Yosymfony\Spress\Core\Support\ItemCollection An intance of itself.
      */
     public function sortItems($attribute, $descending = true, array $collections = [])
     {
@@ -212,7 +211,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Removes an item.
      * 
-     * @param string $id Identifier of the item.
+     * @param string $id The identifier of the item.
      */
     public function remove($id)
     {

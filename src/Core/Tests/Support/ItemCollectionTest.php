@@ -65,15 +65,17 @@ class ItemCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage Item with id: "page1.md" not found.
      */
     public function testItemNotFound()
     {
-        $itemSet = new ItemCollection();
-        $itemSet->get('page1.md');
+        $collection = new ItemCollection();
+        $collection->get('page1.md');
     }
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage A previous item exists with the same id: "post1.md".
      */
     public function testNotUniqueId()
     {
@@ -83,6 +85,24 @@ class ItemCollectionTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post1.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $itemSet = new ItemCollection([$item1, $item2]);
+        $collection = new ItemCollection([$item1, $item2]);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage The item with id: "post1.md" has been registered previously with another collection.
+     */
+    public function testRegisterItemInSeveralCollections()
+    {
+        $collection = new ItemCollection();
+
+        $item1 = new Item('', 'post1.md', ['date' => '2016-01-20']);
+        $item1->setCollection('posts');
+
+        $collection->set($item1);
+
+        $item1->setCollection('events');
+
+        $collection->set($item1);
     }
 }

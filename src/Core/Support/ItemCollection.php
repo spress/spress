@@ -14,56 +14,124 @@ namespace Yosymfony\Spress\Core\Support;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 /**
- * A ItemCollection represents a collection of items.
+ * A ItemCollection represents a set of items.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class ItemCollection extends Collection
+class ItemCollection implements \IteratorAggregate, \Countable
 {
+    private $items = [];
     private $itemCollections = [];
     private $idCollections = [];
 
     /**
      * Constructor.
-     * Initialize the collection using the item's id of each eatem as key.
      *
-     * Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     * \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
      */
     public function __construct(array $items = [])
     {
         foreach ($items as $item) {
-            $this->add($item->getId(), $item);
+            $this->add($item);
         }
     }
 
     /**
-     * Sets an element.
+     * Gets the current ItemCollection as an Iterator that includes all items.
+     * The key is the item's id and the
+     * value is an Yosymfony\Spress\Core\DataSource\ItemInterface object.
      *
-     * @param string $key The key associated to the element.
-     * @param Yosymfony\Spress\Core\DataSource\ItemInterface
+     * @return \ArrayIterator An \ArrayIterator object for iterating over items.
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
+    }
+
+    /**
+     * Adds an new item.
+     * 
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
+     *
+     * @throws \RuntimeException If the item has been registered previously with the some id.
+     */
+    public function add(ItemInterface $item)
+    {
+        if ($this->has($item->getId()) === true) {
+            throw new \RuntimeException(sprintf('A previous item exists with the same id: "%s".', $item->getId()));
+        }
+
+        $this->set($item);
+    }
+
+    /**
+     * Sets an item.
+     * 
+     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item has been registered previously in another collection.
      */
-    public function set($key, ItemInterface $element)
+    public function set(ItemInterface $item)
     {
-        $collectionName = $element->getCollection();
+        $id = $item->getId();
+        $collectionName = $item->getCollection();
 
-        parent::set($key, $element);
+        $this->items[$id] = $item;
 
-        if (isset($this->idCollections[$key]) && $this->idCollections[$key] !== $collectionName) {
-            throw new \RuntimeException(sprintf('The item with id: "%s" has been registered previously with another collection.', $key));
+        if (isset($this->idCollections[$id]) && $this->idCollections[$id] !== $collectionName) {
+            throw new \RuntimeException(sprintf('The item with id: "%s" has been registered previously with another collection.', $id));
         }
 
         if (isset($this->itemCollections[$collectionName]) === false) {
             $this->itemCollections[$collectionName] = [];
         }
 
-        $this->itemCollections[$collectionName][$key] = $element;
-        $this->idCollections[$key] = $collectionName;
+        $this->itemCollections[$collectionName][$id] = $item;
+        $this->idCollections[$id] = $collectionName;
     }
 
     /**
-     * Returns all elemts in this collection.
+     * Counts the items registered.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->items);
+    }
+
+    /**
+     * Gets an item.
+     * 
+     * @param string $id Identifier of the item.
+     * 
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface
+     *
+     * @throws \RuntimeException If the item was not found.
+     */
+    public function get($id)
+    {
+        if (false === $this->has($id)) {
+            throw new \RuntimeException(sprintf('Item with id: "%s" not found.', $id));
+        }
+
+        return $this->items[$id];
+    }
+
+    /**
+     * Checks if a item exists.
+     *
+     * @param string $id The item's name.
+     *
+     * @return bool
+     */
+    public function has($id)
+    {
+        return isset($this->items[$id]);
+    }
+
+    /**
+     * Returns all items in this collection.
      * 
      * @param string[] $collections       The name of the item collections affected. 
      *                                    Array empty means all.
@@ -75,7 +143,7 @@ class ItemCollection extends Collection
     {
         if (count($collections) === 0) {
             if ($groupByCollection === false) {
-                return parent::all();
+                return $this->items;
             }
 
             return $this->itemCollections;
@@ -132,40 +200,40 @@ class ItemCollection extends Collection
             $this->itemCollections[$collection] = $itemsSorted;
         }
 
-        $this->elements = [];
+        $this->items = [];
 
         foreach ($this->itemCollections as $collection => $items) {
-            $this->elements = array_merge($this->elements, $items);
+            $this->items = array_merge($this->items, $items);
         }
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * Removes an item.
+     * 
+     * @param string $id Identifier of the item.
      */
-    public function remove($key)
+    public function remove($id)
     {
-        if ($this->has($key) === false) {
+        if ($this->has($id) === false) {
             return;
         }
 
-        $collection = $this->idCollections[$key];
+        $collection = $this->idCollections[$id];
 
-        unset($this->idCollections[$key]);
+        unset($this->idCollections[$id]);
         unset($this->itemCollections[$collection]);
-
-        parent::remove($key);
+        unset($this->items[$id]);
     }
 
     /**
-     * {@inheritdoc}
+     * Clears all items in this collection.
      */
     public function clear()
     {
+        $this->items = [];
         $this->itemCollections = [];
         $this->idCollections = [];
-
-        parent::clear();
     }
 }

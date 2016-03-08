@@ -188,7 +188,7 @@ class ContentManager
             $this->processDraftIfPost($item);
             $this->processOutputAttribute($item);
 
-            $this->itemCollection->add($item->getId(), $item);
+            $this->itemCollection->add($item);
         }
 
         foreach ($itemsGenerator as $item) {
@@ -199,17 +199,17 @@ class ContentManager
 
         $this->prepareRenderizer();
 
-        foreach ($this->itemCollection as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
             $this->siteAttribute->setItem($item);
         }
 
-        foreach ($this->itemCollection as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->renderBlocks($item);
         }
 
-        foreach ($this->itemCollection as $item) {
+        foreach ($this->itemCollection->all() as $item) {
             $this->renderPage($item);
             $this->dataWriter->write($item);
         }
@@ -304,7 +304,7 @@ class ContentManager
             }
 
             $this->processCollection($item);
-            $this->itemCollection->add($item->getId(), $item);
+            $this->itemCollection->add($item);
         }
     }
 

@@ -199,17 +199,17 @@ class ContentManager
 
         $this->prepareRenderizer();
 
-        foreach ($this->itemCollection->all() as $item) {
+        foreach ($this->itemCollection as $item) {
             $this->convertItem($item);
             $this->processPermalink($item);
             $this->siteAttribute->setItem($item);
         }
 
-        foreach ($this->itemCollection->all() as $item) {
+        foreach ($this->itemCollection as $item) {
             $this->renderBlocks($item);
         }
 
-        foreach ($this->itemCollection->all() as $item) {
+        foreach ($this->itemCollection as $item) {
             $this->renderPage($item);
             $this->dataWriter->write($item);
         }

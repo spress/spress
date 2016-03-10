@@ -16,7 +16,139 @@ use Yosymfony\Spress\Core\Support\ItemCollection;
 
 class ItemCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testItemSet()
+    public function testIterator()
+    {
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection = new ItemCollection([$item]);
+
+        $this->assertInstanceOf('\ArrayIterator', $collection->getIterator());
+        $this->assertSame([
+            'post1.md' => $item,
+        ], $collection->getIterator()->getArrayCopy());
+    }
+
+    public function testHas()
+    {
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection = new ItemCollection([$item]);
+
+        $this->assertTrue($collection->has('post1.md'));
+        $this->assertFalse($collection->has('post2.md'));
+    }
+
+    public function testAdd()
+    {
+        $collection = new ItemCollection();
+
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection->add($item);
+
+        $this->assertTrue($collection->has('post1.md'));
+    }
+
+    public function testCount()
+    {
+        $collection = new ItemCollection();
+
+        $this->assertCount(0, $collection);
+        $this->assertEquals(0, $collection->count());
+
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection->add($item);
+
+        $this->assertCount(1, $collection);
+        $this->assertEquals(1, $collection->count());
+    }
+
+    public function testGet()
+    {
+        $collection = new ItemCollection();
+
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection->add($item);
+
+        $this->assertSame($item, $collection->get('post1.md'));
+    }
+
+    public function testSet()
+    {
+        $item1 = new Item('', 'post1.md', ['date' => '2016-01-20']);
+        $item1->setCollection('posts');
+
+        $collection = new ItemCollection([$item1]);
+
+        $this->assertSame($item1, $collection->get('post1.md'));
+
+        $item2 = new Item('', 'post1.md', ['date' => '2016-01-19']);
+        $item2->setCollection('posts');
+
+        $collection->set($item2);
+
+        $this->assertSame($item2, $collection->get('post1.md'));
+    }
+
+    public function testAll()
+    {
+        $item = new Item('', 'post1.md');
+        $item->setCollection('posts');
+
+        $collection = new ItemCollection([$item]);
+
+        $this->assertSame([
+            'post1.md' => $item,
+        ], $collection->all());
+    }
+
+    public function testAllWithCollections()
+    {
+        $item1 = new Item('', 'post1.md');
+        $item1->setCollection('posts');
+
+        $item2 = new Item('', 'about.md');
+        $item2->setCollection('pages');
+
+        $collection = new ItemCollection([$item1, $item2]);
+
+        $this->assertSame([
+            'about.md' => $item2,
+        ], $collection->all(['pages']));
+
+        $this->assertSame([
+            'post1.md' => $item1,
+        ], $collection->all(['posts']));
+    }
+
+    public function testAllGroupByCollection()
+    {
+        $item1 = new Item('', 'post1.md');
+        $item1->setCollection('posts');
+
+        $item2 = new Item('', 'about.md');
+        $item2->setCollection('pages');
+
+        $collection = new ItemCollection([$item1, $item2]);
+
+        $this->assertSame([
+            'posts' => [
+                'post1.md' => $item1,
+            ],
+            'pages' => [
+                'about.md' => $item2,
+             ],
+        ], $collection->all([], true));
+    }
+
+    public function testSortItems()
     {
         $item1 = new Item('', 'post1.md', ['date' => '2016-01-20']);
         $item1->setCollection('posts');
@@ -24,43 +156,82 @@ class ItemCollectionTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post2.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $itemSet = new ItemCollection([$item1, $item2]);
+        $collection = new ItemCollection([$item1, $item2]);
 
-        $this->assertEquals(2, $itemSet->count());
-        $this->assertTrue($itemSet->has('post1.md'));
-        $this->assertTrue($itemSet->has('post2.md'));
-        $this->assertCount(2, $itemSet->all());
-        $this->assertCount(2, $itemSet->all(['posts']));
+        $this->assertSame([
+            'post1.md' => $item1,
+            'post2.md' => $item2,
+        ], $collection->all());
 
-        $item3 = new Item('', 'page1.md', ['number' => 1]);
-        $item2->setCollection('pages');
-        $itemSet->add($item3);
+        $collection->sortItems('date', false);
 
-        $this->assertCount(2, $itemSet->all([], true));
-        $this->assertArrayHasKey('posts', $itemSet->all([], true));
-        $this->assertArrayNotHasKey('posts', $itemSet->all([], false));
-        $this->assertArrayHasKey('pages', $itemSet->all([], true));
+        $this->assertSame([
+            'post2.md' => $item2,
+            'post1.md' => $item1,
+        ], $collection->all());
+    }
 
-        $itemSet->sortItems('date', false);
+    public function testSortOnlyCollection()
+    {
+        $item1 = new Item('', 'post1.md', ['date' => '2016-01-20']);
+        $item1->setCollection('posts');
 
-        $items = $itemSet->all(['posts']);
-        $this->assertCount(2, $items);
-        $this->assertEquals('post2.md', current($items)->getId());
+        $item2 = new Item('', 'post2.md', ['order' => '2016-01-19']);
+        $item2->setCollection('posts');
 
-        $itemSet->sortItems('date', true);
+        $item3 = new Item('', 'about.md');
+        $item3->setCollection('pages');
 
-        $items = $itemSet->all(['posts']);
-        $this->assertCount(2, $items);
-        $this->assertEquals('post1.md', current($items)->getId());
+        $collection = new ItemCollection([$item1, $item2, $item3]);
 
-        $itemSet->remove('post1.md');
+        $this->assertSame([
+            'post1.md' => $item1,
+            'post2.md' => $item2,
+            'about.md' => $item3,
+        ], $collection->all());
 
-        $this->assertCount(2, $itemSet->all());
-        $this->assertEquals('page1.md', $itemSet->get('page1.md')->getId());
+        $collection->sortItems('date', false, ['posts']);
 
-        $itemSet->clear();
+        $this->assertSame([
+            'post2.md' => $item2,
+            'post1.md' => $item1,
+            'about.md' => $item3,
+        ], $collection->all());
+    }
 
-        $this->assertCount(0, $itemSet->all());
+    public function testRemove()
+    {
+        $item1 = new Item('', 'post1.md');
+        $item1->setCollection('posts');
+
+        $item2 = new Item('', 'post2.md');
+        $item2->setCollection('posts');
+
+        $collection = new ItemCollection([$item1, $item2]);
+
+        $this->assertCount(2, $collection);
+
+        $collection->remove('post1.md');
+
+        $this->assertCount(1, $collection);
+        $this->assertTrue($collection->has('post2.md'));
+    }
+
+    public function testClear()
+    {
+        $item1 = new Item('', 'post1.md');
+        $item1->setCollection('posts');
+
+        $item2 = new Item('', 'post2.md');
+        $item2->setCollection('posts');
+
+        $collection = new ItemCollection([$item1, $item2]);
+
+        $this->assertCount(2, $collection);
+
+        $collection->clear();
+
+        $this->assertCount(0, $collection);
     }
 
     /**

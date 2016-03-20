@@ -11,7 +11,10 @@
 
 namespace Yosymfony\Spress\tests\Plugin;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Yosymfony\Spress\Plugin\CommandPlugin;
+use Yosymfony\Spress\Plugin\Environment\SymfonyCommandEnvironment;
 
 class CommandPluginTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,8 +26,27 @@ class CommandPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $commandPlugin->getMetas());
     }
 
+    public function testGetCommandEnvironment()
+    {
+        $commandPlugin = new CommandPlugin();
+
+        $this->assertInstanceOf('Yosymfony\Spress\Plugin\Environment\CommandEnvironmentInterface', $commandPlugin->getCommandEnvironment());
+    }
+
+    public function testSetCommandEnvironment()
+    {
+        $command = new Command('acme');
+        $command->setCode(function ($input, $output) { $output->writeln('acme'); });
+
+        $commandPlugin = new CommandPlugin();
+        $commandPlugin->setCommandEnvironment(new SymfonyCommandEnvironment($command, new ConsoleOutput()));
+
+        $this->assertInstanceOf('Yosymfony\Spress\Plugin\Environment\CommandEnvironmentInterface', $commandPlugin->getCommandEnvironment());
+    }
+
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage You must override the "getCommandDefinition" method in the concrete command plugin class.
      */
     public function testCommandDefinitionNotOverrided()
     {
@@ -34,10 +56,11 @@ class CommandPluginTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage You must override the "executeCommand" method in the concrete command plugin class.
      */
     public function testExecuteCommandNotOverrided()
     {
-        $io = $this->getMockBuilder('\Yosymfony\Spress\Core\IO\IOInterface')->getMock();
+        $io = $this->getMockBuilder('Yosymfony\Spress\Core\IO\IOInterface')->getMock();
 
         $commandPlugin = new CommandPlugin();
         $commandPlugin->executeCommand($io, [], []);

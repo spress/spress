@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\Core\Plugin\PluginInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\IO\ConsoleIO;
+use Yosymfony\Spress\Plugin\Environment\SymfonyCommandEnvironment;
 
 /**
  * Symfony Console Command builder for command plugins.
@@ -83,11 +84,12 @@ class ConsoleCommandBuilder
         }
 
         $consoleComand->setDefinition($argumentsAndOptions);
-        $consoleComand->setCode(function (InputInterface $input, OutputInterface $output) use ($commandPlugin) {
+        $consoleComand->setCode(function (InputInterface $input, OutputInterface $output) use ($commandPlugin, $consoleComand) {
             $io = new ConsoleIO($input, $output);
             $arguments = $input->getArguments();
             $options = $input->getOptions();
 
+            $commandPlugin->setCommandEnvironment(new SymfonyCommandEnvironment($consoleComand, $output));
             $commandPlugin->executeCommand($io, $arguments, $options);
         });
 

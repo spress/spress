@@ -14,6 +14,7 @@ CHANGELOG for 2.x
 * [Improved] Eliminated unnecessary calls to `setItem` method of `SiteAttribute` class in `ContentManager` class.
 * [Improved] The methods for managing the collection of plugins in `PluginManager` class have been moved to a `Collection` class.
 * [Improved] The methods for managing the collection of collection-item in `CollectionManager` class have been moved to a `Collection` class.
+* [Improved] Clarified the error message in case of denied permissions when renaming the temporal file in `SelfUpdateCommand` class.
 * [Fixed] Fixed the path available at `page.path` variable. Prior to this version, this variable contains the relative path to `src/content/` but with the filename extension changed by the Converter. Now, the original filename extension isn't altered. A new path snapshot has been created in `ItemIterface`.
 
 ## 2.0.2 (2016-01-16)

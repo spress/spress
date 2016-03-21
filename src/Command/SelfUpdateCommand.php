@@ -80,7 +80,12 @@ EOT
             $phar = new \Phar($tempFilename);
 
             unset($phar);
-            rename($tempFilename, $localFilename);
+
+            if (@rename($tempFilename, $localFilename) !== true) {
+                $io->error(sprintf('Cannot rename "%s" to "%s" probably because permission denied.', $tempFilename, $localFilename));
+
+                return 1;
+            }
 
             $io->success(sprintf('Spress updated from %s to %s.', $localVersion, $remoteVersion));
 
@@ -96,7 +101,7 @@ EOT
 
             $io->error([
                 sprintf('The download is corrupt (%s).', $e->getMessage()),
-                'Please re-run the self-update command to try again',
+                'Please re-run the self-update command to try again.',
             ]);
 
             return 1;

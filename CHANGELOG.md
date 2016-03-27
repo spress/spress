@@ -1,6 +1,6 @@
 CHANGELOG for 2.x
 =================
-## 2.1.0
+## 2.1.0 (2016-03-26)
 * [New] Support for calling to an existing command inside a command plugin. The `CommandEnvironmentInterface` interface has been added and `CommandPluginInterface` has been updated with `setCommandEnvironment` and `getCommandEnvironment` methods. See feature #77.
 * [New] Sort items of a collection. See feature #67.
 * [New] Support to extends TwigRenderizer with tags. See PR #65.

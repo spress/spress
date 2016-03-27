@@ -13,7 +13,7 @@
     <target name="package-phar">
         <echo msg="Creating a phar file" />
         <exec passthru="true" command="${cmd.box} build" checkreturn="true"/>
-        <copy file="spress.phar" todir="${dir.output}" overwrite="true"/>
+        <move file="spress.phar" todir="${dir.output}" overwrite="true"/>
     </target>
 
     <target name="package-zip">

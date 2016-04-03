@@ -23,6 +23,7 @@ use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
+use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
@@ -64,7 +65,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             }
         });
 
-        $cm = $this->getContentManager($dw, [$testPlugin]);
+        $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw, [$testPlugin]);
         $cm->parseSite($attributes, $spressAttributes);
 
         $this->assertCount(14, $dw->getItems());
@@ -97,22 +98,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testParseDraft()
     {
-        $attributes = [
-            'site_name' => 'My tests site',
-        ];
-
-        $spressAttributes = [
-            'version' => '2.0.0',
-            'version_id' => '20000',
-            'major_version' => '2',
-            'minor_version' => '0',
-            'release_version' => '0',
-            'extra_version' => 'dev',
-        ];
-
         $dw = new MemoryDataWriter();
-        $cm = $this->getContentManager($dw);
-        $cm->parseSite($attributes, $spressAttributes, true);
+        $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw);
+        $cm->parseSite([], [], true);
 
         $this->assertCount(15, $dw->getItems());
 
@@ -137,7 +125,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             }
         });
 
-        $cm = $this->getContentManager($dw, [$testPlugin]);
+        $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw, [$testPlugin]);
         $cm->parseSite([], [], true);
 
         $item = $dw->getItem('category-1/category-2/2020/01/01/new-post-example/index.html');
@@ -168,9 +156,26 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('posts/2013-08-12-post-example-2.mkd', $nextItem->getId());
     }
 
-    protected function getContentManager($dataWriter, array $plugins = [])
+    public function testMultipleExtension()
     {
-        $dsm = $this->getDataSourceManager();
+        $dw = new MemoryDataWriter();
+        $dsm = $this->getMemoryDataSourceManager();
+        $cm = $this->getContentManager($dsm, $dw);
+
+        $item = new Item('', 'about.html.twig');
+        $item->setPath('about.html.twig', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $memoryDataSource = $dsm->getDataSource('memory');
+        $memoryDataSource->addItem($item);
+
+        $cm->parseSite([], [], true);
+
+        $item = $dw->getItem('about/index.html');
+    }
+
+    protected function getContentManager($dataSourceManager, $dataWriter, array $plugins = [])
+    {
+        $dsm = $dataSourceManager;
         $gm = $this->getGeneratorManager();
         $cm = $this->getConverterManager();
         $com = $this->getCollectionManager();
@@ -204,7 +209,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     protected function getConverterManager()
     {
         $cm = new ConverterManager();
-        $cm->addConverter(new MapConverter(['twig' => 'html']));
+        $cm->addConverter(new MapConverter(['html.twig' => 'html']));
         $cm->addConverter(new MichelfMarkdownConverter(['markdown', 'mkd', 'mkdn', 'md']));
 
         return $cm;
@@ -220,10 +225,10 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         return $gm;
     }
 
-    protected function getDataSourceManager()
+    protected function getFilesystemDataSourceManager()
     {
         $config = [
-            'data_source_name_1' => [
+            'filesystem' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
                     'source_root' => __dir__.'/../fixtures/project/src',
@@ -237,7 +242,20 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         return $builder->buildFromConfigArray($config);
     }
 
-    private function getRenderizer()
+    protected function getMemoryDataSourceManager()
+    {
+        $config = [
+            'memory' => [
+                'class' => 'Yosymfony\Spress\Core\DataSource\Memory\MemoryDataSource',
+            ],
+        ];
+
+        $builder = new DataSourceManagerBuilder();
+
+        return $builder->buildFromConfigArray($config);
+    }
+
+    protected function getRenderizer()
     {
         $twigLoader = new \Twig_Loader_Array([]);
         $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
@@ -245,7 +263,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         return new TwigRenderizer($twig, $twigLoader, ['twig', 'html.twig', 'twig.html', 'html']);
     }
 
-    private function getPluginManager(EventDispatcher $dispatcher, array $plugins)
+    protected function getPluginManager(EventDispatcher $dispatcher, array $plugins)
     {
         $pm = new PluginManager($dispatcher);
         $pluginCollection = $pm->getPluginCollection();

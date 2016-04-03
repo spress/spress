@@ -396,7 +396,7 @@ class ContentManager
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
 
-        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $ext = substr(strstr($path, '.'), 1);
 
         $result = $this->converterManager->convertContent($item->getContent(), $ext);
         $newPath = preg_replace('/\.'.$ext.'$/', '.'.$result->getExtension(), $path);

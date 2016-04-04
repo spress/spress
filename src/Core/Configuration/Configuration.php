@@ -79,6 +79,10 @@ class Configuration implements ConfigurationInterface
      */
     public function loadConfiguration($sitePath, $envName = null)
     {
+        if ($this->isSpressSite($sitePath) === false) {
+            throw new \RuntimeException(sprintf('Not a Spress site at "%s".', $sitePath));
+        }
+
         $default = $this->loadDefaultConfiguration();
         $dev = $this->loadEnvironmentConfiguration($sitePath, 'dev');
         $result = $this->resolver->resolve(array_merge($default, $dev));
@@ -127,6 +131,11 @@ class Configuration implements ConfigurationInterface
         $filename = str_replace(':env', $env, $this->templateEnvFilename);
 
         return $filename;
+    }
+
+    private function isSpressSite($sitePath)
+    {
+        return file_exists($sitePath.'/'.$this->configFilename);
     }
 
     private function getConfigurationResolver()

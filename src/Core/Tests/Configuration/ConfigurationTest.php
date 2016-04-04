@@ -53,7 +53,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('text_extensions', $values['data_sources']['filesystem']['arguments']);
     }
 
-    public function testLoadConfigurationEnvironment()
+    public function testLoadConfigurationWithEnvironmentName()
     {
         $defaulConfiguration = __DIR__.'/../../config/default.yml';
 
@@ -90,8 +90,24 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException RuntimeException
+     * @expectedExceptionMessageRegExp /Not a Spress site at/
      */
-    public function testLoadConfigurationEnvironmentEmpty()
+    public function testNotASpressSite()
+    {
+        $defaulConfiguration = __DIR__.'/../../config/default.yml';
+
+        $locator = new FileLocator([]);
+        $configLoader = new Config([new YamlLoader($locator)]);
+
+        $config = new Configuration($configLoader, $defaulConfiguration);
+        $values = $config->loadConfiguration(__DIR__.'/../fixtures', '');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Expected a non-empty string as environment name.
+     */
+    public function testEnvironmentEmpty()
     {
         $defaulConfiguration = __DIR__.'/../../config/default.yml';
 

@@ -2,6 +2,7 @@ CHANGELOG for 2.x
 =================
 ## 2.1.1
 * [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using *.html.twig".
+* [Improved] Clarified the message when `site:build` command is invoked against a non Spress site folder.
 
 ## 2.1.0 (2016-03-26)
 * [New] Support for calling to an existing command inside a command plugin. The `CommandEnvironmentInterface` interface has been added and `CommandPluginInterface` has been updated with `setCommandEnvironment` and `getCommandEnvironment` methods. See feature #77.

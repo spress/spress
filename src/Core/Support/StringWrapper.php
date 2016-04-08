@@ -114,6 +114,25 @@ class StringWrapper
     }
 
     /**
+     * Gets the first element of the argument matching with
+     * the ends of the string.
+     * 
+     * @param array $strings List of strings.
+     * 
+     * @return string The first element or empty string if no matching found.  
+     */
+    public function getFirstEndMatch(array $strings)
+    {
+        foreach ($strings as $value) {
+            if ($this->endWith($value)) {
+                return $value;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Deletes a prefix of the string.
      *
      * @param string $prefix The prefix.

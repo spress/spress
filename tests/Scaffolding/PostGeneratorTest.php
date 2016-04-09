@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Scaffolding;
+namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Scaffolding\PostGenerator;
@@ -21,7 +21,7 @@ class PostGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->skeletonDir = './app/skeletons';
+        $this->skeletonDir = [__DIR__.'/../../app/skeletons'];
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
     }
 

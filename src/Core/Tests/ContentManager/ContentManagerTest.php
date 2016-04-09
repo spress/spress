@@ -162,15 +162,20 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $dsm = $this->getMemoryDataSourceManager();
         $cm = $this->getContentManager($dsm, $dw);
 
-        $item = new Item('', 'about.html.twig');
-        $item->setPath('about.html.twig', Item::SNAPSHOT_PATH_RELATIVE);
+        $item1 = new Item('', 'about.html.twig');
+        $item1->setPath('about.html.twig', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $item2 = new Item('', 'docs/migrating-1.x-to-2.x.md');
+        $item2->setPath('docs/migrating-1.x-to-2.x.md', Item::SNAPSHOT_PATH_RELATIVE);
 
         $memoryDataSource = $dsm->getDataSource('memory');
-        $memoryDataSource->addItem($item);
+        $memoryDataSource->addItem($item1);
+        $memoryDataSource->addItem($item2);
 
         $cm->parseSite([], [], true);
 
-        $item = $dw->getItem('about/index.html');
+        $this->assertTrue($dw->hasItem('about/index.html'));
+        $this->assertTrue($dw->hasItem('docs/migrating-1.x-to-2.x/index.html'));
     }
 
     protected function getContentManager($dataSourceManager, $dataWriter, array $plugins = [])
@@ -208,7 +213,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getConverterManager()
     {
-        $cm = new ConverterManager();
+        $cm = new ConverterManager(['html', 'html.twig', 'twig.html', 'md']);
         $cm->addConverter(new MapConverter(['html.twig' => 'html']));
         $cm->addConverter(new MichelfMarkdownConverter(['markdown', 'mkd', 'mkdn', 'md']));
 

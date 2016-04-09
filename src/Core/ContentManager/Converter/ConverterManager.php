@@ -11,6 +11,9 @@
 
 namespace Yosymfony\Spress\Core\ContentManager\Converter;
 
+use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\Support\StringWrapper;
+
 /**
  * Converter manager.
  *
@@ -21,19 +24,21 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 class ConverterManager
 {
     private $queue;
+    private $textExtensions;
 
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(array $textExtensions = [])
     {
+        $this->textExtensions = $textExtensions;
         $this->initializeQueue();
     }
 
     /**
      * Adds a converter.
      *
-     * @param \Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface $converter The converter.
+     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface $converter The converter.
      *
      * @throws RuntimeException If invalid priority at the converter.
      */
@@ -69,23 +74,46 @@ class ConverterManager
     /**
      * Converts the content.
      *
-     * @param string $content
-     * @param string $extension
+     * @param string $content        The content.
+     * @param string $inputExtension The filename extension. e.g: 'html'.
      *
-     * @return \Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
+     * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
      *
      * @throws RuntimeException If there's no converter for the extension passed.
      */
-    public function convertContent($content, $extension)
+    public function convertContent($content, $inputExtension)
     {
-        $converter = $this->getConverter($extension);
+        $converter = $this->getConverter($inputExtension);
         $content = $converter->convert($content);
-        $outExtension = $converter->getOutExtension($extension);
+        $outputExtension = $converter->getOutExtension($inputExtension);
 
         return new ConverterResult(
             $content,
-            $outExtension
+            $inputExtension,
+            $outputExtension
         );
+    }
+
+    /**
+     * Converts an item. This method uses the SNAPSHOT_PATH_RELATIVE of Item path.
+     * 
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item The item.
+     * 
+     * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
+     *
+     * @throws RuntimeException If there's no converter for the extension passed.
+     */
+    public function convertItem(ItemInterface $item)
+    {
+        $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+        $str = new StringWrapper($path);
+        $extension = $str->getFirstEndMatch($this->textExtensions);
+
+        if ($extension === '') {
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+        }
+
+        return $this->convertContent($item->getContent(), $extension);
     }
 
     private function getConverter($extension)

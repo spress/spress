@@ -87,7 +87,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     }
 
     /**
-     * Gets a permalink.
+     * Gets a permalink. This method uses the SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT of Item path.
      *
      * For binary items URL path and path point to SNAPSHOT_PATH_RELATIVE.
      *

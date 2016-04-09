@@ -32,13 +32,12 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Construct.
      *
-     * @param \Twig_Environment  $twig
-     * @param \Twig_Loader_Array $arrayLoader
-     * @param array              $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig"
+     * @param \Twig_Environment  $twig            The Twig instance.
+     * @param \Twig_Loader_Array $arrayLoader     The loader.
+     * @param array              $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig".
      */
     public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader, array $layoutExtension)
     {
-        $this->arrayLoaderOrg = $arrayLoader;
         $this->twig = $twig;
         $this->layoutExtension = $layoutExtension;
         $this->arrayLoader = $arrayLoader;
@@ -199,10 +198,18 @@ class TwigRenderizer implements RenderizerInterface
         $this->twig->addTokenParser($tokenParser);
     }
 
+    /**
+     * Get the value of layout attribute.
+     * 
+     * @param array  $attributes  List of attributes.
+     * @param string $contentName The identifier of the content.
+     * 
+     * @return string
+     */
     protected function getLayoutAttribute(array $attributes, $contentName)
     {
         if (isset($attributes['layout']) === false) {
-            return false;
+            return '';
         }
 
         if (is_string($attributes['layout']) === false) {
@@ -216,6 +223,13 @@ class TwigRenderizer implements RenderizerInterface
         return $this->getLayoutNameWithNamespace($attributes['layout']);
     }
 
+    /**
+     * Gets the layout name with the namespace prefix.
+     * 
+     * @param string $name The layout name.
+     * 
+     * @return string
+     */
     protected function getLayoutNameWithNamespace($name)
     {
         return '@layout/'.$name;
@@ -245,7 +259,7 @@ class TwigRenderizer implements RenderizerInterface
 
             $layout = $this->getLayoutAttribute($attributes, $name);
 
-            if ($layout) {
+            if ($layout !== '') {
                 $fullLayout = $this->getLayoutWithExtension($layout, $name);
 
                 $content = sprintf('{%% extends "%s" %%}%s', $fullLayout, $content);

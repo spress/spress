@@ -17,9 +17,10 @@ class ConverterResultTest extends \PHPUnit_Framework_TestCase
 {
     public function testConvertertResult()
     {
-        $result = new ConverterResult('My text', 'md');
+        $result = new ConverterResult('My text', 'md', 'html');
 
         $this->assertEquals('My text', $result->getResult());
-        $this->assertEquals('md', $result->getExtension());
+        $this->assertEquals('md', $result->getInputExtension());
+        $this->assertEquals('html', $result->getExtension());
     }
 }

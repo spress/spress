@@ -236,7 +236,7 @@ class Spress extends Container
         };
 
         $this['spress.cms.converterManager'] = function ($c) {
-            $cm = new ConverterManager();
+            $cm = new ConverterManager($c['spress.config.values']['text_extensions']);
             $converters = $c['spress.cms.converterManager.converters'];
 
             foreach ($converters as $converter) {

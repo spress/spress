@@ -14,23 +14,28 @@ namespace Yosymfony\Spress\Core\ContentManager\Converter;
 /**
  * Converter result.
  *
+ * @api
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ConverterResult
 {
-    private $extension;
+    private $inputExtension;
+    private $outputExtension;
     private $result;
 
     /**
      * Constructor.
      *
-     * @param string $result    Result of converter data
-     * @param string $extension Extension of result
+     * @param string $result      Result of applied the converter.
+     * @param string $inExtension The input extension.
+     * @param string $extension   The output extension.
      */
-    public function __construct($result, $extension)
+    public function __construct($result, $inputExtension, $outputExtension)
     {
+        $this->inputExtension = $inputExtension;
         $this->result = $result;
-        $this->extension = $extension;
+        $this->outputExtension = $outputExtension;
     }
 
     /**
@@ -44,12 +49,22 @@ class ConverterResult
     }
 
     /**
-     * Extension of result.
+     * The output extension.
      *
      * @return string
      */
     public function getExtension()
     {
-        return $this->extension;
+        return $this->outputExtension;
+    }
+
+    /**
+     * The input extension.
+     * 
+     * @return string
+     */
+    public function getInputExtension()
+    {
+        return $this->inputExtension;
     }
 }

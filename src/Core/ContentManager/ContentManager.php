@@ -28,6 +28,7 @@ use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Support\ItemCollection;
+use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Content manager.
@@ -396,10 +397,11 @@ class ContentManager
             ItemInterface::SNAPSHOT_PATH_RELATIVE
         ));
 
-        $ext = substr(strstr($path, '.'), 1);
+        $result = $this->converterManager->convertItem($item);
 
-        $result = $this->converterManager->convertContent($item->getContent(), $ext);
-        $newPath = preg_replace('/\.'.$ext.'$/', '.'.$result->getExtension(), $path);
+        $str = new StringWrapper($path);
+        $filenameWithoutExtension = $str->deleteSufix($result->getInputExtension());
+        $newPath = $filenameWithoutExtension.$result->getExtension();
 
         $item->setContent($result->getResult(), ItemInterface::SNAPSHOT_AFTER_CONVERT);
         $item->setPath($newPath, ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT);

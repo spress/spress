@@ -44,6 +44,22 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($str->endWith('to'));
     }
 
+    public function testGetFirstEndMatch()
+    {
+        $extensions = ['html.twig', 'md', 'md', 'html'];
+        $str = new StringWrapper('about.html.twig');
+
+        $this->assertEquals('html.twig', $str->getFirstEndMatch($extensions));
+
+        $str = new StringWrapper('about.html');
+
+        $this->assertEquals('html', $str->getFirstEndMatch($extensions));
+
+        $str = new StringWrapper('about.xml');
+
+        $this->assertEquals('', $str->getFirstEndMatch($extensions));
+    }
+
     public function testDeletePrefix()
     {
         $str = new StringWrapper('Welcome to Spress');

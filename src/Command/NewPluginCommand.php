@@ -80,7 +80,7 @@ EOT
         $license = $input->getOption('license') ?: 'MIT';
 
         $generator = new PluginGenerator('./src/plugins', $name);
-        $generator->setSkeletonDirs(__DIR__.'/../../app/skeletons');
+        $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
         $generator->setCommandData($commandName, $commandDescription, $commandHelp);
         $generator->setAuthor($author, $email);
         $generator->setDescription($description);

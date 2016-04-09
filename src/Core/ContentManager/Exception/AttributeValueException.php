@@ -57,11 +57,11 @@ class AttributeValueException extends ContentException
             $dot = true;
         }
 
-        if (empty($this->filename) === false) {
+        if (is_null($this->id) === false) {
             $this->message .= sprintf(' in %s', json_encode($this->id));
         }
 
-        if (empty($this->attribute) === false) {
+        if (is_null($this->attribute) === false) {
             $this->message .= sprintf(' at key "%s"', $this->attribute);
         }
 

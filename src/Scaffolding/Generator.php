@@ -28,11 +28,11 @@ class Generator
     }
 
     /**
-     * Set a string or array of directories.
+     * Set a list of directories.
      *
      * @param array $value
      */
-    public function setSkeletonDirs($value)
+    public function setSkeletonDirs(array $value)
     {
         $this->skeletonDirs = $value;
     }
@@ -52,7 +52,7 @@ class Generator
         ];
 
         $loader = new \Twig_Loader_Filesystem();
-        $loader->addPath($this->skeletonDirs);
+        $loader->setPaths($this->skeletonDirs);
 
         return new \Twig_Environment($loader, $options);
     }

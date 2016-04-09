@@ -18,14 +18,19 @@ use Yosymfony\Spress\Core\Configuration\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
+    protected $defaulConfiguration;
+
+    public function setUp()
+    {
+        $this->defaulConfiguration = __DIR__.'/../../config/default.yml';
+    }
+
     public function testLoadConfiguration()
     {
-        $defaulConfiguration = __DIR__.'/../../config/default.yml';
-
         $locator = new FileLocator([]);
         $configLoader = new Config([new YamlLoader($locator)]);
 
-        $config = new Configuration($configLoader, $defaulConfiguration);
+        $config = new Configuration($configLoader, $this->defaulConfiguration);
         $values = $config->loadConfiguration(__DIR__.'/../fixtures/project');
 
         $this->assertTrue($values['debug']);
@@ -55,12 +60,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadConfigurationWithEnvironmentName()
     {
-        $defaulConfiguration = __DIR__.'/../../config/default.yml';
-
         $locator = new FileLocator([]);
         $configLoader = new Config([new YamlLoader($locator)]);
 
-        $config = new Configuration($configLoader, $defaulConfiguration);
+        $config = new Configuration($configLoader, $this->defaulConfiguration);
         $values = $config->loadConfiguration(__DIR__.'/../fixtures/project', 'prod');
 
         $this->assertTrue($values['debug']);
@@ -94,13 +97,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotASpressSite()
     {
-        $defaulConfiguration = __DIR__.'/../../config/default.yml';
-
         $locator = new FileLocator([]);
         $configLoader = new Config([new YamlLoader($locator)]);
 
-        $config = new Configuration($configLoader, $defaulConfiguration);
-        $values = $config->loadConfiguration(__DIR__.'/../fixtures', '');
+        $config = new Configuration($configLoader, $this->defaulConfiguration);
+        $config->loadConfiguration(__DIR__.'/../fixtures', '');
     }
 
     /**
@@ -109,12 +110,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnvironmentEmpty()
     {
-        $defaulConfiguration = __DIR__.'/../../config/default.yml';
-
         $locator = new FileLocator([]);
         $configLoader = new Config([new YamlLoader($locator)]);
 
-        $config = new Configuration($configLoader, $defaulConfiguration);
-        $values = $config->loadConfiguration(__DIR__.'/../fixtures/project', '');
+        $config = new Configuration($configLoader, $this->defaulConfiguration);
+        $config->loadConfiguration(__DIR__.'/../fixtures/project', '');
     }
 }

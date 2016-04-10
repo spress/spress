@@ -170,7 +170,7 @@ class AttributesResolver
     {
         foreach ((array) $attributes as $attribute) {
             unset($this->defaults[$attribute],
-                $this->type[$attribute],
+                $this->types[$attribute],
                 $this->requires[$attribute],
                 $this->notNullables[$attribute]);
         }

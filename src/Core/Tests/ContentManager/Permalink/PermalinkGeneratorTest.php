@@ -271,7 +271,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testPrettyBadTypeForCategoriesAttribute()
     {
         $pmg = new PermalinkGenerator('pretty');
-        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+        $pmg->getPermalink($this->createItem('index.html', [
             'categories' => 'news',
         ]));
     }
@@ -282,7 +282,7 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testPrettyBadDateAttribute()
     {
         $pmg = new PermalinkGenerator('pretty');
-        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+        $pmg->getPermalink($this->createItem('index.html', [
             'date' => [],
         ]));
     }

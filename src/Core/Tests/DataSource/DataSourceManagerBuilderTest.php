@@ -37,12 +37,13 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage Data source "data_source_name_1" class not found: "Acme\AcmeDataSource".
      */
     public function testBuildFromConfigArrayWithNotExistsClass()
     {
         $config = [
             'data_source_name_1' => [
-                'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource_1',
+                'class' => 'Acme\AcmeDataSource',
                 'arguments' => [
                     'source_root' => __dir__.'/../fixtures/project/src',
                 ],
@@ -50,9 +51,6 @@ class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $builder = new DataSourceManagerBuilder();
-        $dsm = $builder->buildFromConfigArray($config);
-
-        $this->assertInstanceOf('\Yosymfony\Spress\Core\DataSource\DataSourceManager', $dsm);
-        $this->assertArrayHasKey('data_source_name_1', $dsm->getDataSources());
+        $builder->buildFromConfigArray($config);
     }
 }

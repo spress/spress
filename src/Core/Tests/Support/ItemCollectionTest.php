@@ -256,7 +256,7 @@ class ItemCollectionTest extends \PHPUnit_Framework_TestCase
         $item2 = new Item('', 'post1.md', ['order' => '2016-01-19']);
         $item2->setCollection('posts');
 
-        $collection = new ItemCollection([$item1, $item2]);
+        new ItemCollection([$item1, $item2]);
     }
 
     /**

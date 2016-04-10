@@ -266,9 +266,10 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedExceptionMessage Invalid value. Expected array in "index.html" at key "categories".
      */
-    public function testPrettyBadTypeForCategoriesAttribute()
+    public function testPrettyBadTypeHintForCategoriesAttribute()
     {
         $pmg = new PermalinkGenerator('pretty');
         $pmg->getPermalink($this->createItem('index.html', [
@@ -277,13 +278,38 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedExceptionMessage Invalid value. Expected date string in "index.html" at key "date".
      */
-    public function testPrettyBadDateAttribute()
+    public function testPrettyBadTypeHintDateAttribute()
     {
         $pmg = new PermalinkGenerator('pretty');
         $pmg->getPermalink($this->createItem('index.html', [
             'date' => [],
+        ]));
+    }
+
+    /**
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedExceptionMessage Invalid value. Expected a non-empty value in "index.html" at key "permalink".
+     */
+    public function testEmptyPermalinkAttribute()
+    {
+        $pmg = new PermalinkGenerator('pretty');
+        $pmg->getPermalink($this->createItem('index.html', [
+            'permalink' => '',
+        ]));
+    }
+
+    /**
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedExceptionMessage Invalid value. Expected string in "index.html" at key "permalink".
+     */
+    public function testBadTypeHintPermalinkAttribute()
+    {
+        $pmg = new PermalinkGenerator('pretty');
+        $pmg->getPermalink($this->createItem('index.html', [
+            'permalink' => [],
         ]));
     }
 

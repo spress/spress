@@ -34,6 +34,7 @@ class EnvironmentEvent extends Event
     protected $dataSourceManager;
     protected $converterManager;
     protected $generatorManager;
+    protected $configValues;
     protected $dataWriter;
     protected $renderizer;
     protected $io;

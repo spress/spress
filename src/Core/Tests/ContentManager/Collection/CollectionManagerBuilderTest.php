@@ -67,7 +67,7 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $builder = new CollectionManagerBuilder();
-        $cm = $builder->buildFromConfigArray($config);
+        $builder->buildFromConfigArray($config);
     }
 
     /**
@@ -81,6 +81,6 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $builder = new CollectionManagerBuilder();
-        $cm = $builder->buildFromConfigArray($config);
+        $builder->buildFromConfigArray($config);
     }
 }

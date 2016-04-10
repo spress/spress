@@ -152,9 +152,9 @@ class AttributesResolver
     public function clear()
     {
         $this->defaults = [];
-        $this->type = [];
+        $this->types = [];
         $this->requires = [];
-        $this->nullables = [];
+        $this->notNullables = [];
 
         return $this;
     }
@@ -170,9 +170,9 @@ class AttributesResolver
     {
         foreach ((array) $attributes as $attribute) {
             unset($this->defaults[$attribute],
-                $this->type[$attribute],
+                $this->types[$attribute],
                 $this->requires[$attribute],
-                $this->nullables[$attribute]);
+                $this->notNullables[$attribute]);
         }
 
         return $this;

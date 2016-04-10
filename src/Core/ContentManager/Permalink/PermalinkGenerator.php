@@ -243,7 +243,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         }
 
         if (is_array($attributes['categories']) === false) {
-            throw new AttributeValueException('Invalid value. Expected array.', 'categories', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new AttributeValueException('Invalid value. Expected array.', 'categories', $item->getPath());
         }
 
         return implode('/', array_map(function ($a) {
@@ -261,7 +261,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
     private function generateUrlPath($template, array $placeholders = [])
     {
         if (0 == strlen($template)) {
-            throw new \InvalidArgumentException('The template param must be a template or a URL');
+            throw new \InvalidArgumentException('The template param must be a template or a URL.');
         }
 
         $permalink = str_replace(array_keys($placeholders), $placeholders, $template, $count);
@@ -275,7 +275,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         if (isset($attributes['preserve_path_title']) === true) {
             if (is_bool($attributes['preserve_path_title']) === false) {
-                throw new AttributeValueException('Invalid value. Expected bolean', 'preserve_path_title', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+                throw new AttributeValueException('Invalid value. Expected bolean.', 'preserve_path_title', $item->getPath());
             }
 
             return $attributes['preserve_path_title'];
@@ -289,17 +289,17 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $attributes = $item->getAttributes();
 
         if (isset($attributes['date']) === false) {
-            throw new MissingAttributeException('Attribute date required', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new MissingAttributeException('Attribute date required.', 'date', $item->getPath());
         }
 
         if (is_string($attributes['date']) === false) {
-            throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new AttributeValueException('Invalid value. Expected date string.', 'date', $item->getPath());
         }
 
         try {
             return new \DateTime($attributes['date']);
         } catch (\Exception $e) {
-            throw new AttributeValueException('Invalid value. Expected date string', 'date', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new AttributeValueException('Invalid value. Expected date string.', 'date', $item->getPath());
         }
     }
 
@@ -309,7 +309,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
 
         if (isset($attributes['no_html_extension']) === true) {
             if (is_bool($attributes['no_html_extension']) === false) {
-                throw new AttributeValueException('Invalid value. Expected boolean', 'no_html_extension', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+                throw new AttributeValueException('Invalid value. Expected boolean.', 'no_html_extension', $item->getPath());
             }
 
             return $attributes['no_html_extension'];
@@ -329,11 +329,11 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $permalink = isset($attributes['permalink']) ? $attributes['permalink'] : $this->defaultPermalink;
 
         if (is_string($permalink) === false) {
-            throw new AttributeValueException('Invalid value. Expected string.', 'permalink', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new AttributeValueException('Invalid value. Expected string.', 'permalink', $item->getPath());
         }
 
         if (trim($permalink) === '') {
-            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'permalink', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
+            throw new AttributeValueException('Invalid value. Expected a non-empty value.', 'permalink', $item->getPath());
         }
 
         return $permalink;
@@ -355,11 +355,11 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         }
 
         if ($count > 1) {
-            throw new \UnexpectedValueException(sprintf('Bad URL: "%s"', $result));
+            throw new \UnexpectedValueException(sprintf('Bad URL: "%s".', $result));
         }
 
         if (false !== strpos($result, ' ')) {
-            throw new \UnexpectedValueException(sprintf('Bad URL: "%s". Contain white space/s', $result));
+            throw new \UnexpectedValueException(sprintf('Bad URL: "%s". Contain white space/s.', $result));
         }
 
         return $result;

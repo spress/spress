@@ -32,7 +32,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 
 /**
- * Spress application.
+ * The Spress application.
  *
  * Namespaces:
  *  - "spress.config.site_dir": (string) The path to the site. "./" by defatul.
@@ -84,7 +84,7 @@ class Spress extends Container
         };
 
         $this['spress.config.vendor_dir'] = function ($c) {
-            return $c['spress.config.site_dir'].'/vendor';
+            return 'vendor';
         };
 
         $this['spress.config.composer_filename'] = 'composer.json';
@@ -158,7 +158,7 @@ class Spress extends Container
         };
 
         $this['lib.embeddedComposer'] = function ($c) {
-            $embeddedComposerBuilder = new EmbeddedComposerBuilder($c['spress.plugin.classLoader']);
+            $embeddedComposerBuilder = new EmbeddedComposerBuilder($c['spress.plugin.classLoader'], $c['spress.config.site_dir']);
             $embeddedComposer = $embeddedComposerBuilder
                 ->setComposerFilename($c['spress.config.composer_filename'])
                 ->setVendorDirectory($c['spress.config.vendor_dir'])

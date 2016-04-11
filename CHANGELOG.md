@@ -2,6 +2,7 @@ CHANGELOG for 2.x
 =================
 ## 2.1.1
 * [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using *.html.twig".
+* [Fixed] Bug #79 has been fixed: "Error loading plugin's dependencies with -s option at site:build command".
 * [Improved] Clarified the message when `site:build` command is invoked against a non Spress site folder.
 
 ## 2.1.0 (2016-03-26)

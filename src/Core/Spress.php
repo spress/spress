@@ -51,11 +51,11 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  */
 class Spress extends Container
 {
-    const VERSION = '2.1.1';
-    const VERSION_ID = '20101';
+    const VERSION = '2.2.0';
+    const VERSION_ID = '20200';
     const MAJOR_VERSION = '2';
-    const MINOR_VERSION = '1';
-    const RELEASE_VERSION = '1';
+    const MINOR_VERSION = '2';
+    const RELEASE_VERSION = '0';
     const EXTRA_VERSION = '';
 
     public function __construct()

@@ -14,8 +14,8 @@
 {% endif %}
     "require": {
         "spress/spress-installer": "2.0.*"
-    },
 {% if namespace %}
+    },
     "autoload": {
         "psr-4": {
             "{{ namespace_psr4 }}": ""
@@ -23,6 +23,8 @@
     },
     "extra": {
         "spress_class": "{{ namespace }}\\{{ classname }}"
+    }
+{% else %}
     }
 {% endif %}
 }

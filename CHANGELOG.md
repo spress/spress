@@ -1,6 +1,9 @@
 CHANGELOG for 2.x
 =================
-## 2.1.1
+## 2.1.2
+* [Fixed] Bug #80 has been fixed: "Composer install fails if no namespace is specified in new plugin". See PR #81.
+
+## 2.1.1 (2016-04-12)
 * [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using *.html.twig".
 * [Fixed] Bug #79 has been fixed: "Error loading plugin's dependencies with -s option at site:build command".
 * [Improved] Clarified the message when `site:build` command is invoked against a non Spress site folder.

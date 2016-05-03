@@ -66,7 +66,7 @@ FRONTMATTER;
         $this->assertEquals('My content', $content);
     }
 
-    public function testGetAttributesFromYamlFrontmatterWithExtraDashed()
+    public function testGetAttributesFromYamlFrontmatterWithExtraDashesInBody()
     {
         $parser = new AttributeParser();
         $raw = <<<FRONTMATTER
@@ -101,7 +101,7 @@ FRONTMATTER;
         $this->assertEquals("--\n--\nMy content", $content);
     }
 
-    public function testGetAttributesFromFrontmatterWithCarriageReturn()
+    public function testGetAttributesFromYamlFrontmatterWithCarriageReturn()
     {
         $parser = new AttributeParser();
         $raw = "---\r\nlayout: default\r\n---\r\nMy content";
@@ -110,6 +110,18 @@ FRONTMATTER;
         $content = $parser->getContentFromFrontmatter($raw);
 
         $this->assertEquals('default', $attributes['layout']);
+        $this->assertEquals('My content', $content);
+    }
+
+    public function testYamlFrontmatterAndAttributeValueWithTripeDashInValue()
+    {
+        $parser = new AttributeParser();
+        $raw = "---\r\nfoo: 'bar---baz'\r\n---\r\nMy content";
+
+        $attributes = $parser->getAttributesFromFrontmatter($raw);
+        $content = $parser->getContentFromFrontmatter($raw);
+
+        $this->assertEquals('bar---baz', $attributes['foo']);
         $this->assertEquals('My content', $content);
     }
 
@@ -159,8 +171,28 @@ FRONTMATTER;
         $this->assertEquals('My content', $content);
     }
 
+    public function testJsonFrontmatterAndAttributeValueWithTripeDashInValue()
+    {
+        $parser = new AttributeParser(AttributeParser::PARSER_JSON);
+        $raw = <<<FRONTMATTER
+---
+{
+    "foo": "bar---baz"
+}
+---
+My content
+FRONTMATTER;
+
+        $attributes = $parser->getAttributesFromFrontmatter($raw);
+        $content = $parser->getContentFromFrontmatter($raw);
+
+        $this->assertEquals('bar---baz', $attributes['foo']);
+        $this->assertEquals('My content', $content);
+    }
+
     /**
      * @expectedException RuntimeException
+     * @expectedExceptionMessage Invalid attributte parser type: "ini".
      */
     public function testGetAttributesFromNotFoundParserType()
     {

@@ -86,5 +86,11 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
 
         $str = new StringWrapper('españa');
         $this->assertEquals('espana', $str->toAscii());
+
+        $str = new StringWrapper('баш');
+        $this->assertEquals('bash', $str->toAscii());
+
+        $str = new StringWrapper('баШ');
+        $this->assertEquals('baSH', $str->toAscii());
     }
 }

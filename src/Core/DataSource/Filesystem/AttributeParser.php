@@ -29,7 +29,7 @@ class AttributeParser
 
     private $config;
     private $type;
-    private $pattern = '/^-{3}\s?(\w*)\r?\n(.*)\r?\n?-{3}\r?\n(.*)/isU';
+    private $pattern = '/^-{3}\r?\n(.*)\r?\n?-{3}\r?\n(.*)/isU';
 
     /**
      * Constructor.
@@ -95,7 +95,7 @@ class AttributeParser
         $found = preg_match($this->pattern, $value, $matches);
 
         if (1 === $found) {
-            return $this->getAttributesFromString($matches[2]);
+            return $this->getAttributesFromString($matches[1]);
         }
 
         return [];

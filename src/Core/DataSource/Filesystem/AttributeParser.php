@@ -29,7 +29,7 @@ class AttributeParser
 
     private $config;
     private $type;
-    private $pattern = '/^---\r*\n(.*)\r*\n?---\r*\n?/isU';
+    private $pattern = '/^-{3}\r?\n(.*)\r?\n?-{3}\r?\n(.*)/isU';
 
     /**
      * Constructor.
@@ -83,7 +83,7 @@ class AttributeParser
      *
      * e.g: (YAML syntax)
      *  ---
-     *   name: "Victor"
+     *  name: "Victor"
      *  ---
      *
      * @param string $value Frontmatter.

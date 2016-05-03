@@ -2,6 +2,7 @@ CHANGELOG for 2.x
 =================
 ## 2.1.2
 * [Fixed] Bug #80 has been fixed: "Composer install fails if no namespace is specified in new plugin". See PR #81.
+* [Fixed] Bug #82 has been fixed: "Substr "---" in yaml string cause builder crash".
 
 ## 2.1.1 (2016-04-12)
 * [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using *.html.twig".

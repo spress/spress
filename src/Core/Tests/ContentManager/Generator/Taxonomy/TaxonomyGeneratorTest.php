@@ -75,4 +75,38 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/categories/news', $attributes['terms_url']['categories']['news']);
         $this->assertEquals('/categories/releases', $attributes['terms_url']['categories']['releases']);
     }
+
+    public function testTaxonomiesPointingToSameSlugedTerm()
+    {
+        $post1 = new Item('Post 1', 'posts/2015-05-26-new-release', ['categories' => ['баш']]);
+        $post2 = new Item('Post 2', 'posts/2015-05-27-new-feature', ['categories' => ['баШ']]);
+        $post3 = new Item('Post 3', 'posts/2015-05-28-new-feature', ['categories' => ['bash']]);
+
+        $collections = [
+            'posts' => [$post1, $post2, $post3],
+        ];
+
+        $templateItem = new Item('Categories content', 'categories/index.html', ['max_page' => 3]);
+        $templateItem->setPath('categories/index.html', Item::SNAPSHOT_PATH_RELATIVE);
+
+        $catetoriesItems = $this->taxonomy->generateItems($templateItem, $collections);
+
+        $this->assertTrue(is_array($catetoriesItems));
+        $this->assertCount(1, $catetoriesItems);
+
+        $item = $catetoriesItems[0];
+
+        $this->assertArrayHasKey('pagination', $item->getAttributes());
+        $this->assertArrayHasKey('term', $item->getAttributes());
+        $this->assertEquals('баш', $item->getAttributes()['term']);
+        $this->assertEquals('categories/bash/index.html', $item->getPath(Item::SNAPSHOT_PATH_RELATIVE));
+
+        $attributes = $post1->getAttributes();
+        $this->assertArrayHasKey('terms_url', $attributes);
+        $this->assertArrayHasKey('categories', $attributes['terms_url']);
+        $this->assertCount(3, $attributes['terms_url']['categories']);
+        $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['bash']);
+        $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['баШ']);
+        $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['баш']);
+    }
 }

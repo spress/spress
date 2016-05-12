@@ -183,7 +183,7 @@ class TaxonomyGenerator implements GeneratorInterface
 
     protected function normalizeTerm($term)
     {
-        return strtolower(trim($term));
+        return mb_strtolower($term, 'UTF-8');
     }
 
     protected function getAttributesResolver(ItemInterface $templateItem)

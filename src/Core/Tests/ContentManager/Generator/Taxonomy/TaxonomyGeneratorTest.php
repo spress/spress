@@ -104,9 +104,8 @@ class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
         $attributes = $post1->getAttributes();
         $this->assertArrayHasKey('terms_url', $attributes);
         $this->assertArrayHasKey('categories', $attributes['terms_url']);
-        $this->assertCount(3, $attributes['terms_url']['categories']);
+        $this->assertCount(2, $attributes['terms_url']['categories']);
         $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['bash']);
-        $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['баШ']);
         $this->assertEquals('/categories/bash', $attributes['terms_url']['categories']['баш']);
     }
 }

@@ -1,9 +1,9 @@
 Spress - PHP Static site generator
 ==============================
-[![Build Status](https://travis-ci.org/spress/Spress.svg?branch=master)](https://travis-ci.org/spress/Spress)
-[![Build status](https://ci.appveyor.com/api/projects/status/mjsjdgauj7ks3ogn/branch/master?svg=true)](https://ci.appveyor.com/project/yosymfony/spress/branch/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
+[![Build Status](https://travis-ci.org/spress/Spress.svg?branch=2.1)](https://travis-ci.org/spress/2.1)
+[![Build status](https://ci.appveyor.com/api/projects/status/mjsjdgauj7ks3ogn/branch/2.1?svg=true)](https://ci.appveyor.com/project/yosymfony/spress/branch/2.1)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=2.1)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.1)
+[![Code Coverage](https://scrutinizer-ci.com/g/spress/Spress/badges/coverage.png?b=2.1)](https://scrutinizer-ci.com/g/spress/Spress/?branch=2.1)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
 Spress is a static site generator built with Symfony components. See [demo](http://yosymfony.github.io/Spress-example/).

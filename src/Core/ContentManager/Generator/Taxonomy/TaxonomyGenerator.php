@@ -37,6 +37,10 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * e.g: for "categories" as taxonomy_attribute and "news" as term
  *  $attributes['terms_url']['categories']['news']
  *
+ * Notice that terms are normalized to lower case and then they are sluged. That means
+ * certain words from cyrillic languages for example, could point
+ * to the same normalized term. e.g: "bash", "баш" are pointing to "bash" term.
+ *
  * How to configure? (Front matter block of the template page):
  *
  * ---
@@ -61,6 +65,7 @@ class TaxonomyGenerator implements GeneratorInterface
     {
         $result = [];
         $taxonomyCollection = [];
+        $termCollection = [];
         $templateAttributes = $templateItem->getAttributes();
         $options = $this->getAttributesResolver($templateItem);
         $taxonomyAttribute = $options['taxonomy_attribute'];
@@ -86,22 +91,37 @@ class TaxonomyGenerator implements GeneratorInterface
                 }
 
                 $term = $this->normalizeTerm($term);
+                $slugedTerm = (new StringWrapper($term))->slug();
 
-                $taxonomyCollection[$term][] = $item;
+                if (isset($taxonomyCollection[$slugedTerm]) === false) {
+                    $taxonomyCollection[$slugedTerm] = [];
+                }
+
+                if (isset($termCollection[$slugedTerm]) === false) {
+                    $termCollection[$slugedTerm] = [];
+                }
+
+                if (in_array($item, $taxonomyCollection[$slugedTerm]) === false) {
+                    $taxonomyCollection[$slugedTerm][] = $item;
+                }
+
+                if (in_array($term, $termCollection[$slugedTerm]) === false) {
+                    $termCollection[$slugedTerm][] = $term;
+                }
             }
         }
 
-        foreach ($taxonomyCollection as $term => $items) {
-            $templateAttributes['provider'] = 'site.'.$term;
-            $templateAttributes['term'] = $term;
+        foreach ($taxonomyCollection as $slugedTerm => $items) {
+            $templateAttributes['provider'] = 'site.'.$slugedTerm;
+            $templateAttributes['term'] = $termCollection[$slugedTerm][0];
             $templateItem->setAttributes($templateAttributes);
-            $termPath = $this->getTermRelativePath($templatePath, $permalink, $term);
-            $templateItem->setPath($termPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
+            $slugedTermPath = $this->getTermRelativePath($templatePath, $permalink, $slugedTerm);
+            $templateItem->setPath($slugedTermPath, ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
             $paginationGenerator = new PaginationGenerator();
-            $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$term => $items]);
+            $itemsGenerated = $paginationGenerator->generateItems($templateItem, [$slugedTerm => $items]);
 
-            $this->setTermsPermalink($items, $taxonomyAttribute, $term, $termPath);
+            $this->setTermsPermalink($items, $taxonomyAttribute, $termCollection[$slugedTerm], $slugedTermPath);
 
             $result = array_merge($result, $itemsGenerated);
         }
@@ -109,7 +129,7 @@ class TaxonomyGenerator implements GeneratorInterface
         return $result;
     }
 
-    protected function setTermsPermalink(array $items, $taxonomyAttribute, $term, $termRelativePath)
+    protected function setTermsPermalink(array $items, $taxonomyAttribute, array $terms, $termRelativePath)
     {
         foreach ($items as $item) {
             $attributes = $item->getAttributes();
@@ -122,7 +142,11 @@ class TaxonomyGenerator implements GeneratorInterface
                 $attributes['term_urls'][$taxonomyAttribute] = [];
             }
 
-            $attributes['terms_url'][$taxonomyAttribute][$term] = $this->getTermPermalink($termRelativePath);
+            $slugedTermPermalink = $this->getTermPermalink($termRelativePath);
+
+            foreach ($terms as $term) {
+                $attributes['terms_url'][$taxonomyAttribute][$term] = $slugedTermPermalink;
+            }
 
             $item->setAttributes($attributes);
         }
@@ -159,7 +183,7 @@ class TaxonomyGenerator implements GeneratorInterface
 
     protected function normalizeTerm($term)
     {
-        return strtolower(trim($term));
+        return (new StringWrapper($term))->lower();
     }
 
     protected function getAttributesResolver(ItemInterface $templateItem)

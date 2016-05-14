@@ -165,6 +165,26 @@ class StringWrapper
     }
 
     /**
+     * Convert the given string to lower-case.
+     *
+     * @return string
+     */
+    public function lower()
+    {
+        return mb_strtolower($this->str, 'UTF-8');
+    }
+
+    /**
+     * Convert the given string to upper-case.
+     *
+     * @return string
+     */
+    public function upper()
+    {
+        return mb_strtoupper($this->str, 'UTF-8');
+    }
+
+    /**
      * Returns the string wrapped.
      *
      * @return string The current value of the wrapper.

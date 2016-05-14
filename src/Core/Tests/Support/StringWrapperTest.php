@@ -78,6 +78,27 @@ class StringWrapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Welcome to Spress', $str->deleteSufix(''));
     }
 
+    public function testLower()
+    {
+        $str = new StringWrapper('ESPAÑA');
+
+        $this->assertEquals('españa', $str->lower());
+    }
+
+    public function testLowerCyrillic()
+    {
+        $str = new StringWrapper('баШ');
+
+        $this->assertEquals('баш', $str->lower());
+    }
+
+    public function testUpper()
+    {
+        $str = new StringWrapper('foo');
+
+        $this->assertEquals('FOO', $str->upper());
+    }
+
     public function testToAscii()
     {
         $str = new StringWrapper('camión');

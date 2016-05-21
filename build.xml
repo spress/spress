@@ -51,7 +51,7 @@
     </target>
 
     <target name="install-vendors">
-        <exec passthru="true" command="${cmd.composer} intall --optimize-autoloader --no-dev" checkreturn="true"/>
+        <exec passthru="true" command="${cmd.composer} install --optimize-autoloader --no-dev" checkreturn="true"/>
     </target>
 
     <target name="update-vendors">

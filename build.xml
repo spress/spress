@@ -8,7 +8,7 @@
         <exec passthru="true" command="phpunit" checkReturn="true" />
     </target>
 
-    <target name="deploy" depends="check-git-branch-status,prepare,clean-vendors,update-vendors,test,package-phar,package-zip" />
+    <target name="deploy" depends="check-git-branch-status,prepare,clean-vendors,install-vendors,test,package-phar,package-zip" />
 
     <target name="package-phar">
         <echo msg="Creating a phar file" />
@@ -50,11 +50,11 @@
         <exec passthru="true" command="open ${dir.output}/coverage/index.html" />
     </target>
 
-    <target name="update-vendors">
-        <exec passthru="true" command="${cmd.composer} update --no-dev" checkreturn="true"/>
+    <target name="install-vendors">
+        <exec passthru="true" command="${cmd.composer} install --optimize-autoloader --no-dev" checkreturn="true"/>
     </target>
 
-    <target name="update-vendors-dev">
+    <target name="update-vendors">
         <exec passthru="true" command="${cmd.composer} update" checkreturn="true"/>
     </target>
 

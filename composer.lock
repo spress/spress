@@ -70,19 +70,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "d401f6e95cca835d165c61648327fc1fa062ba31"
+                "reference": "06c45623d76457562cecbcf2245f904aa0f63a87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/d401f6e95cca835d165c61648327fc1fa062ba31",
-                "reference": "d401f6e95cca835d165c61648327fc1fa062ba31",
+                "url": "https://api.github.com/repos/composer/composer/zipball/06c45623d76457562cecbcf2245f904aa0f63a87",
+                "reference": "06c45623d76457562cecbcf2245f904aa0f63a87",
                 "shasum": ""
             },
             "require": {
                 "composer/ca-bundle": "^1.0",
                 "composer/semver": "^1.0",
                 "composer/spdx-licenses": "^1.0",
-                "justinrainbow/json-schema": "^1.6",
+                "justinrainbow/json-schema": "^1.6 || ^2.0",
                 "php": "^5.3.2 || ^7.0",
                 "psr/log": "^1.0",
                 "seld/cli-prompt": "^1.0",
@@ -95,7 +95,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.5 || ^5.0.5",
-                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+                "phpunit/phpunit-mock-objects": "^2.3 || ^3.0"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -139,7 +139,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-05-19 18:44:43"
+            "time": "2016-05-26 16:11:16"
         },
         {
             "name": "composer/semver",
@@ -579,19 +579,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "61a95a151aac86eaa9bbd31311d3d12a78c971b8"
+                "reference": "5c133a3e336c2b35a4233f5da4cc15f083ea128d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/61a95a151aac86eaa9bbd31311d3d12a78c971b8",
-                "reference": "61a95a151aac86eaa9bbd31311d3d12a78c971b8",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/5c133a3e336c2b35a4233f5da4cc15f083ea128d",
+                "reference": "5c133a3e336c2b35a4233f5da4cc15f083ea128d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "json-schema/json-schema-test-suite": "1.1.0",
+                "json-schema/json-schema-test-suite": "1.2.0",
                 "phpdocumentor/phpdocumentor": "~2",
                 "phpunit/phpunit": "^4.8.22"
             },
@@ -601,7 +601,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -637,7 +637,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2016-03-30 21:06:40"
+            "time": "2016-05-24 17:38:18"
         },
         {
             "name": "michelf/php-markdown",
@@ -1306,12 +1306,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "c723ceb8d7303861d5fc788f0c406d5922e69d31"
+                "reference": "d6280ed81e44e321e64389b8d80f249a1e7d5f3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/c723ceb8d7303861d5fc788f0c406d5922e69d31",
-                "reference": "c723ceb8d7303861d5fc788f0c406d5922e69d31",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d6280ed81e44e321e64389b8d80f249a1e7d5f3d",
+                "reference": "d6280ed81e44e321e64389b8d80f249a1e7d5f3d",
                 "shasum": ""
             },
             "require": {
@@ -1357,7 +1357,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-13 15:28:37"
+            "time": "2016-05-26 08:21:12"
         },
         {
             "name": "symfony/debug",
@@ -1365,12 +1365,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "d8009e5ad74d0bac78208989bd404310bc7c82f8"
+                "reference": "2a1b327f5faf7bc06fc079737b4416d5f6c9a34f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/d8009e5ad74d0bac78208989bd404310bc7c82f8",
-                "reference": "d8009e5ad74d0bac78208989bd404310bc7c82f8",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/2a1b327f5faf7bc06fc079737b4416d5f6c9a34f",
+                "reference": "2a1b327f5faf7bc06fc079737b4416d5f6c9a34f",
                 "shasum": ""
             },
             "require": {
@@ -1414,7 +1414,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-12 15:20:14"
+            "time": "2016-05-24 10:00:02"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1718,12 +1718,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594"
+                "reference": "67f0d2b927796648c5c38cedb7a2c8f1cf14e7dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/dff51f72b0706335131b00a7f49606168c582594",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/67f0d2b927796648c5c38cedb7a2c8f1cf14e7dc",
+                "reference": "67f0d2b927796648c5c38cedb7a2c8f1cf14e7dc",
                 "shasum": ""
             },
             "require": {
@@ -1769,7 +1769,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-05-26 01:13:28"
         },
         {
             "name": "symfony/process",
@@ -1826,12 +1826,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "e9877e0c01cdb4f3daf04784b2a8315ee8cb5b68"
+                "reference": "507901b20d4bdd70d0a85d6f746d4d2dd317e03a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/e9877e0c01cdb4f3daf04784b2a8315ee8cb5b68",
-                "reference": "e9877e0c01cdb4f3daf04784b2a8315ee8cb5b68",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/507901b20d4bdd70d0a85d6f746d4d2dd317e03a",
+                "reference": "507901b20d4bdd70d0a85d6f746d4d2dd317e03a",
                 "shasum": ""
             },
             "require": {
@@ -1867,7 +1867,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:52:28"
+            "time": "2016-05-24 09:57:18"
         },
         {
             "name": "twig/twig",
@@ -2205,12 +2205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa"
+                "reference": "f9a8140d6cf86514a64fb3b637e716008e1885d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa",
-                "reference": "7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/f9a8140d6cf86514a64fb3b637e716008e1885d0",
+                "reference": "f9a8140d6cf86514a64fb3b637e716008e1885d0",
                 "shasum": ""
             },
             "require": {
@@ -2259,7 +2259,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-05-09 09:25:40"
+            "time": "2016-05-27 08:33:35"
         },
         {
             "name": "phpunit/php-code-coverage",

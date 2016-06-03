@@ -67,7 +67,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
 
         $itemAttributes = $items['posts/2016-02-02-spress-2.1.1-released.md']->getAttributes();
         $this->assertArrayHasKey('title_path', $itemAttributes);
-        $this->assertEquals('spress 2.1.1 released', $itemAttributes['title_path']);
+        $this->assertEquals('spress-2.1.1-released', $itemAttributes['title_path']);
 
         $itemAttributes = $items['posts/2013-08-12-post-example-1.md']->getAttributes();
         $this->assertCount(10, $itemAttributes);

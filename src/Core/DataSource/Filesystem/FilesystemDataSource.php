@@ -235,10 +235,10 @@ class FilesystemDataSource extends AbstractDataSource
         $attributes['extension'] = $fileInfo->getExtension();
 
         if ($data = $this->isDateFilename($attributes['filename'])) {
-            $attributes['title_path'] = implode(' ', explode('-', $data[3]));
+            $attributes['title_path'] = $data[3];
 
             if (isset($attributes['title']) === false) {
-                $attributes['title'] = $attributes['title_path'];
+                $attributes['title'] = implode(' ', explode('-', $attributes['title_path']));
             }
 
             if (isset($attributes['date']) === false) {
@@ -282,7 +282,7 @@ class FilesystemDataSource extends AbstractDataSource
 
         return $dt->format(\DateTime::ISO8601);
     }
-    
+
     private function getAttributesFilename(splfileinfo $file)
     {
         $relativePathname = $this->normalizeDirSeparator($file->getRelativePathname());

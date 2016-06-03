@@ -26,7 +26,7 @@ class CollectionManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionForItems()
     {
         $cm = new CollectionManager();
-        $cm->getCollectionItemCollection()->add('events',new Collection('events', 'events'));
+        $cm->getCollectionItemCollection()->add('events', new Collection('events', 'events'));
         $cm->getCollectionItemCollection()->add('books', new Collection('books', 'books'));
 
         $item = new Item('Test of content', 'events/event-1.html');

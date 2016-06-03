@@ -303,7 +303,7 @@ class SiteBuildCommand extends Command
 
     /**
      * Write the result of rebuilding a site.
-     * 
+     *
      * @param Yosymfony\Spress\IO\ConsoleIO $io
      * @param array                         $newResources
      * @param array                         $updatedResources

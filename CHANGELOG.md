@@ -1,6 +1,11 @@
 CHANGELOG for 2.x
 =================
-## 2.1.2
+## 2.1.3
+* [New] Class `FileInfo` has been added to the support classes of the core.
+* [Fixed] Fixed the truncated `title_path` attribute when the filename contains dots before the extension. More details in bug #88.
+* [Fixed] The value of `title_path` is not altered when it is parsed by `FilesystemDataSource` class. More details in bug #88.
+
+## 2.1.2 (2016-05-23)
 * [New] Two new methods have been added to StringWrapper class: `lower` and `upper`.
 * [Fixed] Bug #80 has been fixed: "Composer install fails if no namespace is specified in new plugin". See PR #81.
 * [Fixed] Bug #82 has been fixed: "Substr "---" in yaml string cause builder crash".
@@ -17,7 +22,7 @@ CHANGELOG for 2.x
 * [New] Support to extends TwigRenderizer with tags. See PR #65.
 * [New] Each item of a sorted collection has `next` and `prior` relationships. At compile time, you have access to these through `page.relationships.next` and `page.relationships.prior` variables. See feature #69.
 * [New] Relationship collection for items. A new class has been added: `RelationshipCollection`. A new method getRelationshipCollection has been added to `ItemIterface`.
-* [New] `MirrorConverter` class has been replaced by `MapConverter`. See feature #73. Fixed ticket: #28 "Support .twig extention". 
+* [New] `MirrorConverter` class has been replaced by `MapConverter`. See feature #73. Fixed ticket: #28 "Support .twig extention".
 * [New] Added `ItemCollection` class to Core support classes.
 * [New] Added `getCollections` method in `CollectionManager` class.
 * [New] Added `clearConverter` and `countConverter` methods in `ConverterManager` class.

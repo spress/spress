@@ -22,7 +22,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * TaxonomyGenerator lets you group items around a term.
  * This generator uses PaginationGenerator for generating
  * multiples pages for each term. This means that
- * PaginationGenerator's attributes are available with 
+ * PaginationGenerator's attributes are available with
  * TaxonomyGenerator.
  *
  * Example of URLs generated:

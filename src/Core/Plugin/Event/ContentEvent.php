@@ -22,7 +22,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  *   - "spress.after_convert".
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class ContentEvent extends Event

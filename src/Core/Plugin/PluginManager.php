@@ -27,7 +27,7 @@ class PluginManager
 
     /**
      * Constructor.
-     * 
+     *
      * @param EventDispatcher $eventDispatcher The event dispatcher.
      */
     public function __construct(EventDispatcher $eventDispatcher)
@@ -53,7 +53,7 @@ class PluginManager
 
     /**
      * Gets the plugin collection.
-     * 
+     *
      * @return Yosymfony\Spress\Core\Support\Collection The plugin collection.
      */
     public function getPluginCollection()

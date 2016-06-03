@@ -16,12 +16,13 @@ use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
+use Yosymfony\Spress\Core\Support\FileInfo;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
  * Filesystem data source. Binary items don’t have their content
  * loaded in-memory. getPath method returns the path to the binary filename.
- * 
+ *
  * The directory separator is '/' in any case.
  *
  * Source-root structure:
@@ -227,15 +228,17 @@ class FilesystemDataSource extends AbstractDataSource
             $item->setContent($content, Item::SNAPSHOT_RAW);
         }
 
-        $attributes['mtime'] = $this->getModifiedTime($file);
-        $attributes['filename'] = $file->getFilename();
-        $attributes['extension'] = $file->getExtension();
+        $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
 
-        if ($data = $this->isDateFilename($file)) {
-            $attributes['title_path'] = implode(' ', explode('-', $data[3]));
+        $attributes['mtime'] = $this->getModifiedTime($file);
+        $attributes['filename'] = $fileInfo->getFilename();
+        $attributes['extension'] = $fileInfo->getExtension();
+
+        if ($data = $this->isDateFilename($attributes['filename'])) {
+            $attributes['title_path'] = $data[3];
 
             if (isset($attributes['title']) === false) {
-                $attributes['title'] = $attributes['title_path'];
+                $attributes['title'] = implode(' ', explode('-', $attributes['title_path']));
             }
 
             if (isset($attributes['date']) === false) {
@@ -260,16 +263,14 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function isBinary(SplFileInfo $file)
     {
-        $ext = $file->getExtension();
+        $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
 
-        return false === in_array($ext, $this->params['text_extensions']);
+        return false === $fileInfo->hasPredefinedExtension();
     }
 
-    private function isDateFilename(SplFileInfo $file)
+    private function isDateFilename($filename)
     {
-        $filename = $this->normalizeDirSeparator($file->getFilename());
-
-        if (preg_match('/(\d{4})-(\d{2})-(\d{2})-(.+?)(\.[^\.]+|\.[^\.]+\.[^\.]+)$/', $filename, $matches)) {
+        if (preg_match('/(\d{4})-(\d{2})-(\d{2})-(.+?)$/', $filename, $matches)) {
             return [$matches[1], $matches[2], $matches[3], $matches[4]];
         }
     }

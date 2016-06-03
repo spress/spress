@@ -26,7 +26,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $name The name of the plugin.
      */
     public function __construct($name)
@@ -55,7 +55,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the metadata of the plugin.
-     * 
+     *
      * @param array $metas
      */
     public function setMetas(array $metas)
@@ -65,7 +65,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.start" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToStartEvent(callable $listener)
@@ -75,7 +75,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.before_convert" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToBeforeConvertEvent(callable $listener)
@@ -85,7 +85,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.after_convert" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToAfterConvertEvent(callable $listener)
@@ -95,7 +95,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.before_render_blocks" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToBeforeRenderBlocksEvent(callable $listener)
@@ -105,7 +105,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.after_render_blocks" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToAfterRenderBlocksEvent(callable $listener)
@@ -115,7 +115,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.before_render_page" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToBeforeRenderPageEvent(callable $listener)
@@ -125,7 +125,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.after_render_page" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToAfterRenderPageEvent(callable $listener)
@@ -135,7 +135,7 @@ class PluginTester implements PluginInterface
 
     /**
      * Set the listener to "spress.finish" event.
-     * 
+     *
      * @param callable $listener
      */
     public function setListenerToFinishEvent(callable $listener)

@@ -17,7 +17,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  * Iterface for a data writer.
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface DataWriterInterface

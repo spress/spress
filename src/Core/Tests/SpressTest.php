@@ -25,7 +25,7 @@ class SpressTest extends \PHPUnit_Framework_TestCase
         $spress['spress.dataWriter'] = $dw;
         $spress->parse();
 
-        $this->assertCount(15, $dw->getItems());
+        $this->assertCount(17, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('about/index.html'));
         $this->assertTrue($dw->hasItem('pages/index.html'));
@@ -46,7 +46,7 @@ class SpressTest extends \PHPUnit_Framework_TestCase
         $spress['spress.dataWriter'] = $dw;
         $spress->parse();
 
-        $this->assertCount(16, $dw->getItems());
+        $this->assertCount(18, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
 
@@ -63,7 +63,7 @@ class SpressTest extends \PHPUnit_Framework_TestCase
         $spress['spress.dataWriter'] = $dw;
         $spress->parse();
 
-        $this->assertCount(14, $dw->getItems());
+        $this->assertCount(16, $dw->getItems());
     }
 
     public function testReParseSite()
@@ -76,10 +76,10 @@ class SpressTest extends \PHPUnit_Framework_TestCase
 
         $spress->parse();
 
-        $this->assertCount(15, $dw->getItems());
+        $this->assertCount(17, $dw->getItems());
 
         $spress->parse();
 
-        $this->assertCount(15, $dw->getItems());
+        $this->assertCount(17, $dw->getItems());
     }
 }

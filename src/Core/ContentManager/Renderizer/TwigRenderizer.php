@@ -200,10 +200,10 @@ class TwigRenderizer implements RenderizerInterface
 
     /**
      * Get the value of layout attribute.
-     * 
+     *
      * @param array  $attributes  List of attributes.
      * @param string $contentName The identifier of the content.
-     * 
+     *
      * @return string
      */
     protected function getLayoutAttribute(array $attributes, $contentName)
@@ -225,9 +225,9 @@ class TwigRenderizer implements RenderizerInterface
 
     /**
      * Gets the layout name with the namespace prefix.
-     * 
+     *
      * @param string $name The layout name.
-     * 
+     *
      * @return string
      */
     protected function getLayoutNameWithNamespace($name)

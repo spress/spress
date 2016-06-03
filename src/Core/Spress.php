@@ -46,7 +46,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  *  - "spress.cms.converterManager.converters" (array) List of predefined converters.
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class Spress extends Container
@@ -168,7 +168,7 @@ class Spress extends Container
         };
 
         $this['spress.io'] = function ($c) {
-                return new NullIO();
+            return new NullIO();
         };
 
         $this['spress.plugin.classLoader'] = function ($c) {

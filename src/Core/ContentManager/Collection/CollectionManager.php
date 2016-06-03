@@ -35,7 +35,7 @@ class CollectionManager
 
     /**
      * Gets the collection-item collection.
-     * 
+     *
      * @return Yosymfony\Spress\Core\Support\Collection The collection.
      */
     public function getCollectionItemCollection()

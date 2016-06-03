@@ -24,19 +24,19 @@ interface CommandEnvironmentInterface
      * Returns true if the command exists, false otherwise.
      *
      * This method must be used inside of executeCommand method implementation.
-     * 
+     *
      * @param string $name The name of the command. e.g: "site:build".
-     * 
+     *
      * @return bool
      */
     public function hasCommand($name);
 
     /**
      * Runs a command.
-     * 
+     *
      * @param string $commandName The name of the command. e.g: "site:build".
      * @param array  $arguments   The arguments.
-     * 
+     *
      * @return int The command exit code.
      *
      * @throws Yosymfony\Spress\Plugin\Environment\CommandNotFoundException When command name is incorrect.

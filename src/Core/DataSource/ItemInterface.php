@@ -15,7 +15,7 @@ namespace Yosymfony\Spress\Core\DataSource;
  * Iterface for a data item.
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 interface ItemInterface
@@ -139,7 +139,7 @@ interface ItemInterface
 
     /**
      * Gets the RelationshipCollection instance associated with this item.
-     * 
+     *
      * @return RelationshipCollection A RelationshipCollection instance.
      */
     public function getRelationshipCollection();

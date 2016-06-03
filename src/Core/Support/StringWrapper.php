@@ -116,10 +116,10 @@ class StringWrapper
     /**
      * Gets the first element of the argument matching with
      * the ends of the string.
-     * 
+     *
      * @param array $strings List of strings.
-     * 
-     * @return string The first element or empty string if no matching found.  
+     *
+     * @return string The first element or empty string if no matching found.
      */
     public function getFirstEndMatch(array $strings)
     {

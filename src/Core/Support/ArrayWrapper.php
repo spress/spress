@@ -308,7 +308,7 @@ class ArrayWrapper
      *                             You can to escape a dot in a key surrendering with brackets: "[.]".
      * @param int    $options      See sort_flags at http://php.net/manual/es/function.sort.php
      * @param bool   $isDescending
-     * 
+     *
      * @return array
      */
     public function sortBy(callable $callback, $key = null, $options = SORT_REGULAR, $isDescending = false)

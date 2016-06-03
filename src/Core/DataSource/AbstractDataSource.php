@@ -17,7 +17,7 @@ namespace Yosymfony\Spress\Core\DataSource;
  * Data sources can load site data from certain locations.
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 abstract class AbstractDataSource

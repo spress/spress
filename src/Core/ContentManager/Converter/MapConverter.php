@@ -26,9 +26,9 @@ class MapConverter implements ConverterInterface
 
     /**
      * Constructor.
-     * 
+     *
      * @param array $fileExtensionMap An extension map. e.g:
-     * 
+     *
      * ```php
      * $converter = new MappingConverter([
      *   'twig'      => 'html',

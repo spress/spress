@@ -24,7 +24,7 @@ class ServerResponse
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $content     Content of the response.
      * @param int    $statusCode  The status code.
      * @param string $contentType The MIME type.
@@ -38,7 +38,7 @@ class ServerResponse
 
     /**
      * Set the content of the response.
-     * 
+     *
      * @param string $content
      */
     public function setContent($content)
@@ -48,7 +48,7 @@ class ServerResponse
 
     /**
      * Get the content of the response.
-     * 
+     *
      * @return string
      */
     public function getContent()
@@ -58,7 +58,7 @@ class ServerResponse
 
     /**
      * Set the status code. e.g: 200 for ok response.
-     * 
+     *
      * @param int $code
      */
     public function setStatusCode($code)
@@ -68,7 +68,7 @@ class ServerResponse
 
     /**
      * Get the status code.
-     * 
+     *
      * @return int
      */
     public function getStatusCode()
@@ -78,7 +78,7 @@ class ServerResponse
 
     /**
      * Set the MIME type. e.g: 'text/html'.
-     * 
+     *
      * @param string $type
      */
     public function setContentType($type)
@@ -88,7 +88,7 @@ class ServerResponse
 
     /**
      * Get the MIME type.
-     * 
+     *
      * @return string
      */
     public function getContentType()

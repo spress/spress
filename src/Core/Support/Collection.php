@@ -22,7 +22,7 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * Constructor.
-     * 
+     *
      * @param array $elements Elements.
      */
     public function __construct(array $elements = [])
@@ -83,7 +83,7 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * Gets the keys registered in this collection.
-     * 
+     *
      * @return array
      */
     public function keys()

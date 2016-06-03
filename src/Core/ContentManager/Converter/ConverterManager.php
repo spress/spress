@@ -96,9 +96,9 @@ class ConverterManager
 
     /**
      * Converts an item. This method uses the SNAPSHOT_PATH_RELATIVE of Item path.
-     * 
+     *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item The item.
-     * 
+     *
      * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
      *
      * @throws RuntimeException If there's no converter for the extension passed.

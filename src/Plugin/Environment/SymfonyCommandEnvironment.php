@@ -27,7 +27,7 @@ class SymfonyCommandEnvironment implements CommandEnvironmentInterface
 
     /**
      * Constructor.
-     * 
+     *
      * @param Symfony\Component\Console\Command\Command        $symfonyCommand The Symfony Console command.
      * @param Symfony\Component\Console\Output\OutputInterface $output         The output.
      */
@@ -68,7 +68,7 @@ class SymfonyCommandEnvironment implements CommandEnvironmentInterface
 
     /**
      * Gets the Symfony Console application.
-     * 
+     *
      * @return Symfony\Component\Console\Application The Symfony Console application.
      *
      * @throws \LogicException If Symfony Console application is not set up.

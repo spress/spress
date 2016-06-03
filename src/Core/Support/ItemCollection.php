@@ -49,7 +49,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Adds an new item.
-     * 
+     *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
      * @throws \RuntimeException If the item has been registered previously with the same id.
@@ -65,7 +65,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Sets an item.
-     * 
+     *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item has been registered previously in another collection.
@@ -101,9 +101,9 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Gets an item.
-     * 
+     *
      * @param string $id The identifier of the item.
-     * 
+     *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface
      *
      * @throws \RuntimeException If the item was not found.
@@ -131,11 +131,11 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Returns all items in this collection.
-     * 
-     * @param string[] $collections       The name of the item collections affected. 
+     *
+     * @param string[] $collections       The name of the item collections affected.
      *                                    Array empty means all.
      * @param bool     $groupByCollection First level of array is the collection name.
-     * 
+     *
      * @return array
      */
     public function all(array $collections = [], $groupByCollection = false)
@@ -170,13 +170,13 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Sorts items in this collection.
      * e.g:.
-     * 
+     *
      * ```
      * $itemCollection = new ItemCollection();
      * // warm-up...
      * $items = $itemCollection->sortItems('date', true)->all();
      * ```
-     * 
+     *
      * @param string   $attribute   The name of the attribute used to sort.
      * @param bool     $descending  Is descending sort?
      * @param string[] $collections Only the items belong to Collections will be affected.
@@ -210,7 +210,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
 
     /**
      * Removes an item.
-     * 
+     *
      * @param string $id The identifier of the item.
      */
     public function remove($id)

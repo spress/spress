@@ -23,7 +23,7 @@ use Yosymfony\Spress\Core\DataSource\ItemInterface;
  *   "spress.after_render_page".
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class RenderEvent extends ContentEvent

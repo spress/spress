@@ -37,14 +37,22 @@ class PluginTesterTest extends \PHPUnit_Framework_TestCase
         $plugin = new PluginTester('acme');
         $eventSubscriber = new EventSubscriber();
 
-        $plugin->setListenerToStartEvent(function ($event) {});
-        $plugin->setListenerToBeforeConvertEvent(function ($event) {});
-        $plugin->setListenerToAfterConvertEvent(function ($event) {});
-        $plugin->setListenerToBeforeRenderBlocksEvent(function ($event) {});
-        $plugin->setListenerToAfterRenderBlocksEvent(function ($event) {});
-        $plugin->setListenerToBeforeRenderPageEvent(function ($event) {});
-        $plugin->setListenerToAfterRenderPageEvent(function ($event) {});
-        $plugin->setListenerToFinishEvent(function ($event) {});
+        $plugin->setListenerToStartEvent(function ($event) {
+        });
+        $plugin->setListenerToBeforeConvertEvent(function ($event) {
+        });
+        $plugin->setListenerToAfterConvertEvent(function ($event) {
+        });
+        $plugin->setListenerToBeforeRenderBlocksEvent(function ($event) {
+        });
+        $plugin->setListenerToAfterRenderBlocksEvent(function ($event) {
+        });
+        $plugin->setListenerToBeforeRenderPageEvent(function ($event) {
+        });
+        $plugin->setListenerToAfterRenderPageEvent(function ($event) {
+        });
+        $plugin->setListenerToFinishEvent(function ($event) {
+        });
 
         $plugin->initialize($eventSubscriber);
 

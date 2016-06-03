@@ -44,14 +44,14 @@ interface CommandPluginInterface extends PluginInterface
 
     /**
      * Sets the command environment.
-     * 
+     *
      * @param Yosymfony\Spress\Plugin\Environment\CommandEnvironmentInterface $environment The environment.
      */
     public function setCommandEnvironment(CommandEnvironmentInterface $environment);
 
     /**
      * Gets the command environment.
-     * 
+     *
      * @return Yosymfony\Spress\Plugin\Environment\CommandEnvironmentInterface
      */
     public function getCommandEnvironment();

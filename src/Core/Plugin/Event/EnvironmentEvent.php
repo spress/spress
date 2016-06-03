@@ -26,7 +26,7 @@ use Yosymfony\Spress\Core\IO\IOInterface;
  *   - "spress.start".
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class EnvironmentEvent extends Event
@@ -41,7 +41,7 @@ class EnvironmentEvent extends Event
 
     /**
      * Constructor.
-     * 
+     *
      * @param DataSourceManager   $dataSourceManager
      * @param DataWriterInterface $dataWriter
      * @param ConverterManager    $converterManager
@@ -90,7 +90,7 @@ class EnvironmentEvent extends Event
 
     /**
      * Gets the generator manager.
-     * 
+     *
      * @return Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager
      */
     public function getGeneratorManager()

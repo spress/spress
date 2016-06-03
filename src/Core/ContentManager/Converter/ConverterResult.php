@@ -60,7 +60,7 @@ class ConverterResult
 
     /**
      * The input extension.
-     * 
+     *
      * @return string
      */
     public function getInputExtension()

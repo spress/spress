@@ -12,11 +12,11 @@
 namespace Yosymfony\Spress\Core\DataSource;
 
 /**
- * A RelationshipCollection represents a set of relationships of 
+ * A RelationshipCollection represents a set of relationships of
  * objects that implements ItemInterface.
  *
  * @api
- * 
+ *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class RelationshipCollection implements \IteratorAggregate, \Countable

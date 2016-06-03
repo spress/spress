@@ -1,7 +1,8 @@
 CHANGELOG for 2.x
 =================
 ## 2.1.3
-* [New] Class `FileInfo` has been added to support classes of the core. 
+* [New] Class `FileInfo` has been added to the support classes of the core.
+* [Fixed] Fixed the truncated `title_path` attribute when the filename contains dots before the extension. More details in bug #88.
 
 ## 2.1.2 (2016-05-23)
 * [New] Two new methods have been added to StringWrapper class: `lower` and `upper`.

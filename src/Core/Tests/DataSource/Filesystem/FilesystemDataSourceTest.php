@@ -43,7 +43,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($layouts));
         $this->assertTrue(is_array($includes));
 
-        $this->assertCount(12, $items);
+        $this->assertCount(13, $items);
         $this->assertCount(1, $layouts);
         $this->assertCount(1, $includes);
 
@@ -57,12 +57,17 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sitemap.xml', $items);
         $this->assertArrayHasKey('posts/2013-08-12-post-example-1.md', $items);
         $this->assertArrayHasKey('posts/2013-08-12-post-example-2.mkd', $items);
+        $this->assertArrayHasKey('posts/2016-02-02-spress-2.1.1-released.md', $items);
         $this->assertArrayHasKey('posts/books/2013-08-11-best-book.md', $items);
         $this->assertArrayHasKey('posts/books/2013-09-19-new-book.md', $items);
 
         $itemAttributes = $items['about/index.html']->getAttributes();
         $this->assertCount(4, $itemAttributes);
         $this->assertEquals('default', $itemAttributes['layout']);
+
+        $itemAttributes = $items['posts/2016-02-02-spress-2.1.1-released.md']->getAttributes();
+        $this->assertArrayHasKey('title_path', $itemAttributes);
+        $this->assertEquals('spress 2.1.1 released', $itemAttributes['title_path']);
 
         $itemAttributes = $items['posts/2013-08-12-post-example-1.md']->getAttributes();
         $this->assertCount(10, $itemAttributes);
@@ -108,7 +113,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
-        $this->assertCount(13, $fsDataSource->getItems());
+        $this->assertCount(14, $fsDataSource->getItems());
     }
 
     public function testIncludeFolder()
@@ -120,7 +125,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(14, $fsDataSource->getItems());
+        $this->assertCount(15, $fsDataSource->getItems());
     }
 
     public function testExcludeFile()
@@ -132,7 +137,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(11, $fsDataSource->getItems());
+        $this->assertCount(12, $fsDataSource->getItems());
     }
 
     public function testExcludeFolder()
@@ -144,7 +149,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(10, $fsDataSource->getItems());
+        $this->assertCount(11, $fsDataSource->getItems());
     }
 
     /**

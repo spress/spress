@@ -68,7 +68,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw, [$testPlugin]);
         $cm->parseSite($attributes, $spressAttributes);
 
-        $this->assertCount(14, $dw->getItems());
+        $this->assertCount(16, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('about/index.html'));
         $this->assertTrue($dw->hasItem('about/me/index.html'));
@@ -84,6 +84,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($dw->hasItem('pages/page2/index.html'));
         $this->assertTrue($dw->hasItem('pages/page3/index.html'));
         $this->assertTrue($dw->hasItem('pages/page4/index.html'));
+        $this->assertTrue($dw->hasItem('2016/02/02/spress-2-1-1-released/index.html'));
 
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('about/index.html')->getContent());
         $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/index.html')->getContent());
@@ -102,7 +103,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw);
         $cm->parseSite([], [], true);
 
-        $this->assertCount(15, $dw->getItems());
+        $this->assertCount(17, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
 
@@ -129,31 +130,59 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $cm->parseSite([], [], true);
 
         $item = $dw->getItem('category-1/category-2/2020/01/01/new-post-example/index.html');
-
         $relationshipCollection = $item->getRelationshipCollection();
 
         $this->assertEquals(1, $relationshipCollection->count());
         $this->assertEquals(1, count($relationshipCollection->get('next')));
 
-        $nextItem = current($relationshipCollection->get('next'));
-
-        $this->assertEquals('posts/books/2013-09-19-new-book.md', $nextItem->getId());
-
-        $item = $dw->getItem('books/2013/09/19/new-book/index.html');
-
+        $item = current($relationshipCollection->get('next'));
         $relationshipCollection = $item->getRelationshipCollection();
 
+        $this->assertEquals('posts/2016-02-02-spress-2.1.1-released.md', $item->getId());
         $this->assertEquals(2, $relationshipCollection->count());
         $this->assertEquals(1, count($relationshipCollection->get('prior')));
         $this->assertEquals(1, count($relationshipCollection->get('next')));
 
+        $nextItem = current($relationshipCollection->get('next'));
         $priorItem = current($relationshipCollection->get('prior'));
 
+        $this->assertEquals('posts/books/2013-09-19-new-book.md', $nextItem->getId());
         $this->assertEquals('posts/2013-08-12-post-example-1.md', $priorItem->getId());
 
+        $item = current($relationshipCollection->get('next'));
+        $relationshipCollection = $item->getRelationshipCollection();
+
+        $this->assertEquals('posts/books/2013-09-19-new-book.md', $item->getId());
+        $this->assertEquals(2, $relationshipCollection->count());
+        $this->assertEquals(1, count($relationshipCollection->get('prior')));
+        $this->assertEquals(1, count($relationshipCollection->get('next')));
+
         $nextItem = current($relationshipCollection->get('next'));
+        $priorItem = current($relationshipCollection->get('prior'));
 
         $this->assertEquals('posts/2013-08-12-post-example-2.mkd', $nextItem->getId());
+        $this->assertEquals('posts/2016-02-02-spress-2.1.1-released.md', $priorItem->getId());
+
+        $item = current($relationshipCollection->get('next'));
+        $relationshipCollection = $item->getRelationshipCollection();
+
+        $this->assertEquals('posts/2013-08-12-post-example-2.mkd', $item->getId());
+        $this->assertEquals(2, $relationshipCollection->count());
+        $this->assertEquals(1, count($relationshipCollection->get('prior')));
+        $this->assertEquals(1, count($relationshipCollection->get('next')));
+
+        $nextItem = current($relationshipCollection->get('next'));
+        $priorItem = current($relationshipCollection->get('prior'));
+
+        $this->assertEquals('posts/books/2013-08-11-best-book.md', $nextItem->getId());
+        $this->assertEquals('posts/books/2013-09-19-new-book.md', $priorItem->getId());
+
+        $item = current($relationshipCollection->get('next'));
+        $relationshipCollection = $item->getRelationshipCollection();
+
+        $this->assertEquals('posts/books/2013-08-11-best-book.md', $item->getId());
+        $this->assertEquals(1, $relationshipCollection->count());
+        $this->assertEquals(1, count($relationshipCollection->get('prior')));
     }
 
     public function testMultipleExtension()

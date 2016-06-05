@@ -4,6 +4,7 @@ CHANGELOG for 2.x
 * [New] Class `FileInfo` has been added to the support classes of the core.
 * [Fixed] Fixed the truncated `title_path` attribute when the filename contains dots before the extension. More details in bug #88.
 * [Fixed] The value of `title_path` is not altered when it is parsed by `FilesystemDataSource` class. More details in bug #88.
+* [Fixed] If you set `preserve_path_title` attribute to `true` you will get the title parsed from the filename as-is (without the date part). Only `urlencode` function is applied. See PR #90.
 
 ## 2.1.2 (2016-05-23)
 * [New] Two new methods have been added to StringWrapper class: `lower` and `upper`.

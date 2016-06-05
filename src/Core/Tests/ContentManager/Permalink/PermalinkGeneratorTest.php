@@ -222,6 +222,28 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('title-post/index.html', $permalink->getPath());
         $this->assertEquals('/title-post/index.html', $permalink->getUrlPath());
+
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+            'title' => 'title post',
+            'title_path' => 'title-WITH-1.2.3',
+        ]));
+
+        $this->assertEquals('title-WITH-1.2.3/index.html', $permalink->getPath());
+        $this->assertEquals('/title-WITH-1.2.3/index.html', $permalink->getUrlPath());
+    }
+
+    public function testPreservePathTitleWithSpaces()
+    {
+        $pmg = new PermalinkGenerator('/:title/index.html', true);
+        $permalink = $pmg->getPermalink($this->createItem('index.html', [
+            'date' => '2015-04-17',
+            'title' => 'title post',
+            'title_path' => 'first post',
+        ]));
+
+        $this->assertEquals('first+post/index.html', $permalink->getPath());
+        $this->assertEquals('/first+post/index.html', $permalink->getUrlPath());
     }
 
     public function testNoHtmlExtension()

@@ -242,8 +242,8 @@ class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
             'title_path' => 'first post',
         ]));
 
-        $this->assertEquals('first+post/index.html', $permalink->getPath());
-        $this->assertEquals('/first+post/index.html', $permalink->getUrlPath());
+        $this->assertEquals('first%20post/index.html', $permalink->getPath());
+        $this->assertEquals('/first%20post/index.html', $permalink->getUrlPath());
     }
 
     public function testNoHtmlExtension()

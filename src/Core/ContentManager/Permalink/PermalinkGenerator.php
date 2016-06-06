@@ -226,7 +226,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
         $preservePathTitle = $this->getPreservePathTitleAttribute($item);
 
         if ($preservePathTitle === true && isset($attributes['title_path']) === true) {
-            return urlencode($attributes['title_path']);
+            return rawurlencode($attributes['title_path']);
         }
 
         if (isset($attributes['title']) === true) {

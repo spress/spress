@@ -158,7 +158,7 @@ class Configuration implements ConfigurationInterface
             ->setDefault('permalink', 'pretty', 'string', true)
             ->setDefault('markdown_ext', [], 'array', true)
             ->setDefault('plugin_manager_builder', [], 'array', true)
-            ->setValidator('plugin_manager_builder', function($value) {
+            ->setValidator('plugin_manager_builder', function ($value) {
                 return isset($value['exclude_path']) && is_array($value['exclude_path']);
             });
 

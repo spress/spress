@@ -21,9 +21,9 @@ class CommandNotFoundException extends \LogicException
     /**
      * Constructor.
      *
-     * @param string    $message      Exception message to throw.
-     * @param int       $code         Exception code.
-     * @param Exception $previous     previous exception used for the exception chaining.
+     * @param string    $message  Exception message to throw.
+     * @param int       $code     Exception code.
+     * @param Exception $previous previous exception used for the exception chaining.
      */
     public function __construct($message, $code = 0, \Exception $previous = null)
     {

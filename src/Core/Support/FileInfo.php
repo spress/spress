@@ -26,8 +26,8 @@ class FileInfo extends \SplFileInfo
     /**
      * Constructor.
      *
-     * @param string $file             The file name.
-     * @param array $predefinedExtensions Predefined extensions.
+     * @param string $file                 The file name.
+     * @param array  $predefinedExtensions Predefined extensions.
      */
     public function __construct($file, array $predefinedExtensions = [])
     {
@@ -39,7 +39,7 @@ class FileInfo extends \SplFileInfo
     /**
      * Gets the filename.
      *
-     * @return    string
+     * @return string
      */
     public function getFilename()
     {
@@ -54,7 +54,7 @@ class FileInfo extends \SplFileInfo
     /**
      * Gets the extension of the file.
      *
-     * @return    string
+     * @return string
      */
     public function getExtension()
     {
@@ -76,7 +76,7 @@ class FileInfo extends \SplFileInfo
     /**
      * Has a predefined extension?
      *
-     * @return    bool
+     * @return bool
      */
     public function hasPredefinedExtension()
     {

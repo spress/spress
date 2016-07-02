@@ -41,3 +41,6 @@ data_sources:
       exclude: '%exclude%'
       text_extensions: '%text_extensions%'
       attribute_syntax: '%attribute_syntax%'
+
+plugin_manager_builder:
+  exclude_path: ['tests', 'Tests']

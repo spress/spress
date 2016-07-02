@@ -49,3 +49,7 @@ data_sources:
 host: '0.0.0.0'
 port: 4000
 server_watch_ext: ['html', 'htm', 'xml']
+
+# Plugin manager
+plugin_manager_builder:
+  exclude_path: ['tests', 'Tests']

@@ -49,13 +49,17 @@ $app->add(new NewPluginCommand());
 $app->setDefaultCommand($welcomeCommand->getName());
 
 $spress = new Spress();
-$pm = $spress['spress.plugin.pluginManager'];
 
-$commandBuilder = new ConsoleCommandBuilder($pm);
-$consoleCommandFromPlugins = $commandBuilder->buildCommands();
+try {
+    $pm = $spress['spress.plugin.pluginManager'];
 
-foreach ($consoleCommandFromPlugins as $consoleCommand) {
-    $app->add($consoleCommand);
+    $commandBuilder = new ConsoleCommandBuilder($pm);
+    $consoleCommandFromPlugins = $commandBuilder->buildCommands();
+
+    foreach ($consoleCommandFromPlugins as $consoleCommand) {
+        $app->add($consoleCommand);
+    }
+} catch (Exception $e) {
 }
 
 $app->run();

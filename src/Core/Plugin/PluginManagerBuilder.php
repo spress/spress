@@ -24,6 +24,7 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
 class PluginManagerBuilder
 {
     protected $path;
+    protected $excludeDirs;
     protected $resolver;
     protected $eventDispatcher;
     protected $composerFilename;
@@ -33,12 +34,16 @@ class PluginManagerBuilder
      *
      * @param string                                             $path            Path to plugin folder.
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
+     * @param array                                              $excludeDirs     List of directories excluded of the scan
+     *                                                                            for discovering class. Tests directories are a good example.
      */
     public function __construct(
         $path,
-        EventDispatcher $eventDispatcher)
+        EventDispatcher $eventDispatcher,
+        $excludeDirs = [])
     {
         $this->path = $path;
+        $this->excludeDirs = $excludeDirs;
         $this->eventDispatcher = $eventDispatcher;
         $this->resolver = $this->getResolver();
         $this->setComposerFilename('composer.json');
@@ -192,7 +197,7 @@ class PluginManagerBuilder
      *
      * @param \Symfony\Component\Finder\SplFileInfo $file
      *
-     * @return Array The parsed json filename.
+     * @return array The parsed json filename.
      */
     protected function readComposerFile(SplFileInfo $file)
     {
@@ -223,7 +228,8 @@ class PluginManagerBuilder
         $finder = new Finder();
         $finder->files()
             ->name('/(\.php|composer\.json)$/')
-            ->in($this->path);
+            ->in($this->path)
+            ->exclude($this->excludeDirs);
 
         return $finder;
     }

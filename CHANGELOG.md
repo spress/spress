@@ -1,7 +1,8 @@
 CHANGELOG for 2.x
 =================
 ## 2.1.3
-* [New] Class `FileInfo` has been added to the support classes of the core.
+* [New] Class `FileInfo` has been added to the support classes set of the core.
+* [New] New configuration value aimed to plugin manager builder for excluding directories in the disconvering class phase. Useful to avoid scaning test classes.
 * [Fixed] Fixed the truncated `title_path` attribute when the filename contains dots before the extension. More details in bug #88.
 * [Fixed] The value of `title_path` is not altered when it is parsed by `FilesystemDataSource` class. More details in bug #88.
 * [Fixed] If you set `preserve_path_title` attribute to `true` you will get the title parsed from the filename as-is (without the date part). Only `rawurlencode` function is applied. See PR #90.

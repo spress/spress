@@ -51,11 +51,11 @@ use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
  */
 class Spress extends Container
 {
-    const VERSION = '2.1.2';
-    const VERSION_ID = '20102';
+    const VERSION = '2.1.3';
+    const VERSION_ID = '20103';
     const MAJOR_VERSION = '2';
     const MINOR_VERSION = '1';
-    const RELEASE_VERSION = '2';
+    const RELEASE_VERSION = '3';
     const EXTRA_VERSION = '';
 
     public function __construct()
@@ -185,7 +185,8 @@ class Spress extends Container
                 $embeddedComposer->processAdditionalAutoloads();
             }
 
-            $builder = new PluginManagerBuilder($c['spress.config.plugin_dir'], $c['lib.eventDispatcher']);
+            $excludePath = $c['spress.config.values']['plugin_manager_builder']['exclude_path'];
+            $builder = new PluginManagerBuilder($c['spress.config.plugin_dir'], $c['lib.eventDispatcher'], $excludePath);
 
             return $builder->build();
         };

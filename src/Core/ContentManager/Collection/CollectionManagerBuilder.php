@@ -22,7 +22,7 @@ class CollectionManagerBuilder
      * Build a collection manager with collections
      * loaded from config array.
      *
-     * Config array structure:
+     * A config array has the following sign:
      * .Array
      * (
      *   [collection_name_1] => Array
@@ -37,7 +37,9 @@ class CollectionManagerBuilder
      *
      * @param array $config Configuration array with data about collections.
      *
-     * @return \Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager
+     * @return Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager
+     *
+     * @throws RuntimeException If unexpected type of data.
      */
     public function buildFromConfigArray(array $config)
     {
@@ -45,16 +47,10 @@ class CollectionManagerBuilder
         $collectionItemCollection = $cm->getCollectionItemCollection();
 
         foreach ($config as $collectionName => $attributes) {
-            $path = $collectionName;
+            $path = $collectionName === 'pages' ? '' : $collectionName;
 
             if (is_array($attributes) === false) {
                 throw new \RuntimeException(sprintf('Expected array at the collection: "%s".', $collectionName));
-            }
-
-            if ($collectionItemCollection->has($collectionName) === true) {
-                throw new \RuntimeException(sprintf(
-                    'A previous collection exists with the same name: "%s".',
-                    $collectionName));
             }
 
             $collectionItemCollection->set($collectionName, new Collection($collectionName, $path, $attributes));

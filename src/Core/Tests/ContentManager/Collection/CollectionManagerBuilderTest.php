@@ -56,6 +56,24 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $collection->getAttributes());
     }
 
+    public function testBuildFromConfigArrayWithPageCollection()
+    {
+        $config = [
+            'pages' => [
+                'layout' => 'default',
+            ],
+        ];
+
+        $builder = new CollectionManagerBuilder();
+        $cm = $builder->buildFromConfigArray($config);
+
+        $collection = $cm->getCollectionItemCollection()->get('pages');
+
+        $this->assertEquals('pages', $collection->getName());
+        $this->assertEquals('', $collection->getPath());
+        $this->assertCount(1, $collection->getAttributes());
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Expected array at the collection: "events".
@@ -64,20 +82,6 @@ class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $config = [
             'events' => true,
-        ];
-
-        $builder = new CollectionManagerBuilder();
-        $builder->buildFromConfigArray($config);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage A previous collection exists with the same name: "pages".
-     */
-    public function testBuildFromConfigArrayWithRepeatedCollection()
-    {
-        $config = [
-            'pages' => [],
         ];
 
         $builder = new CollectionManagerBuilder();

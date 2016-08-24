@@ -1,5 +1,8 @@
 CHANGELOG for 2.x
 =================
+## 2.2.0
+* [New] Allow default attributes on "pages" collection. See feature #93.
+
 ## 2.1.3
 * [New] Class `FileInfo` has been added to the support classes set of the core.
 * [New] New configuration value aimed to plugin manager builder for excluding directories in the disconvering class phase. Useful to avoid scaning test classes.

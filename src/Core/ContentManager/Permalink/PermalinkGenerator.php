@@ -75,8 +75,8 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      *
      *   "none" permalink style:
      *    - item: "/:path/:basename.:extension"
-     * @param bool $defaultPreservePathTitle Default value for Preserve-path-title.
-     * @param bool $defaultNoHtmlExtension   Default value for no-html-extension.
+     * @param bool $defaultPreservePathTitle Default value for Preserve-path-title
+     * @param bool $defaultNoHtmlExtension   Default value for no-html-extension
      */
     public function __construct($defaultPermalink = 'pretty',
         $defaultPreservePathTitle = false, $defaultNoHtmlExtension = false)

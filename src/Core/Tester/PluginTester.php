@@ -27,7 +27,7 @@ class PluginTester implements PluginInterface
     /**
      * Constructor.
      *
-     * @param string $name The name of the plugin.
+     * @param string $name The name of the plugin
      */
     public function __construct($name)
     {

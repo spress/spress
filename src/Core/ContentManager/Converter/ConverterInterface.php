@@ -23,7 +23,7 @@ interface ConverterInterface
     /**
      * Get the priority of converter.
      *
-     * @return int Value between 0 to 10. Greater means higher priority.
+     * @return int Value between 0 to 10. Greater means higher priority
      */
     public function getPriority();
 

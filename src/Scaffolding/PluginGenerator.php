@@ -40,8 +40,8 @@ class PluginGenerator extends Generator
     /**
      * Constructor.
      *
-     * @param string $targetDir The target dir.
-     * @param string $name      The name of the plugin. Could you follow the pattern "vendor/class-name".
+     * @param string $targetDir The target dir
+     * @param string $name      The name of the plugin. Could you follow the pattern "vendor/class-name"
      */
     public function __construct($targetDir, $name)
     {
@@ -78,8 +78,8 @@ class PluginGenerator extends Generator
     /**
      * Sets the command's data in case of command plugin.
      *
-     * @param string $name        The name of the command.
-     * @param string $description The description of the command.
+     * @param string $name        The name of the command
+     * @param string $description The description of the command
      */
     public function setCommandData($name, $description = '', $help = '')
     {
@@ -91,8 +91,8 @@ class PluginGenerator extends Generator
     /**
      * Sets the author of the plugin.
      *
-     * @param string $name  The name of the author.
-     * @param string $email The Email of the author.
+     * @param string $name  The name of the author
+     * @param string $email The Email of the author
      */
     public function setAuthor($name, $email = '')
     {
@@ -254,7 +254,7 @@ class PluginGenerator extends Generator
      *
      * @param string $licenseName
      *
-     * @return string Filename or empty-string if not exists.
+     * @return string Filename or empty-string if not exists
      */
     protected function getLicenseFile($licenseName)
     {

@@ -34,7 +34,7 @@ class AttributeParser
     /**
      * Constructor.
      *
-     * @param string $type Type of parser: "yaml" or "json".
+     * @param string $type Type of parser: "yaml" or "json"
      *
      * @throws \RuntimeException if the type of parser is wrong
      */
@@ -61,7 +61,7 @@ class AttributeParser
     /**
      * Get the attributes of an item from string.
      *
-     * @param string $value Attributes represented as string. e.g: JSON or YAML.
+     * @param string $value Attributes represented as string. e.g: JSON or YAML
      *
      * @return array
      */
@@ -86,9 +86,9 @@ class AttributeParser
      *  name: "Victor"
      *  ---
      *
-     * @param string $value Frontmatter.
+     * @param string $value Frontmatter
      *
-     * @return array Array with two elements: "attributes" and "content".
+     * @return array Array with two elements: "attributes" and "content"
      */
     public function getAttributesFromFrontmatter($value)
     {
@@ -104,7 +104,7 @@ class AttributeParser
     /**
      * Get the content without frontmatter block.
      *
-     * @param string $value Frontmatter.
+     * @param string $value Frontmatter
      *
      * @return string
      */

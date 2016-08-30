@@ -111,7 +111,7 @@ class EnvironmentEvent extends Event
     /**
      * Sets a custom renderizer.
      *
-     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer The renderizer.
+     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface $renderizer The renderizer
      */
     public function setRenderizer(RenderizerInterface $renderizer)
     {

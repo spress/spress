@@ -35,14 +35,14 @@ class AttributesResolver
     /**
      * Sets the default value of a given attribute.
      *
-     * @param string $attribute The name of the attribute.
-     * @param mixed  $value     The default value of the attribute.
+     * @param string $attribute The name of the attribute
+     * @param mixed  $value     The default value of the attribute
      * @param string $type      The accepted type. Any type for which a corresponding is_<type>() function exists is
-     *                          acceptable.
+     *                          acceptable
      * @param bool   $required  Is that attribute required?
      * @param bool   $nullable  Is that attribute nullable?
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance
      */
     public function setDefault($attribute, $value, $type = null, $required = false, $nullable = false)
     {
@@ -66,7 +66,7 @@ class AttributesResolver
     /**
      * Sets the validator for an atribute.
      *
-     * @param string   $attribute The name of the attribute.
+     * @param string   $attribute The name of the attribute
      * @param \Closure $validator The validator should be a closure with the following signature:
      *
      * ```php
@@ -75,7 +75,7 @@ class AttributesResolver
      * }
      * ```
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance
      */
     public function setValidator($attribute, \Closure $validator)
     {
@@ -162,9 +162,9 @@ class AttributesResolver
     /**
      * Removes the attributes with the given name.
      *
-     * @param string|string[] One or more attributes.
+     * @param string|string[] One or more attributes
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance.
+     * @return \Yosymfony\Spress\Core\Support\AttributesResolver This instance
      */
     public function remove($attributes)
     {

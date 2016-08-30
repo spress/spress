@@ -67,7 +67,7 @@ class DataSourceManager
     /**
      * Load the items from the registered data sources.
      *
-     * @throws RuntimeException If a previous data sources exists with the same id.
+     * @throws RuntimeException If a previous data sources exists with the same id
      */
     public function load()
     {
@@ -85,10 +85,10 @@ class DataSourceManager
     /**
      * Adds a new data source.
      *
-     * @param string             $name       The name of the data source.
+     * @param string             $name       The name of the data source
      * @param AbstractDataSource $dataSource
      *
-     * @throws \RuntimeException If a previous data sources exists with the same name.
+     * @throws \RuntimeException If a previous data sources exists with the same name
      */
     public function addDataSource($name, AbstractDataSource $dataSource)
     {
@@ -102,7 +102,7 @@ class DataSourceManager
     /**
      * Sets a data source.
      *
-     * @param string             $name       The name of the data source.
+     * @param string             $name       The name of the data source
      * @param AbstractDataSource $dataSource
      */
     public function setDataSource($name, AbstractDataSource $dataSource)
@@ -115,7 +115,7 @@ class DataSourceManager
      *
      * @return \Yosymfony\Spress\Core\DataSource\AbstractDataSource
      *
-     * @throws \RuntimeException If data source not found.
+     * @throws \RuntimeException If data source not found
      */
     public function getDataSource($name)
     {
@@ -139,7 +139,7 @@ class DataSourceManager
     /**
      * Checks if a data source exists.
      *
-     * @param string $name The name of the data source.
+     * @param string $name The name of the data source
      *
      * @return bool
      */
@@ -159,7 +159,7 @@ class DataSourceManager
     /**
      * Removes a data source.
      *
-     * @param string $name The name of the data source.
+     * @param string $name The name of the data source
      */
     public function removeDataSource($name)
     {

@@ -61,11 +61,11 @@ class RenderEvent extends ContentEvent
     /**
      * Prepare a URL.
      *
-     * @param string $url The relative URL.
+     * @param string $url The relative URL
      *
      * @return string
      *
-     * @throws \RuntimeException If empty or malformed relative URL.
+     * @throws \RuntimeException If empty or malformed relative URL
      */
     protected function prepareUrl($url)
     {

@@ -27,7 +27,7 @@ class StringWrapper
     /**
      * Constructor.
      *
-     * @param string $str The string.
+     * @param string $str The string
      */
     public function __construct($str = '')
     {
@@ -37,9 +37,9 @@ class StringWrapper
     /**
      * Sets the string.
      *
-     * @param string $str The string.
+     * @param string $str The string
      *
-     * @return \Yosymfony\Spress\Core\Support This instance.
+     * @return \Yosymfony\Spress\Core\Support This instance
      */
     public function setString($str)
     {
@@ -117,9 +117,9 @@ class StringWrapper
      * Gets the first element of the argument matching with
      * the ends of the string.
      *
-     * @param array $strings List of strings.
+     * @param array $strings List of strings
      *
-     * @return string The first element or empty string if no matching found.
+     * @return string The first element or empty string if no matching found
      */
     public function getFirstEndMatch(array $strings)
     {
@@ -135,9 +135,9 @@ class StringWrapper
     /**
      * Deletes a prefix of the string.
      *
-     * @param string $prefix The prefix.
+     * @param string $prefix The prefix
      *
-     * @return string The string without prefix.
+     * @return string The string without prefix
      */
     public function deletePrefix($prefix)
     {
@@ -151,9 +151,9 @@ class StringWrapper
     /**
      * Deletes a sufix of the string.
      *
-     * @param string $sufix The sufix.
+     * @param string $sufix The sufix
      *
-     * @return string The string without sufix.
+     * @return string The string without sufix
      */
     public function deleteSufix($sufix)
     {
@@ -187,7 +187,7 @@ class StringWrapper
     /**
      * Returns the string wrapped.
      *
-     * @return string The current value of the wrapper.
+     * @return string The current value of the wrapper
      */
     public function __toString()
     {

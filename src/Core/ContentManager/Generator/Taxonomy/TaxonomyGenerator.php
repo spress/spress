@@ -59,7 +59,7 @@ class TaxonomyGenerator implements GeneratorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException if bad attribute value.
+     * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException if bad attribute value
      */
     public function generateItems(ItemInterface $templateItem, array $collections)
     {

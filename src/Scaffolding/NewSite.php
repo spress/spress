@@ -34,7 +34,7 @@ class NewSite
      * Create a new site scaffold.
      *
      * @param string $path         Destination path
-     * @param string $templateName Template name. "blank" is a special template.
+     * @param string $templateName Template name. "blank" is a special template
      * @param bool   $force        Force to clear destination if exists and it's not empty'
      */
     public function newSite($path, $templateName, $force = false, $completeScaffold = false)
@@ -131,7 +131,7 @@ class NewSite
 
     private function getContentComposerJsonFile()
     {
-        $result = <<<eot
+        $result = <<<'eot'
 {
     "name": "vendor/your-theme-name",
     "description": "The description for your theme",

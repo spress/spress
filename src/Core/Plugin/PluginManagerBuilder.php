@@ -32,10 +32,10 @@ class PluginManagerBuilder
     /**
      * Constructor.
      *
-     * @param string                                             $path            Path to plugin folder.
+     * @param string                                             $path            Path to plugin folder
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
      * @param array                                              $excludeDirs     List of directories excluded of the scan
-     *                                                                            for discovering class. Tests directories are a good example.
+     *                                                                            for discovering class. Tests directories are a good example
      */
     public function __construct(
         $path,
@@ -52,7 +52,7 @@ class PluginManagerBuilder
     /**
      * Sets the composer filename. "composer.json" by default.
      *
-     * @param string $name The filename.
+     * @param string $name The filename
      */
     public function setComposerFilename($name)
     {
@@ -146,8 +146,8 @@ class PluginManagerBuilder
     /**
      * Gets metas of a plugin.
      *
-     * @param string                                        $filename The plugin filename.
-     * @param \Yosymfony\Spress\Core\Plugin\PluginInterface $plugin   The plugin.
+     * @param string                                        $filename The plugin filename
+     * @param \Yosymfony\Spress\Core\Plugin\PluginInterface $plugin   The plugin
      *
      * @return array
      */
@@ -197,7 +197,7 @@ class PluginManagerBuilder
      *
      * @param \Symfony\Component\Finder\SplFileInfo $file
      *
-     * @return array The parsed json filename.
+     * @return array The parsed json filename
      */
     protected function readComposerFile(SplFileInfo $file)
     {

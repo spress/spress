@@ -25,9 +25,9 @@ class ContentException extends \RuntimeException
     /**
      * Constructor.
      *
-     * @param string    $message  The exception message.
-     * @param string    $id       The identifier of the content where the exception was generated.
-     * @param Exception $previous The previous exception.
+     * @param string    $message  The exception message
+     * @param string    $id       The identifier of the content where the exception was generated
+     * @param Exception $previous The previous exception
      */
     public function __construct($message, $id = null, \Exception $previous = null)
     {
@@ -42,7 +42,7 @@ class ContentException extends \RuntimeException
     /**
      * Sets the identifier where the exception was generated.
      *
-     * @param string $id The identifier of the content.
+     * @param string $id The identifier of the content
      */
     public function setId($id)
     {

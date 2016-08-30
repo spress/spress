@@ -35,8 +35,8 @@ class ContentEvent extends Event
      * Constructor.
      *
      * @param \Yosymfony\Spress\Core\DataSource\ItemInterface $item
-     * @param string                                          $defaultSnapshotContent The name of the defatul snapshot for content.
-     * @param string                                          $defaultSnapshotPath    The name of the defatul snapshot for path.
+     * @param string                                          $defaultSnapshotContent The name of the defatul snapshot for content
+     * @param string                                          $defaultSnapshotPath    The name of the defatul snapshot for path
      */
     public function __construct(ItemInterface $item, $defaultSnapshotContent, $defaultSnapshotPath)
     {

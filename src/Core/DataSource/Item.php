@@ -35,7 +35,7 @@ class Item implements ItemInterface
      * @param array  $attributes
      * @param bool   $isBinary
      *
-     * @throws RuntimeException If invalid id.
+     * @throws RuntimeException If invalid id
      */
     public function __construct($content, $id, array $attributes = [], $isBinary = false, $type = self::TYPE_ITEM)
     {
@@ -172,7 +172,7 @@ class Item implements ItemInterface
     /**
      * Sets id.
      *
-     * @param string $id The item identifier.
+     * @param string $id The item identifier
      */
     protected function setId($id)
     {

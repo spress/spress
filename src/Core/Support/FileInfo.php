@@ -26,8 +26,8 @@ class FileInfo extends \SplFileInfo
     /**
      * Constructor.
      *
-     * @param string $file                 The file name.
-     * @param array  $predefinedExtensions Predefined extensions.
+     * @param string $file                 The file name
+     * @param array  $predefinedExtensions Predefined extensions
      */
     public function __construct($file, array $predefinedExtensions = [])
     {

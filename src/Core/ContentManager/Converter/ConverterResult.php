@@ -27,9 +27,9 @@ class ConverterResult
     /**
      * Constructor.
      *
-     * @param string $result          Result of applied the converter.
-     * @param string $inputExtension  The input extension.
-     * @param string $outputExtension The output extension.
+     * @param string $result          Result of applied the converter
+     * @param string $inputExtension  The input extension
+     * @param string $outputExtension The output extension
      */
     public function __construct($result, $inputExtension, $outputExtension)
     {

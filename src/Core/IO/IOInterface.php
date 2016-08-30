@@ -61,20 +61,20 @@ interface IOInterface
     /**
      * Writes a message to the output.
      *
-     * @param string|array $messages The message as an array of lines or a single string.
-     * @param bool         $newline  Whether to add a newline or not.
+     * @param string|array $messages The message as an array of lines or a single string
+     * @param bool         $newline  Whether to add a newline or not
      */
     public function write($messages, $newline = true);
 
     /**
      * Asks a question to the user.
      *
-     * @param string|array $question The question to ask.
-     * @param string       $default  The default answer if none is given by the user.
+     * @param string|array $question The question to ask
+     * @param string       $default  The default answer if none is given by the user
      *
-     * @return string The user answer.
+     * @return string The user answer
      *
-     * @throws \RuntimeException If there is no data to read in the input stream.
+     * @throws \RuntimeException If there is no data to read in the input stream
      */
     public function ask($question, $default = null);
 
@@ -86,7 +86,7 @@ interface IOInterface
      * @param string|array $question The question to ask
      * @param bool         $default  The default answer if the user enters nothing
      *
-     * @return bool true if the user has confirmed, false otherwise.
+     * @return bool true if the user has confirmed, false otherwise
      */
     public function askConfirmation($question, $default = true);
 
@@ -97,10 +97,10 @@ interface IOInterface
      * validated data when the data is valid and throw an exception
      * otherwise.
      *
-     * @param string|array $question  The question to ask.
-     * @param callable     $validator A PHP callback.
-     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite).
-     * @param string       $default   The default answer if none is given by the user.
+     * @param string|array $question  The question to ask
+     * @param callable     $validator A PHP callback
+     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite)
+     * @param string       $default   The default answer if none is given by the user
      *
      * @return mixed
      *
@@ -111,10 +111,10 @@ interface IOInterface
     /**
      * Asks a question to the user and hide the answer.
      *
-     * @param string $question The question to ask.
-     * @param bool   $fallback In case the response can not be hidden, whether to fallback on non-hidden question or not.
+     * @param string $question The question to ask
+     * @param bool   $fallback In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
-     * @return string The answer.
+     * @return string The answer
      */
     public function askAndHideAnswer($question, $fallback = true);
 
@@ -125,10 +125,10 @@ interface IOInterface
      * validated data when the data is valid and throw an exception
      * otherwise.
      *
-     * @param string|array $question  The question to ask.
-     * @param callable     $validator A PHP callback.
-     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite).
-     * @param bool         $fallback  In case the response can not be hidden, whether to fallback on non-hidden question or not.
+     * @param string|array $question  The question to ask
+     * @param callable     $validator A PHP callback
+     * @param bool|int     $attempts  Max number of times to ask before giving up (false by default, which means infinite)
+     * @param bool         $fallback  In case the response can not be hidden, whether to fallback on non-hidden question or not
      *
      * @return mixed
      *

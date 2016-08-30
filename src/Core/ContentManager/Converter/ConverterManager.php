@@ -38,9 +38,9 @@ class ConverterManager
     /**
      * Adds a converter.
      *
-     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface $converter The converter.
+     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterInterface $converter The converter
      *
-     * @throws RuntimeException If invalid priority at the converter.
+     * @throws RuntimeException If invalid priority at the converter
      */
     public function addConverter(ConverterInterface $converter)
     {
@@ -74,12 +74,12 @@ class ConverterManager
     /**
      * Converts the content.
      *
-     * @param string $content        The content.
-     * @param string $inputExtension The filename extension. e.g: 'html'.
+     * @param string $content        The content
+     * @param string $inputExtension The filename extension. e.g: 'html'
      *
      * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
      *
-     * @throws RuntimeException If there's no converter for the extension passed.
+     * @throws RuntimeException If there's no converter for the extension passed
      */
     public function convertContent($content, $inputExtension)
     {
@@ -97,11 +97,11 @@ class ConverterManager
     /**
      * Converts an item. This method uses the SNAPSHOT_PATH_RELATIVE of Item path.
      *
-     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item The item.
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item The item
      *
      * @return Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult
      *
-     * @throws RuntimeException If there's no converter for the extension passed.
+     * @throws RuntimeException If there's no converter for the extension passed
      */
     public function convertItem(ItemInterface $item)
     {

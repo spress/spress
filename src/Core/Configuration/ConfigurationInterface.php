@@ -21,10 +21,10 @@ interface ConfigurationInterface
     /**
      * Loads the configuration.
      *
-     * @param string $sitePath Path to Spress site (configuration filename not included). e.g: "/var/spress-site".
+     * @param string $sitePath Path to Spress site (configuration filename not included). e.g: "/var/spress-site"
      * @param string $envName  Environment name. e.g: "dev", "prod"
      *
-     * @return array Configuration values.
+     * @return array Configuration values
      */
     public function loadConfiguration($sitePath, $envName);
 }

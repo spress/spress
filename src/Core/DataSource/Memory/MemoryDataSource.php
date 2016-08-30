@@ -54,7 +54,7 @@ class MemoryDataSource extends AbstractDataSource
      *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
-     * @throws RuntimeException If a previous item exists with the same id.
+     * @throws RuntimeException If a previous item exists with the same id
      */
     public function addItem(ItemInterface $item)
     {
@@ -70,7 +70,7 @@ class MemoryDataSource extends AbstractDataSource
      *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
-     * @throws RuntimeException If a previous layout item exists with the same id.
+     * @throws RuntimeException If a previous layout item exists with the same id
      */
     public function addLayout(ItemInterface $item)
     {
@@ -86,7 +86,7 @@ class MemoryDataSource extends AbstractDataSource
      *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
-     * @throws RuntimeException If a previous include item exists with the same id.
+     * @throws RuntimeException If a previous include item exists with the same id
      */
     public function addInclude(ItemInterface $item)
     {
@@ -100,7 +100,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Checks if an item exists.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      *
      * @return bool
      */
@@ -112,7 +112,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Checks if a layout item exists.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      *
      * @return bool
      */
@@ -124,7 +124,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Checks if an include item exists.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      *
      * @return bool
      */
@@ -196,7 +196,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Removes an item.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      */
     public function removeItem($id)
     {
@@ -206,7 +206,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Removes a layout item.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      */
     public function removeLayout($id)
     {
@@ -216,7 +216,7 @@ class MemoryDataSource extends AbstractDataSource
     /**
      * Removes a include item.
      *
-     * @param string $id The item's identifier.
+     * @param string $id The item's identifier
      */
     public function removeInclude($id)
     {

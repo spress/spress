@@ -29,7 +29,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
      * value is an array of Yosymfony\Spress\Core\DataSource\ItemInterface objects
      * with the item's id as key.
      *
-     * @return \ArrayIterator An \ArrayIterator object for iterating over relationships.
+     * @return \ArrayIterator An \ArrayIterator object for iterating over relationships
      */
     public function getIterator()
     {
@@ -39,7 +39,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
     /**
      * Gets the number of Relationships in this collection.
      *
-     * @return int The number of relationships.
+     * @return int The number of relationships
      */
     public function count()
     {
@@ -50,7 +50,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
      * Adds a relationship.
      *
      * @param string                                         $name The relationship name
-     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item An item.
+     * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item An item
      */
     public function add($name, ItemInterface $item)
     {
@@ -68,7 +68,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
      *
      * @return array An array with the relationship's name as a key and an array of
      *               Yosymfony\Spress\Core\DataSource\ItemInterface object as elements
-     *               with the item's id as key.
+     *               with the item's id as key
      */
     public function all()
     {
@@ -78,7 +78,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
     /**
      * Gets the items in a relationship.
      *
-     * @param string $name The relationship name.
+     * @param string $name The relationship name
      *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface[]
      */
@@ -89,7 +89,7 @@ class RelationshipCollection implements \IteratorAggregate, \Countable
     /**
      * Removes a relationship from the collection.
      *
-     * @param string $name The relationship name.
+     * @param string $name The relationship name
      */
     public function remove($name, ItemInterface $item)
     {

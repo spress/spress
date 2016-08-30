@@ -25,9 +25,9 @@ class ServerResponse
     /**
      * Constructor.
      *
-     * @param string $content     Content of the response.
-     * @param int    $statusCode  The status code.
-     * @param string $contentType The MIME type.
+     * @param string $content     Content of the response
+     * @param int    $statusCode  The status code
+     * @param string $contentType The MIME type
      */
     public function __construct($content, $statusCode = 200, $contentType = 'text/html')
     {

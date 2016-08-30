@@ -35,11 +35,11 @@ class CollectionManagerBuilder
      *        )
      * )
      *
-     * @param array $config Configuration array with data about collections.
+     * @param array $config Configuration array with data about collections
      *
      * @return Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager
      *
-     * @throws RuntimeException If unexpected type of data.
+     * @throws RuntimeException If unexpected type of data
      */
     public function buildFromConfigArray(array $config)
     {

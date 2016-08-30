@@ -64,7 +64,7 @@ class ConsoleCommandBuilder
      *
      * @param \Yosymfony\Spress\Plugin\CommandPluginInterface $commandPlugin
      *
-     * @return \Symfony\Component\Console\Command\Command Symfony Console command.
+     * @return \Symfony\Component\Console\Command\Command Symfony Console command
      */
     protected function buildCommand(CommandPluginInterface $commandPlugin)
     {

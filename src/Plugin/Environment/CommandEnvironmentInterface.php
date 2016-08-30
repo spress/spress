@@ -25,7 +25,7 @@ interface CommandEnvironmentInterface
      *
      * This method must be used inside of executeCommand method implementation.
      *
-     * @param string $name The name of the command. e.g: "site:build".
+     * @param string $name The name of the command. e.g: "site:build"
      *
      * @return bool
      */
@@ -34,12 +34,12 @@ interface CommandEnvironmentInterface
     /**
      * Runs a command.
      *
-     * @param string $commandName The name of the command. e.g: "site:build".
-     * @param array  $arguments   The arguments.
+     * @param string $commandName The name of the command. e.g: "site:build"
+     * @param array  $arguments   The arguments
      *
-     * @return int The command exit code.
+     * @return int The command exit code
      *
-     * @throws Yosymfony\Spress\Plugin\Environment\CommandNotFoundException When command name is incorrect.
+     * @throws Yosymfony\Spress\Plugin\Environment\CommandNotFoundException When command name is incorrect
      * @throws \Exception
      */
     public function runCommand($commandName, array $arguments);

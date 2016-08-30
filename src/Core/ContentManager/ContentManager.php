@@ -111,13 +111,13 @@ class ContentManager
     /**
      * Parse a site.
      *
-     * @param array  $attributes       The site attributes.
+     * @param array  $attributes       The site attributes
      * @param array  $spressAttributes
-     * @param bool   $draft            Include draft posts.
-     * @param bool   $safe             True for disabling custom plugins.
-     * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones.
+     * @param bool   $draft            Include draft posts
+     * @param bool   $safe             True for disabling custom plugins
+     * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones
      *
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site.
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site
      */
     public function parseSite(array $attributes, array $spressAttributes, $draft = false, $safe = false, $timezone = 'UTC')
     {
@@ -262,7 +262,7 @@ class ContentManager
             throw new AttributeValueException('Invalid value. Expected boolean.', 'draft', $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
         }
 
-        if ($item->getCollection() === 'posts' &&  $attributes['draft'] === true) {
+        if ($item->getCollection() === 'posts' && $attributes['draft'] === true) {
             if ($this->processDraft === false) {
                 $attributes['output'] = false;
 

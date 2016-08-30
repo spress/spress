@@ -30,8 +30,8 @@ class ConsoleIO implements IOInterface
     /**
      * Constructor.
      *
-     * @param Symfony\Component\Console\Input\InputInterface   $input  Input operations.
-     * @param Symfony\Component\Console\Output\OutputInterface $output Ouputs operations.
+     * @param Symfony\Component\Console\Input\InputInterface   $input  Input operations
+     * @param Symfony\Component\Console\Output\OutputInterface $output Ouputs operations
      */
     public function __construct(InputInterface $input, OutputInterface $output)
     {
@@ -195,7 +195,7 @@ class ConsoleIO implements IOInterface
     /**
      * Add newline(s).
      *
-     * @param int $count The number of newlines.
+     * @param int $count The number of newlines
      */
     public function newLine($count = 1)
     {

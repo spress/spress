@@ -38,7 +38,7 @@ class CommandDefinition
     /**
      * Constructor.
      *
-     * @param string $name The name of the command. e.g: "update" or with namespace "theme:update".
+     * @param string $name The name of the command. e.g: "update" or with namespace "theme:update"
      */
     public function __construct($name)
     {
@@ -74,7 +74,7 @@ class CommandDefinition
     /**
      * Returns the description for the command.
      *
-     * @return string The description for the command.
+     * @return string The description for the command
      */
     public function getDescription()
     {
@@ -84,9 +84,9 @@ class CommandDefinition
     /**
      * Sets the help for the command.
      *
-     * @param string $help The help for the command.
+     * @param string $help The help for the command
      *
-     * @return Command The current instance.
+     * @return Command The current instance
      */
     public function setHelp($help)
     {
@@ -97,7 +97,7 @@ class CommandDefinition
     /**
      * Returns the help for the command.
      *
-     * @return string The help for the command.
+     * @return string The help for the command
      */
     public function getHelp()
     {
@@ -107,12 +107,12 @@ class CommandDefinition
     /**
      * Adds a new command argument.
      *
-     * @param string $name        The argument name.
-     * @param int    $mode        The argument mode: self::REQUIRED or self::OPTIONAL.
-     * @param string $description A description text.
-     * @param mixed  $default     The default value (for self::OPTIONAL mode only).
+     * @param string $name        The argument name
+     * @param int    $mode        The argument mode: self::REQUIRED or self::OPTIONAL
+     * @param string $description A description text
+     * @param mixed  $default     The default value (for self::OPTIONAL mode only)
      *
-     * @throws \InvalidArgumentException When argument mode is not valid.
+     * @throws \InvalidArgumentException When argument mode is not valid
      */
     public function addArgument($name, $mode = null, $description = '', $default = null)
     {
@@ -128,14 +128,14 @@ class CommandDefinition
     /**
      * Adds a new command option.
      *
-     * @param string       $name        The option name.
+     * @param string       $name        The option name
      * @param string|array $shortcut    The shortcuts, can be null, a string of shortcuts delimited
-     *                                  by | or an array of shortcuts.
-     * @param int          $mode        The option mode: One of the VALUE_* constants.
-     * @param string       $description A description text.
-     * @param mixed        $default     The default value (must be null for self::VALUE_REQUIRED or self::VALUE_NONE).
+     *                                  by | or an array of shortcuts
+     * @param int          $mode        The option mode: One of the VALUE_* constants
+     * @param string       $description A description text
+     * @param mixed        $default     The default value (must be null for self::VALUE_REQUIRED or self::VALUE_NONE)
      *
-     * @throws \InvalidArgumentException If name is empty or option mode is invalid or incompatible.
+     * @throws \InvalidArgumentException If name is empty or option mode is invalid or incompatible
      */
     public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null)
     {
@@ -155,7 +155,7 @@ class CommandDefinition
     /**
      * Gets the arguments registered.
      *
-     * @return array Each element is an array with the following signature: name, mode, description, default.
+     * @return array Each element is an array with the following signature: name, mode, description, default
      */
     public function getArguments()
     {
@@ -165,7 +165,7 @@ class CommandDefinition
     /**
      * Gets the options registered.
      *
-     * @return array Each element is an array with the following signature: name, shortcut, mode, description, default.
+     * @return array Each element is an array with the following signature: name, shortcut, mode, description, default
      */
     public function getOptions()
     {

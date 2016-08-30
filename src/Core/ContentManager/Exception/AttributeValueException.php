@@ -24,10 +24,10 @@ class AttributeValueException extends ContentException
     /**
      * Constructor.
      *
-     * @param string    $message   The exception message.
-     * @param string    $attribute The name of the attribute.
-     * @param string    $id        The identifier of the content where the exception was generated.
-     * @param Exception $previous  The previous exception.
+     * @param string    $message   The exception message
+     * @param string    $attribute The name of the attribute
+     * @param string    $id        The identifier of the content where the exception was generated
+     * @param Exception $previous  The previous exception
      */
     public function __construct($message, $attribute = null, $id = null, \Exception $previous = null)
     {

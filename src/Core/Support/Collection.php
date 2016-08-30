@@ -23,7 +23,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Constructor.
      *
-     * @param array $elements Elements.
+     * @param array $elements Elements
      */
     public function __construct(array $elements = [])
     {
@@ -33,7 +33,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Returns an iterator over the elements.
      *
-     * @return \ArrayIterator An \ArrayIterator object for iterating over elements.
+     * @return \ArrayIterator An \ArrayIterator object for iterating over elements
      */
     public function getIterator()
     {
@@ -43,8 +43,8 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Adds a new element in this collection.
      *
-     * @param mixed $key     The key associated to the element.
-     * @param mixed $element The element.
+     * @param mixed $key     The key associated to the element
+     * @param mixed $element The element
      */
     public function add($key, $element)
     {
@@ -56,11 +56,11 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Gets a element from the collection.
      *
-     * @param string $key The element identifier.
+     * @param string $key The element identifier
      *
-     * @return mixed The element.
+     * @return mixed The element
      *
-     * @throws RuntimeException If the key is not defined.
+     * @throws RuntimeException If the key is not defined
      */
     public function get($key)
     {
@@ -74,7 +74,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Gets the elements in this collection.
      *
-     * @return array All elements in this collection.
+     * @return array All elements in this collection
      */
     public function all()
     {
@@ -94,7 +94,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Checks if a elements exists in the collection.
      *
-     * @param string $key The elements identifier or index.
+     * @param string $key The elements identifier or index
      *
      * @return bool
      */
@@ -106,8 +106,8 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Sets an element.
      *
-     * @param mixed $key     The key associated to the element.
-     * @param mixed $element The element.
+     * @param mixed $key     The key associated to the element
+     * @param mixed $element The element
      */
     public function set($key, $element)
     {
@@ -117,7 +117,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Gets the number of elements in this collection.
      *
-     * @return int The number of elements.
+     * @return int The number of elements
      */
     public function count()
     {
@@ -127,7 +127,7 @@ class Collection implements \IteratorAggregate, \Countable
     /**
      * Removes a element from the collection.
      *
-     * @param string $key The element identifier or index.
+     * @param string $key The element identifier or index
      */
     public function remove($key)
     {

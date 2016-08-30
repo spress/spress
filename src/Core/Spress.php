@@ -303,7 +303,7 @@ class Spress extends Container
      *
      *   $spress->parse();
      *
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site.
+     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site
      */
     public function parse()
     {

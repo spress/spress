@@ -192,8 +192,8 @@ class SiteBuildCommand extends Command
     /**
      * Builds a ResourceWatcher instance.
      *
-     * @param string $sourceDir      Source path.
-     * @param string $destinationDir Destination path.
+     * @param string $sourceDir      Source path
+     * @param string $destinationDir Destination path
      *
      * @return \Yosymfony\ResourceWatcher\ResourceWatcher
      */

@@ -32,7 +32,7 @@ class FinishEvent extends Event
      * Constructor.
      *
      * @param array $items
-     * @param array $siteAttributes The site attributes used for rendering the site.
+     * @param array $siteAttributes The site attributes used for rendering the site
      */
     public function __construct(array $items, array $siteAttributes)
     {

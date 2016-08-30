@@ -36,7 +36,7 @@ class AttributeParserTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributesFromYamlFrontmatter()
     {
         $parser = new AttributeParser();
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 layout: default
 ---
@@ -53,7 +53,7 @@ FRONTMATTER;
     public function testGetAttributesFromEmptyYamlFrontmatter()
     {
         $parser = new AttributeParser();
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 ---
 My content
@@ -69,7 +69,7 @@ FRONTMATTER;
     public function testGetAttributesFromYamlFrontmatterWithExtraDashesInBody()
     {
         $parser = new AttributeParser();
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 layout: default
 ---
@@ -87,7 +87,7 @@ FRONTMATTER;
     public function testGetAttributesFromNotFrontmatter()
     {
         $parser = new AttributeParser(AttributeParser::PARSER_JSON);
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 --
 --
 My content
@@ -137,7 +137,7 @@ FRONTMATTER;
     public function testGetAttributesFromJsonFrontmatter()
     {
         $parser = new AttributeParser(AttributeParser::PARSER_JSON);
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 {
 	"layout": "default",
@@ -158,7 +158,7 @@ FRONTMATTER;
     public function testGetAttributesFromEmptyJsonFrontmatter()
     {
         $parser = new AttributeParser(AttributeParser::PARSER_JSON);
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 ---
 My content
@@ -174,7 +174,7 @@ FRONTMATTER;
     public function testJsonFrontmatterAndAttributeValueWithTripeDashInValue()
     {
         $parser = new AttributeParser(AttributeParser::PARSER_JSON);
-        $raw = <<<FRONTMATTER
+        $raw = <<<'FRONTMATTER'
 ---
 {
     "foo": "bar---baz"

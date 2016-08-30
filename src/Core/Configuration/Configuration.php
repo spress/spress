@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
      * and the template for environment filename is "config_:env.yml".
      *
      * @param \Yosymfony\ConfigLoader\Config $configLoader
-     * @param string                         $defaultConfigFilename Path to filename with defatul configuration.
+     * @param string                         $defaultConfigFilename Path to filename with defatul configuration
      */
     public function __construct(Config $configLoader, $defaultConfigFilename)
     {

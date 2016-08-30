@@ -33,7 +33,7 @@ class FilesystemDataWriter implements DataWriterInterface
      * Constructor.
      *
      * @param Symfony\Component\Filesystem\Filesystem $filesystem
-     * @param string                                  $outputDir  The output folder. e.g: "build".
+     * @param string                                  $outputDir  The output folder. e.g: "build"
      */
     public function __construct(Filesystem $filesystem, $outputDir)
     {

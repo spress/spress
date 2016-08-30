@@ -53,7 +53,7 @@ class ArrayWrapper
     /**
      * Flatten a multi-dimensional array into a single level.
      *
-     * @return array A single level array.
+     * @return array A single level array
      */
     public function flatten()
     {
@@ -145,9 +145,9 @@ class ArrayWrapper
     /**
      * Paginates the array.
      *
-     * @param int    $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array.
-     * @param int    $initialPage Initial page. Page 1 by default.
-     * @param string $key         Element to paginate using "dot" notation.
+     * @param int    $maxPerPage  Max items per page. If this value is minor than 1 the result will be an empty array
+     * @param int    $initialPage Initial page. Page 1 by default
+     * @param string $key         Element to paginate using "dot" notation
      *
      * @return array A list of pages with an array of elements associated with each page
      */
@@ -249,7 +249,7 @@ class ArrayWrapper
      *
      * @param array $array
      *
-     * @return \Yosymfony\Spress\Core\Support\ArrayWrapper This instance.
+     * @return \Yosymfony\Spress\Core\Support\ArrayWrapper This instance
      */
     public function setArray(array $array)
     {
@@ -262,7 +262,7 @@ class ArrayWrapper
      * Sorts the array (ascendant by default).
      *
      * @param string   $key      Element to sort using "dot" notation.
-     *                           You can to escape a dot in a key surrendering with brackets: "[.]".
+     *                           You can to escape a dot in a key surrendering with brackets: "[.]"
      * @param callable $callback Callback should be a function with
      *                           the following signature:
      *
@@ -305,7 +305,7 @@ class ArrayWrapper
      * }
      * ```
      * @param string $key          Element to sort using "dot" notation.
-     *                             You can to escape a dot in a key surrendering with brackets: "[.]".
+     *                             You can to escape a dot in a key surrendering with brackets: "[.]"
      * @param int    $options      See sort_flags at http://php.net/manual/es/function.sort.php
      * @param bool   $isDescending
      *

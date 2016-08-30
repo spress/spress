@@ -40,7 +40,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
      * Gets the current ItemCollection as an Iterator that includes all items.
      * The key of each item is the item's id.
      *
-     * @return \ArrayIterator An \ArrayIterator object for iterating over items.
+     * @return \ArrayIterator An \ArrayIterator object for iterating over items
      */
     public function getIterator()
     {
@@ -52,7 +52,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
      *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface $item
      *
-     * @throws \RuntimeException If the item has been registered previously with the same id.
+     * @throws \RuntimeException If the item has been registered previously with the same id
      */
     public function add(ItemInterface $item)
     {
@@ -68,7 +68,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
      *
      * @param Yosymfony\Spress\Core\DataSource\ItemInterface
      *
-     * @throws \RuntimeException If the item has been registered previously in another collection.
+     * @throws \RuntimeException If the item has been registered previously in another collection
      */
     public function set(ItemInterface $item)
     {
@@ -102,11 +102,11 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Gets an item.
      *
-     * @param string $id The identifier of the item.
+     * @param string $id The identifier of the item
      *
      * @return Yosymfony\Spress\Core\DataSource\ItemInterface
      *
-     * @throws \RuntimeException If the item was not found.
+     * @throws \RuntimeException If the item was not found
      */
     public function get($id)
     {
@@ -120,7 +120,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Checks if a item exists.
      *
-     * @param string $id The identifier of the item.
+     * @param string $id The identifier of the item
      *
      * @return bool
      */
@@ -133,8 +133,8 @@ class ItemCollection implements \IteratorAggregate, \Countable
      * Returns all items in this collection.
      *
      * @param string[] $collections       The name of the item collections affected.
-     *                                    Array empty means all.
-     * @param bool     $groupByCollection First level of array is the collection name.
+     *                                    Array empty means all
+     * @param bool     $groupByCollection First level of array is the collection name
      *
      * @return array
      */
@@ -177,11 +177,11 @@ class ItemCollection implements \IteratorAggregate, \Countable
      * $items = $itemCollection->sortItems('date', true)->all();
      * ```
      *
-     * @param string   $attribute   The name of the attribute used to sort.
+     * @param string   $attribute   The name of the attribute used to sort
      * @param bool     $descending  Is descending sort?
-     * @param string[] $collections Only the items belong to Collections will be affected.
+     * @param string[] $collections Only the items belong to Collections will be affected
      *
-     * @return Yosymfony\Spress\Core\Support\ItemCollection An intance of itself.
+     * @return Yosymfony\Spress\Core\Support\ItemCollection An intance of itself
      */
     public function sortItems($attribute, $descending = true, array $collections = [])
     {
@@ -211,7 +211,7 @@ class ItemCollection implements \IteratorAggregate, \Countable
     /**
      * Removes an item.
      *
-     * @param string $id The identifier of the item.
+     * @param string $id The identifier of the item
      */
     public function remove($id)
     {

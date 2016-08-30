@@ -31,8 +31,8 @@ interface SiteAttributeInterface
      * e.g: $a->addAttribute('site.name', 'Spress site');
      *      $a->addAttribute('site.pages.index[.]html', 'The content');
      *
-     * @param string $name  The name of the attribute.
-     * @param mixed  $value The value of the attribute.
+     * @param string $name  The name of the attribute
+     * @param mixed  $value The value of the attribute
      */
     public function addAttribute($name, $value);
 
@@ -49,7 +49,7 @@ interface SiteAttributeInterface
     /**
      * Gets the site attributes.
      *
-     * @return array The attributes.
+     * @return array The attributes
      */
     public function getAttributes();
 
@@ -57,7 +57,7 @@ interface SiteAttributeInterface
      * Check if an attribute exists in using "dot" notation.
      * You can to escape a dot in a key surrendering with brackets: "[.]".
      *
-     * @param string $name The name of the attribute.
+     * @param string $name The name of the attribute
      *
      * @return bool
      */
@@ -66,8 +66,8 @@ interface SiteAttributeInterface
     /**
      * Set an attribute using "dot" notation.
      *
-     * @param string $name  The name of the attribute.
-     * @param mixed  $value The value of the attribute.
+     * @param string $name  The name of the attribute
+     * @param mixed  $value The value of the attribute
      */
     public function setAttribute($name, $value);
 
@@ -83,7 +83,7 @@ interface SiteAttributeInterface
     /**
      * Initializes the site attributes structure.
      *
-     * @param array $attributes Initial attributes.
+     * @param array $attributes Initial attributes
      */
     public function initialize(array $attributes = []);
 }

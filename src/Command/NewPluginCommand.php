@@ -42,7 +42,7 @@ class NewPluginCommand extends Command
         ])
         ->setName('new:plugin')
         ->setDescription('Generate a plugin')
-        ->setHelp(<<<EOT
+        ->setHelp(<<<'EOT'
 The <info>new:plugin</info> command helps you generates new plugins.
 By default, the command interacts with the developer to tweak the generation.
 Any passed option will be used as a default value for the interaction.

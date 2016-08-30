@@ -31,8 +31,8 @@ class ServerRequest
      * Constructor.
      *
      * @param Symfony\Component\HttpFoundation\Request $request
-     * @param string                                   $documentRoot Path to the document root.
-     * @param string                                   $serverRoot   Path to the server root.
+     * @param string                                   $documentRoot Path to the document root
+     * @param string                                   $serverRoot   Path to the server root
      */
     public function __construct(Request $request, $documentRoot, $serverRoot)
     {
@@ -54,7 +54,7 @@ class ServerRequest
     /**
      * Gets the path with "index.html" append.
      *
-     * @return string Absolute path using either document root or server root (iternal requests).
+     * @return string Absolute path using either document root or server root (iternal requests)
      */
     public function getPathFilename()
     {
@@ -96,7 +96,7 @@ class ServerRequest
     /**
      * Gets the Mime Type.
      *
-     * @return string. Myme type. "application/octet-stream" by default.
+     * @return string. Myme type. "application/octet-stream" by default
      */
     public function getMimeType()
     {

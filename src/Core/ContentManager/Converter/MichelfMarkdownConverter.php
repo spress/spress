@@ -26,7 +26,7 @@ class MichelfMarkdownConverter implements ConverterInterface
     /**
      * Constructor.
      *
-     * @param array $supportedExtension File extesion supported by the converter. Extension without dot.
+     * @param array $supportedExtension File extesion supported by the converter. Extension without dot
      */
     public function __construct(array $supportedExtension)
     {

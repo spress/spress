@@ -62,7 +62,7 @@ class DataSourceManagerBuilder
      *        )
      * )
      *
-     * @param array $config Configuration array with data about data sources.
+     * @param array $config Configuration array with data about data sources
      *
      * @return \Yosymfony\Spress\Core\DataSource\DataSourceManager
      *

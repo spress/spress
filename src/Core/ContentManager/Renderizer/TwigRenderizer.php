@@ -32,9 +32,9 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Construct.
      *
-     * @param \Twig_Environment  $twig            The Twig instance.
-     * @param \Twig_Loader_Array $arrayLoader     The loader.
-     * @param array              $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig".
+     * @param \Twig_Environment  $twig            The Twig instance
+     * @param \Twig_Loader_Array $arrayLoader     The loader
+     * @param array              $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig"
      */
     public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader, array $layoutExtension)
     {
@@ -47,10 +47,10 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Add a new layout.
      *
-     * @param string $id         The identifier of the layout. e.g: path.
+     * @param string $id         The identifier of the layout. e.g: path
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout.
-     *                           "layout" attribute has a special meaning.
+     *                           "layout" attribute has a special meaning
      */
     public function addLayout($id, $content, array $attributes = [])
     {
@@ -79,14 +79,14 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Render a blocks of content (layout NOT included).
      *
-     * @param string $id         The path of the item.
-     * @param string $content    The content.
-     * @param array  $attributes The attributes for using inside the content.
+     * @param string $id         The path of the item
+     * @param string $content    The content
+     * @param array  $attributes The attributes for using inside the content
      *
-     * @return string The block rendered.
+     * @return string The block rendered
      *
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
-     *                                                                                   rendering the content.
+     *                                                                                   rendering the content
      */
     public function renderBlocks($id, $content, array $attributes)
     {
@@ -103,18 +103,18 @@ class TwigRenderizer implements RenderizerInterface
      * Render a page completely (layout included). The value of $content
      * param will be placed at "page.content" attribute.
      *
-     * @param string $id             The path of the item.
-     * @param string $content        The page content.
-     * @param string $layoutName     The layout name.
+     * @param string $id             The path of the item
+     * @param string $content        The page content
+     * @param string $layoutName     The layout name
      * @param array  $siteAttributes The attributes for using inside the content.
-     *                               "layout" attribute has a special meaning.
+     *                               "layout" attribute has a special meaning
      *
      * @return string The page rendered
      *
      * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If "layout" attribute has an invalid value
-     *                                                                                   or layout not found.
+     *                                                                                   or layout not found
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
-     *                                                                                   rendering the content.
+     *                                                                                   rendering the content
      */
     public function renderPage($id, $content, $layoutName, array $siteAttributes)
     {
@@ -141,7 +141,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Adds a new Twig filter.
      *
-     * @see http://twig.sensiolabs.org/doc/advanced.html#filters Twig documentation.
+     * @see http://twig.sensiolabs.org/doc/advanced.html#filters Twig documentation
      *
      * @param string   $name    Name of filter
      * @param callable $filter  Filter implementation
@@ -157,7 +157,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Adds a new Twig function.
      *
-     * @see http://twig.sensiolabs.org/doc/advanced.html#functions Twig documentation.
+     * @see http://twig.sensiolabs.org/doc/advanced.html#functions Twig documentation
      *
      * @param string   $name     Name of filter
      * @param callable $function Filter implementation
@@ -173,7 +173,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Adds a new Twig test.
      *
-     * @see http://twig.sensiolabs.org/doc/advanced.html#tests Twig documentation.
+     * @see http://twig.sensiolabs.org/doc/advanced.html#tests Twig documentation
      *
      * @param string   $name     Name of test
      * @param callable $function Test implementation
@@ -189,7 +189,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Adds a new Twig tag.
      *
-     * @see http://twig.sensiolabs.org/doc/advanced.html#tags Twig documentation.
+     * @see http://twig.sensiolabs.org/doc/advanced.html#tags Twig documentation
      *
      * @param \Twig_TokenParser $tokenParser
      */
@@ -201,8 +201,8 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Get the value of layout attribute.
      *
-     * @param array  $attributes  List of attributes.
-     * @param string $contentName The identifier of the content.
+     * @param array  $attributes  List of attributes
+     * @param string $contentName The identifier of the content
      *
      * @return string
      */
@@ -226,7 +226,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Gets the layout name with the namespace prefix.
      *
-     * @param string $name The layout name.
+     * @param string $name The layout name
      *
      * @return string
      */

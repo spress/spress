@@ -32,7 +32,7 @@ class SelfUpdateCommand extends Command
             ->setName('self-update')
             ->setAliases(['selfupdate'])
             ->setDescription('Update spress.phar to the latest version')
-            ->setHelp(<<<EOT
+            ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command replace your spress.phar by the
 latest version from spress.yosymfony.com.
 <info>php spress.phar %command.name%</info>

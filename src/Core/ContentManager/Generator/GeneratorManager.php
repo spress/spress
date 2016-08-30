@@ -25,10 +25,10 @@ class GeneratorManager
     /**
      * Adds a new generator.
      *
-     * @param string                                                             $name      The generator name.
+     * @param string                                                             $name      The generator name
      * @param \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
      *
-     * @throws RuntimeException If a previous generator exists with the same name.
+     * @throws RuntimeException If a previous generator exists with the same name
      */
     public function addGenerator($name, GeneratorInterface $generator)
     {
@@ -42,7 +42,7 @@ class GeneratorManager
     /**
      * Sets a generator.
      *
-     * @param string                                                             $name      The generator name.
+     * @param string                                                             $name      The generator name
      * @param \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface $generator
      */
     public function setGenerator($name, GeneratorInterface $generator)
@@ -53,11 +53,11 @@ class GeneratorManager
     /**
      * Gets a generator.
      *
-     * @param string $name The generator name.
+     * @param string $name The generator name
      *
      * @return \Yosymfony\Spress\Core\ContentManager\Generator\GeneratorInterface
      *
-     * @throws RuntimeException If the generator is not defined.
+     * @throws RuntimeException If the generator is not defined
      */
     public function getGenerator($name)
     {
@@ -71,7 +71,7 @@ class GeneratorManager
     /**
      * Checks if a generator exists.
      *
-     * @param string $name The generator name.
+     * @param string $name The generator name
      *
      * @return bool
      */
@@ -101,7 +101,7 @@ class GeneratorManager
     /**
      * Removes a generator.
      *
-     * @param string $name The generator name.
+     * @param string $name The generator name
      */
     public function removeGenerator($name)
     {

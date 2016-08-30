@@ -54,11 +54,13 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * If the filename is located in a subfolder of "posts/" receive an extra attribute "categories".
  *
  * Params:
- *  - source_root       : the root directory.
- *  - include           : force to include files or directories.
- *  - exclude           : force to exclude files or directories.
- *  - text_extensions   : extension of the files considered as text files.
- *  - attribute_syntax  : syntax for describing attributes: "yaml" or "json". "yaml" by default.
+ *  - source_root      (string): the root directory.
+ *  - include           (array): force to include files or directories. e.g:"/tmp/files".
+ *  - exclude           (array): force to exclude files or directories. e.g: "post".
+ *  - text_extensions   (array): extension of the files considered as text files. e.g: "html".
+ *  - attribute_syntax (string): syntax for describing attributes: "yaml" or "json". "yaml" by default.
+ *  - avoid_renderizer_path (array): the files belong to declared path will have set up `avoid_renderizer` to true.
+ *  - avoid_renderizer_extension (array): the filenames with an extension belong to declared will have set up `avoid_renderizer` to true.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -96,8 +98,8 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * {@inheritdoc}
      *
-     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules.
-     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute.
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules
+     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute
      */
     public function configure()
     {
@@ -218,6 +220,7 @@ class FilesystemDataSource extends AbstractDataSource
     {
         $attributes = [];
         $attributesFile = $this->getAttributesFilename($file);
+        $isItemType = $item->getType() === Item::TYPE_ITEM;
 
         if ($attributesFile && file_exists($attributesFile)) {
             $contentFile = file_get_contents($attributesFile);
@@ -229,6 +232,11 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
+        $avoidRender = $this->avoidRenderizer($fileInfo->getExtension(), $file->getRelativePath());
+
+        if ($isItemType && $avoidRender === true) {
+            $attributes['avoid_renderizer'] = true;
+        }
 
         $attributes['mtime'] = $this->getModifiedTime($file);
         $attributes['filename'] = $fileInfo->getFilename();
@@ -248,7 +256,7 @@ class FilesystemDataSource extends AbstractDataSource
 
         $str = new StringWrapper($this->normalizeDirSeparator($file->getRelativePath()));
 
-        if ($str->startWith('posts/') === true && array_key_exists('categories', $attributes) === false) {
+        if ($isItemType && $str->startWith('posts/') === true && array_key_exists('categories', $attributes) === false) {
             $categories = explode('/', $str->deletePrefix('posts/'));
 
             if ($categories[0] === '') {
@@ -259,6 +267,23 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $item->setAttributes($attributes);
+    }
+
+    private function avoidRenderizer($extension, $relativePath)
+    {
+        $strPath = new StringWrapper($relativePath);
+
+        foreach ($this->params['avoid_renderizer_path'] as $path) {
+            if ($relativePath == $path || $strPath->startWith($path.'/') === true) {
+                return true;
+            }
+        }
+
+        if (in_array($extension, $this->params['avoid_renderizer_extension']) === true) {
+            return true;
+        }
+
+        return false;
     }
 
     private function isBinary(SplFileInfo $file)
@@ -308,7 +333,9 @@ class FilesystemDataSource extends AbstractDataSource
                         return false;
                         break;
                 }
-            });
+            })
+            ->setDefault('avoid_renderizer_path', [], 'array')
+            ->setDefault('avoid_renderizer_extension', [], 'array');
 
         return $resolver;
     }

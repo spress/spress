@@ -152,6 +152,48 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(11, $fsDataSource->getItems());
     }
 
+    public function testAvoidRenderizerPath()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'avoid_renderizer_path' => ['projects'],
+        ]);
+
+        $fsDataSource->load();
+
+        $items = $fsDataSource->getItems();
+
+        $this->assertCount(13, $items);
+
+        $itemAttributes = $items['projects/index.md']->getAttributes();
+        $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
+
+        $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
+        $this->assertArrayNotHasKey('avoid_renderizer', $itemAttributes);
+    }
+
+    public function testAvoidRenderizerFilenameExtension()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'avoid_renderizer_extension' => ['mkd'],
+        ]);
+
+        $fsDataSource->load();
+
+        $items = $fsDataSource->getItems();
+
+        $this->assertCount(13, $items);
+
+        $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
+        $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
+
+        $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
+        $this->assertArrayNotHasKey('avoid_renderizer', $itemAttributes);
+    }
+
     /**
      * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */

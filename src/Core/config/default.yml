@@ -45,6 +45,8 @@ data_sources:
       exclude: '%exclude%'
       text_extensions: '%text_extensions%'
       attribute_syntax: '%attribute_syntax%'
+      avoid_renderizer_path: '%avoid_renderizer_path%'
+      avoid_renderizer_extension: '%avoid_renderizer_extension%'
 
 # Plugins
 plugin_manager_builder:

@@ -204,6 +204,8 @@ class Spress extends Container
                 '%exclude%' => $c['spress.config.values']['exclude'],
                 '%text_extensions%' => $c['spress.config.values']['text_extensions'],
                 '%attribute_syntax%' => $c['spress.config.values']['attribute_syntax'],
+                '%avoid_renderizer_path%' => $c['spress.config.values']['avoid_renderizer']['paths'],
+                '%avoid_renderizer_extension%' => $c['spress.config.values']['avoid_renderizer']['filename_extensions'],
             ];
         };
 

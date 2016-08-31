@@ -24,6 +24,10 @@ no_html_extension: false
 layout_ext: ['html.twig', 'twig', 'html']
 url: ''                                  # e.g: http://your-domain.local:4000
 
+avoid_renderizer:
+  filename_extensions: ['css', 'js']
+  paths: ['assets', 'bower_components', 'node_modules'] # relative to `content` folder
+
 # Collections
 collections:
   posts:
@@ -42,5 +46,6 @@ data_sources:
       text_extensions: '%text_extensions%'
       attribute_syntax: '%attribute_syntax%'
 
+# Plugins
 plugin_manager_builder:
   exclude_path: ['tests', 'Tests']

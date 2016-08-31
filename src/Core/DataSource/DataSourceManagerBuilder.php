@@ -25,12 +25,12 @@ class DataSourceManagerBuilder
     /**
      * Constructor.
      *
-     * @param array $parameters A key-value array with parameters.
-     *                          These parameter may be recovered from the arguments array.
+     * @param array $parameters A key-value array with available parameters.
+     *                          The signature of each key is %parameter_name%.
      *
      * e.g:
      *   .array(
-     *     [%site_dir%] => './'
+     *     [%site_dir%] => './',
      *   )
      */
     public function __construct(array $parameters = [])

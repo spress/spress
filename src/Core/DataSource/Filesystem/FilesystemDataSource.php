@@ -234,7 +234,7 @@ class FilesystemDataSource extends AbstractDataSource
         $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
         $avoidRender = $this->avoidRenderizer($fileInfo->getExtension(), $file->getRelativePath());
 
-        if ($isItemType && $avoidRender === true) {
+        if ($isItemType && $avoidRender === true && isset($attributes['avoid_renderizer']) === false) {
             $attributes['avoid_renderizer'] = true;
         }
 

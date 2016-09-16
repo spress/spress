@@ -136,8 +136,7 @@ class SiteBuildCommand extends Command
         $env = $input->getOption('env');
         $sourceDir = $input->getOption('source');
 
-        $spress = new Spress();
-        $spress['spress.config.default_filename'] = __DIR__.'/../../app/config/config.yml';
+        $spress = $this->getApplication()->getSpress();
 
         if (is_null($sourceDir) === false) {
             if (($realDir = realpath($sourceDir)) === false) {

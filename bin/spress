@@ -25,41 +25,9 @@ if (PHP_VERSION_ID < 50500) {
     exit(1);
 }
 
-use Symfony\Component\Console\Application;
-use Yosymfony\Spress\Command\NewPluginCommand;
-use Yosymfony\Spress\Command\NewPostCommand;
-use Yosymfony\Spress\Command\NewSiteCommand;
-use Yosymfony\Spress\Command\SelfUpdateCommand;
-use Yosymfony\Spress\Command\SiteBuildCommand;
-use Yosymfony\Spress\Command\WelcomeCommand;
-use Yosymfony\Spress\Core\Spress;
-use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
+use Yosymfony\Spress\Console\Application;
 
-$app = new Application('Spress - The static site generator', Yosymfony\Spress\Core\Spress::VERSION);
-
-$welcomeCommand = new WelcomeCommand();
-
-$app->add($welcomeCommand);
-$app->add(new SiteBuildCommand());
-$app->add(new NewSiteCommand());
-$app->add(new NewPostCommand());
-$app->add(new SelfUpdateCommand());
-$app->add(new NewPluginCommand());
-
-$app->setDefaultCommand($welcomeCommand->getName());
-
-$spress = new Spress();
-
-try {
-    $pm = $spress['spress.plugin.pluginManager'];
-
-    $commandBuilder = new ConsoleCommandBuilder($pm);
-    $consoleCommandFromPlugins = $commandBuilder->buildCommands();
-
-    foreach ($consoleCommandFromPlugins as $consoleCommand) {
-        $app->add($consoleCommand);
-    }
-} catch (Exception $e) {
-}
-
+$app = new Application($classloader);
+$app->registerStandardCommands();
+$app->registerCommandPlugins();
 $app->run();

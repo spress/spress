@@ -11,17 +11,22 @@
 
 namespace Yosymfony\Spress\Tests;
 
-use Symfony\Component\Console\Application;
+use Yosymfony\Spress\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
-use Yosymfony\Spress\Command\SiteBuildCommand;
 
 class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $app;
     protected $sourceDir;
 
     public function setUp()
     {
+        $autoloaders = spl_autoload_functions();
+
+        $this->app = new Application($autoloaders[0][0]);
+        $this->app->registerStandardCommands();
+
         $this->sourceDir = __DIR__.'/../../src/Core/Tests/fixtures/project';
     }
 
@@ -34,10 +39,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildCommand()
     {
-        $app = new Application();
-        $app->add(new SiteBuildCommand());
-
-        $command = $app->find('site:build');
+        $command = $this->app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,
@@ -54,10 +56,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildCommandDraft()
     {
-        $app = new Application();
-        $app->add(new SiteBuildCommand());
-
-        $command = $app->find('site:build');
+        $command = $this->app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,
@@ -74,10 +73,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildCommandSafe()
     {
-        $app = new Application();
-        $app->add(new SiteBuildCommand());
-
-        $command = $app->find('site:build');
+        $command = $this->app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,
@@ -93,10 +89,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildCommandEnv()
     {
-        $app = new Application();
-        $app->add(new SiteBuildCommand());
-
-        $command = $app->find('site:build');
+        $command = $this->app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,
@@ -114,10 +107,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $fs = new Filesystem();
         $fs->dumpFile($this->sourceDir.'/config_test.yml', 'parsedown_activated: true');
 
-        $app = new Application();
-        $app->add(new SiteBuildCommand());
-
-        $command = $app->find('site:build');
+        $command = $this->app->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             '--source' => $this->sourceDir,

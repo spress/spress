@@ -70,7 +70,7 @@ class Application extends ConsoleApplication
    }
 
    /**
-    * Register the command plugins present in the current directory.
+    * Registers the command plugins present in the current directory.
     */
    public function registerCommandPlugins()
    {
@@ -90,7 +90,7 @@ class Application extends ConsoleApplication
    }
 
    /**
-    * Register the standard commands of Spress.
+    * Registers the standard commands of Spress.
     */
    public function registerStandardCommands()
    {

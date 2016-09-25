@@ -19,7 +19,6 @@
         "symfony/filesystem": "2.7.*",
         "symfony/event-dispatcher": "2.7.*",
         "michelf/php-markdown": "1.5.*",
-        "composer/composer": "1.*@dev",
         "dflydev/embedded-composer": "1.0.*@dev",
         "yosymfony/config-loader": "1.3.*"
     },

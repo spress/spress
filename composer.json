@@ -28,9 +28,6 @@
         "spress/spress-theme-spresso": "2.0.*",
         "erusev/parsedown-extra": "0.7.*"
     },
-    "require-dev": {
-        "phpunit/phpunit": "4.5.*"
-    },
     "replace": {
         "spress/spress-core": "self.version"
     },

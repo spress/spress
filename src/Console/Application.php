@@ -19,7 +19,6 @@ use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
 use Yosymfony\Spress\Command\SelfUpdateCommand;
 use Yosymfony\Spress\Command\SiteBuildCommand;
-use Yosymfony\Spress\Command\UpdatePluginCommand;
 use Yosymfony\Spress\Command\WelcomeCommand;
 use Yosymfony\Spress\Core\Spress;
 use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;

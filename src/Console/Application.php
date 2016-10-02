@@ -121,7 +121,6 @@ class Application extends ConsoleApplication
        $this->add(new NewPostCommand());
        $this->add(new SelfUpdateCommand());
        $this->add(new NewPluginCommand());
-       $this->add(new UpdatePluginCommand());
 
        $this->setDefaultCommand($welcomeCommand->getName());
    }

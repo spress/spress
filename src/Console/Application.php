@@ -12,12 +12,14 @@
 namespace Yosymfony\Spress\Console;
 
 use Composer\Autoload\ClassLoader;
+use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Yosymfony\Spress\Command\NewPluginCommand;
 use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
 use Yosymfony\Spress\Command\SelfUpdateCommand;
 use Yosymfony\Spress\Command\SiteBuildCommand;
+use Yosymfony\Spress\Command\UpdatePluginCommand;
 use Yosymfony\Spress\Command\WelcomeCommand;
 use Yosymfony\Spress\Core\Spress;
 use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
@@ -29,12 +31,13 @@ use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
  */
 class Application extends ConsoleApplication
 {
+    /** @var ClassLoader */
     private $classloader;
 
    /**
     * Constructor.
     *
-    * @param Composer\Autoload\ClassLoader $classloader Composer Class Loader
+    * @param ClassLoader $classloader Composer Class Loader
     */
    public function __construct(ClassLoader $classloader)
    {
@@ -44,9 +47,9 @@ class Application extends ConsoleApplication
    }
 
    /**
-    * Returns the Composer's  classloader.
+    * Returns the Composer's classloader.
     *
-    * @return Composer\Autoload\ClassLoader The classloader
+    * @return ClassLoader The classloader
     */
    public function getClassloader()
    {
@@ -56,9 +59,9 @@ class Application extends ConsoleApplication
    /**
     * Returns an Spress instance with the minimum configuration:
     *  - Classloader.
-    *  - Default configuration configuration.
+    *  - Default configuration.
     *
-    * @return Yosymfony\Spress\Core\Spress The Spress instance
+    * @return Spress The Spress instance
     */
    public function getSpress()
    {
@@ -67,6 +70,22 @@ class Application extends ConsoleApplication
        $spress['spress.plugin.classLoader'] = $this->getClassloader();
 
        return $spress;
+   }
+
+   /**
+    * Returns an EmbeddedComposer instance.
+    *
+    * @return  Dflydev\EmbeddedComposer\Core\EmbeddedComposer
+    */
+   public function getEmbeddedComposer($siteDir, $composerFilename, $vendorDir)
+   {
+       $classloader = $this->getClassloader();
+       $builder = new EmbeddedComposerBuilder($classloader, $siteDir);
+
+       return $builder
+           ->setComposerFilename($composerFilename)
+           ->setVendorDirectory($vendorDir)
+           ->build();
    }
 
    /**
@@ -102,6 +121,7 @@ class Application extends ConsoleApplication
        $this->add(new NewPostCommand());
        $this->add(new SelfUpdateCommand());
        $this->add(new NewPluginCommand());
+       $this->add(new UpdatePluginCommand());
 
        $this->setDefaultCommand($welcomeCommand->getName());
    }

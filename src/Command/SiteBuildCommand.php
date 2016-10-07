@@ -32,7 +32,7 @@ use Yosymfony\Spress\HttpServer\ServerRequest;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class SiteBuildCommand extends Command
+class SiteBuildCommand extends BaseCommand
 {
     protected $configResolver;
 
@@ -121,7 +121,7 @@ class SiteBuildCommand extends Command
     }
 
     /**
-     * Buils a Spress instance.
+     * Builds a Spress instance.
      *
      * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
      * @param \Symfony\Component\Console\Input\InputInterface $input
@@ -136,15 +136,15 @@ class SiteBuildCommand extends Command
         $env = $input->getOption('env');
         $sourceDir = $input->getOption('source');
 
-        $spress = $this->getApplication()->getSpress();
-
-        if (is_null($sourceDir) === false) {
-            if (($realDir = realpath($sourceDir)) === false) {
-                throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
-            }
-
-            $spress['spress.config.site_dir'] = $realDir;
+        if (is_null($sourceDir) === true) {
+            $sourceDir = './';
         }
+
+        if (($realDir = realpath($sourceDir)) === false) {
+            throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
+        }
+
+        $spress = $this->getSpress($realDir);
 
         $spress['spress.config.env'] = $env;
         $spress['spress.config.safe'] = $safe;

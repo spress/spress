@@ -11,17 +11,22 @@
 
 namespace Yosymfony\Spress\tests\Command;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\Console\Application;
 use Yosymfony\Spress\Command\NewSiteCommand;
 
 class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $app;
     protected $tmpDir;
 
     public function setUp()
     {
+        $autoloaders = spl_autoload_functions();
+
+        $this->app = new Application($autoloaders[0][0]);
+
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
     }
 
@@ -33,10 +38,9 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSite()
     {
-        $app = new Application();
-        $app->add(new NewSiteCommand());
+        $this->app->add(new NewSiteCommand());
 
-        $command = $app->find('new:site');
+        $command = $this->app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'path' => $this->tmpDir,
@@ -54,10 +58,9 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($this->tmpDir);
 
-        $app = new Application();
-        $app->add(new NewSiteCommand());
+        $this->app->add(new NewSiteCommand());
 
-        $command = $app->find('new:site');
+        $command = $this->app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'path' => $this->tmpDir,
@@ -73,10 +76,9 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteNotForce()
     {
-        $app = new Application();
-        $app->add(new NewSiteCommand());
+        $this->app->add(new NewSiteCommand());
 
-        $command = $app->find('new:site');
+        $command = $this->app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'path' => $this->tmpDir,
@@ -89,10 +91,9 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteForce()
     {
-        $app = new Application();
-        $app->add(new NewSiteCommand());
+        $this->app->add(new NewSiteCommand());
 
-        $command = $app->find('new:site');
+        $command = $this->app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'path' => $this->tmpDir,
@@ -109,10 +110,9 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteCompleteScaffold()
     {
-        $app = new Application();
-        $app->add(new NewSiteCommand());
+        $this->app->add(new NewSiteCommand());
 
-        $command = $app->find('new:site');
+        $command = $this->app->find('new:site');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'path' => $this->tmpDir,

@@ -33,4 +33,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Yosymfony\Spress\Core\Spress', $this->app->getSpress());
     }
+
+    public function testRegisterStandardCommands()
+    {
+        $this->app->registerStandardCommands();
+
+        $this->assertTrue(count($this->app->all()) > 0);
+    }
 }

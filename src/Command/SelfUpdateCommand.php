@@ -21,7 +21,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class SelfUpdateCommand extends Command
+class SelfUpdateCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}

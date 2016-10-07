@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
+use Composer\Package\Version\VersionParser;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -21,9 +22,17 @@ use Symfony\Component\Finder\Finder;
  */
 class NewSite
 {
+    /** @var string */
     private $templatePath;
+
+    /** @var Filesystem */
     private $fs;
 
+    /**
+     * Constructor.
+     *
+     * @param string $templatePath
+     */
     public function __construct($templatePath)
     {
         $this->templatePath = $templatePath;
@@ -58,14 +67,11 @@ class NewSite
 
     private function createSite($path, $templateName, $completeScaffold = false)
     {
-        if ($templateName === 'blank') {
-            $this->createBlankSite($path, $completeScaffold);
-        } else {
-            $this->copyTemplate($path, $templateName);
-        }
+        $packageNames = $templateName == 'blank' ? [] : [$templateName];
+        $this->createBlankSite($path, $completeScaffold, $packageNames);
     }
 
-    private function createBlankSite($path, $completeScaffold)
+    private function createBlankSite($path, $completeScaffold, array $packageNames = [])
     {
         $orgDir = getcwd();
 
@@ -73,7 +79,7 @@ class NewSite
 
         $this->fs->mkdir(['build', 'src/layouts', 'src/content', 'src/content/posts']);
         $this->fs->dumpFile('config.yml', '# Site configuration');
-        $this->fs->dumpFile('composer.json', $this->getContentComposerJsonFile());
+        $this->fs->dumpFile('composer.json', $this->generateContentComposerJsonFile($packageNames));
         $this->fs->dumpFile('src/content/index.html', '');
 
         if ($completeScaffold === true) {
@@ -129,16 +135,21 @@ class NewSite
         return $this->templatePath.'/'.$templateName;
     }
 
-    private function getContentComposerJsonFile()
+    private function generateContentComposerJsonFile(array $packagNames = [])
     {
-        $result = <<<'eot'
+        $versionParser = new VersionParser();
+        $requires = $versionParser->parseNameVersionPairs($packagNames);
+        $jsonPackages = '';
+
+        foreach ($requires as $pair) {
+            $version = isset($pair['version']) ? $pair['version'] : '*';
+            $jsonPackages .= sprintf("\"%s\": \"%s\"\n", $pair['name'], $version);
+        }
+
+        $result = <<<"eot"
 {
-    "name": "vendor/your-theme-name",
-    "description": "The description for your theme",
-    "license": "MIT",
-    "type": "spress-theme",
     "require": {
-            "spress/spress-installer": "2.0.*"
+            $jsonPackages
     }
 }
 eot;

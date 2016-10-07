@@ -24,7 +24,7 @@ use Yosymfony\Spress\Scaffolding\NewSite;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewSiteCommand extends Command
+class NewSiteCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class NewSiteCommand extends Command
     {
         $this->setDefinition([
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
-            new InputArgument('template', InputArgument::OPTIONAL, 'Template name', 'blank'),
+            new InputArgument('template', InputArgument::OPTIONAL, 'Package name', 'blank'),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation event if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
         ])
@@ -55,6 +55,11 @@ class NewSiteCommand extends Command
 
         $operation = new NewSite($this->getTemplatesPath());
         $operation->newSite($path, $template, $force, $completeScaffold);
+
+        if ($template !== 'blank') {
+            $packageManager = $this->getPackageManager($path, $io);
+            $packageManager->update();
+        }
 
         $this->successMessage($io, $path);
     }

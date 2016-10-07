@@ -11,19 +11,24 @@
 
 namespace Yosymfony\Spress\Tests\Command;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\Console\Application;
 use Yosymfony\Spress\Command\NewPostCommand;
 
 class NewPostCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $app;
     protected $tmpDir;
     protected $currentDir;
     protected $fs;
 
     public function setUp()
     {
+        $autoloaders = spl_autoload_functions();
+
+        $this->app = new Application($autoloaders[0][0]);
+
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
@@ -43,10 +48,9 @@ class NewPostCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewPost()
     {
-        $app = new Application();
-        $app->add(new NewPostCommand());
+        $this->app->add(new NewPostCommand());
 
-        $command = $app->find('new:post');
+        $command = $this->app->find('new:post');
         $commandTester = new CommandTester($command);
 
         $commandTester->execute([

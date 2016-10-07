@@ -11,19 +11,24 @@
 
 namespace Yosymfony\Spress\tests\Command;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\Console\Application;
 use Yosymfony\Spress\Command\NewPluginCommand;
 
 class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
 {
+    protected $app;
     protected $tmpDir;
     protected $currentDir;
     protected $fs;
 
     public function setUp()
     {
+        $autoloaders = spl_autoload_functions();
+
+        $this->app = new Application($autoloaders[0][0]);
+
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
 
         $this->fs = new Filesystem();
@@ -43,10 +48,9 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewPlugin()
     {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
+        $this->app->add(new NewPluginCommand());
 
-        $command = $app->find('new:plugin');
+        $command = $this->app->find('new:plugin');
         $commandTester = new CommandTester($command);
 
         $commandTester->execute([
@@ -79,10 +83,9 @@ class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testNewCommandPlugin()
     {
-        $app = new Application();
-        $app->add(new NewPluginCommand());
+        $this->app->add(new NewPluginCommand());
 
-        $command = $app->find('new:plugin');
+        $command = $this->app->find('new:plugin');
         $commandTester = new CommandTester($command);
 
         $commandTester->execute([

@@ -23,7 +23,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewPostCommand extends Command
+class NewPostCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}

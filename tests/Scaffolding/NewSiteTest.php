@@ -104,13 +104,4 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $operation->newSite($this->tmpDir, 'blank');
         $operation->newSite($this->tmpDir, 'blank', false);
     }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testNewSiteTemplateNotExists()
-    {
-        $operation = new NewSite($this->templatePath);
-        $operation->newSite($this->tmpDir, 'template-not-exisits');
-    }
 }

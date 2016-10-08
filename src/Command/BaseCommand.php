@@ -14,7 +14,6 @@ namespace Yosymfony\Spress\Command;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Symfony\Component\Console\Command\Command;
 use Yosymfony\Spress\Core\IO\IOInterface;
-use Yosymfony\Spress\PackageManager\ComposerIOBridge;
 use Yosymfony\Spress\PackageManager\PackageManager;
 
 /**
@@ -27,6 +26,9 @@ class BaseCommand extends Command
     /**
      * A shortcut for $this->getApplication->getSpress().
      *
+     * @param string $siteDir Root directory of an Spress site. "./" if this
+     *                        value is null
+     *
      * @return Spress A Spress instance
      */
     public function getSpress($siteDir = null)
@@ -38,6 +40,8 @@ class BaseCommand extends Command
      * Returns an instance of PackageManager.
      * It is configured to read a composer.json file.
      *
+     * @param string $siteDir Root directory of an Spress site
+     *
      * @return PackageManager
      */
     public function getPackageManager($siteDir, IOInterface $io)
@@ -45,7 +49,7 @@ class BaseCommand extends Command
         $embeddedComposer = $this->getEmbeddedComposer($siteDir, 'composer.json', 'vendor');
         $embeddedComposer->processAdditionalAutoloads();
 
-        return new PackageManager($embeddedComposer, new ComposerIOBridge($io));
+        return new PackageManager($embeddedComposer, $io);
     }
 
     /**

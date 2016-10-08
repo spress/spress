@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\PackageManager;
 
-use Composer\IO\IOInterface;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposer;
+use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
@@ -31,17 +31,20 @@ class PackageManager
     /** @var EmbeddedComposer */
     private $embeddedComposer;
 
-    /** @var IOInterface */
+    /** @var Composer\IO\IOInterface */
     private $io;
 
     /**
      * Constructor.
+     *
+     * @param EmbeddedComposer $embeddedComposer
+     * @param IOInterface      $io
      */
     public function __construct(EmbeddedComposer $embeddedComposer, IOInterface $io)
     {
         $this->siteRoot = $embeddedComposer->getExternalRootDirectory();
         $this->embeddedComposer = $embeddedComposer;
-        $this->io = $io;
+        $this->io = new ComposerIOBridge($io);
     }
 
     /**

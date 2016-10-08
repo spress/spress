@@ -18,14 +18,14 @@ use Yosymfony\Spress\PackageManager\ComposerIOBridge;
 use Yosymfony\Spress\PackageManager\PackageManager;
 
 /**
- * New plugin command.
+ * Base for commands.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class BaseCommand extends Command
 {
     /**
-     * A shortcut for $this->getApplication->getSpres().
+     * A shortcut for $this->getApplication->getSpress().
      *
      * @return Spress A Spress instance
      */
@@ -36,6 +36,7 @@ class BaseCommand extends Command
 
     /**
      * Returns an instance of PackageManager.
+     * It is configured to read a composer.json file.
      *
      * @return PackageManager
      */

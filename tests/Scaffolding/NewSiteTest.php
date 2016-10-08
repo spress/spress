@@ -17,11 +17,9 @@ use Yosymfony\Spress\Scaffolding\NewSite;
 class NewSiteTest extends \PHPUnit_Framework_TestCase
 {
     protected $tmpDir;
-    protected $templatePath;
 
     public function setUp()
     {
-        $this->templatePath = __DIR__.'/../fixtures/templates';
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
     }
 
@@ -33,7 +31,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlank()
     {
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'blank');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
@@ -50,7 +48,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($this->tmpDir);
 
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'blank');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
@@ -62,7 +60,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankForce()
     {
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'blank');
         $operation->newSite($this->tmpDir, 'blank', true);
 
@@ -75,7 +73,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankCompleteScaffold()
     {
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'blank', false, true);
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
@@ -89,7 +87,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteTemplateTest()
     {
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'template-test');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
@@ -100,7 +98,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteBlankNoForce()
     {
-        $operation = new NewSite($this->templatePath);
+        $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'blank');
         $operation->newSite($this->tmpDir, 'blank', false);
     }

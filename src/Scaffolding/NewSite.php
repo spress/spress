@@ -23,30 +23,28 @@ use Symfony\Component\Finder\Finder;
 class NewSite
 {
     /** @var string */
-    private $templatePath;
+    const BLANK_THEME = 'blank';
 
     /** @var Filesystem */
     private $fs;
 
     /**
      * Constructor.
-     *
-     * @param string $templatePath
      */
-    public function __construct($templatePath)
+    public function __construct()
     {
-        $this->templatePath = $templatePath;
         $this->fs = new Filesystem();
     }
 
     /**
      * Create a new site scaffold.
      *
-     * @param string $path         Destination path
-     * @param string $templateName Template name. "blank" is a special template
-     * @param bool   $force        Force to clear destination if exists and it's not empty'
+     * @param string $path             Destination path
+     * @param string $themeName        Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
+     * @param bool   $force            Force to clear destination if exists and it's not empty'
+     * @param bool   $completeScaffold If true adds "includes" and "plugins" folders to the site
      */
-    public function newSite($path, $templateName, $force = false, $completeScaffold = false)
+    public function newSite($path, $themeName, $force = false, $completeScaffold = false)
     {
         $this->fs = new Filesystem();
         $existsPath = $this->fs->exists($path);
@@ -62,12 +60,12 @@ class NewSite
             $this->fs->mkdir($path);
         }
 
-        $this->createSite($path, $templateName, $completeScaffold);
+        $this->createSite($path, $themeName, $completeScaffold);
     }
 
-    private function createSite($path, $templateName, $completeScaffold = false)
+    private function createSite($path, $themeName, $completeScaffold = false)
     {
-        $packageNames = $templateName == 'blank' ? [] : [$templateName];
+        $packageNames = $themeName === self::BLANK_THEME ? [] : [$themeName];
         $this->createBlankSite($path, $completeScaffold, $packageNames);
     }
 
@@ -87,17 +85,6 @@ class NewSite
         }
 
         chdir($orgDir);
-    }
-
-    private function copyTemplate($path, $templateName)
-    {
-        $templatePath = $this->getTemplatePath($templateName);
-
-        if ($this->fs->exists($templatePath) === false) {
-            throw new \InvalidArgumentException(sprintf('The template "%s" not exists.', $templateName));
-        }
-
-        $this->fs->mirror($templatePath, $path);
     }
 
     private function isEmptyDir($path)
@@ -128,11 +115,6 @@ class NewSite
         if (count($items) > 0) {
             $this->fs->remove($items);
         }
-    }
-
-    private function getTemplatePath($templateName)
-    {
-        return $this->templatePath.'/'.$templateName;
     }
 
     private function generateContentComposerJsonFile(array $packagNames = [])

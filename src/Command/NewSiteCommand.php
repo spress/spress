@@ -26,6 +26,12 @@ use Yosymfony\Spress\Scaffolding\NewSite;
  */
 class NewSiteCommand extends BaseCommand
 {
+    /** @var string */
+    const BLANK_THEME = 'blank';
+
+    /** @var string */
+    const SPRESSO_THEME = 'spresso';
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +39,7 @@ class NewSiteCommand extends BaseCommand
     {
         $this->setDefinition([
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
-            new InputArgument('template', InputArgument::OPTIONAL, 'Package name', 'blank'),
+            new InputArgument('template', InputArgument::OPTIONAL, 'Package name', self::BLANK_THEME),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation event if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
         ])
@@ -53,26 +59,19 @@ class NewSiteCommand extends BaseCommand
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output);
 
-        $operation = new NewSite($this->getTemplatesPath());
+        if ($template === self::SPRESSO_THEME) {
+            $template = 'spress/spress-theme-spresso';
+        }
+
+        $operation = new NewSite();
         $operation->newSite($path, $template, $force, $completeScaffold);
 
-        if ($template !== 'blank') {
+        if ($template !== self::BLANK_THEME) {
             $packageManager = $this->getPackageManager($path, $io);
             $packageManager->update();
         }
 
         $this->successMessage($io, $path);
-    }
-
-    protected function getTemplatesPath()
-    {
-        $spressPath = __DIR__.'/../../';
-
-        if (file_exists($spressPath.'app/templates/')) {
-            return $spressPath.'app/templates';
-        }
-
-        return $spressPath.'../spress-templates';
     }
 
     protected function successMessage($io, $sitePath)

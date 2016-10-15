@@ -26,13 +26,19 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
 class PackageManager
 {
     /** @var string */
-    private $siteRoot;
+    const PACKAGE_TYPE_THEME = 'spress-theme';
+
+    /** @var array List of packages with the package's name as key */
+    protected $packageCache = [];
+
+    /** @var string */
+    protected $siteRoot;
 
     /** @var EmbeddedComposer */
-    private $embeddedComposer;
+    protected $embeddedComposer;
 
     /** @var Composer\IO\IOInterface */
-    private $io;
+    protected $io;
 
     /**
      * Constructor.
@@ -75,7 +81,75 @@ class PackageManager
         $installer->run();
     }
 
-    private function buildInstaller(array $options)
+    /**
+     * Clear all package in cache.
+     */
+    public function clearPackageCache()
+    {
+        $this->packageCache = [];
+    }
+
+    /**
+     * Determines if a package exists in the registered repositories
+     * (packagist.org for example).
+     *
+     * @param string $packageName Package's name. It could be a pair of
+     *                            name and version as the follow: "spress/foo:v1.0.0". If no version
+     *                            supplied the latest version will be used
+     *
+     * @return bool
+     */
+    public function existPackage($packageName)
+    {
+        return !is_null($this->findPackage($packageName));
+    }
+
+    /**
+     * Determines if package is a Spress theme.
+     *
+     * @return bool
+     *
+     * @throws RuntimeException If the package doesn't exist
+     */
+    public function isThemePackage($packageName)
+    {
+        $package = $this->findPackage($packageName);
+
+        if (is_null($package)) {
+            $name = (new PackageNameVersion($packageName))->getName();
+
+            throw new \RuntimeException(sprintf('The theme: "%s" doesn\'t exist.', $name));
+        }
+
+        return $package->getType() == self::PACKAGE_TYPE_THEME;
+    }
+
+    /**
+     * Recovers the data of a package.
+     *
+     * @param string $packageName Package's name
+     *
+     * @return Composer\Package\PackageInterface|null Null if the package not found
+     */
+    protected function findPackage($packageName)
+    {
+        $packageVersion = new PackageNameVersion($packageName);
+
+        if (isset($this->packageCache[$packageVersion->getNormalizedNameVersion()])) {
+            return $this->packageCache[$packageVersion->getNormalizedNameVersion()];
+        }
+
+        $composer = $this->embeddedComposer->createComposer($this->io);
+        $repoManager = $composer->getRepositoryManager();
+
+        $name = $packageVersion->getName();
+        $version = $packageVersion->getVersion();
+        $package = $this->packageCache[$packageName] = $repoManager->findPackage($name, $version);
+
+        return $package;
+    }
+
+    protected function buildInstaller(array $options)
     {
         $options = $this->getInstallResolver()->resolve($options);
         $installer = $this->embeddedComposer->createInstaller($this->io);
@@ -95,7 +169,7 @@ class PackageManager
         return $installer;
     }
 
-    private function getInstallResolver()
+    protected function getInstallResolver()
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('dry-run', false, 'bool')

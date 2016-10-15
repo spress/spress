@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Scaffolding;
+namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Scaffolding\NewSite;
@@ -85,7 +85,11 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/plugins');
     }
 
-    public function testNewSiteTemplateTest()
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage You must set the PackageManager at constructor in order to create non-blank themes.
+     */
+    public function testNewSiteWithTemplateAndNoPackageManagerTest()
     {
         $operation = new NewSite();
         $operation->newSite($this->tmpDir, 'template-test');

@@ -48,7 +48,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
         $output = $commandTester->getDisplay();
 
-        $this->assertRegExp('/New site created/', $output);
+        $this->assertRegExp('/New site with theme/', $output);
     }
 
     public function testNewSiteExistsEmptyDir()
@@ -68,7 +68,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
 
         $output = $commandTester->getDisplay();
 
-        $this->assertRegExp('/New site created/', $output);
+        $this->assertRegExp('/New site with theme/', $output);
     }
 
     /**
@@ -105,7 +105,7 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
             '--force' => true,
         ]);
 
-        $this->assertRegExp('/New site created/', $commandTester->getDisplay());
+        $this->assertRegExp('/New site with theme/', $commandTester->getDisplay());
     }
 
     public function testNewSiteCompleteScaffold()
@@ -119,6 +119,6 @@ class NewSiteCommandTest extends \PHPUnit_Framework_TestCase
             '--all' => true,
         ]);
 
-        $this->assertRegExp('/New site created/', $commandTester->getDisplay());
+        $this->assertRegExp('/New site with theme/', $commandTester->getDisplay());
     }
 }

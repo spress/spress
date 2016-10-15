@@ -63,19 +63,9 @@ class NewSiteCommand extends BaseCommand
             $template = 'spress/spress-theme-spresso';
         }
 
-        $operation = new NewSite();
-        $operation->newSite($path, $template, $force, $completeScaffold);
+        $operation = new NewSite($this->getPackageManager($path, $io));
+        $operation->newSite($path, $template, $force);
 
-        if ($template !== self::BLANK_THEME) {
-            $packageManager = $this->getPackageManager($path, $io);
-            $packageManager->update();
-        }
-
-        $this->successMessage($io, $path);
-    }
-
-    protected function successMessage($io, $sitePath)
-    {
-        $io->success(sprintf('New site created at "%s" folder', $sitePath));
+        $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));
     }
 }

@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
-use Composer\Package\Version\VersionParser;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Yosymfony\Spress\PackageManager\PackageManager;
+use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
 /**
  * Creates a new site.
@@ -28,23 +29,31 @@ class NewSite
     /** @var Filesystem */
     private $fs;
 
+    /** @var PackageManager */
+    private $packageManager;
+
     /**
      * Constructor.
+     *
+     * @param PackageManager $packageManager Package Manager. If null, only
+     *                                       blank themes is allowed
      */
-    public function __construct()
+    public function __construct(PackageManager $packageManager = null)
     {
+        $this->packageManager = $packageManager;
         $this->fs = new Filesystem();
     }
 
     /**
      * Create a new site scaffold.
      *
-     * @param string $path             Destination path
-     * @param string $themeName        Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
-     * @param bool   $force            Force to clear destination if exists and it's not empty'
-     * @param bool   $completeScaffold If true adds "includes" and "plugins" folders to the site
+     * @param string $path      Destination path
+     * @param string $themeName Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
+     * @param bool   $force     Force to clear destination if exists and it's not empty'
+     *
+     * @throws LogicException If there is an attemp of create a non-blank template without the PackageManager
      */
-    public function newSite($path, $themeName, $force = false, $completeScaffold = false)
+    public function newSite($path, $themeName, $force = false)
     {
         $this->fs = new Filesystem();
         $existsPath = $this->fs->exists($path);
@@ -60,16 +69,32 @@ class NewSite
             $this->fs->mkdir($path);
         }
 
-        $this->createSite($path, $themeName, $completeScaffold);
+        $this->createSite($path, $themeName);
     }
 
-    private function createSite($path, $themeName, $completeScaffold = false)
+    private function createSite($path, $themeName)
     {
+        if ($themeName !== self::BLANK_THEME && is_null($this->packageManager)) {
+            throw new \LogicException(
+                'You must set the PackageManager at constructor in order to create non-blank themes.'
+            );
+        }
+
         $packageNames = $themeName === self::BLANK_THEME ? [] : [$themeName];
-        $this->createBlankSite($path, $completeScaffold, $packageNames);
+        $this->createBlankSite($path, $packageNames);
+
+        if ($themeName === self::BLANK_THEME) {
+            return;
+        }
+
+        if ($this->packageManager->isThemePackage($themeName) === false) {
+            throw new \RuntimeException(sprintf('The theme: "%s" is not a Spress theme.', $themeName));
+        }
+
+        $packageManager->update();
     }
 
-    private function createBlankSite($path, $completeScaffold, array $packageNames = [])
+    private function createBlankSite($path, array $packageNames = [])
     {
         $orgDir = getcwd();
 
@@ -79,10 +104,7 @@ class NewSite
         $this->fs->dumpFile('config.yml', '# Site configuration');
         $this->fs->dumpFile('composer.json', $this->generateContentComposerJsonFile($packageNames));
         $this->fs->dumpFile('src/content/index.html', '');
-
-        if ($completeScaffold === true) {
-            $this->fs->mkdir(['src/includes', 'src/plugins']);
-        }
+        $this->fs->mkdir(['src/includes', 'src/plugins']);
 
         chdir($orgDir);
     }
@@ -117,15 +139,21 @@ class NewSite
         }
     }
 
+    /**
+     * @param array[string] $packagNames
+     *
+     * @return string String in JSON format
+     */
     private function generateContentComposerJsonFile(array $packagNames = [])
     {
-        $versionParser = new VersionParser();
-        $requires = $versionParser->parseNameVersionPairs($packagNames);
         $jsonPackages = '';
 
-        foreach ($requires as $pair) {
-            $version = isset($pair['version']) ? $pair['version'] : '*';
-            $jsonPackages .= sprintf("\"%s\": \"%s\"\n", $pair['name'], $version);
+        foreach ($packagNames as $PackageName) {
+            $nameVersion = new PackageNameVersion($packageName);
+            $jsonPackages .= sprintf("\"%s\": \"%s\"\n",
+                $nameVersion->getName(),
+                $nameVersion->getVersion()
+            );
         }
 
         $result = <<<"eot"

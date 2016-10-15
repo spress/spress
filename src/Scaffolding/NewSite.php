@@ -69,7 +69,13 @@ class NewSite
             $this->fs->mkdir($path);
         }
 
-        $this->createSite($path, $themeName);
+        try {
+            $this->createSite($path, $themeName);
+        } catch (\Exception $e) {
+            $this->fs->remove($path);
+
+            throw $e;
+        }
     }
 
     private function createSite($path, $themeName)
@@ -91,7 +97,7 @@ class NewSite
             throw new \RuntimeException(sprintf('The theme: "%s" is not a Spress theme.', $themeName));
         }
 
-        $packageManager->update();
+        $this->packageManager->update();
     }
 
     private function createBlankSite($path, array $packageNames = [])
@@ -148,7 +154,7 @@ class NewSite
     {
         $jsonPackages = '';
 
-        foreach ($packagNames as $PackageName) {
+        foreach ($packagNames as $packageName) {
             $nameVersion = new PackageNameVersion($packageName);
             $jsonPackages .= sprintf("\"%s\": \"%s\"\n",
                 $nameVersion->getName(),

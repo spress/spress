@@ -101,7 +101,7 @@ class PackageManager
      */
     public function existPackage($packageName)
     {
-        return !is_null($this->findPackage($packageName));
+        return !is_null($this->findPackageGlobal($packageName));
     }
 
     /**
@@ -113,7 +113,7 @@ class PackageManager
      */
     public function isThemePackage($packageName)
     {
-        $composerPackage = $this->findPackage($packageName);
+        $composerPackage = $this->findPackageGlobal($packageName);
 
         if (is_null($composerPackage) === true) {
             throw new \RuntimeException(sprintf('The theme: "%s" does not exist.', $packageName));
@@ -123,13 +123,47 @@ class PackageManager
     }
 
     /**
-     * Recovers the data of a package.
+     * Determines if a package A depends on package B. Only scan with first deep level.
+     *
+     * @param string $packageNameA Packagae A. e.g: "vendor/foo *"
+     * @param string $packageNameB Package B. e.g: "vendor/foo-b 2.0"
+     *
+     * @return bool
+     *
+     * @throws RuntimeException If the package doesn't exist
+     */
+    public function isPackageDependOn($packageNameA, $packageNameB)
+    {
+        $composerPackageA = $this->findPackageGlobal($packageNameA);
+
+        if (is_null($composerPackageA) === true) {
+            throw new \RuntimeException(sprintf('The package: "%s" does not exist.', $packageNameA));
+        }
+
+        $requires = $composerPackageA->getRequires();
+        $pairPackageB = new PackageNameVersion($packageNameB);
+
+        foreach ($requires as $link) {
+            if ($link->getTarget() == $pairPackageB->getName()) {
+                if ($link->getConstraint()->matches($pairPackageB->getComposerVersionConstraint())) {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Recovers the data of a package registered in repositories such as packagist.org.
      *
      * @param string $packageName Package's name
      *
      * @return Composer\Package\PackageInterface|null Null if the package not found
      */
-    protected function findPackage($packageName)
+    protected function findPackageGlobal($packageName)
     {
         $packageVersion = new PackageNameVersion($packageName);
 

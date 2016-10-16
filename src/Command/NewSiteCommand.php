@@ -32,6 +32,9 @@ class NewSiteCommand extends BaseCommand
     /** @var string */
     const SPRESSO_THEME = 'spresso';
 
+    /** @var string */
+    const SPRESS_INSTALLER_PACKAGE = 'spress/spress-installer >= 2.1';
+
     /**
      * {@inheritdoc}
      */
@@ -63,7 +66,7 @@ class NewSiteCommand extends BaseCommand
             $template = 'spress/spress-theme-spresso';
         }
 
-        $operation = new NewSite($this->getPackageManager($path, $io));
+        $operation = new NewSite($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
         $operation->newSite($path, $template, $force);
 
         $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));

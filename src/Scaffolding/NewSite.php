@@ -32,16 +32,21 @@ class NewSite
     /** @var PackageManager */
     private $packageManager;
 
+    /** @var string */
+    private $spressInstallerPackage;
+
     /**
      * Constructor.
      *
      * @param PackageManager $packageManager Package Manager. If null, only
      *                                       blank themes is allowed
+     * @param string The minimum Spress installer package required. e.g: "spress/spress-installer >=2.0"
      */
-    public function __construct(PackageManager $packageManager = null)
+    public function __construct(PackageManager $packageManager = null, $spressInstallerPackage = 'spress/spress-installer')
     {
         $this->packageManager = $packageManager;
         $this->fs = new Filesystem();
+        $this->spressInstallerPackage = $spressInstallerPackage;
     }
 
     /**
@@ -100,6 +105,13 @@ class NewSite
 
         if ($this->packageManager->isThemePackage($themeName) === false) {
             throw new \RuntimeException(sprintf('The theme: "%s" is not a Spress theme.', $themeName));
+        }
+
+        if ($this->packageManager->isPackageDependOn($themeName, $this->spressInstallerPackage) === false) {
+            throw new \RuntimeException(sprintf(
+                sprintf('This version of Spress requires a theme with "%s".', $this->spressInstallerPackage),
+                $themeName
+            ));
         }
 
         $this->packageManager->update();

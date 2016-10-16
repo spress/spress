@@ -45,7 +45,8 @@ class NewSite
     }
 
     /**
-     * Create a new site scaffold.
+     * Create a new site scaffold. In case of exception, the new-site directory
+     * will be removed.
      *
      * @param string $path      Destination path
      * @param string $themeName Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme

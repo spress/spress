@@ -126,7 +126,7 @@ class PackageManager
      * Determines if a package A depends on package B. Only scan with first deep level.
      *
      * @param string $packageNameA Packagae A. e.g: "vendor/foo *"
-     * @param string $packageNameB Package B. e.g: "vendor/foo-b 2.0"
+     * @param string $packageNameB Package B. e.g: "vendor/foo-b" or "vendor/foo-b >=2.0"
      *
      * @return bool
      *

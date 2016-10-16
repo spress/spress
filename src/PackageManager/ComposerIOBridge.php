@@ -87,6 +87,10 @@ class ComposerIOBridge extends BaseIO
      */
     public function writeError($messages, $newline = true, $verbosity = self::NORMAL)
     {
+        if ($verbosity != self::NORMAL) {
+            return;
+        }
+
         $this->io->write($messages, $newline);
     }
 

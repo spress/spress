@@ -113,15 +113,13 @@ class PackageManager
      */
     public function isThemePackage($packageName)
     {
-        $package = $this->findPackage($packageName);
+        $composerPackage = $this->findPackage($packageName);
 
-        if (is_null($package)) {
-            $name = (new PackageNameVersion($packageName))->getName();
-
-            throw new \RuntimeException(sprintf('The theme: "%s" doesn\'t exist.', $name));
+        if (is_null($composerPackage) === true) {
+            throw new \RuntimeException(sprintf('The theme: "%s" does not exist.', $packageName));
         }
 
-        return $package->getType() == self::PACKAGE_TYPE_THEME;
+        return $composerPackage->getType() == self::PACKAGE_TYPE_THEME;
     }
 
     /**
@@ -144,9 +142,9 @@ class PackageManager
 
         $name = $packageVersion->getName();
         $version = $packageVersion->getVersion();
-        $package = $this->packageCache[$packageName] = $repoManager->findPackage($name, $version);
+        $composerPackage = $this->packageCache[$packageName] = $repoManager->findPackage($name, $version);
 
-        return $package;
+        return $composerPackage;
     }
 
     protected function buildInstaller(array $options)

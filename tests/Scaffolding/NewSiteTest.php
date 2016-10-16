@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\Scaffolding\NewSite;
 
 class NewSiteTest extends \PHPUnit_Framework_TestCase
@@ -83,6 +84,38 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
         $this->assertFileExists($this->tmpDir.'/src/plugins');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The theme: "vendor-name/foo" does not exist at registered repositories.
+     */
+    public function testNotFoundTheme()
+    {
+        $stubPackageManager = $this->getMockBuilder(PackageManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stubPackageManager->method('existPackage')
+            ->willReturn(false);
+
+        $operation = new NewSite($stubPackageManager);
+        $operation->newSite($this->tmpDir, 'vendor-name/foo');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The theme: "vendor-name/foo" is not a Spress theme.
+     */
+    public function testNotSpressTheme()
+    {
+        $stubPackageManager = $this->getMockBuilder(PackageManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stubPackageManager->method('isThemePackage')
+            ->willReturn(false);
+
+        $operation = new NewSite($stubPackageManager);
+        $operation->newSite($this->tmpDir, 'vendor-name/foo');
     }
 
     /**

@@ -93,6 +93,10 @@ class NewSite
             return;
         }
 
+        if ($this->packageManager->existPackage($themeName) === false) {
+            throw new \RuntimeException(sprintf('The theme: "%s" does not exist at registered repositories.', $themeName));
+        }
+
         if ($this->packageManager->isThemePackage($themeName) === false) {
             throw new \RuntimeException(sprintf('The theme: "%s" is not a Spress theme.', $themeName));
         }

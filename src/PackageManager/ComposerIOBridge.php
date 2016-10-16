@@ -39,7 +39,7 @@ class ComposerIOBridge extends BaseIO
      */
     public function isInteractive()
     {
-        return $this->isInteractive();
+        return $this->io->isInteractive();
     }
 
     /**

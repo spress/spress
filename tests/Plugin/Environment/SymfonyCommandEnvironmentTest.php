@@ -24,7 +24,9 @@ class SymfonyCommandEnvironmentTest extends \PHPUnit_Framework_TestCase
         $application->setAutoExit(false);
 
         $command = new Command('acme');
-        $command->setCode(function ($input, $output) { $output->writeln('acme'); });
+        $command->setCode(function ($input, $output) {
+            $output->writeln('acme');
+        });
 
         $application->add($command);
 
@@ -41,7 +43,9 @@ class SymfonyCommandEnvironmentTest extends \PHPUnit_Framework_TestCase
         $application->setAutoExit(false);
 
         $command = new Command('acme');
-        $command->setCode(function ($input, $output) use (&$token) { $token = 1; });
+        $command->setCode(function ($input, $output) use (&$token) {
+            $token = 1;
+        });
 
         $application->add($command);
 
@@ -62,7 +66,9 @@ class SymfonyCommandEnvironmentTest extends \PHPUnit_Framework_TestCase
         $application->setAutoExit(false);
 
         $command = new Command('acme');
-        $command->setCode(function ($input, $output) { $output->writeln('acme'); });
+        $command->setCode(function ($input, $output) {
+            $output->writeln('acme');
+        });
 
         $application->add($command);
 

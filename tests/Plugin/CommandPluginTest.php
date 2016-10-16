@@ -36,7 +36,9 @@ class CommandPluginTest extends \PHPUnit_Framework_TestCase
     public function testSetCommandEnvironment()
     {
         $command = new Command('acme');
-        $command->setCode(function ($input, $output) { $output->writeln('acme'); });
+        $command->setCode(function ($input, $output) {
+            $output->writeln('acme');
+        });
 
         $commandPlugin = new CommandPlugin();
         $commandPlugin->setCommandEnvironment(new SymfonyCommandEnvironment($command, new ConsoleOutput()));

@@ -27,6 +27,8 @@ class PackageNameVersion
     /** @var string */
     private $version;
 
+    private $composerVersionConstraint;
+
     /**
      * Constructor.
      *
@@ -40,6 +42,8 @@ class PackageNameVersion
 
         $this->version = isset($pair['version']) ? $pair['version'] : '*';
         $this->name = $pair['name'];
+
+        $this->composerVersionConstraint = $versionParser->parseConstraints($this->version);
     }
 
     /**
@@ -70,6 +74,16 @@ class PackageNameVersion
     public function getNormalizedNameVersion()
     {
         return $this->name.' '.$this->version;
+    }
+
+    /**
+     * Returns version Constraint for Composer.
+     *
+     * @return Composer\Semver\Constraint\ConstraintInterface
+     */
+    public function getComposerVersionConstraint()
+    {
+        return $this->composerVersionConstraint;
     }
 
     /**

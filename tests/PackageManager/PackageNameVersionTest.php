@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\tests\PackageManager;
 
+use Composer\Semver\Constraint\ConstraintInterface;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
 class PackageNameVersionTest extends \PHPUnit_Framework_TestCase
@@ -40,5 +41,12 @@ class PackageNameVersionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('vendor/foo', $packagePair->getName());
         $this->assertEquals('2.0', $packagePair->getVersion());
         $this->assertEquals('vendor/foo 2.0', $packagePair->getNormalizedNameVersion());
+    }
+
+    public function testGetComposerVersionConstraint()
+    {
+        $packagePair = new PackageNameVersion('vendor/foo >2.0');
+
+        $this->assertInstanceOf(ConstraintInterface::class, $packagePair->getComposerVersionConstraint());
     }
 }

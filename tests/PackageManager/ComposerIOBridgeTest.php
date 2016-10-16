@@ -20,7 +20,7 @@ use Yosymfony\Spress\Core\IO\NullIO;
  */
 class ComposerIOBridgeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testVerboses()
+    public function testVerbosity()
     {
         $ioBridge = new ComposerIOBridge(new NullIO());
 

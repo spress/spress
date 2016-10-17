@@ -22,6 +22,9 @@ class Generator
     private $files = [];
     private $skeletonDirs;
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         \Twig_Autoloader::register();
@@ -37,6 +40,14 @@ class Generator
         $this->skeletonDirs = $value;
     }
 
+    /**
+     * Render a content using Twig template engine.
+     *
+     * @param string $template The Twig template
+     * @param array  $model    List of key-value properties
+     *
+     * @return string The redered template
+     */
     protected function render($template, $model)
     {
         $twig = $this->getTwig();
@@ -44,6 +55,11 @@ class Generator
         return $twig->render($template, $model);
     }
 
+    /**
+     * Return an instance of Twig.
+     *
+     * @return Twig_Environment The Twig instance
+     */
     protected function getTwig()
     {
         $options = [

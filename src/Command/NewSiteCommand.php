@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
-use Yosymfony\Spress\Scaffolding\NewSite;
+use Yosymfony\Spress\Scaffolding\NewSiteGenerator;
 
 /**
  * New site command.
@@ -66,10 +66,24 @@ class NewSiteCommand extends BaseCommand
             $template = 'spress/spress-theme-spresso';
         }
 
-        $generator = new NewSite($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
+        $this->startingMessage($io, $template);
+
+        $generator = new NewSiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
         $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
         $generator->generate($path, $template, $force);
 
         $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));
+    }
+
+    /**
+     * Writes the staring messages.
+     *
+     * @param ConsoleIO $io       Spress IO
+     * @param string    $template The template
+     */
+    protected function startingMessage(ConsoleIO $io, $template)
+    {
+        $io->newLine();
+        $io->write(sprintf('<comment>Generating a site using the theme: "%s"...</comment>', $template));
     }
 }

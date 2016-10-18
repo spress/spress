@@ -13,9 +13,9 @@ namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\PackageManager\PackageManager;
-use Yosymfony\Spress\Scaffolding\NewSite;
+use Yosymfony\Spress\Scaffolding\NewSiteGenerator;
 
-class NewSiteTest extends \PHPUnit_Framework_TestCase
+class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     protected $skeletonDir;
     protected $tmpDir;
@@ -34,7 +34,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlank()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
 
@@ -52,7 +52,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($this->tmpDir);
 
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
 
@@ -65,7 +65,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankForce()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
         $generator->generate($this->tmpDir, 'blank', true);
@@ -79,7 +79,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankCompleteScaffold()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank', false, true);
 
@@ -98,7 +98,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyTheme()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, '');
     }
@@ -115,7 +115,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $stubPackageManager->method('existPackage')
             ->willReturn(false);
 
-        $generator = new NewSite($stubPackageManager);
+        $generator = new NewSiteGenerator($stubPackageManager);
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'vendor-name/foo');
     }
@@ -132,7 +132,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $stubPackageManager->method('isThemePackage')
             ->willReturn(false);
 
-        $generator = new NewSite($stubPackageManager);
+        $generator = new NewSiteGenerator($stubPackageManager);
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'vendor-name/foo');
     }
@@ -143,7 +143,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteWithTemplateAndNoPackageManagerTest()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'template-test');
 
@@ -155,7 +155,7 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteBlankNoForce()
     {
-        $generator = new NewSite();
+        $generator = new NewSiteGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
         $generator->generate($this->tmpDir, 'blank', false);

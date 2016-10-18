@@ -21,7 +21,7 @@ use Yosymfony\Spress\PackageManager\PackageNameVersion;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewSite extends Generator
+class NewSiteGenerator extends Generator
 {
     /** @var string */
     const BLANK_THEME = 'blank';

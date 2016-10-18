@@ -18,7 +18,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Yosymfony\Spress\Core\IO\IOInterface;
 
 /**
- * Symfony Console implementation. This implementation uses the SymfonyStyle.
+ * Symfony Console implementation of Spress IO.
+ * This implementation uses the SymfonyStyle class.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -30,8 +31,8 @@ class ConsoleIO implements IOInterface
     /**
      * Constructor.
      *
-     * @param Symfony\Component\Console\Input\InputInterface   $input  Input operations
-     * @param Symfony\Component\Console\Output\OutputInterface $output Ouputs operations
+     * @param InputInterface  $input  The Symfony Console input
+     * @param OutputInterface $output The Symfony Console Ouput
      */
     public function __construct(InputInterface $input, OutputInterface $output)
     {
@@ -144,7 +145,7 @@ class ConsoleIO implements IOInterface
     /**
      * Formats a success result bar.
      *
-     * @param string|array $message
+     * @param string|array $message The message
      */
     public function success($message)
     {
@@ -154,7 +155,7 @@ class ConsoleIO implements IOInterface
     /**
      * Formats an error result bar.
      *
-     * @param string|array $message
+     * @param string|array $message The message
      */
     public function error($message)
     {
@@ -164,7 +165,7 @@ class ConsoleIO implements IOInterface
     /**
      * Formats an warning result bar.
      *
-     * @param string|array $message
+     * @param string|array $message The message
      */
     public function warning($message)
     {
@@ -174,7 +175,7 @@ class ConsoleIO implements IOInterface
     /**
      * Formats a list.
      *
-     * @param array $elements
+     * @param array $elements List of element to display
      */
     public function listing(array $elements)
     {

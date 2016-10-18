@@ -31,7 +31,7 @@ class Generator
     }
 
     /**
-     * Set a list of directories.
+     * Sets a list of directories in which templates are located.
      *
      * @param array $value
      */
@@ -73,6 +73,15 @@ class Generator
         return new \Twig_Environment($loader, $options);
     }
 
+    /**
+     * Render a template and result is dumped to a file.
+     *
+     * @param string $template Path to the template file
+     * @param string $target   Filename result
+     * @param array  $model    key-value array that acts as model
+     *
+     * @return int|bool Numer of byte that were written or false if error
+     */
     protected function renderFile($template, $target, $model)
     {
         if (!is_dir(dirname($target))) {
@@ -84,11 +93,19 @@ class Generator
         return file_put_contents($target, $this->render($template, $model));
     }
 
+    /**
+     * Returns the filenames affected by generator operations.
+     *
+     * @return array[string]
+     */
     protected function getFilesAffected()
     {
         return $this->files;
     }
 
+    /**
+     * Cleans the file-affected list.
+     */
     protected function cleanFilesAffected()
     {
         $this->files = [];

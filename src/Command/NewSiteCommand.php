@@ -66,8 +66,9 @@ class NewSiteCommand extends BaseCommand
             $template = 'spress/spress-theme-spresso';
         }
 
-        $operation = new NewSite($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
-        $operation->newSite($path, $template, $force);
+        $generator = new NewSite($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
+        $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
+        $generator->generate($path, $template, $force);
 
         $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));
     }

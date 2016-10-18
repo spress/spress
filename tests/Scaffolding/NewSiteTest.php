@@ -17,11 +17,13 @@ use Yosymfony\Spress\Scaffolding\NewSite;
 
 class NewSiteTest extends \PHPUnit_Framework_TestCase
 {
+    protected $skeletonDir;
     protected $tmpDir;
 
     public function setUp()
     {
         $this->tmpDir = sys_get_temp_dir().'/spress-tests';
+        $this->skeletonDir = [__DIR__.'/../../app/skeletons'];
     }
 
     public function tearDown()
@@ -32,8 +34,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlank()
     {
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'blank');
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
@@ -49,8 +52,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($this->tmpDir);
 
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'blank');
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
@@ -61,9 +65,10 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankForce()
     {
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'blank');
-        $operation->newSite($this->tmpDir, 'blank', true);
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank');
+        $generator->generate($this->tmpDir, 'blank', true);
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
@@ -74,8 +79,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSiteBlankCompleteScaffold()
     {
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'blank', false, true);
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank', false, true);
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
@@ -84,6 +90,17 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
         $this->assertFileExists($this->tmpDir.'/src/plugins');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The name of the theme cannot be empty.
+     */
+    public function testEmptyTheme()
+    {
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, '');
     }
 
     /**
@@ -98,8 +115,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $stubPackageManager->method('existPackage')
             ->willReturn(false);
 
-        $operation = new NewSite($stubPackageManager);
-        $operation->newSite($this->tmpDir, 'vendor-name/foo');
+        $generator = new NewSite($stubPackageManager);
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'vendor-name/foo');
     }
 
     /**
@@ -114,8 +132,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
         $stubPackageManager->method('isThemePackage')
             ->willReturn(false);
 
-        $operation = new NewSite($stubPackageManager);
-        $operation->newSite($this->tmpDir, 'vendor-name/foo');
+        $generator = new NewSite($stubPackageManager);
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'vendor-name/foo');
     }
 
     /**
@@ -124,8 +143,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteWithTemplateAndNoPackageManagerTest()
     {
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'template-test');
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'template-test');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
     }
@@ -135,8 +155,9 @@ class NewSiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewSiteBlankNoForce()
     {
-        $operation = new NewSite();
-        $operation->newSite($this->tmpDir, 'blank');
-        $operation->newSite($this->tmpDir, 'blank', false);
+        $generator = new NewSite();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank');
+        $generator->generate($this->tmpDir, 'blank', false);
     }
 }

@@ -17,11 +17,11 @@ use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
 /**
- * Creates a new site.
+ * Generates a new site.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewSite
+class NewSite extends Generator
 {
     /** @var string */
     const BLANK_THEME = 'blank';
@@ -50,7 +50,7 @@ class NewSite
     }
 
     /**
-     * Create a new site scaffold. In case of exception, the new-site directory
+     * Generates a new site scaffold. In case of exception, the new-site directory
      * will be removed.
      *
      * @param string $path      Destination path
@@ -59,8 +59,12 @@ class NewSite
      *
      * @throws LogicException If there is an attemp of create a non-blank template without the PackageManager
      */
-    public function newSite($path, $themeName, $force = false)
+    public function generate($path, $themeName, $force = false)
     {
+        if (empty(trim($themeName)) === true) {
+            throw new \RuntimeException('The name of the theme cannot be empty.');
+        }
+
         $this->fs = new Filesystem();
         $existsPath = $this->fs->exists($path);
         $isEmpty = $this->isEmptyDir($path);
@@ -69,11 +73,7 @@ class NewSite
             throw new \RuntimeException(sprintf('Path "%s" exists and is not empty.', $path));
         }
 
-        if ($existsPath) {
-            $this->clearDir($path);
-        } else {
-            $this->fs->mkdir($path);
-        }
+        $existsPath ? $this->clearDir($path) : $this->fs->mkdir($path);
 
         try {
             $this->createSite($path, $themeName);
@@ -84,6 +84,10 @@ class NewSite
         }
     }
 
+    /**
+     * @param string $path
+     * @param string $themeName
+     */
     private function createSite($path, $themeName)
     {
         if ($themeName !== self::BLANK_THEME && is_null($this->packageManager)) {
@@ -92,8 +96,7 @@ class NewSite
             );
         }
 
-        $packageNames = $themeName === self::BLANK_THEME ? [] : [$themeName];
-        $this->createBlankSite($path, $packageNames);
+        $this->createBlankSite($path, $themeName);
 
         if ($themeName === self::BLANK_THEME) {
             return;
@@ -117,21 +120,41 @@ class NewSite
         $this->packageManager->update();
     }
 
-    private function createBlankSite($path, array $packageNames = [])
+    /**
+     * @param string $path
+     * @param string $themeName
+     */
+    private function createBlankSite($path, $themeName)
     {
+        $packagePairs = [];
+        $defaultTheme = '';
+        $themePair = new PackageNameVersion($themeName);
+
+        if ($themePair->getName() !== self::BLANK_THEME) {
+            $defaultTheme = $themePair->getName();
+            array_push($packagePairs, $themePair);
+        }
+
         $orgDir = getcwd();
 
         chdir($path);
 
         $this->fs->mkdir(['build', 'src/layouts', 'src/content', 'src/content/posts']);
-        $this->fs->dumpFile('config.yml', '# Site configuration');
-        $this->fs->dumpFile('composer.json', $this->generateContentComposerJsonFile($packageNames));
+        $this->renderFile('site/config.yml.twig', 'config.yml', [
+            'default_theme' => $defaultTheme,
+        ]);
+        $this->renderFile('site/composer.json.twig', 'composer.json', [
+            'requires' => $this->generateRequirePackages($packagePairs),
+        ]);
         $this->fs->dumpFile('src/content/index.html', '');
         $this->fs->mkdir(['src/includes', 'src/plugins']);
 
         chdir($orgDir);
     }
 
+    /**
+     * @param string $path
+     */
     private function isEmptyDir($path)
     {
         if ($this->fs->exists($path) === true) {
@@ -147,6 +170,9 @@ class NewSite
         return true;
     }
 
+    /**
+     * @param string $path
+     */
     private function clearDir($path)
     {
         $items = [];
@@ -163,30 +189,19 @@ class NewSite
     }
 
     /**
-     * @param array[string] $packagNames
+     * @param array[PackageNameVersion] $packagePairs
      *
-     * @return string String in JSON format
+     * @return array List of packages in which the key is the package's name
+     *               and the value is the package's version
      */
-    private function generateContentComposerJsonFile(array $packagNames = [])
+    private function generateRequirePackages(array $packagePairs)
     {
-        $jsonPackages = '';
+        $requires = [];
 
-        foreach ($packagNames as $packageName) {
-            $nameVersion = new PackageNameVersion($packageName);
-            $jsonPackages .= sprintf("\"%s\": \"%s\"\n",
-                $nameVersion->getName(),
-                $nameVersion->getVersion()
-            );
+        foreach ($packagePairs as $packagePair) {
+            $requires[$packagePair->getName()] = $packagePair->getVersion();
         }
 
-        $result = <<<"eot"
-{
-    "require": {
-            $jsonPackages
-    }
-}
-eot;
-
-        return $result;
+        return $requires;
     }
 }

@@ -1,0 +1,7 @@
+{
+    "require": {
+        {% for name, version in requires %}
+        "{{ name }}": "{{ version }}"
+        {% endfor %}
+    }
+}

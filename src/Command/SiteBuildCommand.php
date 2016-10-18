@@ -123,10 +123,10 @@ class SiteBuildCommand extends BaseCommand
     /**
      * Builds a Spress instance.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param IOInterface    $io    The Spress IO
+     * @param InputInterface $input The Symfony Console input
      *
-     * @return \Yosymfony\Spress\Core\Spress
+     * @return Spress The Spress instance
      */
     protected function buildSpress(IOInterface $io, InputInterface $input)
     {
@@ -166,11 +166,11 @@ class SiteBuildCommand extends BaseCommand
     }
 
     /**
-     * Reparse a site.
+     * Reparses a site.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Yosymfony\ResourceWatcher\ResourceWatcher      $rw
+     * @param IOInterface     $io    The Spress IO
+     * @param InputInterface  $input The Symfony Console input
+     * @param ResourceWatcher $rw    The ResourceWatcher
      */
     protected function reParse(IOInterface $io, InputInterface $input, ResourceWatcher $rw)
     {
@@ -194,7 +194,7 @@ class SiteBuildCommand extends BaseCommand
      * @param string $sourceDir      Source path
      * @param string $destinationDir Destination path
      *
-     * @return \Yosymfony\ResourceWatcher\ResourceWatcher
+     * @return ResourceWatcher The ResourceWatcher instance
      */
     protected function buildResourceWatcher($sourceDir, $destinationDir)
     {
@@ -218,9 +218,9 @@ class SiteBuildCommand extends BaseCommand
     }
 
     /**
-     * Gets the attributes or option resolver for configuration values.
+     * Returns the attributes or options resolver for configuration values.
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver
+     * @return AttributesResolver
      */
     protected function getConfigResolver()
     {
@@ -245,7 +245,7 @@ class SiteBuildCommand extends BaseCommand
     /**
      * Enables Parsedown converter.
      *
-     * @param Spress $spress
+     * @param Spress $spress The Spress instance
      */
     protected function enableParsedown(Spress $spress)
     {
@@ -262,12 +262,12 @@ class SiteBuildCommand extends BaseCommand
     /**
      * Writes the staring messages.
      *
-     * @param \Yosymfony\Spress\IO\ConsoleIO $io
-     * @param string                         $env    [description]
-     * @param bool                           $drafts [description]
-     * @param bool                           $safe   [description]
+     * @param ConsoleIO $io    Spress IO
+     * @param string    $env   The enviroment name
+     * @param bool      $draft Is draft mode enabled?
+     * @param bool      $safe  Is safe mode enabled?
      */
-    protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
+    protected function startingMessage(ConsoleIO $io, $env, $draft, $safe)
     {
         $io->newLine();
         $io->write('<comment>Starting...</comment>');
@@ -277,7 +277,7 @@ class SiteBuildCommand extends BaseCommand
             $io->labelValue('Debug mode', 'enabled');
         }
 
-        if ($drafts === true) {
+        if ($draft === true) {
             $io->labelValue('Draft posts', 'enabled');
         }
 
@@ -289,8 +289,8 @@ class SiteBuildCommand extends BaseCommand
     /**
      * Writes the result of a parsing a site.
      *
-     * @param \Yosymfony\Spress\IO\ConsoleIO                    $io
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     * @param ConsoleIO       $io    The Spress IO
+     * @param ItemInterface[] $items Item affected
      */
     protected function resultMessage(ConsoleIO $io, array $items)
     {
@@ -303,10 +303,10 @@ class SiteBuildCommand extends BaseCommand
     /**
      * Write the result of rebuilding a site.
      *
-     * @param Yosymfony\Spress\IO\ConsoleIO $io
-     * @param array                         $newResources
-     * @param array                         $updatedResources
-     * @param array                         $deletedResources
+     * @param ConsoleIO $io               The Spress IO
+     * @param array     $newResources
+     * @param array     $updatedResources
+     * @param array     $deletedResources
      */
     protected function rebuildingSiteMessage(ConsoleIO $io, array $newResources, array $updatedResources, array $deletedResources)
     {

@@ -96,7 +96,8 @@ class NewSiteGenerator extends Generator
             );
         }
 
-        $this->createBlankSite($path, $themeName);
+        $themePair = new PackageNameVersion($themeName);
+        $this->createBlankSite($path, $themePair);
 
         if ($themeName === self::BLANK_THEME) {
             return;
@@ -118,17 +119,17 @@ class NewSiteGenerator extends Generator
         }
 
         $this->packageManager->update();
+        $this->copyContentFromThemeToSite($path, $themePair);
     }
 
     /**
-     * @param string $path
-     * @param string $themeName
+     * @param string             $path
+     * @param PackageNameVersion $themePair
      */
-    private function createBlankSite($path, $themeName)
+    private function createBlankSite($path, PackageNameVersion $themePair)
     {
         $packagePairs = [];
         $defaultTheme = '';
-        $themePair = new PackageNameVersion($themeName);
 
         if ($themePair->getName() !== self::BLANK_THEME) {
             $defaultTheme = $themePair->getName();
@@ -153,7 +154,31 @@ class NewSiteGenerator extends Generator
     }
 
     /**
+     * @param string             $path
+     * @param PackageNameVersion $themePair
+     */
+    private function copyContentFromThemeToSite($path, PackageNameVersion $themePair)
+    {
+        $relativeThemePath = 'src/themes/'.$themePair->getName();
+
+        if ($this->fs->exists($path.'/'.$relativeThemePath) === false) {
+            throw new \RuntimeException('The theme has not been installed correctly.');
+        }
+
+        $finder = new Finder();
+        $finder->in($path.'/'.$relativeThemePath.'/src/content')
+            ->exclude(['assets'])
+            ->files();
+
+        foreach ($finder as $file) {
+            $this->fs->copy($file->getRealpath(), $path.'/src/content/'.$file->getRelativePathname());
+        }
+    }
+
+    /**
      * @param string $path
+     *
+     * @return bool
      */
     private function isEmptyDir($path)
     {
@@ -189,7 +214,7 @@ class NewSiteGenerator extends Generator
     }
 
     /**
-     * @param array[PackageNameVersion] $packagePairs
+     * @param PackageNameVersion[] $packagePairs
      *
      * @return array List of packages in which the key is the package's name
      *               and the value is the package's version

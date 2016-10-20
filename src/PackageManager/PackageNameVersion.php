@@ -34,11 +34,17 @@ class PackageNameVersion
      *
      * @param string $packagName Package's name.
      *                           e.g: "myvendor/foo v1.0"
+     *
+     * @throws RuntimeException If the parsed package's name is empty
      */
     public function __construct($packageName)
     {
         $versionParser = new VersionParser();
         $pair = $versionParser->parseNameVersionPairs([$packageName])[0];
+
+        if (empty($pair['name']) === true) {
+            throw new \RuntimeException('The package name could not be empty.');
+        }
 
         $this->version = isset($pair['version']) ? $pair['version'] : '*';
         $this->name = $pair['name'];

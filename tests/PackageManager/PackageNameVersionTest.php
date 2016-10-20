@@ -49,4 +49,13 @@ class PackageNameVersionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ConstraintInterface::class, $packagePair->getComposerVersionConstraint());
     }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The package name could not be empty.
+     */
+    public function testPackageEmpty()
+    {
+        $packagePair = new PackageNameVersion('');
+    }
 }

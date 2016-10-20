@@ -37,6 +37,16 @@ class BaseCommand extends Command
     }
 
     /**
+     * Returns the skeletons directory.
+     *
+     * @return string Path to skeletons directory
+     */
+    public function getSkeletonsDir()
+    {
+        return __DIR__.'/../../app/skeletons';
+    }
+
+    /**
      * Returns an instance of PackageManager.
      * It is configured to read a composer.json file.
      *

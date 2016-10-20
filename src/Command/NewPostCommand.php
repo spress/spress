@@ -64,7 +64,7 @@ EOT
         $postsDir = './src/content/posts';
 
         $generator = new PostGenerator();
-        $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
+        $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
 
         $files = $generator->generate($postsDir, new \DateTime($date), $title, $layout, $tags, $categories);
 

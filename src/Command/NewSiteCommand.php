@@ -69,7 +69,7 @@ class NewSiteCommand extends BaseCommand
         $this->startingMessage($io, $template);
 
         $generator = new NewSiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
-        $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
+        $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
         $generator->generate($path, $template, $force);
 
         $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));

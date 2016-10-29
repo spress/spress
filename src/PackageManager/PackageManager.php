@@ -28,6 +28,8 @@ class PackageManager
     /** @var string */
     const PACKAGE_TYPE_THEME = 'spress-theme';
 
+    const EXTRA_SPRESS_SITE_DIR = 'spress_site_dir';
+
     /** @var array List of packages with the package's name as key */
     protected $packageCache = [];
 
@@ -195,7 +197,13 @@ class PackageManager
     {
         $options = $this->getInstallResolver()->resolve($options);
 
-        $composer = $this->embeddedComposer->createComposer($this->io, $this->getRootDirectory());
+        $composer = $this->embeddedComposer->createComposer($this->io);
+        $rootPackage = $composer->getPackage();
+        $extras = $rootPackage->getExtra();
+        $extras[self::EXTRA_SPRESS_SITE_DIR] = $this->getRootDirectory();
+
+        $rootPackage->setExtra($extras);
+
         $installer = $this->embeddedComposer->createInstaller($composer, $this->io);
         $installer
             ->setDryRun($options['dry-run'])

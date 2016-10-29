@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
@@ -119,7 +120,10 @@ class NewSiteGenerator extends Generator
         }
 
         $this->packageManager->update();
-        $this->copyContentFromThemeToSite($path, $themePair);
+
+        $relativeThemePath = 'src/themes/'.$themePair->getName();
+        $this->copyContentFromThemeToSite($path, $relativeThemePath);
+        $this->setUpSiteConfigFile($path, $relativeThemePath, $themePair->getName());
     }
 
     /**
@@ -154,25 +158,44 @@ class NewSiteGenerator extends Generator
     }
 
     /**
-     * @param string             $path
-     * @param PackageNameVersion $themePair
+     * @param string $sitePath
+     * @param string $relativeThemePath
      */
-    private function copyContentFromThemeToSite($path, PackageNameVersion $themePair)
+    private function copyContentFromThemeToSite($sitePath, $relativeThemePath)
     {
-        $relativeThemePath = 'src/themes/'.$themePair->getName();
-
-        if ($this->fs->exists($path.'/'.$relativeThemePath) === false) {
+        if ($this->fs->exists($sitePath.'/'.$relativeThemePath) === false) {
             throw new \RuntimeException('The theme has not been installed correctly.');
         }
 
         $finder = new Finder();
-        $finder->in($path.'/'.$relativeThemePath.'/src/content')
+        $finder->in($sitePath.'/'.$relativeThemePath.'/src/content')
             ->exclude(['assets'])
             ->files();
 
         foreach ($finder as $file) {
-            $this->fs->copy($file->getRealpath(), $path.'/src/content/'.$file->getRelativePathname());
+            $this->fs->copy($file->getRealpath(), $sitePath.'/src/content/'.$file->getRelativePathname(), true);
         }
+    }
+
+    /**
+     * @param string $sitePath
+     * @param string $relativeThemePath
+     * @param string $themeName
+     */
+    private function setUpSiteConfigFile($sitePath, $relativeThemePath, $themeName)
+    {
+        $source = $sitePath.'/'.$relativeThemePath.'/config.yml';
+        $destination = $sitePath.'/config.yml';
+
+        $this->fs->copy($source, $destination, true);
+
+        $configContent = file_get_contents($destination);
+        $configValues = Yaml::parse($configContent);
+        $configValues['themes'] = ['default' => $themeName];
+
+        $configParsed = Yaml::dump($configValues);
+
+        $this->fs->dumpFile($destination, $configParsed);
     }
 
     /**

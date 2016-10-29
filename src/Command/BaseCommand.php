@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Command;
 
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
+use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Symfony\Component\Console\Command\Command;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\PackageManager\PackageManager;

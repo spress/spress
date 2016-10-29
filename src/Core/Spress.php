@@ -11,12 +11,12 @@
 
 namespace Yosymfony\Spress\Core;
 
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
 use Pimple\Container;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ConfigLoader\Config;
+use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;

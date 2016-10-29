@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin;
 
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposerBuilder;
+use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 

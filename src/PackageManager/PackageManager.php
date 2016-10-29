@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\PackageManager;
 
-use Dflydev\EmbeddedComposer\Core\EmbeddedComposer;
+use Yosymfony\EmbeddedComposer\EmbeddedComposer;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
@@ -51,6 +51,16 @@ class PackageManager
         $this->siteRoot = $embeddedComposer->getExternalRootDirectory();
         $this->embeddedComposer = $embeddedComposer;
         $this->io = new ComposerIOBridge($io);
+    }
+
+    /**
+     * Returns the root directory in which the composer.json is located.
+     *
+     * @return string
+     */
+    public function getRootDirectory()
+    {
+        return $this->embeddedComposer->getExternalRootDirectory();
     }
 
     /**
@@ -184,7 +194,9 @@ class PackageManager
     protected function buildInstaller(array $options)
     {
         $options = $this->getInstallResolver()->resolve($options);
-        $installer = $this->embeddedComposer->createInstaller($this->io);
+
+        $composer = $this->embeddedComposer->createComposer($this->io, $this->getRootDirectory());
+        $installer = $this->embeddedComposer->createInstaller($composer, $this->io);
         $installer
             ->setDryRun($options['dry-run'])
             ->setVerbose($options['verbose'])

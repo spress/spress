@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\PackageManager;
+namespace Yosymfony\Spress\Tests\PackageManager;
 
 use Composer\Semver\Constraint\ConstraintInterface;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;

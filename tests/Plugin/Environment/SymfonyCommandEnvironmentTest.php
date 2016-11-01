@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Plugin\Environment;
+namespace Yosymfony\Spress\Tests\Plugin\Environment;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\PackageManager;
+namespace Yosymfony\Spress\Test\PackageManager;
 
+use Yosymfony\Spress\PackageManager\ComposerIOBridge;
 use Yosymfony\Spress\Core\IO\NullIO;
 
 class ComposerIOBridgeTest extends \PHPUnit_Framework_TestCase

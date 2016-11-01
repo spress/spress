@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Scaffolding;
+namespace Yosymfony\Spress\Tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\PackageManager\PackageManager;

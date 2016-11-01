@@ -13,11 +13,6 @@ namespace Yosymfony\Spress\PackageManager;
 
 use Yosymfony\Spress\Core\IO\NullIO;
 
-/**
- * Bridge between Spress IO and Composer IO.
- *
- * @author Victor Puertas <vpgugr@gmail.com>
- */
 class ComposerIOBridgeTest extends \PHPUnit_Framework_TestCase
 {
     public function testVerbosity()

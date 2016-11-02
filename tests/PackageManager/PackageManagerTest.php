@@ -12,8 +12,10 @@
 namespace Yosymfony\Spress\Test\PackageManager;
 
 use Composer\Composer;
+use Composer\Package\Link;
 use Composer\Package\Package;
 use Composer\Repository\RepositoryManager;
+use Composer\Semver\Constraint\EmptyConstraint;
 use Yosymfony\EmbeddedComposer\EmbeddedComposer;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\PackageManager\PackageManager;
@@ -145,5 +147,53 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
         $packageManager = new PackageManager($embeddedComposerStub, new NullIO());
 
         $this->assertFalse($packageManager->isThemePackage('foo:1.0.0'));
+    }
+
+    public function testIsPackageDependOn()
+    {
+        $composer = new Composer();
+        $package = new Package('foo', '1.0.0', '1.0');
+        $package->setRequires([new Link('foo', 'foo-b', new EmptyConstraint())]);
+
+        $managerStub = $this->getMockBuilder(RepositoryManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $managerStub->method('findPackage')
+            ->willReturn($package);
+
+        $composer->setRepositoryManager($managerStub);
+
+        $embeddedComposerStub = $this->getMockBuilder(EmbeddedComposer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $embeddedComposerStub->method('createComposer')
+            ->willReturn($composer);
+        $packageManager = new PackageManager($embeddedComposerStub, new NullIO());
+
+        $this->assertTrue($packageManager->isPackageDependOn('foo:1.0.0', 'foo-b: 2.0.0'));
+    }
+
+    public function testIsPackageNotDependOn()
+    {
+        $composer = new Composer();
+        $package = new Package('foo', '1.0.0', '1.0');
+        $package->setRequires([new Link('foo', 'foo-c', new EmptyConstraint())]);
+
+        $managerStub = $this->getMockBuilder(RepositoryManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $managerStub->method('findPackage')
+            ->willReturn($package);
+
+        $composer->setRepositoryManager($managerStub);
+
+        $embeddedComposerStub = $this->getMockBuilder(EmbeddedComposer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $embeddedComposerStub->method('createComposer')
+            ->willReturn($composer);
+        $packageManager = new PackageManager($embeddedComposerStub, new NullIO());
+
+        $this->assertFalse($packageManager->isPackageDependOn('foo:1.0.0', 'foo-b: 2.0.0'));
     }
 }

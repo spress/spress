@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\Scaffolding;
+namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\PackageManager\PackageManager;
@@ -43,6 +43,8 @@ class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
+        $this->assertFileExists($this->tmpDir.'/src/includes');
+        $this->assertFileExists($this->tmpDir.'/src/plugins');
     }
 
     public function testNewSiteExistsEmptyDir()
@@ -61,6 +63,8 @@ class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
+        $this->assertFileExists($this->tmpDir.'/src/includes');
+        $this->assertFileExists($this->tmpDir.'/src/plugins');
     }
 
     public function testNewSiteBlankForce()
@@ -69,19 +73,6 @@ class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
         $generator->generate($this->tmpDir, 'blank', true);
-
-        $this->assertFileExists($this->tmpDir.'/config.yml');
-        $this->assertFileExists($this->tmpDir.'/composer.json');
-        $this->assertFileExists($this->tmpDir.'/src/content/index.html');
-        $this->assertFileExists($this->tmpDir.'/src/content/posts');
-        $this->assertFileExists($this->tmpDir.'/src/layouts');
-    }
-
-    public function testNewSiteBlankCompleteScaffold()
-    {
-        $generator = new NewSiteGenerator();
-        $generator->setSkeletonDirs($this->skeletonDir);
-        $generator->generate($this->tmpDir, 'blank', false, true);
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');

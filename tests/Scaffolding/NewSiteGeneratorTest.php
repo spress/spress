@@ -12,6 +12,8 @@
 namespace Yosymfony\Spress\tests\Scaffolding;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
+use Yosymfony\Spress\IO\BufferIO;
 use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\Scaffolding\NewSiteGenerator;
 
@@ -76,6 +78,36 @@ class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
+        $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/posts');
+        $this->assertFileExists($this->tmpDir.'/src/layouts');
+        $this->assertFileExists($this->tmpDir.'/src/includes');
+        $this->assertFileExists($this->tmpDir.'/src/plugins');
+    }
+
+    /**
+     * @group net
+     */
+    public function testSpressoTheme()
+    {
+        $autoloaders = spl_autoload_functions();
+        $composerClassloader = $autoloaders[0][0];
+        $builder = new EmbeddedComposerBuilder($composerClassloader, $this->tmpDir);
+        $embeddedComposer = $builder->setComposerFilename('composer.json')
+            ->setVendorDirectory('vendor')
+            ->build();
+        $embeddedComposer->processAdditionalAutoloads();
+
+        $io = new BufferIO();
+        $packageManager = new PackageManager($embeddedComposer, $io);
+
+        $generator = new NewSiteGenerator($packageManager);
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
+
+        $this->assertFileExists($this->tmpDir.'/config.yml');
+        $this->assertFileExists($this->tmpDir.'/composer.json');
+        $this->assertFileExists($this->tmpDir.'/src/themes/spress/spress-theme-spresso/config.yml');
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');

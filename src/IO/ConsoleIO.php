@@ -25,7 +25,10 @@ use Yosymfony\Spress\Core\IO\IOInterface;
  */
 class ConsoleIO implements IOInterface
 {
+    /** @var InputInterface */
     protected $input;
+
+    /** @var SymfonyStyle */
     protected $io;
 
     /**

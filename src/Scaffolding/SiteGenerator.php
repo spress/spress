@@ -51,7 +51,7 @@ class SiteGenerator extends Generator
     }
 
     /**
-     * Generates a new site scaffold. In case of exception, the new-site directory
+     * Scaffold a new site. In case of exception, the new-site directory
      * will be removed.
      *
      * @param string $path      Destination path

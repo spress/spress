@@ -87,6 +87,7 @@ class NewSiteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group net
+     * @large
      */
     public function testSpressoTheme()
     {

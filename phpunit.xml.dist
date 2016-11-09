@@ -20,4 +20,10 @@
             </exclude>
         </whitelist>
     </filter>
+
+    <groups>
+        <exclude>
+            <group>net</group>
+        </exclude>
+    </groups>
 </phpunit>

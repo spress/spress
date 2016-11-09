@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yosymfony\Spress\IO\ConsoleIO;
-use Yosymfony\Spress\Scaffolding\NewSiteGenerator;
+use Yosymfony\Spress\Scaffolding\SiteGenerator;
 
 /**
  * New site command.
@@ -68,7 +68,7 @@ class NewSiteCommand extends BaseCommand
 
         $this->startingMessage($io, $template);
 
-        $generator = new NewSiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
+        $generator = new SiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
         $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
         $generator->generate($path, $template, $force);
 

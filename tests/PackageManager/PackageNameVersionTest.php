@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\PackageManager;
+namespace Yosymfony\Spress\tests\PackageManager;
 
 use Composer\Semver\Constraint\ConstraintInterface;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
@@ -48,6 +48,17 @@ class PackageNameVersionTest extends \PHPUnit_Framework_TestCase
         $packagePair = new PackageNameVersion('vendor/foo >2.0');
 
         $this->assertInstanceOf(ConstraintInterface::class, $packagePair->getComposerVersionConstraint());
+    }
+
+    public function testGetStability()
+    {
+        $packagePair = new PackageNameVersion('vendor/foo 2.0-dev');
+
+        $this->assertEquals('dev', $packagePair->getStability());
+
+        $packagePair = new PackageNameVersion('vendor/foo 2.0@dev');
+
+        $this->assertEquals('dev', $packagePair->getStability());
     }
 
     /**

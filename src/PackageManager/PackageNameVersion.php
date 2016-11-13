@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\PackageManager;
 
+use Composer\Package\BasePackage;
 use Composer\Package\Version\VersionParser;
 
 /**
@@ -26,6 +27,9 @@ class PackageNameVersion
 
     /** @var string */
     private $version;
+
+    /** @var string */
+    private $stability;
 
     private $composerVersionConstraint;
 
@@ -70,6 +74,28 @@ class PackageNameVersion
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Returns the package's version stability.
+     *
+     * @return string
+     */
+    public function getStability()
+    {
+        if (is_null($this->stability) === false) {
+            return $this->stability;
+        }
+
+        if (preg_match('{^[^,\s]*?@('.implode('|', array_keys(BasePackage::$stabilities)).')$}i', $this->getVersion(), $match)) {
+            $stability = $match[1];
+        } else {
+            $stability = VersionParser::parseStability($this->getVersion());
+        }
+
+        $this->stability = VersionParser::normalizeStability($stability);
+
+        return $this->stability;
     }
 
     /**

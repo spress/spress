@@ -11,6 +11,18 @@
 
 namespace Yosymfony\Spress\PackageManager;
 
+use Composer\Config;
+use Composer\DependencyResolver\Operation\InstallOperation;
+use Composer\DependencyResolver\Pool;
+use Composer\Factory;
+use Composer\Installer\InstallationManager;
+use Composer\Installer\ProjectInstaller;
+use Composer\Json\JsonFile;
+use Composer\Package\Version\VersionSelector;
+use Composer\Repository\CompositeRepository;
+use Composer\Repository\InstalledFilesystemRepository;
+use Composer\Repository\PlatformRepository;
+use Composer\Repository\RepositoryFactory;
 use Yosymfony\EmbeddedComposer\EmbeddedComposer;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
@@ -82,7 +94,7 @@ class PackageManager
      * Update plugins and themes installed previously.
      *
      * @param array    $options      Options for updating packages
-     * @param string[] $packageNames Lista de packages
+     * @param string[] $packageNames List of packages
      */
     public function update(array $options = [], array $packageNames = [])
     {
@@ -91,6 +103,83 @@ class PackageManager
         $installer->setUpdate(true);
         $installer->setUpdateWhitelist($packageNames);
         $installer->run();
+    }
+
+    /**
+     * Create a new project. This is equivalent to run "git clone" followed by
+     * `$packageManger->install()` method.
+     *
+     * @param string $siteDir
+     * @param string $packageName
+     * @param string $repository
+     */
+    public function createProject($siteDir, $packageName, $repository = null)
+    {
+        $packagePair = new PackageNameVersion($packageName);
+        $config = Factory::createConfig();
+
+        if (is_null($repository) === true) {
+            $sourceRepo = new CompositeRepository(RepositoryFactory::defaultRepos($this->io, $config));
+        } else {
+            $sourceRepo = RepositoryFactory::fromString($this->io, $config, $repository, true);
+        }
+
+        $pool = new Pool($packagePair->getStability());
+        $pool->addRepository($sourceRepo);
+
+        $platformOverrides = $config->get('platform') ?: [];
+
+        $platform = new PlatformRepository([], $platformOverrides);
+        $phpPackage = $platform->findPackage('php', '*');
+        $phpVersion = $phpPackage->getVersion();
+        $prettyPhpVersion = $phpPackage->getPrettyVersion();
+
+        $versionSelector = new VersionSelector($pool);
+        $package = $versionSelector->findBestCandidate(
+            $packagePair->getName(),
+            $packagePair->getVersion(),
+            $phpVersion,
+            $packagePair->getStability()
+        );
+
+        if (is_null($package)) {
+            $errorMessage = sprintf(
+                'Could not find the theme "%s"',
+                $packagePair->getName()
+            );
+
+            $versionWithoutPHP = $versionSelector->findBestCandidate(
+                $packagePair->getName(),
+                $packagePair->getVersion(),
+                null,
+                $packagePair->getStability());
+
+            if ($phpVersion && $versionWithoutPHP) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        '%s in a version installable using your PHP version %s.',
+                        $errorMessage,
+                        $prettyPhpVersion
+                    )
+                );
+            }
+
+            throw new \InvalidArgumentException($errorMessage.'.');
+        }
+
+        if (strpos($package->getPrettyVersion(), 'dev-') === 0 && in_array($package->getSourceType(), array('git', 'hg'))) {
+            $package->setSourceReference(substr($package->getPrettyVersion(), 4));
+        }
+
+        $dm = $this->createDownloadManager($config);
+        $dm->setPreferSource(false)
+            ->setPreferDist(true);
+
+        $projectInstaller = new ProjectInstaller($siteDir, $dm);
+        $im = new InstallationManager();
+        $im->addInstaller($projectInstaller);
+        $im->install(new InstalledFilesystemRepository(new JsonFile('php://memory')), new InstallOperation($package));
+        $im->notifyInstalls($this->io);
     }
 
     /**
@@ -237,5 +326,15 @@ class PackageManager
             ->setDefault('ignore-platform-reqs', false, 'bool');
 
         return $resolver;
+    }
+
+    /**
+     * Returns a DownloadManager instance.
+     *
+     * @return Composer\Downloader\DownloadManager
+     */
+    protected function createDownloadManager(Config $config)
+    {
+        return (new Factory())->createDownloadManager($this->io, $config);
     }
 }

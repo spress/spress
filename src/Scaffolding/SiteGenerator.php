@@ -28,13 +28,13 @@ class SiteGenerator extends Generator
     const BLANK_THEME = 'blank';
 
     /** @var Filesystem */
-    private $fs;
+    protected $fs;
 
     /** @var PackageManager */
-    private $packageManager;
+    protected $packageManager;
 
     /** @var string */
-    private $spressInstallerPackage;
+    protected $spressInstallerPackage;
 
     /**
      * Constructor.
@@ -89,13 +89,9 @@ class SiteGenerator extends Generator
      * @param string $path
      * @param string $themeName
      */
-    private function createSite($path, $themeName)
+    protected function createSite($path, $themeName)
     {
-        if ($themeName !== self::BLANK_THEME && is_null($this->packageManager)) {
-            throw new \LogicException(
-                'You must set the PackageManager at constructor in order to create non-blank themes.'
-            );
-        }
+        $this->checkRequirements($themeName);
 
         $themePair = new PackageNameVersion($themeName);
         $this->createBlankSite($path, $themePair);
@@ -127,10 +123,24 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Checks the requirements for the theme.
+     *
+     * @throws LogicException If the packageManager is null
+     */
+    protected function checkRequirements($themeName)
+    {
+        if ($themeName !== self::BLANK_THEME && is_null($this->packageManager)) {
+            throw new \LogicException(
+                'You must set the PackageManager at constructor in order to create non-blank themes.'
+            );
+        }
+    }
+
+    /**
      * @param string             $path
      * @param PackageNameVersion $themePair
      */
-    private function createBlankSite($path, PackageNameVersion $themePair)
+    protected function createBlankSite($path, PackageNameVersion $themePair)
     {
         $packagePairs = [];
         $defaultTheme = '';
@@ -161,7 +171,7 @@ class SiteGenerator extends Generator
      * @param string $sitePath
      * @param string $relativeThemePath
      */
-    private function copyContentFromThemeToSite($sitePath, $relativeThemePath)
+    protected function copyContentFromThemeToSite($sitePath, $relativeThemePath)
     {
         if ($this->fs->exists($sitePath.'/'.$relativeThemePath) === false) {
             throw new \RuntimeException('The theme has not been installed correctly.');
@@ -182,7 +192,7 @@ class SiteGenerator extends Generator
      * @param string $relativeThemePath
      * @param string $themeName
      */
-    private function setUpSiteConfigFile($sitePath, $relativeThemePath, $themeName)
+    protected function setUpSiteConfigFile($sitePath, $relativeThemePath, $themeName)
     {
         $source = $sitePath.'/'.$relativeThemePath.'/config.yml';
         $destination = $sitePath.'/config.yml';
@@ -203,7 +213,7 @@ class SiteGenerator extends Generator
      *
      * @return bool
      */
-    private function isEmptyDir($path)
+    protected function isEmptyDir($path)
     {
         if ($this->fs->exists($path) === true) {
             $finder = new Finder();
@@ -221,7 +231,7 @@ class SiteGenerator extends Generator
     /**
      * @param string $path
      */
-    private function clearDir($path)
+    protected function clearDir($path)
     {
         $items = [];
         $finder = new Finder();
@@ -242,7 +252,7 @@ class SiteGenerator extends Generator
      * @return array List of packages in which the key is the package's name
      *               and the value is the package's version
      */
-    private function generateRequirePackages(array $packagePairs)
+    protected function generateRequirePackages(array $packagePairs)
     {
         $requires = [];
 

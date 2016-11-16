@@ -16,6 +16,7 @@ use Symfony\Component\Console\Application as ConsoleApplication;
 use Yosymfony\Spress\Command\NewPluginCommand;
 use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
+use Yosymfony\Spress\Command\NewThemeCommand;
 use Yosymfony\Spress\Command\SelfUpdateCommand;
 use Yosymfony\Spress\Command\SiteBuildCommand;
 use Yosymfony\Spress\Command\UpdatePluginCommand;
@@ -104,11 +105,12 @@ class Application extends ConsoleApplication
         $welcomeCommand = new WelcomeCommand();
 
         $this->add($welcomeCommand);
-        $this->add(new SiteBuildCommand());
-        $this->add(new NewSiteCommand());
-        $this->add(new NewPostCommand());
-        $this->add(new SelfUpdateCommand());
         $this->add(new NewPluginCommand());
+        $this->add(new NewPostCommand());
+        $this->add(new NewSiteCommand());
+        $this->add(new NewThemeCommand());
+        $this->add(new SelfUpdateCommand());
+        $this->add(new SiteBuildCommand());
         $this->add(new UpdatePluginCommand());
 
         $this->setDefaultCommand($welcomeCommand->getName());

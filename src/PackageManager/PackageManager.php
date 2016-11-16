@@ -106,8 +106,7 @@ class PackageManager
     }
 
     /**
-     * Create a new project. This is equivalent to run "git clone" followed by
-     * `$packageManger->install()` method.
+     * Create a new project. This is equivalent to perform a "git clone".
      *
      * @param string $siteDir
      * @param string $packageName

@@ -43,7 +43,7 @@ class NewSiteCommand extends BaseCommand
         $this->setDefinition([
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
             new InputArgument('template', InputArgument::OPTIONAL, 'Package name', self::BLANK_THEME),
-            new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation event if path already exists'),
+            new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
         ])
         ->setName('new:site')

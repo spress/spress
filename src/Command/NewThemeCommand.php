@@ -34,6 +34,7 @@ class NewThemeCommand extends BaseCommand
         $this->setDefinition(array(
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', getcwd()),
             new InputArgument('package', InputArgument::OPTIONAL, 'Packages that should be updated, if not provided all packages are.', ThemeGenerator::BLANK_THEME),
+            new InputOption('repository', null, InputOption::VALUE_REQUIRED, 'Pick a different repository (as url or json config) to look for the package.'),
             new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information.'),
             new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages.'),
             new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
@@ -58,16 +59,37 @@ EOT
         $generator = new ThemeGenerator($packageManager);
         $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
 
-        $io->write(sprintf(
-            'Installing theme "%s"  in %s.',
+        $this->startingMessage(
+            $io,
             $input->getArgument('package'),
             $packageManager->getRootDirectory()
-        ));
+        );
 
         $generator->generate(
             $packageManager->getRootDirectory(),
             $input->getArgument('package'),
-            $input->getOption('force')
+            $input->getOption('repository'),
+            $input->getOption('force'),
+            $input->getOption('prefer-source')
         );
+
+        $packageManager->update();
+    }
+
+    /**
+     * Writes the staring messages.
+     *
+     * @param ConsoleIO $io       Spress IO
+     * @param string    $template The template
+     */
+    protected function startingMessage(ConsoleIO $io, $packageName, $siteDir)
+    {
+        $io->newLine();
+        $io->write(sprintf(
+            '<comment>Installing theme: "%s" in "%s" folder.</comment>',
+            $packageName,
+            $siteDir
+        ));
+        $io->newLine();
     }
 }

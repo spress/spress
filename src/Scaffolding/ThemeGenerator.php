@@ -19,9 +19,21 @@ namespace Yosymfony\Spress\Scaffolding;
 class ThemeGenerator extends SiteGenerator
 {
     /**
-     * {@inheritdoc}
+     * Scaffold a new theme. In case of exception, the new-site directory
+     * will be removed.
+     *
+     * @param string $path         Destination path
+     * @param string $themeName    Theme name. Pattern <theme_name>:<theme_version>
+     *                             can be used. "blank" is a special theme
+     * @param string $repository   Provide a custom repository to search for the
+     *                             package, which will be used instead of packagist
+     * @param bool   $force        Force to clear destination if exists and it's
+     *                             not empty'
+     * @param bool   $preferSource Grab the theme from source when available
+     *
+     * @throws LogicException If there is an attemp of create a non-blank template without the PackageManager
      */
-    public function generate($path, $themeName, $force = false)
+    public function generate($path, $themeName, $repository = null, $force = false, $preferSource = false)
     {
         if ($themeName === self::BLANK_THEME) {
             parent::generate($path, $themeName, $force);
@@ -29,7 +41,10 @@ class ThemeGenerator extends SiteGenerator
             return;
         }
 
+        $this->checkThemeName($themeName);
+        $this->processPath($path, $force);
         $this->checkRequirements($themeName);
-        $this->packageManager->createProject($path, $themeName);
+
+        $this->packageManager->createProject($path, $themeName, $repository, $preferSource);
     }
 }

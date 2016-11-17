@@ -108,11 +108,12 @@ class PackageManager
     /**
      * Create a new project. This is equivalent to perform a "git clone".
      *
-     * @param string $siteDir
-     * @param string $packageName
-     * @param string $repository
+     * @param string $siteDir      Site directory
+     * @param string $packageName  Package's name. e.g: "vendory/foo 2.0.0"
+     * @param string $repository   Provide a custom repository to search for the package
+     * @param bool   $preferSource Install packages from source when available
      */
-    public function createProject($siteDir, $packageName, $repository = null)
+    public function createProject($siteDir, $packageName, $repository = null, $preferSource = false)
     {
         $packagePair = new PackageNameVersion($packageName);
         $config = Factory::createConfig();
@@ -171,8 +172,8 @@ class PackageManager
         }
 
         $dm = $this->createDownloadManager($config);
-        $dm->setPreferSource(false)
-            ->setPreferDist(true);
+        $dm->setPreferSource($preferSource)
+            ->setPreferDist(!$preferSource);
 
         $projectInstaller = new ProjectInstaller($siteDir, $dm);
         $im = new InstallationManager();

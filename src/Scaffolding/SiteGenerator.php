@@ -62,19 +62,8 @@ class SiteGenerator extends Generator
      */
     public function generate($path, $themeName, $force = false)
     {
-        if (empty(trim($themeName)) === true) {
-            throw new \RuntimeException('The name of the theme cannot be empty.');
-        }
-
-        $this->fs = new Filesystem();
-        $existsPath = $this->fs->exists($path);
-        $isEmpty = $this->isEmptyDir($path);
-
-        if ($existsPath === true && $force === false && $isEmpty === false) {
-            throw new \RuntimeException(sprintf('Path "%s" exists and is not empty.', $path));
-        }
-
-        $existsPath ? $this->clearDir($path) : $this->fs->mkdir($path);
+        $this->checkThemeName($themeName);
+        $this->processPath($path, $force);
 
         try {
             $this->createSite($path, $themeName);
@@ -86,6 +75,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Create a site.
+     *
      * @param string $path
      * @param string $themeName
      */
@@ -123,6 +114,18 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Checks the theme's name.
+     *
+     * @param string $themeName
+     */
+    protected function checkThemeName($themeName)
+    {
+        if (empty(trim($themeName)) === true) {
+            throw new \RuntimeException('The name of the theme cannot be empty.');
+        }
+    }
+
+    /**
      * Checks the requirements for the theme.
      *
      * @throws LogicException If the packageManager is null
@@ -134,6 +137,27 @@ class SiteGenerator extends Generator
                 'You must set the PackageManager at constructor in order to create non-blank themes.'
             );
         }
+    }
+
+    /**
+     * Process the path of the future site.
+     *
+     * @param string $path
+     * @param bool   $force
+     *
+     * @throws RuntimeException If the argument force is set to true and the
+     *                          path exists and is not empty
+     */
+    protected function processPath($path, $force)
+    {
+        $existsPath = $this->fs->exists($path);
+        $isEmpty = $this->isEmptyDir($path);
+
+        if ($existsPath === true && $force === false && $isEmpty === false) {
+            throw new \RuntimeException(sprintf('Path "%s" exists and is not empty.', $path));
+        }
+
+        $existsPath ? $this->clearDir($path) : $this->fs->mkdir($path);
     }
 
     /**
@@ -168,6 +192,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Copies content files from the theme to "src/content" folder.
+     *
      * @param string $sitePath
      * @param string $relativeThemePath
      */
@@ -188,6 +214,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Sets up the configuration file.
+     *
      * @param string $sitePath
      * @param string $relativeThemePath
      * @param string $themeName
@@ -209,6 +237,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Is the path empty?
+     *
      * @param string $path
      *
      * @return bool
@@ -229,6 +259,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Clears the directory.
+     *
      * @param string $path
      */
     protected function clearDir($path)
@@ -247,6 +279,8 @@ class SiteGenerator extends Generator
     }
 
     /**
+     * Generates the list of required packages.
+     *
      * @param PackageNameVersion[] $packagePairs
      *
      * @return array List of packages in which the key is the package's name

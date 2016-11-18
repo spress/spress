@@ -267,7 +267,9 @@ class SiteGenerator extends Generator
     {
         $items = [];
         $finder = new Finder();
-        $finder->in($path);
+        $finder->in($path)
+            ->ignoreVCS(false)
+            ->ignoreDotFiles(false);
 
         foreach ($finder as $item) {
             $items[] = $item->getRealpath();

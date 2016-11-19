@@ -23,6 +23,8 @@ use Composer\Repository\CompositeRepository;
 use Composer\Repository\InstalledFilesystemRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Yosymfony\EmbeddedComposer\EmbeddedComposer;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
@@ -40,7 +42,11 @@ class PackageManager
     /** @var string */
     const PACKAGE_TYPE_THEME = 'spress-theme';
 
+    /** @var string */
     const EXTRA_SPRESS_SITE_DIR = 'spress_site_dir';
+
+    /** @var array */
+    protected $vcsNames = ['.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg', '.fslckout', '_FOSSIL_'];
 
     /** @var array List of packages with the package's name as key */
     protected $packageCache = [];
@@ -180,6 +186,10 @@ class PackageManager
         $im->addInstaller($projectInstaller);
         $im->install(new InstalledFilesystemRepository(new JsonFile('php://memory')), new InstallOperation($package));
         $im->notifyInstalls($this->io);
+
+        if (is_null($repository)) {
+            $this->clearVcsMetadata($siteDir);
+        }
     }
 
     /**
@@ -336,5 +346,39 @@ class PackageManager
     protected function createDownloadManager(Config $config)
     {
         return (new Factory())->createDownloadManager($this->io, $config);
+    }
+
+    /**
+     * Clear the VCS metadata. e.g: .git folder.
+     *
+     * @param string $directory Directory in which find VCS metadata
+     *
+     * @throws RuntimeException If an error ocurred while removing VCS metadata
+     */
+    protected function clearVcsMetadata($directory)
+    {
+        $fs = new Filesystem();
+        $finder = new Finder();
+        $finder
+            ->in($directory)
+            ->depth(0)
+            ->directories()
+            ->ignoreVCS(false)
+            ->ignoreDotFiles(false);
+
+        foreach ($this->vcsNames as $vcsName) {
+            $finder->name($vcsName);
+        }
+
+        try {
+            foreach ($finder as $dir) {
+                $fs->remove($dir);
+            }
+        } catch (\Exception $e) {
+            throw new \RuntimeException(sprintf(
+               'An error occurred while removing the VCS metadata: %s.',
+               $e->getMessage()
+           ));
+        }
     }
 }

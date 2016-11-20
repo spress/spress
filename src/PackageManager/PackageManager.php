@@ -286,17 +286,17 @@ class PackageManager
      */
     protected function findPackageGlobal($packageName)
     {
-        $packageVersion = new PackageNameVersion($packageName);
+        $packagePair = new PackageNameVersion($packageName);
 
-        if (isset($this->packageCache[$packageVersion->getNormalizedNameVersion()])) {
-            return $this->packageCache[$packageVersion->getNormalizedNameVersion()];
+        if (isset($this->packageCache[$packagePair->getNormalizedNameVersion()])) {
+            return $this->packageCache[$packagePair->getNormalizedNameVersion()];
         }
 
         $composer = $this->embeddedComposer->createComposer($this->io);
         $repoManager = $composer->getRepositoryManager();
 
-        $name = $packageVersion->getName();
-        $version = $packageVersion->getVersion();
+        $name = $packagePair->getName();
+        $version = $packagePair->getVersion();
         $composerPackage = $this->packageCache[$packageName] = $repoManager->findPackage($name, $version);
 
         return $composerPackage;

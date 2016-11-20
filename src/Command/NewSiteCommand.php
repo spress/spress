@@ -42,9 +42,9 @@ class NewSiteCommand extends BaseCommand
     {
         $this->setDefinition([
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
-            new InputArgument('template', InputArgument::OPTIONAL, 'Package name', self::BLANK_THEME),
+            new InputArgument('theme', InputArgument::OPTIONAL, 'Theme name', self::BLANK_THEME),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
-            new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold'),
+            new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold of a blank site.'),
         ])
         ->setName('new:site')
         ->setDescription('Create a new site')
@@ -57,33 +57,49 @@ class NewSiteCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
-        $template = $input->getArgument('template');
+        $theme = $input->getArgument('theme');
         $force = $input->getOption('force');
         $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output);
 
-        if ($template === self::SPRESSO_THEME) {
-            $template = 'spress/spress-theme-spresso';
+        if ($theme === self::SPRESSO_THEME) {
+            $theme = 'spress/spress-theme-spresso';
         }
 
-        $this->startingMessage($io, $template);
+        $this->startingMessage($io, $theme);
+
+        if ($completeScaffold === true) {
+            $io->warning('You are using a deprecated option "--all"');
+        }
 
         $generator = new SiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
         $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
-        $generator->generate($path, $template, $force);
+        $generator->generate($path, $theme, $force);
 
-        $io->success(sprintf('New site with theme "%s" created at "%s" folder', $template, $path));
+        $this->successMessage($io, $theme, $path);
     }
 
     /**
      * Writes the staring messages.
      *
-     * @param ConsoleIO $io       Spress IO
-     * @param string    $template The template
+     * @param ConsoleIO $io    Spress IO
+     * @param string    $theme The theme
      */
-    protected function startingMessage(ConsoleIO $io, $template)
+    protected function startingMessage(ConsoleIO $io, $theme)
     {
         $io->newLine();
-        $io->write(sprintf('<comment>Generating a site using the theme: "%s"...</comment>', $template));
+        $io->write(sprintf('<comment>Generating a site using the theme: "%s"...</comment>', $theme));
+    }
+
+    /**
+     * Writes the success messages.
+     *
+     * @param ConsoleIO $io    Spress IO
+     * @param string    $theme The theme
+     * @param string    $path  The path
+     */
+    protected function successMessage(ConsoleIO $io, $theme, $path)
+    {
+        $io->success(sprintf('New site with theme "%s" created at "%s" folder', $theme, $path));
     }
 }

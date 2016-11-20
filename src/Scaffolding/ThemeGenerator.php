@@ -45,6 +45,6 @@ class ThemeGenerator extends SiteGenerator
         $this->processPath($path, $force);
         $this->checkRequirements($themeName);
 
-        $this->packageManager->createProject($path, $themeName, $repository, $preferSource);
+        $this->packageManager->createThemeProject($path, $themeName, $repository, $preferSource);
     }
 }

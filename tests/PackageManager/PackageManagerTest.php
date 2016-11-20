@@ -218,7 +218,7 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
      * @group net
      * @large
      */
-    public function testCreateProject()
+    public function testCreateThemeProject()
     {
         $autoloaders = spl_autoload_functions();
         $composerClassloader = $autoloaders[0][0];
@@ -229,7 +229,7 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
 
         $io = new BufferIO();
         $packageManager = new PackageManager($embeddedComposer, $io);
-        $packageManager->createProject($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
+        $packageManager->createThemeProject($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
 
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
@@ -247,7 +247,7 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
      * @group net
      * @large
      */
-    public function testCreateProjectPreferSource()
+    public function testCreateThemeProjectPreferSource()
     {
         $autoloaders = spl_autoload_functions();
         $composerClassloader = $autoloaders[0][0];
@@ -258,7 +258,7 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
 
         $io = new BufferIO();
         $packageManager = new PackageManager($embeddedComposer, $io);
-        $packageManager->createProject(
+        $packageManager->createThemeProject(
             $this->tmpDir,
             'spress/spress-theme-spresso:2.1.*-dev',
             null,

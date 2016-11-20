@@ -122,7 +122,7 @@ class PackageManager
      * @throws InvalidArgumentException If the package is not a Spress theme or
      *                                  or the host doesn't meet the requirements
      */
-    public function createProject($siteDir, $packageName, $repository = null, $preferSource = false)
+    public function createThemeProject($siteDir, $packageName, $repository = null, $preferSource = false)
     {
         $packagePair = new PackageNameVersion($packageName);
         $config = Factory::createConfig();

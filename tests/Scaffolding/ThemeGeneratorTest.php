@@ -54,7 +54,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $packageManagerMock
             ->expects($this->once())
-            ->method('createProject')
+            ->method('createThemeProject')
             ->with(
                 $this->anything(),
                 $this->anything(),
@@ -74,7 +74,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $packageManagerMock
             ->expects($this->once())
-            ->method('createProject')
+            ->method('createThemeProject')
             ->with(
                 $this->anything(),
                 $this->anything(),
@@ -97,7 +97,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $packageManagerMock
             ->expects($this->once())
-            ->method('createProject')
+            ->method('createThemeProject')
             ->with(
                 $this->anything(),
                 $this->anything(),

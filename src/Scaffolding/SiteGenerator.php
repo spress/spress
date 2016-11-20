@@ -79,6 +79,10 @@ class SiteGenerator extends Generator
      *
      * @param string $path
      * @param string $themeName
+     *
+     * @throws LogicException           If the packageManager is null
+     * @throws RuntimeException         If an error occurs while installing the theme
+     * @throws InvalidArgumentException If the theme's name is invalid
      */
     protected function createSite($path, $themeName)
     {
@@ -121,7 +125,7 @@ class SiteGenerator extends Generator
     protected function checkThemeName($themeName)
     {
         if (empty(trim($themeName)) === true) {
-            throw new \RuntimeException('The name of the theme cannot be empty.');
+            throw new \InvalidArgumentException('The name of the theme cannot be empty.');
         }
     }
 
@@ -134,7 +138,7 @@ class SiteGenerator extends Generator
     {
         if ($themeName !== self::BLANK_THEME && is_null($this->packageManager)) {
             throw new \LogicException(
-                'You must set the PackageManager at constructor in order to create non-blank themes.'
+                'You must set the PackageManager at the constructor in order to create non-blank themes.'
             );
         }
     }

@@ -117,7 +117,7 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage The name of the theme cannot be empty.
      */
     public function testEmptyTheme()
@@ -163,7 +163,7 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException LogicException
-     * @expectedExceptionMessage You must set the PackageManager at constructor in order to create non-blank themes.
+     * @expectedExceptionMessage You must set the PackageManager at the constructor in order to create non-blank themes.
      */
     public function testNewSiteWithTemplateAndNoPackageManagerTest()
     {

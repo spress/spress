@@ -117,7 +117,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException LogicException
-     * @expectedExceptionMessage You must set the PackageManager at constructor in order to create non-blank themes.
+     * @expectedExceptionMessage You must set the PackageManager at the constructor in order to create non-blank themes.
      */
     public function testThemeAndNoPackageManagerSet()
     {

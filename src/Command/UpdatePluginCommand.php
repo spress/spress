@@ -36,6 +36,7 @@ class UpdatePluginCommand extends BaseCommand
                new InputOption('dry-run', null, InputOption::VALUE_NONE, 'Outputs the operations but will not execute anything (implicitly enables --verbose).'),
                new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages.'),
                new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
+               new InputOption('prefer-lock', '', InputOption::VALUE_NONE, 'If there is a "composer.lock" file in the theme, Spress will use the exact version declared in that'),
            ))
             ->setName('update:plugin')
             ->setDescription('Update plugins and themes by the latest version.')
@@ -52,13 +53,27 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new ConsoleIO($input, $output);
-
-        $packageManager = $this->getPackageManager('./', $io);
-        $packageManager->update([
+        $pmOptions = [
             'dry-run' => $input->getOption('dry-run'),
             'prefer-source' => $input->getOption('prefer-source'),
             'no-dev' => !$input->getOption('dev'),
             'no-scripts' => !$input->getOption('no-scripts'),
-        ], $input->getArgument('packages'));
+        ];
+
+        $this->initialMessage($io);
+        $packageManager = $this->getPackageManager('./', $io);
+
+        if ($input->getOption('prefer-lock') === true) {
+            $packageManager->install($pmOptions, $input->getArgument('packages'));
+        } else {
+            $packageManager->update($pmOptions, $input->getArgument('packages'));
+        }
+    }
+
+    protected function initialMessage(ConsoleIO $io)
+    {
+        $io->newLine(2);
+        $io->write('<comment>Updating plugins and themes...</comment>');
+        $io->newLine();
     }
 }

@@ -16,12 +16,29 @@ use Composer\Package\Link;
 use Composer\Package\Package;
 use Composer\Repository\RepositoryManager;
 use Composer\Semver\Constraint\EmptyConstraint;
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\EmbeddedComposer\EmbeddedComposer;
+use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Yosymfony\Spress\Core\IO\NullIO;
+use Yosymfony\Spress\IO\BufferIO;
 use Yosymfony\Spress\PackageManager\PackageManager;
 
 class PackageManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var string */
+    protected $tmpDir;
+
+    public function setUp()
+    {
+        $this->tmpDir = sys_get_temp_dir().'/spress-tests';
+    }
+
+    public function tearDown()
+    {
+        $fs = new FileSystem();
+        $fs->remove($this->tmpDir);
+    }
+
     public function testGetRootDirectory()
     {
         $embeddedComposerStub = $this->getMockBuilder(EmbeddedComposer::class)
@@ -195,5 +212,69 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
         $packageManager = new PackageManager($embeddedComposerStub, new NullIO());
 
         $this->assertFalse($packageManager->isPackageDependOn('foo:1.0.0', 'foo-b: 2.0.0'));
+    }
+
+    /**
+     * @group net
+     * @large
+     */
+    public function testCreateProject()
+    {
+        $autoloaders = spl_autoload_functions();
+        $composerClassloader = $autoloaders[0][0];
+        $builder = new EmbeddedComposerBuilder($composerClassloader, $this->tmpDir);
+        $embeddedComposer = $builder->setComposerFilename('composer.json')
+            ->setVendorDirectory('vendor')
+            ->build();
+
+        $io = new BufferIO();
+        $packageManager = new PackageManager($embeddedComposer, $io);
+        $packageManager->createProject($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
+
+        $this->assertFileExists($this->tmpDir.'/config.yml');
+        $this->assertFileExists($this->tmpDir.'/composer.json');
+        $this->assertFileNotExists($this->tmpDir.'/src/themes');
+        $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/posts');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
+        $this->assertFileExists($this->tmpDir.'/src/layouts');
+        $this->assertFileExists($this->tmpDir.'/src/includes');
+
+        $this->assertRegExp('/Installing spress\/spress-theme-spresso/', $io->getOutput());
+    }
+
+    /**
+     * @group net
+     * @large
+     */
+    public function testCreateProjectPreferSource()
+    {
+        $autoloaders = spl_autoload_functions();
+        $composerClassloader = $autoloaders[0][0];
+        $builder = new EmbeddedComposerBuilder($composerClassloader, $this->tmpDir);
+        $embeddedComposer = $builder->setComposerFilename('composer.json')
+            ->setVendorDirectory('vendor')
+            ->build();
+
+        $io = new BufferIO();
+        $packageManager = new PackageManager($embeddedComposer, $io);
+        $packageManager->createProject(
+            $this->tmpDir,
+            'spress/spress-theme-spresso:2.1.*-dev',
+            null,
+            true
+        );
+
+        $this->assertFileExists($this->tmpDir.'/config.yml');
+        $this->assertFileExists($this->tmpDir.'/composer.json');
+        $this->assertFileNotExists($this->tmpDir.'/src/themes');
+        $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/posts');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
+        $this->assertFileExists($this->tmpDir.'/src/layouts');
+        $this->assertFileExists($this->tmpDir.'/src/includes');
+        $this->assertFileNotExists($this->tmpDir.'/.git');
+
+        $this->assertRegExp('/Installing spress\/spress-theme-spresso/', $io->getOutput());
     }
 }

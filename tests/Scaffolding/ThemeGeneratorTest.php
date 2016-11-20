@@ -47,18 +47,72 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/src/plugins');
     }
 
-    public function testSpressoTheme()
+    public function testTheme()
     {
-        $packageManagerStub = $this->getMockBuilder(PackageManager::class)
+        $packageManagerMock = $this->getMockBuilder(PackageManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $packageManagerStub
+        $packageManagerMock
             ->expects($this->once())
-            ->method('createProject');
+            ->method('createProject')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $this->equalTo(false)
+            );
 
-        $generator = new ThemeGenerator($packageManagerStub);
+        $generator = new ThemeGenerator($packageManagerMock);
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
+    }
+
+    public function testThemeWithRepository()
+    {
+        $packageManagerMock = $this->getMockBuilder(PackageManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $packageManagerMock
+            ->expects($this->once())
+            ->method('createProject')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->equalTo('http://repository.foo.com')
+        );
+
+        $generator = new ThemeGenerator($packageManagerMock);
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate(
+            $this->tmpDir,
+            'spress/spress-theme-spresso:2.1.*-dev',
+            'http://repository.foo.com'
+        );
+    }
+
+    public function testThemePreferSource()
+    {
+        $packageManagerMock = $this->getMockBuilder(PackageManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $packageManagerMock
+            ->expects($this->once())
+            ->method('createProject')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $this->equalTo(true)
+            );
+
+        $generator = new ThemeGenerator($packageManagerMock);
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate(
+            $this->tmpDir,
+            'spress/spress-theme-spresso:2.1.*-dev',
+            null,
+            false,
+            true);
     }
 
     /**

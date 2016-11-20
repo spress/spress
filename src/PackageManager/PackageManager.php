@@ -188,7 +188,7 @@ class PackageManager
         $im->notifyInstalls($this->io);
 
         if (is_null($repository)) {
-            $this->clearVcsMetadata($siteDir);
+            $this->removeVcsMetadata($siteDir);
         }
     }
 
@@ -349,13 +349,12 @@ class PackageManager
     }
 
     /**
-     * Clear the VCS metadata. e.g: .git folder.
+     * Clear the VCS metadata. e.g: .git folder. If an error occurred
+     * while removing VCS metadata, then its details will be dump using IO.
      *
      * @param string $directory Directory in which find VCS metadata
-     *
-     * @throws RuntimeException If an error ocurred while removing VCS metadata
      */
-    protected function clearVcsMetadata($directory)
+    protected function removeVcsMetadata($directory)
     {
         $fs = new Filesystem();
         $finder = new Finder();
@@ -375,10 +374,10 @@ class PackageManager
                 $fs->remove($dir);
             }
         } catch (\Exception $e) {
-            throw new \RuntimeException(sprintf(
+            $this->io->writeError(sprintf(
                'An error occurred while removing the VCS metadata: %s.',
                $e->getMessage()
-           ));
+            ));
         }
     }
 }

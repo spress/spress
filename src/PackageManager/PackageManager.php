@@ -112,12 +112,15 @@ class PackageManager
     }
 
     /**
-     * Create a new project. This is equivalent to perform a "git clone".
+     * Create a new theme project. This is equivalent to perform a "git clone".
      *
      * @param string $siteDir      Site directory
      * @param string $packageName  Package's name. e.g: "vendory/foo 2.0.0"
      * @param string $repository   Provide a custom repository to search for the package
      * @param bool   $preferSource Install packages from source when available
+     *
+     * @throws InvalidArgumentException If the package is not a Spress theme or
+     *                                  or the host doesn't meet the requirements
      */
     public function createProject($siteDir, $packageName, $repository = null, $preferSource = false)
     {
@@ -171,6 +174,13 @@ class PackageManager
             }
 
             throw new \InvalidArgumentException($errorMessage.'.');
+        }
+
+        if ($package->getType() != self::PACKAGE_TYPE_THEME) {
+            throw new \InvalidArgumentException(sprintf(
+                'The package "%s" is not a Spress theme.',
+                $packageName
+            ));
         }
 
         if (strpos($package->getPrettyVersion(), 'dev-') === 0 && in_array($package->getSourceType(), array('git', 'hg'))) {

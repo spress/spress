@@ -54,19 +54,22 @@ class SiteGenerator extends Generator
      * Scaffold a new site. In case of exception, the new-site directory
      * will be removed.
      *
-     * @param string $path      Destination path
-     * @param string $themeName Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
-     * @param bool   $force     Force to clear destination if exists and it's not empty'
+     * @param string $path         Destination path
+     * @param string $themeName    Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
+     * @param bool   $force        Force to clear destination if exists and it's not empty'
+     * @param bool   $preferSource
+     * @param bool   $preferLock
+     * @param bool   $noScripts
      *
      * @throws LogicException If there is an attemp of create a non-blank template without the PackageManager
      */
-    public function generate($path, $themeName, $force = false)
+    public function generate($path, $themeName, $force = false, $preferSource = false, $preferLock = false, $noScripts = false)
     {
         $this->checkThemeName($themeName);
         $this->processPath($path, $force);
 
         try {
-            $this->createSite($path, $themeName);
+            $this->createSite($path, $themeName, $preferLock, $preferSource, $noScripts);
         } catch (\Exception $e) {
             $this->fs->remove($path);
 
@@ -84,7 +87,7 @@ class SiteGenerator extends Generator
      * @throws RuntimeException         If an error occurs while installing the theme
      * @throws InvalidArgumentException If the theme's name is invalid
      */
-    protected function createSite($path, $themeName)
+    protected function createSite($path, $themeName, $preferLock, $preferSource, $noScripts)
     {
         $this->checkRequirements($themeName);
 
@@ -110,11 +113,33 @@ class SiteGenerator extends Generator
             ));
         }
 
-        $this->packageManager->update();
+        $this->updateDependencies($preferLock, $preferSource, $noScripts);
 
         $relativeThemePath = 'src/themes/'.$themePair->getName();
         $this->copyContentFromThemeToSite($path, $relativeThemePath);
         $this->setUpSiteConfigFile($path, $relativeThemePath, $themePair->getName());
+    }
+
+    /**
+     * Updates the site dependencies.
+     *
+     * @param bool $preferLock
+     * @param bool $preferSource
+     * @param bool $noScripts
+     */
+    protected function updateDependencies($preferLock, $preferSource, $noScripts)
+    {
+        $pmOptions = [
+            'prefer-source' => $preferSource,
+            'prefer-dist' => !$preferSource,
+            'no-scripts' => $noScripts,
+        ];
+
+        if ($preferLock === true) {
+            $this->packageManager->install($pmOptions);
+        } else {
+            $this->packageManager->update($pmOptions);
+        }
     }
 
     /**

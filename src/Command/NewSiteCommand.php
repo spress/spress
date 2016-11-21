@@ -45,6 +45,9 @@ class NewSiteCommand extends BaseCommand
             new InputArgument('theme', InputArgument::OPTIONAL, 'Theme name', self::BLANK_THEME),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold of a blank site.'),
+            new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information.'),
+            new InputOption('prefer-lock', '', InputOption::VALUE_NONE, 'If there is a "composer.lock" file in the theme, Spress will use the exact version declared in that'),
+            new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
         ])
         ->setName('new:site')
         ->setDescription('Create a new site')
@@ -56,10 +59,7 @@ class NewSiteCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getArgument('path');
         $theme = $input->getArgument('theme');
-        $force = $input->getOption('force');
-        $completeScaffold = $input->getOption('all');
         $io = new ConsoleIO($input, $output);
 
         if ($theme === self::SPRESSO_THEME) {
@@ -68,15 +68,25 @@ class NewSiteCommand extends BaseCommand
 
         $this->startingMessage($io, $theme);
 
-        if ($completeScaffold === true) {
+        if ($input->getOption('all') === true) {
             $io->warning('You are using a deprecated option "--all"');
         }
 
-        $generator = new SiteGenerator($this->getPackageManager($path, $io), self::SPRESS_INSTALLER_PACKAGE);
+        $generator = new SiteGenerator(
+            $this->getPackageManager($input->getArgument('path'), $io),
+            self::SPRESS_INSTALLER_PACKAGE
+        );
         $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
-        $generator->generate($path, $theme, $force);
+        $generator->generate(
+            $input->getArgument('path'),
+            $theme,
+            $input->getOption('force'),
+            $input->getOption('prefer-source'),
+            $input->getOption('prefer-lock'),
+            $input->getOption('no-scripts')
+        );
 
-        $this->successMessage($io, $theme, $path);
+        $this->successMessage($io, $theme, $input->getArgument('path'));
     }
 
     /**

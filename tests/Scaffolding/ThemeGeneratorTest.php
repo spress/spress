@@ -86,7 +86,10 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->generate(
             $this->tmpDir,
             'spress/spress-theme-spresso:2.1.*-dev',
-            'http://repository.foo.com'
+            false,
+            [
+                'repository' => 'http://repository.foo.com',
+            ]
         );
     }
 
@@ -110,9 +113,11 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->generate(
             $this->tmpDir,
             'spress/spress-theme-spresso:2.1.*-dev',
-            null,
             false,
-            true);
+            [
+                'prefer-source' => true,
+            ]
+        );
     }
 
     /**

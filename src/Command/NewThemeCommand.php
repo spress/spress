@@ -66,22 +66,24 @@ EOT
             $packageManager->getRootDirectory()
         );
 
+        $options = [
+            'prefer-source' => $input->getOption('prefer-source'),
+            'repository' => $input->getOption('repository'),
+        ];
+
         $generator->generate(
             $packageManager->getRootDirectory(),
             $input->getArgument('package'),
-            $input->getOption('repository'),
             $input->getOption('force'),
-            $input->getOption('prefer-source')
+            $options
         );
 
         $this->updateRequirementsMessage($io);
 
-        $pmOptions = [
-            'no-dev' => !$input->getOption('dev'),
-            'prefer-source' => $input->getOption('prefer-source'),
-            'prefer-dist' => !$input->getOption('prefer-source'),
-            'no-scripts' => $input->getOption('no-scripts'),
-        ];
+        $options = array_merge($options, [
+           'no-dev' => !$input->getOption('dev'),
+           'no-scripts' => $input->getOption('no-scripts'),
+        ]);
 
         if ($input->getOption('prefer-lock') === true) {
             $packageManager->install($pmOptions);

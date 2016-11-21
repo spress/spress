@@ -81,9 +81,11 @@ class NewSiteCommand extends BaseCommand
             $input->getArgument('path'),
             $theme,
             $input->getOption('force'),
-            $input->getOption('prefer-source'),
-            $input->getOption('prefer-lock'),
-            $input->getOption('no-scripts')
+            [
+                'prefer-source' => $input->getOption('prefer-source'),
+                'prefer-lock' => $input->getOption('prefer-lock'),
+                'no-scripts' => $input->getOption('no-scripts'),
+            ]
         );
 
         $this->successMessage($io, $theme, $input->getArgument('path'));

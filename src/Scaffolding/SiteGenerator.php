@@ -14,6 +14,7 @@ namespace Yosymfony\Spress\Scaffolding;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
@@ -54,22 +55,26 @@ class SiteGenerator extends Generator
      * Scaffold a new site. In case of exception, the new-site directory
      * will be removed.
      *
-     * @param string $path         Destination path
-     * @param string $themeName    Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
-     * @param bool   $force        Force to clear destination if exists and it's not empty'
-     * @param bool   $preferSource
-     * @param bool   $preferLock
-     * @param bool   $noScripts
+     * @param string $path      Destination path
+     * @param string $themeName Theme name. Pattern <theme_name>:<theme_version> can be used. "blank" is a special theme
+     * @param bool   $force     Force to clear destination if exists and it's not empty'
+     * @param array  $options
      *
      * @throws LogicException If there is an attemp of create a non-blank template without the PackageManager
      */
-    public function generate($path, $themeName, $force = false, $preferSource = false, $preferLock = false, $noScripts = false)
+    public function generate($path, $themeName, $force = false, array $options = [])
     {
+        $options = $this->createOptionsResolver()->resolve($options);
         $this->checkThemeName($themeName);
         $this->processPath($path, $force);
 
         try {
-            $this->createSite($path, $themeName, $preferLock, $preferSource, $noScripts);
+            $this->createSite(
+                $path,
+                $themeName,
+                $options['prefer-lock'],
+                $options['prefer-source'],
+                $options['no-scripts']);
         } catch (\Exception $e) {
             $this->fs->remove($path);
 
@@ -326,5 +331,20 @@ class SiteGenerator extends Generator
         }
 
         return $requires;
+    }
+
+    /**
+     * Returns the resolver for generating options.
+     *
+     * @return AttributesResolver
+     */
+    protected function createOptionsResolver()
+    {
+        $resolver = new AttributesResolver();
+        $resolver->setDefault('prefer-lock', false, 'bool')
+            ->setDefault('prefer-source', false, 'bool')
+            ->setDefault('no-scripts', false, 'bool');
+
+        return $resolver;
     }
 }

@@ -42,7 +42,7 @@ class NewThemeCommand extends BaseCommand
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
         ))
             ->setName('new:theme')
-            ->setDescription('Create a new theme.')
+            ->setDescription('Create a new theme')
             ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command create a new blank theme or a new
 theme based on another.

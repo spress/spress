@@ -39,7 +39,7 @@ class UpdatePluginCommand extends BaseCommand
                new InputOption('prefer-lock', '', InputOption::VALUE_NONE, 'If there is a "composer.lock" file in the theme, Spress will use the exact version declared in that'),
            ))
             ->setName('update:plugin')
-            ->setDescription('Update plugins and themes by the latest version.')
+            ->setDescription('Update plugins and themes by the latest version')
             ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command update the dependencies of your site by the
 latest version.

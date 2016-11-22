@@ -112,6 +112,46 @@ class PackageManager
     }
 
     /**
+     * Adds a new package to the current Composer file.
+     *
+     * @param array $packageNames
+     * @param bool  $areDevPackages
+     *
+     * @return string The path of composer filename
+     *
+     * @throws array List of package's name as a key and the package's version
+     *               as value
+     */
+    public function addPackage(array $packageNames, $areDevPackages = false)
+    {
+        $fs = new Filesystem();
+        $file = $this->embeddedComposer->getExternalComposerFilename();
+
+        if ($fs->exists($file) === false) {
+            $fs->dumpFile($file, "{\n}\n");
+        }
+
+        if (filesize($file) === 0) {
+            $fs->dumpFile($file, "{\n}\n");
+        }
+
+        $json = new JsonFile($file);
+
+        $requirements = $this->formatPackageNames($packageNames);
+        $composerDefinition = $json->read();
+
+        $requireKey = $areDevPackages ? 'require-dev' : 'require';
+
+        foreach ($requirements as $package => $version) {
+            $composerDefinition[$requireKey][$package] = $version;
+        }
+
+        $json->write($composerDefinition);
+
+        return $composerDefinition[$requireKey];
+    }
+
+    /**
      * Create a new theme project. This is equivalent to perform a "git clone".
      *
      * @param string $siteDir      Site directory
@@ -356,6 +396,19 @@ class PackageManager
     protected function createDownloadManager(Config $config)
     {
         return (new Factory())->createDownloadManager($this->io, $config);
+    }
+
+    protected function formatPackageNames(array $packageNames)
+    {
+        $requires = [];
+
+        foreach ($packageNames as $packageName) {
+            $packagePair = new PackageNameVersion($packageName);
+
+            $requires[$packagePair->getName()] = $packagePair->getVersion();
+        }
+
+        return $requires;
     }
 
     /**

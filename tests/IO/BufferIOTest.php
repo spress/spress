@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\IO;
+namespace Yosymfony\Spress\tests\IO;
 
 use Yosymfony\Spress\IO\BufferIO;
 
@@ -20,6 +20,6 @@ class BufferIOTest extends \PHPUnit_Framework_TestCase
         $io = new BufferIO();
         $io->write('Hello');
 
-        $this->assertEquals("Hello\n", $io->getOutput());
+        $this->assertRegExp('/Hello/', $io->getOutput());
     }
 }

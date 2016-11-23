@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Console;
 
 use Composer\Autoload\ClassLoader;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Yosymfony\Spress\Command\AddPluginCommand;
 use Yosymfony\Spress\Command\NewPluginCommand;
 use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
@@ -112,6 +113,7 @@ class Application extends ConsoleApplication
         $this->add(new SelfUpdateCommand());
         $this->add(new SiteBuildCommand());
         $this->add(new UpdatePluginCommand());
+        $this->add(new AddPluginCommand());
 
         $this->setDefaultCommand($welcomeCommand->getName());
     }

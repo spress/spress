@@ -88,6 +88,8 @@ class PackageManager
      *
      * @param array    $options      Options for installing packages
      * @param string[] $packageNames List of packages
+     *
+     * @throws RuntimeException If any problem occurs while resolving dependencies
      */
     public function install(array $options = [], array $packageNames = [])
     {
@@ -109,7 +111,7 @@ class PackageManager
      * @param array    $options      Options for updating packages
      * @param string[] $packageNames List of packages
      *
-     * @throw RuntimeException If any problem occurs while resolving dependencies.
+     * @throws RuntimeException If any problem occurs while resolving dependencies
      */
     public function update(array $options = [], array $packageNames = [])
     {

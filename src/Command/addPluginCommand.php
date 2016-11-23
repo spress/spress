@@ -23,7 +23,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class addPluginCommand extends BaseCommand
+class AddPluginCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}

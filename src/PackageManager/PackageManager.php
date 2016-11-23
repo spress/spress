@@ -93,7 +93,14 @@ class PackageManager
     {
         $options = $this->getInstallResolver()->resolve($options);
         $installer = $this->buildInstaller($options);
-        $installer->run();
+        $status = $installer->run();
+
+        if ($status !== 0) {
+            throw new \RuntimeException(sprintf(
+                'An error has been occurred with code: %s while resolving dependencies.',
+                $status
+            ));
+        }
     }
 
     /**
@@ -101,6 +108,8 @@ class PackageManager
      *
      * @param array    $options      Options for updating packages
      * @param string[] $packageNames List of packages
+     *
+     * @throw RuntimeException If any problem occurs while resolving dependencies.
      */
     public function update(array $options = [], array $packageNames = [])
     {
@@ -108,7 +117,14 @@ class PackageManager
         $installer = $this->buildInstaller($options);
         $installer->setUpdate(true);
         $installer->setUpdateWhitelist($packageNames);
-        $installer->run();
+        $status = $installer->run();
+
+        if ($status !== 0) {
+            throw new \RuntimeException(sprintf(
+                'An error has been occurred with code: %s while resolving dependencies.',
+                $status
+            ));
+        }
     }
 
     /**

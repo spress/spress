@@ -292,4 +292,23 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('spress/spress-theme-spresso', $packages);
     }
+
+    public function testRemovePackage()
+    {
+        $embeddedComposerStub = $this->getMockBuilder(EmbeddedComposer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $embeddedComposerStub->method('getExternalComposerFilename')
+            ->willReturn($this->tmpDir.'/composer.json');
+        $packageManager = new PackageManager($embeddedComposerStub, new NullIO());
+        $packages = $packageManager->addPackage([
+            'spress/spress-theme-spresso:2.1.*-dev',
+        ]);
+
+        $packages = $packageManager->removePackage([
+            'spress/spress-theme-spresso:2.1.*-dev',
+        ]);
+
+        $this->assertArrayNotHasKey('spress/spress-theme-spresso', $packages);
+    }
 }

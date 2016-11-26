@@ -12,12 +12,14 @@
 namespace Yosymfony\Spress\PackageManager;
 
 use Composer\Config;
+use Composer\Config\JsonConfigSource;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Pool;
 use Composer\Factory;
 use Composer\Installer\InstallationManager;
 use Composer\Installer\ProjectInstaller;
 use Composer\Json\JsonFile;
+use Composer\Package\Version\VersionParser;
 use Composer\Package\Version\VersionSelector;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\InstalledFilesystemRepository;
@@ -130,14 +132,12 @@ class PackageManager
     }
 
     /**
-     * Adds a new package to the current Composer file.
+     * Adds a new set of packages to the current Composer file.
      *
      * @param array $packageNames
      * @param bool  $areDevPackages
      *
-     * @return string The path of composer filename
-     *
-     * @throws array List of package's name as a key and the package's version
+     * @return array List of package's name as a key and the package's version
      *               as value
      */
     public function addPackage(array $packageNames, $areDevPackages = false)
@@ -156,6 +156,12 @@ class PackageManager
         $json = new JsonFile($file);
 
         $requirements = $this->formatPackageNames($packageNames);
+        $versionParser = new VersionParser();
+
+        foreach ($requirements as $constraint) {
+            $versionParser->parseConstraints($constraint);
+        }
+
         $composerDefinition = $json->read();
 
         $requireKey = $areDevPackages ? 'require-dev' : 'require';
@@ -167,6 +173,41 @@ class PackageManager
         $json->write($composerDefinition);
 
         return $composerDefinition[$requireKey];
+    }
+
+    /**
+     * Remove a set of packages of the current Composer file.
+     *
+     * @param array $packageNames
+     * @param bool  $areDevPackages
+     *
+     * @return array List of package's name as a key and the package's version
+     *               as value
+     */
+    public function removePackage(array $packageNames, $areDevPackages = false)
+    {
+        $packages = $this->formatPackageNames($packageNames);
+        $file = $this->embeddedComposer->getExternalComposerFilename();
+        $jsonFile = new JsonFile($file);
+        $json = new JsonConfigSource($jsonFile);
+        $composerDefinition = $jsonFile->read();
+        $type = $areDevPackages ? 'require-dev' : 'require';
+
+        foreach ($packages as $name => $version) {
+            if (isset($composerDefinition[$type][$name])) {
+                $json->removeLink($type, $name);
+                unset($composerDefinition[$type][$name]);
+
+                continue;
+            }
+
+            $this->io->writeError(sprintf(
+               'Package: "%s" is not required and has not been removed.',
+               $name
+            ));
+        }
+
+        return $composerDefinition[$type];
     }
 
     /**
@@ -416,6 +457,11 @@ class PackageManager
         return (new Factory())->createDownloadManager($this->io, $config);
     }
 
+    /**
+     * Formats the packages names.
+     *
+     * @return array List in which the key is the name and the value is the version
+     */
     protected function formatPackageNames(array $packageNames)
     {
         $requires = [];

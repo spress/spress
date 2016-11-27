@@ -18,6 +18,7 @@ use Yosymfony\Spress\Command\NewPluginCommand;
 use Yosymfony\Spress\Command\NewPostCommand;
 use Yosymfony\Spress\Command\NewSiteCommand;
 use Yosymfony\Spress\Command\NewThemeCommand;
+use Yosymfony\Spress\Command\RemovePluginCommand;
 use Yosymfony\Spress\Command\SelfUpdateCommand;
 use Yosymfony\Spress\Command\SiteBuildCommand;
 use Yosymfony\Spress\Command\UpdatePluginCommand;
@@ -114,6 +115,7 @@ class Application extends ConsoleApplication
         $this->add(new SiteBuildCommand());
         $this->add(new UpdatePluginCommand());
         $this->add(new AddPluginCommand());
+        $this->add(new RemovePluginCommand());
 
         $this->setDefaultCommand($welcomeCommand->getName());
     }

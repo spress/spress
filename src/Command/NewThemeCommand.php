@@ -86,10 +86,12 @@ EOT
         ]);
 
         if ($input->getOption('prefer-lock') === true) {
-            $packageManager->install($pmOptions);
+            $packageManager->install($options);
         } else {
-            $packageManager->update($pmOptions);
+            $packageManager->update($options);
         }
+
+        $packageManager->rewritingSelfVersionDependencies();
 
         $this->okMessage($io);
     }
@@ -104,7 +106,7 @@ EOT
     {
         $io->newLine();
         $io->write(sprintf(
-            '<comment>Installing theme: "%s" in "%s" folder.</comment>',
+            '<comment>Installing theme: "%s" in "%s" folder</comment>',
             $packageName,
             $siteDir
         ));

@@ -88,7 +88,7 @@ EOT
     protected function initialMessage(ConsoleIO $io)
     {
         $io->newLine(2);
-        $io->write('<comment>Adding requirements...</comment>');
+        $io->write('<comment>Adding packages...</comment>');
         $io->newLine();
     }
 }

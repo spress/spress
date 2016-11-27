@@ -52,7 +52,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new ConsoleIO($input, $output);
-        $pmOptions = [
+        $options = [
             'dry-run' => $input->getOption('dry-run'),
             'prefer-source' => $input->getOption('prefer-source'),
             'no-dev' => !$input->getOption('dev'),
@@ -65,9 +65,24 @@ EOT
             $input->getArgument('packages'),
             $input->getOption('dev')
         );
-        $packageManager->update($pmOptions);
 
-        $this->okMessage($io);
+        try {
+            $packageManager->update($options);
+        } catch (\Exception $e) {
+            $io->error('Installation failed. Reverting changes...');
+
+            $packageManager->removePackage(
+                $input->getArgument('packages'),
+                $input->getOption('dev')
+            );
+
+            $io->write('Changes reverted successfully!');
+            $io->newLine();
+
+            return 1;
+        }
+
+        $io->success('Plugins and themes updated');
     }
 
     protected function initialMessage(ConsoleIO $io)
@@ -75,10 +90,5 @@ EOT
         $io->newLine(2);
         $io->write('<comment>Adding requirements...</comment>');
         $io->newLine();
-    }
-
-    protected function okMessage(ConsoleIO $io)
-    {
-        $io->success('Plugins and themes updated');
     }
 }

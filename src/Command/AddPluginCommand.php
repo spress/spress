@@ -60,7 +60,7 @@ EOT
         ];
 
         $this->initialMessage($io);
-        $packageManager = $this->getPackageManager('./', $io);
+        $packageManager = $this->getPackageManager('.', $io);
         $packageManager->addPackage(
             $input->getArgument('packages'),
             $input->getOption('dev')

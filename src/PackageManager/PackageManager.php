@@ -19,6 +19,7 @@ use Composer\Factory;
 use Composer\Installer\InstallationManager;
 use Composer\Installer\ProjectInstaller;
 use Composer\Json\JsonFile;
+use Composer\Package\BasePackage;
 use Composer\Package\Version\VersionParser;
 use Composer\Package\Version\VersionSelector;
 use Composer\Repository\CompositeRepository;
@@ -298,6 +299,30 @@ class PackageManager
 
         if (is_null($repository)) {
             $this->removeVcsMetadata($siteDir);
+        }
+    }
+
+    /**
+     * Rewriting "self.version" dependencies with explicit version numbers
+     * of the current composer.json file. Useful if the package's vcs metadata
+     * is gone.
+     */
+    public function rewritingSelfVersionDependencies()
+    {
+        $composer = $this->embeddedComposer->createComposer($this->io);
+        $package = $composer->getPackage();
+        $configSource = new JsonConfigSource(new JsonFile('composer.json'));
+
+        foreach (BasePackage::$supportedLinkTypes as $type => $meta) {
+            foreach ($package->{'get'.$meta['method']}() as $link) {
+                if ($link->getPrettyConstraint() === 'self.version') {
+                    $configSource->addLink(
+                        $type,
+                        $link->getTarget(),
+                        $package->getPrettyVersion()
+                    );
+                }
+            }
         }
     }
 

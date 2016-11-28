@@ -56,7 +56,7 @@ EOT
         ];
 
         $this->initialMessage($io);
-        $packageManager = $this->getPackageManager('./', $io);
+        $packageManager = $this->getPackageManager(getcwd(), $io);
         $packageManager->removePackage(
             $input->getArgument('packages'),
             $input->getOption('dev')

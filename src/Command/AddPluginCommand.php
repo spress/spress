@@ -38,7 +38,7 @@ class AddPluginCommand extends BaseCommand
                new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
            ))
             ->setName('add:plugin')
-            ->setDescription('Adds plugins and themes to your composer.json and installs them')
+            ->setDescription('Adds plugins and themes to your requirements and installs them')
             ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command update the dependencies of your site by the
 latest version.
@@ -60,7 +60,7 @@ EOT
         ];
 
         $this->initialMessage($io);
-        $packageManager = $this->getPackageManager('.', $io);
+        $packageManager = $this->getPackageManager(getcwd(), $io);
         $packageManager->addPackage(
             $input->getArgument('packages'),
             $input->getOption('dev')

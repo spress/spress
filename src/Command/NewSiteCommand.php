@@ -45,9 +45,9 @@ class NewSiteCommand extends BaseCommand
             new InputArgument('theme', InputArgument::OPTIONAL, 'Theme name', self::BLANK_THEME),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold of a blank site.'),
-            new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information.'),
+            new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information'),
             new InputOption('prefer-lock', '', InputOption::VALUE_NONE, 'If there is a "composer.lock" file in the theme, Spress will use the exact version declared in that'),
-            new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
+            new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file'),
         ])
         ->setName('new:site')
         ->setDescription('Create a new site')

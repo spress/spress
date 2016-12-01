@@ -35,6 +35,10 @@ collections:
     sort_by: 'date'
     sort_type: 'descending'
 
+# Themes
+themes:
+  name: ''
+
 # Data sources
 data_sources:
   filesystem:

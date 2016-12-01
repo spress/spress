@@ -95,14 +95,37 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($items['posts/2013-08-12-post-example-1.md']->isBinary());
 
         $this->assertEquals('layout', $layouts['default.html']->getType());
+        $this->assertRegExp('/Welcome to my site/', $layouts['default.html']->getContent());
 
         $include = $includes['test.html'];
 
         $this->assertEquals('include', $include->getType());
+        $this->assertRegExp('/Include test/', $includes['test.html']->getContent());
 
         $this->assertTrue($items['LICENSE']->isBinary());
         $this->assertTrue(strlen($items['LICENSE']->getPath('source')) > 0);
         $this->assertTrue(strlen($items['LICENSE']->getPath('relative')) > 0);
+    }
+
+    public function testTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+
+        $items = $fsDataSource->getItems();
+        $layouts = $fsDataSource->getLayouts();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertCount(1, $layouts);
+        $this->assertRegExp('/Theme 01 title/', $layouts['default.html']->getContent());
+
+        $this->assertCount(1, $includes);
+        $this->assertRegExp('/Include theme 01/', $includes['test.html']->getContent());
     }
 
     public function testIncludeFile()

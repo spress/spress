@@ -214,7 +214,7 @@ class SiteGenerator extends Generator
 
         $this->fs->mkdir(['build', 'src/layouts', 'src/content', 'src/content/posts']);
         $this->renderFile('site/config.yml.twig', 'config.yml', [
-            'default_theme' => $defaultTheme,
+            'theme_name' => $defaultTheme,
         ]);
         $this->renderFile('site/composer.json.twig', 'composer.json', [
             'requires' => $this->generateRequirePackages($packagePairs),

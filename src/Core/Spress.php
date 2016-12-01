@@ -202,6 +202,7 @@ class Spress extends Container
                 '%site_dir%' => $c['spress.config.site_dir'],
                 '%include%' => $c['spress.config.values']['include'],
                 '%exclude%' => $c['spress.config.values']['exclude'],
+                '%theme_name%' => $c['spress.config.values']['themes']['name'],
                 '%text_extensions%' => $c['spress.config.values']['text_extensions'],
                 '%attribute_syntax%' => $c['spress.config.values']['attribute_syntax'],
                 '%avoid_renderizer_path%' => $c['spress.config.values']['avoid_renderizer']['paths'],

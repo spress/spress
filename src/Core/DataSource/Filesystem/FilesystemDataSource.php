@@ -26,6 +26,8 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * The directory separator is '/' in any case.
  *
  * Source-root structure:
+ * |- themes
+ * | |- theme1
  * |- includes
  * |- layouts
  * |- plugins
@@ -61,14 +63,22 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  *  - attribute_syntax (string): syntax for describing attributes: "yaml" or "json". "yaml" by default.
  *  - avoid_renderizer_path (array): the files belong to declared path will have set up `avoid_renderizer` to true.
  *  - avoid_renderizer_extension (array): the filenames with an extension belong to declared will have set up `avoid_renderizer` to true.
+ *  - theme_name (string): The name of the theme. Empty string by default. e.g: "theme1" or "vendor1/theme".
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
 class FilesystemDataSource extends AbstractDataSource
 {
+    /** @var Item[] */
     private $items;
+
+    /** @var Item[] */
     private $layouts;
+
+    /** @var Item[] */
     private $includes;
+
+    /** @var AttributeParser */
     private $attributeParser;
 
     /**
@@ -98,8 +108,8 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * {@inheritdoc}
      *
-     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules
-     * @throws \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute
+     * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules
+     * @throws Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute
      */
     public function configure()
     {
@@ -107,7 +117,7 @@ class FilesystemDataSource extends AbstractDataSource
         $this->layouts = [];
         $this->includes = [];
 
-        $resolver = $this->getResolver();
+        $resolver = $this->createResolver();
         $this->params = $resolver->resolve($this->params);
 
         switch ($this->params['attribute_syntax']) {
@@ -165,8 +175,13 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $finder = new Finder();
+
         $finder->in($path)
             ->files();
+
+        if (empty($this->params['theme_name']) === false) {
+            $finder->in($this->composeThemeSubPath('layouts'));
+        }
 
         $this->processItems($finder, Item::TYPE_LAYOUT);
     }
@@ -183,12 +198,18 @@ class FilesystemDataSource extends AbstractDataSource
         $finder->in($path)
             ->files();
 
+        if (empty($this->params['theme_name']) === false) {
+            $finder->in($this->composeThemeSubPath('includes'));
+        }
+
         $this->processItems($finder, Item::TYPE_INCLUDE);
     }
 
     private function processItems(Finder $finder, $type)
     {
-        foreach ($finder as $file) {
+        $files = iterator_to_array($finder);
+
+        foreach ($files as $file) {
             $id = $this->normalizeDirSeparator($file->getRelativePathname());
             $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();
@@ -315,7 +336,7 @@ class FilesystemDataSource extends AbstractDataSource
         return $this->composeSubPath(sprintf('content/%s.meta', $relativePathname));
     }
 
-    private function getResolver()
+    private function createResolver()
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('source_root', '', 'string', true)
@@ -335,7 +356,8 @@ class FilesystemDataSource extends AbstractDataSource
                 }
             })
             ->setDefault('avoid_renderizer_path', [], 'array')
-            ->setDefault('avoid_renderizer_extension', [], 'array');
+            ->setDefault('avoid_renderizer_extension', [], 'array')
+            ->setDefault('theme_name', '', 'string');
 
         return $resolver;
     }
@@ -343,6 +365,18 @@ class FilesystemDataSource extends AbstractDataSource
     private function composeSubPath($path)
     {
         return $this->params['source_root'].'/'.$path;
+    }
+
+    /**
+     * @return string
+     */
+    private function composeThemeSubPath($path)
+    {
+        return sprintf('%s/themes/%s/src/%s',
+            $this->params['source_root'],
+            $this->params['theme_name'],
+            $path
+        );
     }
 
     private function normalizeDirSeparator($path)

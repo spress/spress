@@ -136,7 +136,10 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
             'text_extensions' => $this->textExtensions,
         ]);
         $fsDataSource->load();
-        $this->assertCount(14, $fsDataSource->getItems());
+        $items = $fsDataSource->getItems();
+
+        $this->assertCount(14, $items);
+        $this->assertArrayHasKey('extra-page1.html', $items);
     }
 
     public function testIncludeFolder()

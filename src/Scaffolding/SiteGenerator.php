@@ -263,7 +263,7 @@ class SiteGenerator extends Generator
 
         $configContent = file_get_contents($destination);
         $configValues = Yaml::parse($configContent);
-        $configValues['themes'] = ['default' => $themeName];
+        $configValues['themes'] = ['name' => $themeName];
 
         $configParsed = Yaml::dump($configValues);
 

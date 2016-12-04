@@ -32,6 +32,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * |- layouts
  * |- plugins
  * |- content
+ * | |- assets
  * | |- posts
  * | |- index.html
  * | |- ...
@@ -163,6 +164,7 @@ class FilesystemDataSource extends AbstractDataSource
             $finder->notPath($item);
         }
 
+        $finder->append($this->getThemeAssetFiles());
         $this->processItems($finder, Item::TYPE_ITEM);
     }
 
@@ -203,6 +205,36 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $this->processItems($finder, Item::TYPE_INCLUDE);
+    }
+
+    /**
+     * @return SplFileInfo[]
+     */
+    private function getThemeAssetFiles()
+    {
+        $files = [];
+        $path = $this->composeThemeSubPath('content/assets');
+
+        if (empty($this->params['theme_name']) === true || file_exists($path) === false) {
+            return $files;
+        }
+
+        $finder = new Finder();
+        $finder
+            ->in($path)
+            ->files();
+
+        foreach ($finder as $file) {
+            $fileInfo = new SplFileInfo(
+                $file->getPathname(),
+                $file->getRelativePath(),
+                $file->getRelativePathname()
+            );
+
+            $files[] = $fileInfo;
+        }
+
+        return $files;
     }
 
     private function processItems(Finder $finder, $type)
@@ -307,6 +339,9 @@ class FilesystemDataSource extends AbstractDataSource
         return false;
     }
 
+    /**
+     * @return bool
+     */
     private function isBinary(SplFileInfo $file)
     {
         $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
@@ -314,6 +349,9 @@ class FilesystemDataSource extends AbstractDataSource
         return false === $fileInfo->hasPredefinedExtension();
     }
 
+    /**
+     * @return array|bool
+     */
     private function isDateFilename($filename)
     {
         if (preg_match('/(\d{4})-(\d{2})-(\d{2})-(.+?)$/', $filename, $matches)) {
@@ -321,6 +359,9 @@ class FilesystemDataSource extends AbstractDataSource
         }
     }
 
+    /**
+     * @return string Date in ISO 8601 format
+     */
     private function getModifiedTime(SplFileInfo $file)
     {
         $dt = new \DateTime();
@@ -329,6 +370,9 @@ class FilesystemDataSource extends AbstractDataSource
         return $dt->format(\DateTime::ISO8601);
     }
 
+    /**
+     * @return string
+     */
     private function getAttributesFilename(splfileinfo $file)
     {
         $relativePathname = $this->normalizeDirSeparator($file->getRelativePathname());
@@ -336,6 +380,9 @@ class FilesystemDataSource extends AbstractDataSource
         return $this->composeSubPath(sprintf('content/%s.meta', $relativePathname));
     }
 
+    /**
+     * @return AttributesResolver
+     */
     private function createResolver()
     {
         $resolver = new AttributesResolver();
@@ -362,6 +409,9 @@ class FilesystemDataSource extends AbstractDataSource
         return $resolver;
     }
 
+    /**
+     * @return string
+     */
     private function composeSubPath($path)
     {
         return $this->params['source_root'].'/'.$path;
@@ -379,6 +429,9 @@ class FilesystemDataSource extends AbstractDataSource
         );
     }
 
+    /**
+     * @return string
+     */
     private function normalizeDirSeparator($path)
     {
         if (DIRECTORY_SEPARATOR === '/') {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Plugin;
+namespace Yosymfony\Spress\Tests\Plugin;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -36,7 +36,9 @@ class CommandPluginTest extends \PHPUnit_Framework_TestCase
     public function testSetCommandEnvironment()
     {
         $command = new Command('acme');
-        $command->setCode(function ($input, $output) { $output->writeln('acme'); });
+        $command->setCode(function ($input, $output) {
+            $output->writeln('acme');
+        });
 
         $commandPlugin = new CommandPlugin();
         $commandPlugin->setCommandEnvironment(new SymfonyCommandEnvironment($command, new ConsoleOutput()));

@@ -11,7 +11,6 @@
 
 namespace Yosymfony\Spress\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +31,7 @@ use Yosymfony\Spress\HttpServer\ServerRequest;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class SiteBuildCommand extends Command
+class SiteBuildCommand extends BaseCommand
 {
     protected $configResolver;
 
@@ -121,12 +120,12 @@ class SiteBuildCommand extends Command
     }
 
     /**
-     * Buils a Spress instance.
+     * Builds a Spress instance.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param IOInterface    $io    The Spress IO
+     * @param InputInterface $input The Symfony Console input
      *
-     * @return \Yosymfony\Spress\Core\Spress
+     * @return Spress The Spress instance
      */
     protected function buildSpress(IOInterface $io, InputInterface $input)
     {
@@ -136,15 +135,15 @@ class SiteBuildCommand extends Command
         $env = $input->getOption('env');
         $sourceDir = $input->getOption('source');
 
-        $spress = $this->getApplication()->getSpress();
-
-        if (is_null($sourceDir) === false) {
-            if (($realDir = realpath($sourceDir)) === false) {
-                throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
-            }
-
-            $spress['spress.config.site_dir'] = $realDir;
+        if (is_null($sourceDir) === true) {
+            $sourceDir = './';
         }
+
+        if (($realDir = realpath($sourceDir)) === false) {
+            throw new \RuntimeException(sprintf('Invalid source path: "%s".', $sourceDir));
+        }
+
+        $spress = $this->getSpress($realDir);
 
         $spress['spress.config.env'] = $env;
         $spress['spress.config.safe'] = $safe;
@@ -166,11 +165,11 @@ class SiteBuildCommand extends Command
     }
 
     /**
-     * Reparse a site.
+     * Reparses a site.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface           $io
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Yosymfony\ResourceWatcher\ResourceWatcher      $rw
+     * @param IOInterface     $io    The Spress IO
+     * @param InputInterface  $input The Symfony Console input
+     * @param ResourceWatcher $rw    The ResourceWatcher
      */
     protected function reParse(IOInterface $io, InputInterface $input, ResourceWatcher $rw)
     {
@@ -194,7 +193,7 @@ class SiteBuildCommand extends Command
      * @param string $sourceDir      Source path
      * @param string $destinationDir Destination path
      *
-     * @return \Yosymfony\ResourceWatcher\ResourceWatcher
+     * @return ResourceWatcher The ResourceWatcher instance
      */
     protected function buildResourceWatcher($sourceDir, $destinationDir)
     {
@@ -218,9 +217,9 @@ class SiteBuildCommand extends Command
     }
 
     /**
-     * Gets the attributes or option resolver for configuration values.
+     * Returns the attributes or options resolver for configuration values.
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver
+     * @return AttributesResolver
      */
     protected function getConfigResolver()
     {
@@ -245,7 +244,7 @@ class SiteBuildCommand extends Command
     /**
      * Enables Parsedown converter.
      *
-     * @param Spress $spress
+     * @param Spress $spress The Spress instance
      */
     protected function enableParsedown(Spress $spress)
     {
@@ -262,12 +261,12 @@ class SiteBuildCommand extends Command
     /**
      * Writes the staring messages.
      *
-     * @param \Yosymfony\Spress\IO\ConsoleIO $io
-     * @param string                         $env    [description]
-     * @param bool                           $drafts [description]
-     * @param bool                           $safe   [description]
+     * @param ConsoleIO $io    Spress IO
+     * @param string    $env   The enviroment name
+     * @param bool      $draft Is draft mode enabled?
+     * @param bool      $safe  Is safe mode enabled?
      */
-    protected function startingMessage(ConsoleIO $io, $env, $drafts, $safe)
+    protected function startingMessage(ConsoleIO $io, $env, $draft, $safe)
     {
         $io->newLine();
         $io->write('<comment>Starting...</comment>');
@@ -277,7 +276,7 @@ class SiteBuildCommand extends Command
             $io->labelValue('Debug mode', 'enabled');
         }
 
-        if ($drafts === true) {
+        if ($draft === true) {
             $io->labelValue('Draft posts', 'enabled');
         }
 
@@ -289,8 +288,8 @@ class SiteBuildCommand extends Command
     /**
      * Writes the result of a parsing a site.
      *
-     * @param \Yosymfony\Spress\IO\ConsoleIO                    $io
-     * @param \Yosymfony\Spress\Core\DataSource\ItemInterface[] $items
+     * @param ConsoleIO       $io    The Spress IO
+     * @param ItemInterface[] $items Item affected
      */
     protected function resultMessage(ConsoleIO $io, array $items)
     {
@@ -303,10 +302,10 @@ class SiteBuildCommand extends Command
     /**
      * Write the result of rebuilding a site.
      *
-     * @param Yosymfony\Spress\IO\ConsoleIO $io
-     * @param array                         $newResources
-     * @param array                         $updatedResources
-     * @param array                         $deletedResources
+     * @param ConsoleIO $io               The Spress IO
+     * @param array     $newResources
+     * @param array     $updatedResources
+     * @param array     $deletedResources
      */
     protected function rebuildingSiteMessage(ConsoleIO $io, array $newResources, array $updatedResources, array $deletedResources)
     {

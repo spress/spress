@@ -1,8 +1,12 @@
 CHANGELOG for 2.x
 =================
 ## 2.2.0
+* [New] Support for themes. See the new feature #98.
+* [New] Package manager with the following new commands: "new:theme", "add:plugin", "remove:plugin" and "update:plugin". Additionaly, "new:site" command has been updated for scaffolding new sites using themes. See the new feature #96.
 * [New] Allow default attributes on "pages" collection. See new feature #93.
 * [New] New options for applying "avoid_renderizer" feature to type of files and files belong to a path (relative to `src/content` folder). See new feature #91.
+* [Fixed] Avoid an error using `--force` option of `new:site` command over a
+non-empty directory that contains "hidden" directories and files.
 
 ## 2.1.3
 * [New] Class `FileInfo` has been added to the support classes set of the core.

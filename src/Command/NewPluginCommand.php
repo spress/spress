@@ -11,7 +11,6 @@
 
 namespace Yosymfony\Spress\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +22,7 @@ use Yosymfony\Spress\IO\ConsoleIO;
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
-class NewPluginCommand extends Command
+class NewPluginCommand extends BaseCommand
 {
     /**
      * {@inheritdoc}
@@ -80,7 +79,7 @@ EOT
         $license = $input->getOption('license') ?: 'MIT';
 
         $generator = new PluginGenerator('./src/plugins', $name);
-        $generator->setSkeletonDirs([__DIR__.'/../../app/skeletons']);
+        $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
         $generator->setCommandData($commandName, $commandDescription, $commandHelp);
         $generator->setAuthor($author, $email);
         $generator->setDescription($description);

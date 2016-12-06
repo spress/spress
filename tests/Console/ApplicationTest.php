@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Console;
+namespace Yosymfony\Spress\Tests\Console;
 
 use Yosymfony\Spress\Console\Application;
 
@@ -32,5 +32,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testGetSpress()
     {
         $this->assertInstanceOf('Yosymfony\Spress\Core\Spress', $this->app->getSpress());
+    }
+
+    public function testRegisterStandardCommands()
+    {
+        $this->app->registerStandardCommands();
+
+        $this->assertTrue(count($this->app->all()) > 0);
     }
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\HttpServer;
+namespace Yosymfony\Spress\Tests\HttpServer;
 
 use Yosymfony\Spress\HttpServer\ServerRequest;
 

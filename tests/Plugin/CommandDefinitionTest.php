@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\tests\Plugin;
+namespace Yosymfony\Spress\Tests\Plugin;
 
 use Yosymfony\Spress\Plugin\CommandDefinition;
 

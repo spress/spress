@@ -227,8 +227,8 @@ class FilesystemDataSource extends AbstractDataSource
         foreach ($finder as $file) {
             $fileInfo = new SplFileInfo(
                 $file->getPathname(),
-                $file->getRelativePath(),
-                $file->getRelativePathname()
+                'assets/'.$file->getRelativePath(),
+                'assets/'.$file->getRelativePathname()
             );
 
             $files[] = $fileInfo;

@@ -43,6 +43,7 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
@@ -63,6 +64,7 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
@@ -79,6 +81,7 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/config.yml');
         $this->assertFileExists($this->tmpDir.'/composer.json');
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
@@ -110,10 +113,15 @@ class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->tmpDir.'/composer.json');
         $this->assertFileExists($this->tmpDir.'/src/themes/spress/spress-theme-spresso/config.yml');
         $this->assertFileExists($this->tmpDir.'/src/content/index.html');
+        $this->assertFileExists($this->tmpDir.'/src/content/assets');
         $this->assertFileExists($this->tmpDir.'/src/content/posts');
         $this->assertFileExists($this->tmpDir.'/src/layouts');
         $this->assertFileExists($this->tmpDir.'/src/includes');
         $this->assertFileExists($this->tmpDir.'/src/plugins');
+        $this->assertRegExp(
+            '/name: spress\/spress-theme-spresso/',
+            file_get_contents($this->tmpDir.'/config.yml')
+        );
     }
 
     /**

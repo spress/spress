@@ -201,26 +201,32 @@ class SiteGenerator extends Generator
     protected function createBlankSite($path, PackageNameVersion $themePair)
     {
         $packagePairs = [];
-        $defaultTheme = '';
+        $themeName = '';
 
         if ($themePair->getName() !== self::BLANK_THEME) {
-            $defaultTheme = $themePair->getName();
+            $themeName = $themePair->getName();
             array_push($packagePairs, $themePair);
         }
 
         $orgDir = getcwd();
-
         chdir($path);
 
-        $this->fs->mkdir(['build', 'src/layouts', 'src/content', 'src/content/posts']);
+        $this->fs->mkdir([
+            'build',
+            'src/layouts',
+            'src/content',
+            'src/content/posts',
+            'src/content/assets',
+            'src/includes',
+            'src/plugins',
+        ]);
         $this->renderFile('site/config.yml.twig', 'config.yml', [
-            'theme_name' => $defaultTheme,
+            'theme_name' => $themeName,
         ]);
         $this->renderFile('site/composer.json.twig', 'composer.json', [
             'requires' => $this->generateRequirePackages($packagePairs),
         ]);
         $this->fs->dumpFile('src/content/index.html', '');
-        $this->fs->mkdir(['src/includes', 'src/plugins']);
 
         chdir($orgDir);
     }

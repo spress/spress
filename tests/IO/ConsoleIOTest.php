@@ -61,11 +61,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($isVerbose, $io->isVerbose());
         });
 
-        $this->tester->execute([], ['verbosity' => 2]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
 
         $isVerbose = false;
 
-        $this->tester->execute([], ['verbosity' => 0]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_QUIET]);
     }
 
     public function testIsVeryVerbose()
@@ -78,11 +78,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($isVeryVerbose, $io->isVeryVerbose());
         });
 
-        $this->tester->execute([], ['verbosity' => 3]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE]);
 
         $isVeryVerbose = false;
 
-        $this->tester->execute([], ['verbosity' => 2]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
     }
 
     public function testIsDebug()
@@ -95,11 +95,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($isDebug, $io->isDebug());
         });
 
-        $this->tester->execute([], ['verbosity' => 4]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
 
         $isDebug = false;
 
-        $this->tester->execute([], ['verbosity' => 3]);
+        $this->tester->execute([], ['verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE]);
     }
 
     public function testIsDecorated()
@@ -119,16 +119,70 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $this->tester->execute([], ['decorated' => false]);
     }
 
-    public function testWrite()
+    public function testWriteVerbosityNormal()
     {
         $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
             $io = new ConsoleIO($input, $output);
             $io->write('Hi IO API');
+            $io->write('Verbose message', true, ConsoleIO::VERBOSITY_VERBOSE);
         });
 
-        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+        $this->tester->execute([], []);
 
-        $this->assertEquals("Hi IO API\n", $this->tester->getDisplay(true));
+        $display = $this->tester->getDisplay(true);
+        $this->assertRegExp('/Hi IO API/', $display);
+        $this->assertNotRegExp('/Verbose message/', $display);
+    }
+
+    public function testWriteVerbosityVerbose()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->write('Verbose message', true, ConsoleIO::VERBOSITY_VERBOSE);
+            $io->write('Very verbose message', true, ConsoleIO::VERBOSITY_VERY_VERBOSE);
+        });
+
+        $this->tester->execute([], [
+            'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
+        ]);
+
+        $display = $this->tester->getDisplay(true);
+        $this->assertRegExp('/Verbose message/', $display);
+        $this->assertNotRegExp('/Very verbose message/', $display);
+    }
+
+    public function testWriteVerbosityVeryVerbose()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->write('Very verbose message', true, ConsoleIO::VERBOSITY_VERY_VERBOSE);
+            $io->write('Debug message', true, ConsoleIO::VERBOSITY_DEBUG);
+        });
+
+        $this->tester->execute([], [
+            'verbosity' => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        ]);
+
+        $display = $this->tester->getDisplay(true);
+        $this->assertRegExp('/Very verbose message/', $display);
+        $this->assertNotRegExp('/Debug message/', $display);
+    }
+
+    public function testWriteVerbosityDebug()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $io->write('Very verbose message', true, ConsoleIO::VERBOSITY_VERY_VERBOSE);
+            $io->write('Debug message', true, ConsoleIO::VERBOSITY_DEBUG);
+        });
+
+        $this->tester->execute([], [
+            'verbosity' => OutputInterface::VERBOSITY_DEBUG,
+        ]);
+
+        $display = $this->tester->getDisplay(true);
+        $this->assertRegExp('/Very verbose message/', $display);
+        $this->assertRegExp('/Debug message/', $display);
     }
 
     public function testAsk()

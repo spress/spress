@@ -23,6 +23,21 @@ namespace Yosymfony\Spress\Core\IO;
  */
 interface IOInterface
 {
+    /** @var int */
+    const VERBOSITY_QUIET = 1;
+
+    /** @var int */
+    const VERBOSITY_NORMAL = 2;
+
+    /** @var int */
+    const VERBOSITY_VERBOSE = 4;
+
+    /** @var int */
+    const VERBOSITY_VERY_VERBOSE = 8;
+
+    /** @var int */
+    const VERBOSITY_DEBUG = 16;
+
     /**
      * Is this input means interactive?
      *
@@ -61,10 +76,11 @@ interface IOInterface
     /**
      * Writes a message to the output.
      *
-     * @param string|array $messages The message as an array of lines or a single string
-     * @param bool         $newline  Whether to add a newline or not
+     * @param string|array $messages  The message as an array of lines or a single string
+     * @param bool         $newline   Whether to add a newline or not
+     * @param int          $verbosity Verbosity level from VERBOSITY_* constants
      */
-    public function write($messages, $newline = true);
+    public function write($messages, $newline = true, $verbosity = self::VERBOSITY_NORMAL);
 
     /**
      * Asks a question to the user.

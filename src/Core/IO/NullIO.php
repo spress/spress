@@ -58,7 +58,7 @@ class NullIO implements IOInterface
     /**
      * {@inheritdoc}
      */
-    public function write($messages, $newline = true)
+    public function write($messages, $newline = true, $verbosity = self::VERBOSITY_NORMAL)
     {
         // do nothing
     }

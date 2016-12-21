@@ -29,7 +29,10 @@ class ConsoleIO implements IOInterface
     protected $input;
 
     /** @var SymfonyStyle */
-    protected $io;
+    protected $sStyle;
+
+    /** @var array<int, int> */
+    protected $verbosityMap;
 
     /**
      * Constructor.
@@ -40,7 +43,14 @@ class ConsoleIO implements IOInterface
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
-        $this->io = new SymfonyStyle($input, $output);
+        $this->sStyle = new SymfonyStyle($input, $output);
+        $this->verbosityMap = [
+           self::VERBOSITY_QUIET => OutputInterface::VERBOSITY_QUIET,
+           self::VERBOSITY_NORMAL => OutputInterface::VERBOSITY_NORMAL,
+           self::VERBOSITY_VERBOSE => OutputInterface::VERBOSITY_VERBOSE,
+           self::VERBOSITY_VERY_VERBOSE => OutputInterface::VERBOSITY_VERY_VERBOSE,
+           self::VERBOSITY_DEBUG => OutputInterface::VERBOSITY_DEBUG,
+       ];
     }
 
     /**
@@ -56,7 +66,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVerbose()
     {
-        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
+        return $this->sStyle->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE;
     }
 
     /**
@@ -64,7 +74,7 @@ class ConsoleIO implements IOInterface
      */
     public function isVeryVerbose()
     {
-        return $this->io->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
+        return $this->sStyle->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE;
     }
 
     /**
@@ -72,7 +82,7 @@ class ConsoleIO implements IOInterface
      */
     public function isDebug()
     {
-        return $this->io->getVerbosity() === OutputInterface::VERBOSITY_DEBUG;
+        return $this->sStyle->getVerbosity() === OutputInterface::VERBOSITY_DEBUG;
     }
 
     /**
@@ -80,15 +90,21 @@ class ConsoleIO implements IOInterface
      */
     public function isDecorated()
     {
-        return $this->io->isDecorated();
+        return $this->sStyle->isDecorated();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($messages, $newline = true)
+    public function write($messages, $newline = true, $verbosity = self::VERBOSITY_NORMAL)
     {
-        $this->io->write($messages, $newline);
+        $sfVerbosity = $this->verbosityMap[$verbosity];
+
+        if ($sfVerbosity > $this->sStyle->getVerbosity()) {
+            return;
+        }
+
+        $this->sStyle->write($messages, $newline);
     }
 
     /**
@@ -96,7 +112,7 @@ class ConsoleIO implements IOInterface
      */
     public function ask($question, $default = null)
     {
-        return $this->io->ask($question, $default);
+        return $this->sStyle->ask($question, $default);
     }
 
     /**
@@ -104,7 +120,7 @@ class ConsoleIO implements IOInterface
      */
     public function askConfirmation($question, $default = true)
     {
-        return $this->io->confirm($question, $default);
+        return $this->sStyle->confirm($question, $default);
     }
 
     /**
@@ -118,7 +134,7 @@ class ConsoleIO implements IOInterface
         $question->setValidator($validator);
         $question->setMaxAttempts($attempts);
 
-        return $this->io->askQuestion($question);
+        return $this->sStyle->askQuestion($question);
     }
 
     /**
@@ -126,7 +142,7 @@ class ConsoleIO implements IOInterface
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
-        return $this->io->askHidden($question);
+        return $this->sStyle->askHidden($question);
     }
 
     /**
@@ -152,7 +168,7 @@ class ConsoleIO implements IOInterface
      */
     public function success($message)
     {
-        $this->io->success($message);
+        $this->sStyle->success($message);
     }
 
     /**
@@ -162,7 +178,7 @@ class ConsoleIO implements IOInterface
      */
     public function error($message)
     {
-        $this->io->error($message);
+        $this->sStyle->error($message);
     }
 
     /**
@@ -172,7 +188,7 @@ class ConsoleIO implements IOInterface
      */
     public function warning($message)
     {
-        $this->io->warning($message);
+        $this->sStyle->warning($message);
     }
 
     /**
@@ -182,7 +198,7 @@ class ConsoleIO implements IOInterface
      */
     public function listing(array $elements)
     {
-        $this->io->listing($elements);
+        $this->sStyle->listing($elements);
     }
 
     /**
@@ -203,6 +219,6 @@ class ConsoleIO implements IOInterface
      */
     public function newLine($count = 1)
     {
-        $this->io->newLine($count);
+        $this->sStyle->newLine($count);
     }
 }

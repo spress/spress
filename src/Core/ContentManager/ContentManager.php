@@ -149,6 +149,7 @@ class ContentManager
     private function initializePlugins()
     {
         if ($this->safe === false) {
+            $this->io->write('Initializing plugins', true, IOInterface::VERBOSITY_VERBOSE);
             $this->pluginManager->callInitialize();
         }
     }
@@ -156,6 +157,8 @@ class ContentManager
     private function process()
     {
         $itemsGenerator = [];
+
+        $this->writeVMessage('Starting to process items');
 
         $event = $this->eventDispatcher->dispatch('spress.start', new Event\EnvironmentEvent(
             $this->dataSourceManager,
@@ -175,6 +178,7 @@ class ContentManager
         $this->prepareSiteAttributes();
 
         $this->dataSourceManager->load();
+        $this->writeVMessage('Data sources loaded');
 
         $items = $this->dataSourceManager->getItems();
 
@@ -192,9 +196,13 @@ class ContentManager
             $this->itemCollection->add($item);
         }
 
+        $this->writeVMessage('Collections, drafts and output attributes processed');
+
         foreach ($itemsGenerator as $item) {
             $this->processGenerator($item);
         }
+
+        $this->writeVMessage('Generators processed');
 
         $this->sortItems();
 
@@ -206,14 +214,25 @@ class ContentManager
             $this->siteAttribute->setItem($item);
         }
 
+        $this->writeVMessage(
+            [
+                'Converters has been applied to the items',
+                'Permalinks ready',
+            ]
+        );
+
         foreach ($this->itemCollection as $item) {
             $this->renderBlocks($item);
         }
+
+        $this->writeVMessage('Render over blocks has been applied');
 
         foreach ($this->itemCollection as $item) {
             $this->renderPage($item);
             $this->dataWriter->write($item);
         }
+
+        $this->writeVMessage('Render over pages has been applied');
     }
 
     private function finish()
@@ -252,6 +271,11 @@ class ContentManager
         $item->setCollection($collectionName);
 
         $this->siteAttribute->setAttribute($collectionNamePath, $this->getCollectionAttributes($collection));
+        $this->writeVvMessage(sprintf(
+            'The collection for the item with id: "%s" is "%s"',
+            $item->getId(),
+            $collectionName
+        ));
     }
 
     private function processDraftIfPost(ItemInterface $item)
@@ -291,6 +315,8 @@ class ContentManager
 
     private function processGenerator(ItemInterface $item)
     {
+        $this->writeVvMessage(sprintf('Processing the generator with id: "%s"', $item->getId()));
+
         $attributes = $item->getAttributes();
 
         $generator = $this->generatorManager->getGenerator($attributes['generator']);
@@ -336,6 +362,8 @@ class ContentManager
             $this->itemCollection->sortItems($sortBy, $isDescending, [$collection->getName()]);
             $this->setRelationships($collection->getName());
         }
+
+        $this->writeVMessage('Items sorted');
     }
 
     private function setRelationships($collection)
@@ -383,6 +411,7 @@ class ContentManager
 
     private function convertItem(ItemInterface $item)
     {
+        $this->writeVvMessage(sprintf('Applying a converter to the item with id: "%s"', $item->getId()));
         $path = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
 
         if ($item->isBinary() === true) {
@@ -423,6 +452,12 @@ class ContentManager
         $attributes['url'] = $permalink->getUrlPath();
 
         $item->setAttributes($attributes);
+
+        $this->writeVvMessage(sprintf(
+            'Permalink for the item with id: "%s" is "%s"',
+            $item->getId(),
+            $attributes['url']
+        ));
     }
 
     private function renderBlocks(ItemInterface $item)
@@ -430,6 +465,11 @@ class ContentManager
         if ($this->isRenderizerExcluded($item) === true) {
             return;
         }
+
+        $this->writeVvMessage(sprintf(
+            'Rendering blocks for the item with id: "%s"',
+            $item->getId()
+        ));
 
         $this->eventDispatcher->dispatch('spress.before_render_blocks', new Event\RenderEvent(
             $item,
@@ -455,6 +495,11 @@ class ContentManager
         if ($this->isRenderizerExcluded($item) === true) {
             return;
         }
+
+        $this->writeVvMessage(sprintf(
+            'Rendering page for the item with id: "%s"',
+            $item->getId()
+        ));
 
         $this->eventDispatcher->dispatch('spress.before_render_page', new Event\RenderEvent(
             $item,
@@ -533,8 +578,27 @@ class ContentManager
         return $attributes['avoid_renderizer'];
     }
 
+    /**
+     * @param string $key
+     */
     private function escapeDot($key)
     {
         return str_replace('.', '[.]', $key);
+    }
+
+    /**
+     * @param string|array $messasge
+     */
+    private function writeVMessage($message)
+    {
+        $this->io->write($message, true, IOInterface::VERBOSITY_VERBOSE);
+    }
+
+    /**
+     * @param string|array $messasge
+     */
+    private function writeVvMessage($message)
+    {
+        $this->io->write($message, true, IOInterface::VERBOSITY_VERY_VERBOSE);
     }
 }

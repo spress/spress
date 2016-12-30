@@ -34,6 +34,9 @@ class ConsoleIO implements IOInterface
     /** @var array<int, int> */
     protected $verbosityMap;
 
+    /** @var string */
+    protected $lastMessage;
+
     /**
      * Constructor.
      *
@@ -105,6 +108,43 @@ class ConsoleIO implements IOInterface
         }
 
         $this->sStyle->write($messages, $newline);
+        $this->lastMessage = implode($newline ? PHP_EOL : '', (array) $messages);
+    }
+
+    /**
+     * {@inheritdoc}
+     * Based on Composer overwrite method of ConsoleIO.
+     *
+     * @see https://github.com/composer/composer/blob/master/src/Composer/IO/ConsoleIO.php#L193
+     */
+    public function overwrite($messages, $newline = true, $size = null, $verbosity = self::VERBOSITY_NORMAL)
+    {
+        if ($this->isDecorated() === false || is_null($this->lastMessage) === true) {
+            $this->write($messages, $newline, $verbosity);
+
+            return;
+        }
+
+        $messages = implode($newline ? PHP_EOL : '', (array) $messages);
+
+        if (is_null($size) === true) {
+            $size = strlen(strip_tags($this->lastMessage));
+        }
+
+        $this->write(str_repeat("\x08", $size), false, $verbosity);
+        $this->write($messages, false, $verbosity);
+        $fill = $size - strlen(strip_tags($messages));
+
+        if ($fill > 0) {
+            $this->write(str_repeat(' ', $fill), false, $verbosity);
+            $this->write(str_repeat("\x08", $fill), false, $verbosity);
+        }
+
+        if ($newline) {
+            $this->write('', true, $verbosity);
+        }
+
+        $this->lastMessage = $messages;
     }
 
     /**

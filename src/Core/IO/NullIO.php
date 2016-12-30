@@ -66,6 +66,14 @@ class NullIO implements IOInterface
     /**
      * {@inheritdoc}
      */
+    public function overwrite($messages, $newline = true, $size = null, $verbosity = self::VERBOSITY_NORMAL)
+    {
+        // do nothing
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function ask($question, $default = null)
     {
         return $default;

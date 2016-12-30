@@ -99,7 +99,7 @@ class ComposerIOBridge extends BaseIO
      */
     public function overwrite($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
     {
-        $this->io->write($messages, $newline);
+        $this->io->overwrite($messages, $newline, $size, $verbosity);
     }
 
     /**
@@ -107,7 +107,7 @@ class ComposerIOBridge extends BaseIO
      */
     public function overwriteError($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
     {
-        $this->io->write($messages, $newline);
+        $this->io->overwrite($messages, $newline, $size, $verbosity);
     }
 
     /**

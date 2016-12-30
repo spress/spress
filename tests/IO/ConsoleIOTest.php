@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Yosymfony\Spress\Tests\IO;
+namespace Yosymfony\Spress\tests\IO;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -183,6 +184,45 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $display = $this->tester->getDisplay(true);
         $this->assertRegExp('/Very verbose message/', $display);
         $this->assertRegExp('/Debug message/', $display);
+    }
+
+    public function testOverWriteVerbosityNormal()
+    {
+        $inputMock = $this->getMock(InputInterface::class);
+        $outputMock = $this->getMock(OutputInterface::class);
+
+        $outputMock->method('getVerbosity')
+            ->willReturn(OutputInterface::VERBOSITY_NORMAL);
+        $outputMock->method('isDecorated')
+            ->willReturn(true);
+        $outputMock->method('getFormatter')
+            ->willReturn(new OutputFormatter());
+        $outputMock->expects($this->at(3))
+            ->method('write')
+            ->with($this->equalTo('something (<question>strlen = 23</question>)'));
+        $outputMock->expects($this->at(6))
+            ->method('write')
+            ->with($this->equalTo(str_repeat("\x08", 23)), $this->equalTo(false));
+        $outputMock->expects($this->at(8))
+            ->method('write')
+            ->with($this->equalTo('shorter (<comment>12</comment>)'), $this->equalTo(false));
+        $outputMock->expects($this->at(10))
+                    ->method('write')
+                    ->with($this->equalTo(str_repeat(' ', 11)), $this->equalTo(false));
+        $outputMock->expects($this->at(12))
+                    ->method('write')
+                    ->with($this->equalTo(str_repeat("\x08", 11)), $this->equalTo(false));
+        $outputMock->expects($this->at(15))
+                    ->method('write')
+                    ->with($this->equalTo(str_repeat("\x08", 12)), $this->equalTo(false));
+        $outputMock->expects($this->at(17))
+                    ->method('write')
+                    ->with($this->equalTo('something longer than initial (<info>34</info>)'));
+
+        $io = new ConsoleIO($inputMock, $outputMock);
+        $io->write('something (<question>strlen = 23</question>)');
+        $io->overwrite('shorter (<comment>12</comment>)', false);
+        $io->overwrite('something longer than initial (<info>34</info>)');
     }
 
     public function testAsk()

@@ -7,6 +7,7 @@ CHANGELOG for 2.x
 * [New] New options for applying "avoid_renderizer" feature to type of files and files belong to a path (relative to `src/content` folder). See new feature #91.
 * [New] Added a verbosity level param (optional) to write method of IOInterface.
 * [New] Added verbosity and very-verbosity level messages to the content manager.
+* [New] Added support for overwriting messages to the output in IOInterface.
 * [Fixed] Avoid an error using `--force` option of `new:site` command over a
 non-empty directory that contains "hidden" directories and files.
 

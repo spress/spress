@@ -79,7 +79,7 @@ class ComposerIOBridge extends BaseIO
      */
     public function write($messages, $newline = true, $verbosity = self::NORMAL)
     {
-        $this->io->write($messages, $newline);
+        $this->io->write($messages, $newline, $verbosity);
     }
 
     /**
@@ -87,15 +87,13 @@ class ComposerIOBridge extends BaseIO
      */
     public function writeError($messages, $newline = true, $verbosity = self::NORMAL)
     {
-        if ($verbosity != self::NORMAL) {
-            return;
-        }
-
-        $this->io->write($messages, $newline);
+        $this->io->write($messages, $newline, $verbosity);
     }
 
     /**
      * {@inheritdoc}
+     * The Composer's verbosity levels match with the Spress's verbosity levels.
+     * In this implementation, the param `size` is unused.
      */
     public function overwrite($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
     {
@@ -104,6 +102,8 @@ class ComposerIOBridge extends BaseIO
 
     /**
      * {@inheritdoc}
+     * The Composer's verbosity levels match with the Spress's verbosity levels.
+     * In this implementation, the param `size` is unused.
      */
     public function overwriteError($messages, $newline = true, $size = null, $verbosity = self::NORMAL)
     {

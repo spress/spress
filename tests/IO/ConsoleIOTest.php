@@ -200,24 +200,26 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $outputMock->expects($this->at(3))
             ->method('write')
             ->with($this->equalTo('something (<question>strlen = 23</question>)'));
+
         $outputMock->expects($this->at(6))
             ->method('write')
-            ->with($this->equalTo(str_repeat("\x08", 23)), $this->equalTo(false));
+            ->with($this->equalTo("\x0D"), $this->equalTo(false));
         $outputMock->expects($this->at(8))
             ->method('write')
-            ->with($this->equalTo('shorter (<comment>12</comment>)'), $this->equalTo(false));
+            ->with($this->equalTo("\x1B[2K"), $this->equalTo(false));
         $outputMock->expects($this->at(10))
-                    ->method('write')
-                    ->with($this->equalTo(str_repeat(' ', 11)), $this->equalTo(false));
-        $outputMock->expects($this->at(12))
-                    ->method('write')
-                    ->with($this->equalTo(str_repeat("\x08", 11)), $this->equalTo(false));
+            ->method('write')
+            ->with($this->equalTo('shorter (<comment>12</comment>)'), $this->equalTo(false));
+
+        $outputMock->expects($this->at(13))
+            ->method('write')
+            ->with($this->equalTo("\x0D"), $this->equalTo(false));
         $outputMock->expects($this->at(15))
-                    ->method('write')
-                    ->with($this->equalTo(str_repeat("\x08", 12)), $this->equalTo(false));
+            ->method('write')
+            ->with($this->equalTo("\x1B[2K"), $this->equalTo(false));
         $outputMock->expects($this->at(17))
-                    ->method('write')
-                    ->with($this->equalTo('something longer than initial (<info>34</info>)'));
+            ->method('write')
+            ->with($this->equalTo('something longer than initial (<info>34</info>)'), $this->equalTo(false));
 
         $io = new ConsoleIO($inputMock, $outputMock);
         $io->write('something (<question>strlen = 23</question>)');

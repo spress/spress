@@ -34,8 +34,8 @@ class ConsoleIO implements IOInterface
     /** @var array<int, int> */
     protected $verbosityMap;
 
-    /** @var string */
-    protected $lastMessage;
+    /** @var bool */
+    protected $isFirstMessage = true;
 
     /**
      * Constructor.
@@ -108,43 +108,38 @@ class ConsoleIO implements IOInterface
         }
 
         $this->sStyle->write($messages, $newline);
-        $this->lastMessage = implode($newline ? PHP_EOL : '', (array) $messages);
+        $this->isFirstMessage = false;
     }
 
     /**
      * {@inheritdoc}
-     * Based on Composer overwrite method of ConsoleIO.
+     * Based on ProgressBar helper of Symfony Console component.
      *
-     * @see https://github.com/composer/composer/blob/master/src/Composer/IO/ConsoleIO.php#L193
+     * @see https://github.com/symfony/console/blob/master/Helper/ProgressBar.php#L470
      */
-    public function overwrite($messages, $newline = true, $size = null, $verbosity = self::VERBOSITY_NORMAL)
+    public function overwrite($messages, $newline = true, $verbosity = self::VERBOSITY_NORMAL)
     {
-        if ($this->isDecorated() === false || is_null($this->lastMessage) === true) {
+        if ($this->hasSupportAnsiCommands() === false || $this->isFirstMessage === true) {
             $this->write($messages, $newline, $verbosity);
 
             return;
         }
 
         $messages = implode($newline ? PHP_EOL : '', (array) $messages);
+        $numNewLines = substr_count($messages, PHP_EOL);
 
-        if (is_null($size) === true) {
-            $size = strlen(strip_tags($this->lastMessage));
+        $this->write("\x0D", false, $verbosity);
+        $this->write("\x1B[2K", false, $verbosity);
+
+        if ($numNewLines > 0) {
+            $this->write(str_repeat("\x1B[1A\x1B[2K", $this->formatLineCount), false, $verbosity);
         }
 
-        $this->write(str_repeat("\x08", $size), false, $verbosity);
         $this->write($messages, false, $verbosity);
-        $fill = $size - strlen(strip_tags($messages));
-
-        if ($fill > 0) {
-            $this->write(str_repeat(' ', $fill), false, $verbosity);
-            $this->write(str_repeat("\x08", $fill), false, $verbosity);
-        }
 
         if ($newline) {
             $this->write('', true, $verbosity);
         }
-
-        $this->lastMessage = $messages;
     }
 
     /**
@@ -260,5 +255,17 @@ class ConsoleIO implements IOInterface
     public function newLine($count = 1)
     {
         $this->sStyle->newLine($count);
+    }
+
+    /**
+     * Does the terminal has support for ANSI commands?
+     *
+     * @see http://www.inwap.com/pdp10/ansicode.txt
+     *
+     * @return bool
+     */
+    private function hasSupportAnsiCommands()
+    {
+        return $this->isDecorated();
     }
 }

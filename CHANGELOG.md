@@ -8,6 +8,7 @@ CHANGELOG for 2.x
 * [New] Added a verbosity level param (optional) to write method of IOInterface.
 * [New] Added verbosity and very-verbosity level messages to the content manager.
 * [New] Added support for overwriting messages to the output in IOInterface.
+* [New] Added support for ask choice questions in IOInterface.
 * [Fixed] Avoid an error using `--force` option of `new:site` command over a
 non-empty directory that contains "hidden" directories and files.
 

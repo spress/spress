@@ -204,7 +204,6 @@ class ConsoleIO implements IOInterface
     {
         $attempts = is_int($attempts) ?: null;
 
-        $question = new Question($question);
         $question = new ChoiceQuestion($question, $choices, $default);
         $question->setErrorMessage($errorMessage);
         $question->setMultiselect($multiselect);

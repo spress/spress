@@ -160,4 +160,20 @@ interface IOInterface
      * @throws \Exception When any of the validators return an error
      */
     public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback = true);
+
+    /**
+     * Asks the user to select a value.
+     *
+     * @param string|array    $question     The question to ask
+     * @param array           $choices      List of choices to pick from
+     * @param string|int|null $default      The default answer if the user enters nothing
+     * @param bool|int        $attempts     Max number of times to ask before giving up (false by default, which means infinite)
+     * @param string          $errorMessage Message which will be shown if invalid value from choice list would be picked
+     * @param bool            $multiselect  Select more than one value separated by comma
+     *
+     * @return int|string|array The selected value or values (the key of the choices array)
+     *
+     * @throws \Exception When any of the validators return an error
+     */
+    public function askChoice($question, array $choices, $default = null, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false);
 }

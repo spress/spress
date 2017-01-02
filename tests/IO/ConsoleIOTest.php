@@ -269,6 +269,18 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
         $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
     }
 
+    public function testAskChoice()
+    {
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+            $io = new ConsoleIO($input, $output);
+            $result = $io->askChoice('Select a color', ['blue', 'green'], 'green');
+
+            $this->assertEquals('green', $result);
+        });
+
+        $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+    }
+
     public function testSuccess()
     {
         $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {

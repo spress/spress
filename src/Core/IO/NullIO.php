@@ -103,8 +103,19 @@ class NullIO implements IOInterface
         return;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function askHiddenResponseAndValidate($question, callable $validator, $attempts = false, $fallback = true)
     {
         return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askChoice($question, array $choices, $default = null, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
+    {
+        return $default;
     }
 }

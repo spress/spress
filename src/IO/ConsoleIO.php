@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\IO;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Yosymfony\Spress\Core\IO\IOInterface;
@@ -193,7 +194,23 @@ class ConsoleIO implements IOInterface
         $question->setMaxAttempts($attempts);
         $question->setHiddenFallback($fallback);
 
-        return $this->askQuestion($question);
+        return $this->sStyle->askQuestion($question);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function askChoice($question, array $choices, $default = null, $attempts = null, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
+    {
+        $attempts = is_int($attempts) ?: null;
+
+        $question = new Question($question);
+        $question = new ChoiceQuestion($question, $choices, $default);
+        $question->setErrorMessage($errorMessage);
+        $question->setMultiselect($multiselect);
+        $question->setMaxAttempts($attempts);
+
+        return $this->sStyle->askQuestion($question);
     }
 
     /**

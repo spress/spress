@@ -160,6 +160,9 @@ class PaginationGenerator implements GeneratorInterface
         return '/'.$result;
     }
 
+    /**
+     * @return Item[]
+     */
     protected function getProviderItems(array $collections, $providerName, $templateItemPath)
     {
         $arr = new ArrayWrapper($collections);
@@ -171,7 +174,18 @@ class PaginationGenerator implements GeneratorInterface
                 $templateItemPath);
         }
 
-        return $provider;
+        $providerItemsArr = new ArrayWrapper($provider);
+        $itemWithActiveOutput = $providerItemsArr->where(function ($key, Item $item) {
+            $attributes = $item->getAttributes();
+
+            if (array_key_exists('output', $attributes) && $attributes['output'] === false) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return $itemWithActiveOutput;
     }
 
     protected function sortItemsByAttribute(array $items, $attribute, $sortType)

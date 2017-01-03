@@ -51,7 +51,7 @@ class SiteBuildCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Environment: dev/', $output);
         $this->assertNotRegExp('/Posts drafts enabled/', $output);
         $this->assertRegExp('/Debug mode: enabled/', $output);
-        $this->assertRegExp('/Total items: 18/', $output);
+        $this->assertRegExp('/Total items: 17/', $output);
     }
 
     public function testBuildCommandDraft()

@@ -68,7 +68,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw, [$testPlugin]);
         $cm->parseSite($attributes, $spressAttributes);
 
-        $this->assertCount(16, $dw->getItems());
+        $this->assertCount(15, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('about/index.html'));
         $this->assertTrue($dw->hasItem('about/me/index.html'));

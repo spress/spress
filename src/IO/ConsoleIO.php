@@ -178,7 +178,11 @@ class ConsoleIO implements IOInterface
      */
     public function askAndHideAnswer($question, $fallback = true)
     {
-        return $this->sStyle->askHidden($question);
+        $question = new Question($question);
+        $question->setHidden(true);
+        $question->setHiddenFallback($fallback);
+
+        return $this->sStyle->askQuestion($question);
     }
 
     /**

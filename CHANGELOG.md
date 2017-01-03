@@ -11,6 +11,7 @@ CHANGELOG for 2.x
 * [New] Added support for ask choice questions in IOInterface.
 * [Fixed] Avoid an error using `--force` option of `new:site` command over a
 non-empty directory that contains "hidden" directories and files.
+* [Fixed] Fixed "askAndHideAnswer" method of ConsoleIO class to use the fallback argument.
 
 ## 2.1.3 (2016-07-03)
 * [New] Class `FileInfo` has been added to the support classes set of the core.

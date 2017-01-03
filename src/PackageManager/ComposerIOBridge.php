@@ -147,6 +147,10 @@ class ComposerIOBridge extends BaseIO
      */
     public function select($question, $choices, $default, $attempts = false, $errorMessage = 'Value "%s" is invalid', $multiselect = false)
     {
+        if (is_array($question)) {
+            $question = implode('', $messages);
+        }
+
         return $this->io->askChoice(
             $question,
             $choices,

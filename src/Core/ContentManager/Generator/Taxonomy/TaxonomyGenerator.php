@@ -31,7 +31,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  *  ...
  *
  * This generator adds an attribute "terms_url" to each
- * items processed with the permalinks of the terms. The patter
+ * item processed with the permalink of the terms. The patter
  * follows is $attributes['terms_url'][$taxonomy_attribute][$term].
  *
  * e.g: for "categories" as taxonomy_attribute and "news" as term

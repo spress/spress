@@ -32,7 +32,7 @@ interface CommandPluginInterface extends PluginInterface
     public function getCommandDefinition();
 
     /**
-     * Executes the current command.
+     * The body of the command.
      *
      * @param Yosymfony\Spress\Core\IO\IOInterface $io        Input/output interface
      * @param array                                $arguments Arguments passed to the command

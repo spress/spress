@@ -67,7 +67,7 @@ class TaxonomyGenerator implements GeneratorInterface
         $taxonomyCollection = [];
         $termCollection = [];
         $templateAttributes = $templateItem->getAttributes();
-        $options = $this->getAttributesResolver($templateItem);
+        $options = $this->buildAttributesResolver($templateItem);
         $taxonomyAttribute = $options['taxonomy_attribute'];
         $permalink = $options['permalink'];
 
@@ -111,6 +111,8 @@ class TaxonomyGenerator implements GeneratorInterface
             }
         }
 
+        ksort($taxonomyCollection);
+
         foreach ($taxonomyCollection as $slugedTerm => $items) {
             $templateAttributes['provider'] = 'site.'.$slugedTerm;
             $templateAttributes['term'] = $termCollection[$slugedTerm][0];
@@ -129,6 +131,15 @@ class TaxonomyGenerator implements GeneratorInterface
         return $result;
     }
 
+    /**
+     * Sets the permalink's term to a list of items associated with that term.
+     *
+     * @param array  $items             List of items associated with a the term
+     * @param string $taxonomyAttribute The item's attribute used for grouping by
+     * @param array  $terms             Term or set of sluged equivalent terms
+     * @param string $termRelativePath  Relative path to the term.
+     *                                  Used for generating the permalink
+     */
     protected function setTermsPermalink(array $items, $taxonomyAttribute, array $terms, $termRelativePath)
     {
         foreach ($items as $item) {
@@ -152,6 +163,15 @@ class TaxonomyGenerator implements GeneratorInterface
         }
     }
 
+    /**
+     * Returns the relative path of a term.
+     *
+     * @param string $basePath          The base path
+     * @param string $permalinkTemplate The template of the permalink that will be applied
+     * @param string $term              The term
+     *
+     * @return string
+     */
     protected function getTermRelativePath($basePath, $permalinkTemplate, $term)
     {
         $result = $basePath;
@@ -161,6 +181,13 @@ class TaxonomyGenerator implements GeneratorInterface
         return ltrim(preg_replace('/\/\/+/', '/', $result), '/');
     }
 
+    /**
+     * Returns the permalink of a term relative-path-based.
+     *
+     * @param string $TermRelativePath The relative path of the term
+     *
+     * @return string
+     */
     protected function getTermPermalink($TermRelativePath)
     {
         if (is_null($TermRelativePath)) {
@@ -181,12 +208,26 @@ class TaxonomyGenerator implements GeneratorInterface
         return '/'.$result;
     }
 
+    /**
+     * Normalizes a term.
+     *
+     * @param string $term The term
+     *
+     * @return string
+     */
     protected function normalizeTerm($term)
     {
         return (new StringWrapper($term))->lower();
     }
 
-    protected function getAttributesResolver(ItemInterface $templateItem)
+    /**
+     * Build the attribute resolver.
+     *
+     * @param ItemInterface $templateItem The item used as template
+     *
+     * @return AttributesResolver
+     */
+    protected function buildAttributesResolver(ItemInterface $templateItem)
     {
         $resolver = new AttributesResolver();
         $resolver->setDefault('taxonomy_attribute', 'categories', 'string')

@@ -28,7 +28,7 @@ non-empty directory that contains "hidden" directories and files.
 * [Fixed] Bug #83 has been fixed: "Same tags on different languages cause builder crash".
 
 ## 2.1.1 (2016-04-12)
-* [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using *.html.twig".
+* [Fixed] Bug #78 has been fixed: "/:basename permalink variable contains .html when using .html.twig".
 * [Fixed] Bug #79 has been fixed: "Error loading plugin's dependencies with -s option at site:build command".
 * [Improved] Clarified the message when `site:build` command is invoked against a non Spress site folder.
 

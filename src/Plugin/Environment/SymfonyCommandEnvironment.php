@@ -14,6 +14,7 @@ namespace Yosymfony\Spress\Plugin\Environment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Yosymfony\Spress\Console\Application;
 
 /**
  * Command environment implementation based on Symfony Console.
@@ -67,11 +68,25 @@ class SymfonyCommandEnvironment implements CommandEnvironmentInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSpress($siteDir = null)
+    {
+        $symfonyConsoleApp = $this->getSymfonyConsoleApplication();
+
+        if ($symfonyConsoleApp instanceof Application) {
+            return $symfonyConsoleApp->getSpress($siteDir);
+        }
+
+        throw new \RuntimeException('This implementation of the Symfony Console application does not support Spress.');
+    }
+
+    /**
      * Gets the Symfony Console application.
      *
-     * @return Symfony\Component\Console\Application The Symfony Console application
+     * @return Yosymfony\Spress\Console\Application The Symfony Console application
      *
-     * @throws \LogicException If Symfony Console application is not set up
+     * @throws LogicException If Symfony Console application is not set up
      */
     protected function getSymfonyConsoleApplication()
     {

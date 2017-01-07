@@ -11,6 +11,8 @@
 
 namespace Yosymfony\Spress\Plugin\Environment;
 
+use Yosymfony\Spress\Core\Spress;
+
 /**
  * The default command environment implementation.
  *
@@ -32,5 +34,20 @@ class DefaultCommandEnvironment implements CommandEnvironmentInterface
     public function runCommand($commandName, array $arguments)
     {
         throw new \RuntimeException('The default command environment does not has support for "runCommand" method.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpress($siteDir = null)
+    {
+        $spress = new Spress();
+        $spress['spress.config.default_filename'] = __DIR__.'/../../../app/config/config.yml';
+
+        if (is_null($siteDir) === false) {
+            $spress['spress.config.site_dir'] = $siteDir;
+        }
+
+        return $spress;
     }
 }

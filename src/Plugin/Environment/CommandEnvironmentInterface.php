@@ -40,7 +40,16 @@ interface CommandEnvironmentInterface
      * @return int The command exit code
      *
      * @throws Yosymfony\Spress\Plugin\Environment\CommandNotFoundException When command name is incorrect
-     * @throws \Exception
+     * @throws Exception
      */
     public function runCommand($commandName, array $arguments);
+
+    /**
+     * Returns an Spress instance.
+     *
+     * @param string $siteDir The site directory. Null means the current dir
+     *
+     * @return Spress A Spress instance
+     */
+    public function getSpress($siteDir = null);
 }

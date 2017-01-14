@@ -188,8 +188,8 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testOverWriteVerbosityNormal()
     {
-        $inputMock = $this->getMock(InputInterface::class);
-        $outputMock = $this->getMock(OutputInterface::class);
+        $inputMock = $this->getMockBuilder(InputInterface::class)->getMock();
+        $outputMock = $this->getMockBuilder(OutputInterface::class)->getMock();
 
         $outputMock->method('getVerbosity')
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);

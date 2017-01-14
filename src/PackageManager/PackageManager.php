@@ -98,6 +98,7 @@ class PackageManager
     {
         $options = $this->getInstallResolver()->resolve($options);
         $installer = $this->buildInstaller($options);
+        $installer->setUpdateWhitelist($packageNames);
         $status = $installer->run();
 
         if ($status !== 0) {

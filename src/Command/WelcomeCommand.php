@@ -52,7 +52,7 @@ class WelcomeCommand extends Command
         ]);
 
         if ($this->isUnstableVersion()) {
-            $io->warning('This is a unstable version');
+            $io->warning('This is an unstable version');
         }
 
         $command = $this->getApplication()->find('list');

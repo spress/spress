@@ -32,10 +32,10 @@ class PluginManagerBuilder
     /**
      * Constructor.
      *
-     * @param string                                             $path            Path to plugin folder
-     * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
-     * @param array                                              $excludeDirs     List of directories excluded of the scan
-     *                                                                            for discovering class. Tests directories are a good example
+     * @param string          $path            Path to plugin folder
+     * @param EventDispatcher $eventDispatcher
+     * @param array           $excludeDirs     List of directories excluded of the scan
+     *                                         for discovering class. Tests directories are a good example
      */
     public function __construct(
         $path,
@@ -65,7 +65,7 @@ class PluginManagerBuilder
      * Each plugin is added to PluginManager using "name"
      * meta or its classname if that meta do not exists.
      *
-     * @return \Yosymfony\Spress\Core\Plugin\PluginManager
+     * @return PluginManager
      */
     public function build()
     {
@@ -120,9 +120,9 @@ class PluginManagerBuilder
     }
 
     /**
-     * Gets the class name.
+     * Extracts the class name from the filename.
      *
-     * @param \Symfony\Component\Finder\SplFileInfo $file
+     * @param SplFileInfo $file The file. This could be a PHP file or a Composer.json file
      *
      * @return string
      */
@@ -146,10 +146,12 @@ class PluginManagerBuilder
     /**
      * Gets metas of a plugin.
      *
-     * @param string                                        $filename The plugin filename
-     * @param \Yosymfony\Spress\Core\Plugin\PluginInterface $plugin   The plugin
+     * @param string          $filename The plugin filename
+     * @param PluginInterface $plugin   The plugin
      *
      * @return array
+     *
+     * @throws RuntimeException If bad metas
      */
     protected function getPluginMetas(PluginInterface $plugin)
     {
@@ -158,7 +160,7 @@ class PluginManagerBuilder
         if (is_array($metas) === false) {
             $classname = get_class($plugin);
 
-            throw new \RuntimeException(sprintf('Expected an array at method "getMetas" of the plugin: "%s"', $classname));
+            throw new \RuntimeException(sprintf('Expected an array at method "getMetas" of the plugin: "%s".', $classname));
         }
 
         $metas = $this->resolver->resolve($metas);
@@ -171,9 +173,9 @@ class PluginManagerBuilder
     }
 
     /**
-     * Checks if the class name is valid.
+     * Checks if the class implements the PluginInterface.
      *
-     * @param string $name
+     * @param string $name Class's name
      *
      * @return bool
      */
@@ -195,9 +197,9 @@ class PluginManagerBuilder
     /**
      * Reads a "composer.json" file.
      *
-     * @param \Symfony\Component\Finder\SplFileInfo $file
+     * @param SplFileInfo $file The file
      *
-     * @return array The parsed json filename
+     * @return array The parsed JSON filename
      */
     protected function readComposerFile(SplFileInfo $file)
     {
@@ -210,7 +212,7 @@ class PluginManagerBuilder
     /**
      * Gets the attribute resolver.
      *
-     * @return \Yosymfony\Spress\Core\Support\AttributesResolver\AttributesResolver
+     * @return AttributesResolver
      */
     protected function getResolver()
     {
@@ -223,6 +225,11 @@ class PluginManagerBuilder
         return $resolver;
     }
 
+    /**
+     * Returns a Finder set up for finding both composer.json and php files.
+     *
+     * @return Finder A Symfony Finder instance
+     */
     protected function buildFinder()
     {
         $finder = new Finder();

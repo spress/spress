@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
+use Yosymfony\Spress\Core\Support\Collection;
 
 /**
  * Plugin manager builder.
@@ -63,84 +64,107 @@ class PluginManagerBuilder
      * Builds the PluginManager with the plugins of a site.
      *
      * Each plugin is added to PluginManager using "name"
-     * meta or its classname if that meta do not exists.
+     * meta or its classname if that meta does not exists.
      *
-     * @return PluginManager
+     * @return PluginManager PluginManager filled with the valid plugins
      */
     public function build()
     {
         $pm = new PluginManager($this->eventDispatcher);
         $pluginCollection = $pm->getPluginCollection();
 
-        if (empty($this->path) === true || file_exists($this->path) === false) {
+        if (file_exists($this->path) === false) {
             return $pm;
         }
 
-        $composerClassname = [];
+        $classnamesFromComposerFile = [];
 
         $finder = $this->buildFinder();
 
         foreach ($finder as $file) {
-            $classname = $this->getClassname($file);
-
-            if (empty($classname) === true) {
-                continue;
-            }
-
             if ($file->getFilename() === $this->composerFilename) {
-                $composerClassname[] = $classname;
+                $classes = $this->getClassnamesFromComposerFile($file);
+                $classnamesFromComposerFile = array_merge($classnamesFromComposerFile, $classes);
 
                 continue;
             }
+
+            $classname = $this->getClassnameFromPHPFilename($file);
 
             include_once $file->getRealPath();
 
-            if ($this->isValidClassName($classname) === false) {
+            if ($this->hasImplementedPluginInterface($classname) === false) {
                 continue;
             }
 
-            $plugin = new $classname();
-
-            $metas = $this->getPluginMetas($plugin);
-
-            $pluginCollection->add($metas['name'], $plugin);
+            $this->addPluginToCollection($classname, $pluginCollection);
         }
 
-        foreach ($composerClassname as $classname) {
-            if ($this->isValidClassName($classname) === true) {
-                $plugin = new $classname();
-
-                $metas = $this->getPluginMetas($plugin);
-
-                $pluginCollection->add($metas['name'], $plugin);
+        foreach ($classnamesFromComposerFile as $classname) {
+            if ($this->hasImplementedPluginInterface($classname) === true) {
+                $this->addPluginToCollection($classname, $pluginCollection);
             }
         }
 
         return $pm;
     }
 
-    /**
-     * Extracts the class name from the filename.
-     *
-     * @param SplFileInfo $file The file. This could be a PHP file or a Composer.json file
-     *
-     * @return string
-     */
-    protected function getClassname(SplFileInfo $file)
+    protected function isValidPluginFolder($path)
     {
-        if ($file->getExtension() === 'php') {
-            return $file->getBasename('.php');
+        return empty($path) === true || file_exists($path) === false;
+    }
+
+    /**
+     * Adds a new valid list of plugins (they must implements PluginInterface) to a collections
+     * of plugins. It performs a new operation for each valid plugin.
+     *
+     * @param string     $classname
+     * @param Collection $pluginCollection
+     */
+    protected function addPluginToCollection($classname, Collection $pluginCollection)
+    {
+        $plugin = new $classname();
+        $metas = $this->getPluginMetas($plugin);
+        $pluginCollection->add($metas['name'], $plugin);
+    }
+
+    /**
+     * Extracts the class names from the filename.
+     *
+     * @param SplFileInfo $file A PHP file
+     *
+     * @return string Class name
+     */
+    protected function getClassnameFromPHPFilename(SplFileInfo $file)
+    {
+        return $file->getBasename('.php');
+    }
+
+    /**
+     * Extracts the class names from a composer.json file
+     * A composer.json file could defines several classes in spress_class
+     * property from extra section.
+     *
+     * @param SplFileInfo $file A composer.json file
+     *
+     * @return array List of class names
+     */
+    protected function getClassnamesFromComposerFile(SplFileInfo $file)
+    {
+        $composerData = $this->readComposerFile($file);
+
+        if (isset($composerData['extra']['spress_class']) === false) {
+            return [];
         }
 
-        if ($file->getFilename() === $this->composerFilename) {
-            $composerData = $this->readComposerFile($file);
-
-            if (isset($composerData['extra']['spress_class']) === true && is_string($composerData['extra']['spress_class'])) {
-                return $composerData['extra']['spress_class'];
-            }
+        if (
+            is_string($composerData['extra']['spress_class']) === false
+            && is_array($composerData['extra']['spress_class']) === false
+        ) {
+            return [];
         }
 
-        return '';
+        return (array) $composerData['extra']['spress_class'];
     }
 
     /**
@@ -179,7 +203,7 @@ class PluginManagerBuilder
      *
      * @return bool
      */
-    protected function isValidClassName($name)
+    protected function hasImplementedPluginInterface($name)
     {
         $result = false;
 

@@ -1,6 +1,10 @@
 CHANGELOG for 2.x
 =================
 ## 2.2.0
+* [Improved] Updated `PluginManagerBuilder` class with support for loading several plugins
+from extra->spress_class attribute of a plugin's `composer.json` file.
+
+## 2.2.0-rc (2017-01-15)
 * [New] Support for themes. See the new feature #98.
 * [New] Package manager with the following new commands: `new:theme`, `add:plugin`, `remove:plugin` and `update:plugin`. Additionaly, `new:site` command has been updated for scaffolding new sites using themes. See the new feature #96.
 * [New] Allow default attributes on "pages" collection. See new feature #93.

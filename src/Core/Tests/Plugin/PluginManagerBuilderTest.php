@@ -35,24 +35,24 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->embeddedComposer->processAdditionalAutoloads();
     }
 
-    public function testBuild()
+    public function testBuildMustFillThePluginCollectionWithTheValidPluginsFoundInTheFolder()
     {
         $builder = new PluginManagerBuilder($this->pluginDir, new EventDispatcher());
         $pm = $builder->build();
         $pluginCollection = $pm->getPluginCollection();
 
-        $this->assertCount(2, $pluginCollection);
+        $this->assertCount(2, $pluginCollection, 'The number of plugins in the collection is wrong');
 
         $plugin = $pluginCollection->get('Test plugin');
 
         $metas = $plugin->getMetas();
 
-        $this->assertEquals('Test plugin', $metas['name']);
+        $this->assertEquals('Test plugin', $metas['name'], 'Failed to retrieve the name of the plugin from metas');
 
         $plugin = $pluginCollection->get('Hello plugin');
 
         $metas = $plugin->getMetas();
 
-        $this->assertEquals('Hello plugin', $metas['name']);
+        $this->assertEquals('Hello plugin', $metas['name'], 'Failed to retrieve the name of the plugin from metas');
     }
 }

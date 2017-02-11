@@ -11,6 +11,8 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
+use Yosymfony\Spress\PackageManager\PackageNameVersion;
+
 /**
  * Theme generator.
  *
@@ -19,7 +21,7 @@ namespace Yosymfony\Spress\Scaffolding;
 class ThemeGenerator extends SiteGenerator
 {
     /**
-     * Scaffold a new theme. In case of exception, the new-site directory
+     * Scaffolds a new theme. In case of exception, the new-site directory
      * will be removed.
      *
      * @param string $path       Destination path
@@ -53,6 +55,14 @@ class ThemeGenerator extends SiteGenerator
             $options['repository'],
             $options['prefer-source']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getInitialPackagePairs()
+    {
+        return [new PackageNameVersion($this->spressInstallerPackage)];
     }
 
     /**

@@ -28,13 +28,16 @@ class SiteGenerator extends Generator
     /** @var string */
     const BLANK_THEME = 'blank';
 
+    /** @var string */
+    const SPRESS_INSTALLER_PACKAGE = 'spress/spress-installer ~2.1';
+
     /** @var Filesystem */
     protected $fs;
 
     /** @var PackageManager */
     protected $packageManager;
 
-    /** @var string */
+    /** @var string Spress installer package */
     protected $spressInstallerPackage;
 
     /**
@@ -44,7 +47,7 @@ class SiteGenerator extends Generator
      *                                       blank themes is allowed
      * @param string The minimum Spress installer package required. e.g: "spress/spress-installer >=2.0"
      */
-    public function __construct(PackageManager $packageManager = null, $spressInstallerPackage = 'spress/spress-installer')
+    public function __construct(PackageManager $packageManager = null, $spressInstallerPackage = self::SPRESS_INSTALLER_PACKAGE)
     {
         $this->packageManager = $packageManager;
         $this->fs = new Filesystem();
@@ -85,8 +88,8 @@ class SiteGenerator extends Generator
     /**
      * Create a site.
      *
-     * @param string $path
-     * @param string $themeName
+     * @param string $path      Where the site will be located
+     * @param string $themeName The name of the theme the site based on
      *
      * @throws LogicException           If the packageManager is null
      * @throws RuntimeException         If an error occurs while installing the theme
@@ -195,13 +198,15 @@ class SiteGenerator extends Generator
     }
 
     /**
-     * @param string             $path
-     * @param PackageNameVersion $themePair
+     * Creates a blank site.
+     *
+     * @param string             $path      Where the site will be located
+     * @param PackageNameVersion $themePair Theme pair
      */
     protected function createBlankSite($path, PackageNameVersion $themePair)
     {
-        $packagePairs = [];
         $themeName = '';
+        $packagePairs = $this->getInitialPackagePairs();
 
         if ($themePair->getName() !== self::BLANK_THEME) {
             $themeName = $themePair->getName();
@@ -229,6 +234,17 @@ class SiteGenerator extends Generator
         $this->fs->dumpFile('src/content/index.html', '');
 
         chdir($orgDir);
+    }
+
+    /**
+     * Returns the initial list of packages that will be render into the require section.
+     * of composer.json file.
+     *
+     * @return PackageNameVersion[]
+     */
+    protected function getInitialPackagePairs()
+    {
+        return [];
     }
 
     /**

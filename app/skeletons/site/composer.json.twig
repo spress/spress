@@ -1,8 +1,11 @@
 {
+    "type": "spress-theme",
+    {% if requires|length > 0 %}
     "require": {
         {% for name, version in requires %}
-        "{{ name }}": "{{ version }}"
+        "{{ name }}": "{{ version|raw }}"
         {% endfor %}
     },
+    {% endif %}
     "minimum-stability": "dev"
 }

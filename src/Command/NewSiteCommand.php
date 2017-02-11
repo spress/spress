@@ -26,13 +26,7 @@ use Yosymfony\Spress\Scaffolding\SiteGenerator;
 class NewSiteCommand extends BaseCommand
 {
     /** @var string */
-    const BLANK_THEME = 'blank';
-
-    /** @var string */
     const SPRESSO_THEME = 'spresso';
-
-    /** @var string */
-    const SPRESS_INSTALLER_PACKAGE = 'spress/spress-installer >= 2.1';
 
     /**
      * {@inheritdoc}
@@ -41,7 +35,7 @@ class NewSiteCommand extends BaseCommand
     {
         $this->setDefinition([
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new site', './'),
-            new InputArgument('theme', InputArgument::OPTIONAL, 'Theme name', self::BLANK_THEME),
+            new InputArgument('theme', InputArgument::OPTIONAL, 'Theme name', SiteGenerator::BLANK_THEME),
             new InputOption('force', '', InputOption::VALUE_NONE, 'Force creation even if path already exists'),
             new InputOption('all', '', InputOption::VALUE_NONE, 'Complete scaffold of a blank site.'),
             new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information'),
@@ -71,10 +65,8 @@ class NewSiteCommand extends BaseCommand
             $io->warning('You are using a deprecated option "--all"');
         }
 
-        $generator = new SiteGenerator(
-            $this->getPackageManager($input->getArgument('path'), $io),
-            self::SPRESS_INSTALLER_PACKAGE
-        );
+        $packageManager = $this->getPackageManager($input->getArgument('path'), $io);
+        $generator = new SiteGenerator($packageManager);
         $generator->setSkeletonDirs([$this->getSkeletonsDir()]);
         $generator->generate(
             $input->getArgument('path'),

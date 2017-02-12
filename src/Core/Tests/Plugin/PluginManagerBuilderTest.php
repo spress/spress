@@ -14,6 +14,7 @@ namespace Yosymfony\Spress\Core\Tests\Plugin;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
+use Yosymfony\Spress\Core\Plugin\PluginManager;
 
 class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +36,14 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->embeddedComposer->processAdditionalAutoloads();
     }
 
-    public function testBuildMustFillThePluginCollectionWithTheValidPluginsFoundInTheFolder()
+    public function testBuildMustReturnsAPluginManagerInstance()
+    {
+        $builder = new PluginManagerBuilder($this->pluginDir, new EventDispatcher());
+
+        $this->assertInstanceOf(PluginManager::class, $builder->build(), 'Failed to retrieve the PluginManager instance');
+    }
+
+    public function testGetPluginCollectionMustReturnsThePluginCollectionFilledWithTheValidPluginsFoundInThePluginFolder()
     {
         $builder = new PluginManagerBuilder($this->pluginDir, new EventDispatcher());
         $pm = $builder->build();
@@ -44,13 +52,11 @@ class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $pluginCollection, 'The number of plugins in the collection is wrong');
 
         $plugin = $pluginCollection->get('Test plugin');
-
         $metas = $plugin->getMetas();
 
         $this->assertEquals('Test plugin', $metas['name'], 'Failed to retrieve the name of the plugin from metas');
 
         $plugin = $pluginCollection->get('Hello plugin');
-
         $metas = $plugin->getMetas();
 
         $this->assertEquals('Hello plugin', $metas['name'], 'Failed to retrieve the name of the plugin from metas');

@@ -32,22 +32,32 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         $fs->remove($this->tmpDir);
     }
 
-    public function testBlankTheme()
+    public function testGenerateMustScaffoldABlankSiteWhenTheThemeNameIsBlank()
     {
         $generator = new ThemeGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);
         $generator->generate($this->tmpDir, 'blank');
 
-        $this->assertFileExists($this->tmpDir.'/config.yml');
-        $this->assertFileExists($this->tmpDir.'/composer.json');
-        $this->assertFileExists($this->tmpDir.'/src/content/index.html');
-        $this->assertFileExists($this->tmpDir.'/src/content/posts');
-        $this->assertFileExists($this->tmpDir.'/src/layouts');
-        $this->assertFileExists($this->tmpDir.'/src/includes');
-        $this->assertFileExists($this->tmpDir.'/src/plugins');
+        $this->assertFileExists($this->tmpDir.'/config.yml', 'Failed asserting that config.yml file exists in a blank site');
+        $this->assertFileExists($this->tmpDir.'/composer.json', 'Failed asserting that composer.json file exists in a blank site');
+        $this->assertFileExists($this->tmpDir.'/src/content/index.html', 'Failed asserting that index.html file exists at src/content folder of a blank site');
+        $this->assertFileExists($this->tmpDir.'/src/content/posts', 'Failed asserting that posts folder exists at src/content folder of a blank site');
+        $this->assertFileExists($this->tmpDir.'/src/layouts', 'Failed asserting that layouts folder exists at src folder of a blank site');
+        $this->assertFileExists($this->tmpDir.'/src/includes', 'Failed asserting that includes folder exists at src folder of a blank site');
+        $this->assertFileExists($this->tmpDir.'/src/plugins', 'Failed asserting that plugins folder exists at src folder of a blank site');
     }
 
-    public function testTheme()
+    public function testGenerateMustContainsSpressInstallerInRequiresSectionOfComposerJsonWhenTheThemeNameIsBlank()
+    {
+        $generator = new ThemeGenerator();
+        $generator->setSkeletonDirs($this->skeletonDir);
+        $generator->generate($this->tmpDir, 'blank');
+        $ComposerJsonFileContent = file_get_contents($this->tmpDir.'/composer.json');
+
+        $this->assertRegExp('/spress-installer/', $ComposerJsonFileContent, 'Failed asserting that spress-installer package is declared as a requires in composer.json file');
+    }
+
+    public function testGenerateWithAThemeMustCallCreateThemeProjectOfPackageManagerWithFalseInPreferSourceParameter()
     {
         $packageManagerMock = $this->getMockBuilder(PackageManager::class)
             ->disableOriginalConstructor()
@@ -67,7 +77,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->generate($this->tmpDir, 'spress/spress-theme-spresso:2.1.*-dev');
     }
 
-    public function testThemeWithRepository()
+    public function testGenerateWithAThemeAndAReposirotyMustCallCreateThemeProjectOfPackageManagerWithAnUrlInRepositoryParameter()
     {
         $packageManagerMock = $this->getMockBuilder(PackageManager::class)
             ->disableOriginalConstructor()
@@ -93,7 +103,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testThemePreferSource()
+    public function testGenerateWithAThemeAndPreferSourceSetToTrueMustCallCreateThemeProjectOfPackageManagerWithTrueInPreferSourceParameter()
     {
         $packageManagerMock = $this->getMockBuilder(PackageManager::class)
             ->disableOriginalConstructor()
@@ -124,7 +134,7 @@ class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
      * @expectedException LogicException
      * @expectedExceptionMessage You must set the PackageManager at the constructor in order to create non-blank themes.
      */
-    public function testThemeAndNoPackageManagerSet()
+    public function testGenerateMustThrowALogicExceptionIfNonBlankThemeIsPassedAsArgumentAndAThePackageManagerInstanceWasNotPassed()
     {
         $generator = new ThemeGenerator();
         $generator->setSkeletonDirs($this->skeletonDir);

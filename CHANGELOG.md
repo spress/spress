@@ -3,6 +3,8 @@ CHANGELOG for 2.x
 ## 2.2.0
 * [Improved] Updated `PluginManagerBuilder` class with support for loading several plugins
 from extra->spress_class attribute of a plugin's `composer.json` file.
+* [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.
+* Renamed some tests with a more descritive name.
 
 ## 2.2.0-rc (2017-01-15)
 * [New] Support for themes. See the new feature #98.

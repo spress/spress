@@ -32,8 +32,8 @@ class NewThemeCommand extends BaseCommand
     {
         $this->setDefinition(array(
             new InputArgument('path', InputArgument::OPTIONAL, 'Path of the new theme', getcwd()),
-            new InputArgument('package', InputArgument::OPTIONAL, 'The name of the package theme.', ThemeGenerator::BLANK_THEME),
-            new InputOption('repository', null, InputOption::VALUE_REQUIRED, 'Pick a different repository (as url or json config) to look for the package theme.'),
+            new InputArgument('package', InputArgument::OPTIONAL, 'The name of the theme package.', ThemeGenerator::BLANK_THEME),
+            new InputOption('repository', null, InputOption::VALUE_REQUIRED, 'Pick a different repository (as url or json config) to look for the theme package.'),
             new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation of the theme from package sources when possible, including VCS information.'),
             new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages of the theme.'),
             new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),

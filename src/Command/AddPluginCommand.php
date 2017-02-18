@@ -30,10 +30,10 @@ class AddPluginCommand extends BaseCommand
     protected function configure()
     {
         $this->setDefinition(array(
-               new InputArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Packages that should be updated, if not provided all packages are.'),
-               new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation from package sources when possible, including VCS information.'),
-               new InputOption('dry-run', null, InputOption::VALUE_NONE, 'Outputs the operations but will not execute anything (implicitly enables --verbose).'),
-               new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages.'),
+               new InputArgument('packages', InputArgument::IS_ARRAY, 'List of packages that should be added.'),
+               new InputOption('prefer-source', null, InputOption::VALUE_NONE, 'Forces installation of the plugins from package sources when possible, including VCS information.'),
+               new InputOption('dry-run', null, InputOption::VALUE_NONE, 'Outputs the operations but will not execute anything.'),
+               new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages of the plugin.'),
                new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
            ))
             ->setName('add:plugin')

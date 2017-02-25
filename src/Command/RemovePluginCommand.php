@@ -30,12 +30,12 @@ class RemovePluginCommand extends BaseCommand
     protected function configure()
     {
         $this->setDefinition(array(
-               new InputArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Packages that should be updated, if not provided all packages are.'),
-               new InputOption('dev', null, InputOption::VALUE_NONE, 'Enables installation of dev-require packages.'),
+               new InputArgument('packages', InputArgument::IS_ARRAY, 'List of packages that should be removed.'),
+               new InputOption('dev', null, InputOption::VALUE_NONE, 'Remove packages from require-dev.'),
                new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
            ))
             ->setName('remove:plugin')
-            ->setDescription('Removes plugins and themes from the requirements')
+            ->setDescription('Removes plugins and themes from the composer.json file of the current directory')
             ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command removes a plugin or theme from the list
 of installed packages.

@@ -37,7 +37,7 @@ class AddPluginCommand extends BaseCommand
                new InputOption('no-scripts', null, InputOption::VALUE_NONE, 'Skips the execution of all scripts defined in composer.json file.'),
            ))
             ->setName('add:plugin')
-            ->setDescription('Adds plugins and themes to your requirements and installs them')
+            ->setDescription('Adds plugins and themes to the composer.json file of the current directory and installs them')
             ->setHelp(<<<'EOT'
 The <info>%command.name%</info> command update the dependencies of your site by the
 latest version.

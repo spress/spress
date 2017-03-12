@@ -177,13 +177,13 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $finder = new Finder();
-
-        $finder->in($path)
-            ->files();
+        $finder->files();
 
         if (empty($this->params['theme_name']) === false) {
             $finder->in($this->composeThemeSubPath('layouts'));
         }
+
+        $finder->in($path);
 
         $this->processItems($finder, Item::TYPE_LAYOUT);
     }
@@ -197,12 +197,13 @@ class FilesystemDataSource extends AbstractDataSource
         }
 
         $finder = new Finder();
-        $finder->in($path)
-            ->files();
+        $finder->files();
 
         if (empty($this->params['theme_name']) === false) {
             $finder->in($this->composeThemeSubPath('includes'));
         }
+
+        $finder->in($path);
 
         $this->processItems($finder, Item::TYPE_INCLUDE);
     }
@@ -241,7 +242,7 @@ class FilesystemDataSource extends AbstractDataSource
     {
         $files = iterator_to_array($finder);
 
-        foreach ($files as $file) {
+        foreach ($files as $key => $file) {
             $id = $this->normalizeDirSeparator($file->getRelativePathname());
             $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();

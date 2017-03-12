@@ -107,7 +107,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(strlen($items['LICENSE']->getPath('relative')) > 0);
     }
 
-    public function testTheme()
+    public function testGetLayoutsMustGivesPreferenceSiteLayoutsOverThemeLayoutsWhenThereIsAEnabledTheme()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -116,19 +116,58 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $fsDataSource->load();
-
-        $items = $fsDataSource->getItems();
         $layouts = $fsDataSource->getLayouts();
-        $includes = $fsDataSource->getIncludes();
 
-        $this->assertCount(1, $layouts);
-        $this->assertRegExp('/Theme 01 title/', $layouts['default.html']->getContent());
-
-        $this->assertCount(1, $includes);
-        $this->assertRegExp('/Include theme 01/', $includes['test.html']->getContent());
+        $this->assertCount(2, $layouts);
+        $this->assertRegExp('/Welcome to my site/', $layouts['default.html']->getContent());
     }
 
-    public function testIncludeFile()
+    public function testGetIncludesMustGivesPreferenceSiteIncludesOverThemeIncludesWhenThereIsAEnabledTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertCount(2, $includes);
+        $this->assertRegExp('/Include test/', $includes['test.html']->getContent());
+    }
+
+    public function testGetIncludesMustReturnThemeIncludesIfItDoesNotExistsInTheSiteIncludesWhenThereIsAEnabledTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertCount(2, $includes);
+        $this->assertRegExp('/Include theme 01 - test2/', $includes['test2.html']->getContent());
+    }
+
+    public function testGetLayoutsMustReturnThemeLayoutsIfItDoesNotExistsInTheSiteLayoutsWhenThereIsAEnabledTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
+
+        $this->assertCount(2, $layouts);
+        $this->assertRegExp('/Theme 01 layout/', $layouts['page.html']->getContent());
+    }
+
+    public function testGetItemsMustReturnAnExtraItemWhenIncludeOptionIsUsedWithAFile()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -142,7 +181,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('extra-page1.html', $items);
     }
 
-    public function testIncludeFolder()
+    public function testGetItemsMustReturnItemsOfIncludedFolderWhenIncludeOptionIsUsedWithAFolder()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -154,7 +193,7 @@ class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(15, $fsDataSource->getItems());
     }
 
-    public function testExcludeFile()
+    public function testGetItemMustExcludeTheFileSetInExcludeOptionWhenExcludeOptionIsSetWithAFile()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,

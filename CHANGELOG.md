@@ -1,6 +1,7 @@
 CHANGELOG for 2.x
 =================
 ## 2.2.0
+* [New] Dropped the support for PHP 5.5. The minimum version is 5.6.
 * [Improved] Updated `PluginManagerBuilder` class with support for loading several plugins
 from extra->spress_class attribute of a plugin's `composer.json` file.
 * [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.

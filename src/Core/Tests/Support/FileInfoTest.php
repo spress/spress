@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Support;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Support\FileInfo;
 
-class FileInfoTest extends \PHPUnit_Framework_TestCase
+class FileInfoTest extends TestCase
 {
     private $predefinedExtensions;
 

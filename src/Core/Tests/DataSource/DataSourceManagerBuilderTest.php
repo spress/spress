@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 
-class DataSourceManagerBuilderTest extends \PHPUnit_Framework_TestCase
+class DataSourceManagerBuilderTest extends TestCase
 {
     public function testBuildFromConfigArray()
     {

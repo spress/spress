@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Renderizer;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 
-class TwigRenderizerTest extends \PHPUnit_Framework_TestCase
+class TwigRenderizerTest extends TestCase
 {
     public function setUp()
     {

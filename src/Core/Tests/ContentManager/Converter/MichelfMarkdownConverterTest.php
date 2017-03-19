@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
 
-class MichelfMarkdownConverterTest extends \PHPUnit_Framework_TestCase
+class MichelfMarkdownConverterTest extends TestCase
 {
     public function testMarkdown()
     {

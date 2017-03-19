@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Support;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Support\ArrayWrapper;
 
-class ArrayWrapperTest extends \PHPUnit_Framework_TestCase
+class ArrayWrapperTest extends TestCase
 {
     public function testAdd()
     {

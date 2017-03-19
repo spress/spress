@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\Spress;
 
-class SpressTest extends \PHPUnit_Framework_TestCase
+class SpressTest extends TestCase
 {
     public function testParseSite()
     {

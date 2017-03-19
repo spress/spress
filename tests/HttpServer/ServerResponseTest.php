@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\HttpServer;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\HttpServer\ServerResponse;
 
-class ServerResponseTest extends \PHPUnit_Framework_TestCase
+class ServerResponseTest extends TestCase
 {
     public function testResponse()
     {

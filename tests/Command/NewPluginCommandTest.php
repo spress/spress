@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Console\Application;
 use Yosymfony\Spress\Command\NewPluginCommand;
 
-class NewPluginCommandTest extends \PHPUnit_Framework_TestCase
+class NewPluginCommandTest extends TestCase
 {
     protected $app;
     protected $tmpDir;

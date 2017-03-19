@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Tests\Plugin\Environment;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Yosymfony\Spress\Plugin\Environment\SymfonyCommandEnvironment;
 
-class SymfonyCommandEnvironmentTest extends \PHPUnit_Framework_TestCase
+class SymfonyCommandEnvironmentTest extends TestCase
 {
     public function testHasCommand()
     {

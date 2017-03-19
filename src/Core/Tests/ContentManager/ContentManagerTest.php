@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
@@ -29,7 +30,7 @@ use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Tester\PluginTester;
 
-class ContentManagerTest extends \PHPUnit_Framework_TestCase
+class ContentManagerTest extends TestCase
 {
     public function setUp()
     {

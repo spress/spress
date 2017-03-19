@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\HttpServer;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\HttpServer\ServerRequest;
 
-class ServerRequestTest extends \PHPUnit_Framework_TestCase
+class ServerRequestTest extends TestCase
 {
     protected $documentRoot;
     protected $serverRoot;

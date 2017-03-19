@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource\Memory;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\DataSource\Memory\MemoryDataSource;
 
-class MemoryDataSourceTest extends \PHPUnit_Framework_TestCase
+class MemoryDataSourceTest extends TestCase
 {
     public function testMemoryDataSource()
     {

@@ -12,9 +12,10 @@
 namespace Yosymfony\Spress\tests\PackageManager;
 
 use Composer\Semver\Constraint\ConstraintInterface;
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\PackageManager\PackageNameVersion;
 
-class PackageNameVersionTest extends \PHPUnit_Framework_TestCase
+class PackageNameVersionTest extends TestCase
 {
     public function testNameVersionPair()
     {

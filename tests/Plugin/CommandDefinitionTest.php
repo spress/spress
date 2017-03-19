@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Plugin\CommandDefinition;
 
-class CommandDefinitionTest extends \PHPUnit_Framework_TestCase
+class CommandDefinitionTest extends TestCase
 {
     public function testCommandDefinitionSimple()
     {

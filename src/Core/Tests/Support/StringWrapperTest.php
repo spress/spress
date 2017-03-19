@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Support;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
-class StringWrapperTest extends \PHPUnit_Framework_TestCase
+class StringWrapperTest extends TestCase
 {
     public function testSlug()
     {

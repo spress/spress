@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
 
-class DataSourceManagerTest extends \PHPUnit_Framework_TestCase
+class DataSourceManagerTest extends TestCase
 {
     public function testCreatingDataSourceManager()
     {

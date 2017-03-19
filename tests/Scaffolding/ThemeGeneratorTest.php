@@ -11,11 +11,12 @@
 
 namespace Yosymfony\Spress\tests\Scaffolding;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\Scaffolding\ThemeGenerator;
 
-class ThemeGeneratorTest extends \PHPUnit_Framework_TestCase
+class ThemeGeneratorTest extends TestCase
 {
     protected $skeletonDir;
     protected $tmpDir;

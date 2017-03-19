@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Support;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Support\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     public function testIterator()
     {

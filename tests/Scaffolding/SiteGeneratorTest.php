@@ -11,13 +11,14 @@
 
 namespace Yosymfony\Spress\tests\Scaffolding;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Yosymfony\Spress\IO\BufferIO;
 use Yosymfony\Spress\PackageManager\PackageManager;
 use Yosymfony\Spress\Scaffolding\SiteGenerator;
 
-class SiteGeneratorTest extends \PHPUnit_Framework_TestCase
+class SiteGeneratorTest extends TestCase
 {
     protected $skeletonDir;
     protected $tmpDir;

@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Tests\Scaffolding;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Scaffolding\PluginGenerator;
 
-class PluginGeneratorTest extends \PHPUnit_Framework_TestCase
+class PluginGeneratorTest extends TestCase
 {
     protected $tmpDir;
     protected $skeletonDir;

@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin\Event;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Plugin\Event\ContentEvent;
 
-class ContentEventTest extends \PHPUnit_Framework_TestCase
+class ContentEventTest extends TestCase
 {
     public function testContentEvent()
     {

@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -18,7 +19,7 @@ use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Plugin\CommandDefinition;
 use Yosymfony\Spress\Plugin\ConsoleCommandBuilder;
 
-class ConsoleCommandBuilderTest extends \PHPUnit_Framework_TestCase
+class ConsoleCommandBuilderTest extends TestCase
 {
     public function testBuildCommands()
     {

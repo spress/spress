@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Collection;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManagerBuilder;
 
-class CollectionManagerBuilderTest extends \PHPUnit_Framework_TestCase
+class CollectionManagerBuilderTest extends TestCase
 {
     public function testBuildFromConfigArray()
     {

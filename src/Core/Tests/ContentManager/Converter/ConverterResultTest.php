@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterResult;
 
-class ConverterResultTest extends \PHPUnit_Framework_TestCase
+class ConverterResultTest extends TestCase
 {
     public function testConvertertResult()
     {

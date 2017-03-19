@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Converter\MapConverter;
 
-class MapConverterTest extends \PHPUnit_Framework_TestCase
+class MapConverterTest extends TestCase
 {
     public function testMapConverter()
     {

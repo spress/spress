@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Generator\Pagination;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
 
-class PaginationGeneratorTest extends \PHPUnit_Framework_TestCase
+class PaginationGeneratorTest extends TestCase
 {
     protected $pagination;
 

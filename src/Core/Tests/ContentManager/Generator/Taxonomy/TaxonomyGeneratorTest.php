@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Generator\Taxonomy;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\ContentManager\Generator\Taxonomy\TaxonomyGenerator;
 
-class TaxonomyGeneratorTest extends \PHPUnit_Framework_TestCase
+class TaxonomyGeneratorTest extends TestCase
 {
     protected $taxonomy;
 

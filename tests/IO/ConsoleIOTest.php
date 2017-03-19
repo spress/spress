@@ -11,6 +11,7 @@
 
 namespace Yosymfony\Spress\tests\IO;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Yosymfony\Spress\IO\ConsoleIO;
 
-class ConsoleIOTest extends \PHPUnit_Framework_TestCase
+class ConsoleIOTest extends TestCase
 {
     protected $command;
     protected $tester;

@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\Coverter;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Converter\ParsedownConverter;
 
-class ParsedownConverterTest extends \PHPUnit_Framework_TestCase
+class ParsedownConverterTest extends TestCase
 {
     public function testConverter()
     {

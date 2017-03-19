@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
 
-class GeneratorManagerTest extends \PHPUnit_Framework_TestCase
+class GeneratorManagerTest extends TestCase
 {
     public function testGeneratorManager()
     {

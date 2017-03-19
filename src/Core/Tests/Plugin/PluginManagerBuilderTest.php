@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
-class PluginManagerBuilderTest extends \PHPUnit_Framework_TestCase
+class PluginManagerBuilderTest extends TestCase
 {
     protected $pluginDir;
     protected $embeddedComposer;

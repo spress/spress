@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Test\PackageManager;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\PackageManager\ComposerIOBridge;
 use Yosymfony\Spress\Core\IO\NullIO;
 
-class ComposerIOBridgeTest extends \PHPUnit_Framework_TestCase
+class ComposerIOBridgeTest extends TestCase
 {
     public function testVerbosity()
     {

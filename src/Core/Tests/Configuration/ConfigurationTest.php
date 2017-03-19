@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Core\Tests\Configuration;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Yosymfony\ConfigLoader\Config;
 use Yosymfony\ConfigLoader\Loaders\YamlLoader;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     protected $defaulConfiguration;
 

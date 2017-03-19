@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 
-class MemoryDataWriterTest extends \PHPUnit_Framework_TestCase
+class MemoryDataWriterTest extends TestCase
 {
     public function testWriteItem()
     {

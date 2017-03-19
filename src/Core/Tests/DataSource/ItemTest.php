@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends TestCase
 {
     public function testDefaultContent()
     {

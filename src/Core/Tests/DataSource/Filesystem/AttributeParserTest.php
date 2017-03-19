@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Filesystem\AttributeParser;
 
-class AttributeParserTest extends \PHPUnit_Framework_TestCase
+class AttributeParserTest extends TestCase
 {
     public function testGetAttributesFromYamlString()
     {

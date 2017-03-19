@@ -16,6 +16,7 @@ use Composer\Package\Link;
 use Composer\Package\Package;
 use Composer\Repository\RepositoryManager;
 use Composer\Semver\Constraint\EmptyConstraint;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\EmbeddedComposer\EmbeddedComposer;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
@@ -23,7 +24,7 @@ use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\IO\BufferIO;
 use Yosymfony\Spress\PackageManager\PackageManager;
 
-class PackageManagerTest extends \PHPUnit_Framework_TestCase
+class PackageManagerTest extends TestCase
 {
     /** @var string */
     protected $tmpDir;

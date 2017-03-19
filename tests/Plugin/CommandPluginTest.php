@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Yosymfony\Spress\Plugin\CommandPlugin;
 use Yosymfony\Spress\Plugin\Environment\SymfonyCommandEnvironment;
 
-class CommandPluginTest extends \PHPUnit_Framework_TestCase
+class CommandPluginTest extends TestCase
 {
     public function testEmptyPlugin()
     {

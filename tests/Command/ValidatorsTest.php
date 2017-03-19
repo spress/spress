@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Command\Validators;
 
-class ValidatorsTest extends \PHPUnit_Framework_TestCase
+class ValidatorsTest extends TestCase
 {
     public function testValidateCommandName()
     {

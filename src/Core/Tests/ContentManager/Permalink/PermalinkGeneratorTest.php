@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Permalink;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGenerator;
 use Yosymfony\Spress\Core\DataSource\Item;
 
-class PermalinkGeneratorTest extends \PHPUnit_Framework_TestCase
+class PermalinkGeneratorTest extends TestCase
 {
     public function testNonePermalink()
     {

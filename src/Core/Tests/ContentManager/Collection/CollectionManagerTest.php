@@ -11,11 +11,12 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Collection;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Collection\Collection;
 use Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager;
 use Yosymfony\Spress\Core\DataSource\Item;
 
-class CollectionManagerTest extends \PHPUnit_Framework_TestCase
+class CollectionManagerTest extends TestCase
 {
     public function testGetCollectionItemCollection()
     {

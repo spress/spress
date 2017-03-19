@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin\Event;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
 
-class EnvironmentEventTest extends \PHPUnit_Framework_TestCase
+class EnvironmentEventTest extends TestCase
 {
     protected $event;
     protected $configValues = [];

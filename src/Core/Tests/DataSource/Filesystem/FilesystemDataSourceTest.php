@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
 
-class FilesystemDataSourceTest extends \PHPUnit_Framework_TestCase
+class FilesystemDataSourceTest extends TestCase
 {
     protected $sourcePath;
     protected $extraPagesPath;

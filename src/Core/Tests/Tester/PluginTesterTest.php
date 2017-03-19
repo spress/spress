@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 use Yosymfony\Spress\Core\Tester\PluginTester;
 
-class PluginTesterTest extends \PHPUnit_Framework_TestCase
+class PluginTesterTest extends TestCase
 {
     public function testMetas()
     {

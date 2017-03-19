@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 
-class PluginManagerTest extends \PHPUnit_Framework_TestCase
+class PluginManagerTest extends TestCase
 {
     public function testGetPluginCollection()
     {

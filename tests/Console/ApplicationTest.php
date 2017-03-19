@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Tests\Console;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Console\Application;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     protected $app;
 

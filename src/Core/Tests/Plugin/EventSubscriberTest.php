@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\Plugin\EventSubscriber;
 
-class EventSubscriberTest extends \PHPUnit_Framework_TestCase
+class EventSubscriberTest extends TestCase
 {
     public function testGetEventListeners()
     {

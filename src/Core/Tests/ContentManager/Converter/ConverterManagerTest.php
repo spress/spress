@@ -11,12 +11,13 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Converter;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager;
 use Yosymfony\Spress\Core\ContentManager\Converter\MichelfMarkdownConverter;
 use Yosymfony\Spress\Core\ContentManager\Converter\MapConverter;
 use Yosymfony\Spress\Core\DataSource\Item;
 
-class ConverterManagerTest extends \PHPUnit_Framework_TestCase
+class ConverterManagerTest extends TestCase
 {
     public function testAddConverter()
     {

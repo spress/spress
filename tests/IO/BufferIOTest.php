@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\tests\IO;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\IO\BufferIO;
 
-class BufferIOTest extends \PHPUnit_Framework_TestCase
+class BufferIOTest extends TestCase
 {
     public function testGetOutput()
     {

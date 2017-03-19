@@ -11,9 +11,10 @@
 
 namespace Yosymfony\Spress\Core\Tests\IO;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\IO\NullIO;
 
-class NullIOTest extends \PHPUnit_Framework_TestCase
+class NullIOTest extends TestCase
 {
     public function testIsInteractive()
     {

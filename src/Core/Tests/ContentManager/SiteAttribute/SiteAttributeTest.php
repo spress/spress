@@ -11,10 +11,11 @@
 
 namespace Yosymfony\Spress\Core\Tests\ContentManager\SiteAttribute;
 
+use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\Item;
 
-class SiteAttributeTest extends \PHPUnit_Framework_TestCase
+class SiteAttributeTest extends TestCase
 {
     public function testSiteAttributes()
     {

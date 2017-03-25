@@ -17,7 +17,7 @@ Add the following to your `composer.json` and run `composer update`.
 ```
 {
     "require": {
-        "spress/spress-core": "2.0.*"
+        "spress/spress-core": "2.2.*"
     },
     "minimum-stability": "dev"
 }
@@ -55,7 +55,7 @@ class MyClass
         $spress->parse();
     }
 }
-``` 
+```
 
 ### Another configuration values:
 

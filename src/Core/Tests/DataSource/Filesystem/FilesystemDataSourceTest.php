@@ -44,7 +44,7 @@ class FilesystemDataSourceTest extends TestCase
         $this->assertTrue(is_array($layouts));
         $this->assertTrue(is_array($includes));
 
-        $this->assertCount(13, $items);
+        $this->assertCount(14, $items);
         $this->assertCount(1, $layouts);
         $this->assertCount(1, $includes);
 
@@ -138,6 +138,34 @@ class FilesystemDataSourceTest extends TestCase
         $this->assertRegExp('/Include test/', $includes['test.html']->getContent());
     }
 
+    public function testGetItemsMustGivesPreferenceSiteAssetsOverThemeAssetsWhenThereIsAEnabledTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+        $this->assertRegExp('/styles of the site/', $items['assets/style.css']->getContent());
+    }
+
+    public function testGetItemsMustReturnThemeAssetsIfItDoesNotExistsInTheSiteAssetsWhenThereIsAEnabledTheme()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'theme_name' => 'theme01',
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertArrayHasKey('assets/extra.css', $items);
+        $this->assertRegExp('/extra styles of the theme/', $items['assets/extra.css']->getContent());
+    }
+
     public function testGetIncludesMustReturnThemeIncludesIfItDoesNotExistsInTheSiteIncludesWhenThereIsAEnabledTheme()
     {
         $fsDataSource = new FilesystemDataSource([
@@ -178,7 +206,7 @@ class FilesystemDataSourceTest extends TestCase
         $fsDataSource->load();
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(14, $items);
+        $this->assertCount(15, $items);
         $this->assertArrayHasKey('extra-page1.html', $items);
     }
 
@@ -191,10 +219,10 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(15, $fsDataSource->getItems());
+        $this->assertCount(16, $fsDataSource->getItems());
     }
 
-    public function testGetItemMustExcludeTheFileSetInExcludeOptionWhenExcludeOptionIsSetWithAFile()
+    public function testGetItemMustExcludeTheFileInExcludeOptionWhenExcludeOptionIsSetWithAFile()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -203,7 +231,7 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(12, $fsDataSource->getItems());
+        $this->assertCount(13, $fsDataSource->getItems());
     }
 
     public function testExcludeFolder()
@@ -215,7 +243,7 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(11, $fsDataSource->getItems());
+        $this->assertCount(12, $fsDataSource->getItems());
     }
 
     public function testAvoidRenderizerPath()
@@ -230,7 +258,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(13, $items);
+        $this->assertCount(14, $items);
 
         $itemAttributes = $items['projects/index.md']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
@@ -251,7 +279,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(13, $items);
+        $this->assertCount(14, $items);
 
         $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);

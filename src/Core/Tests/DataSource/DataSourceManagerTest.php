@@ -47,7 +47,7 @@ class DataSourceManagerTest extends TestCase
 
         $dsm->load();
 
-        $this->assertCount(13, $dsm->getItems());
+        $this->assertCount(14, $dsm->getItems());
         $this->assertCount(1, $dsm->getLayouts());
         $this->assertCount(1, $dsm->getIncludes());
     }
@@ -64,7 +64,7 @@ class DataSourceManagerTest extends TestCase
         $dsm->load();
         $dsm->load();
 
-        $this->assertCount(13, $dsm->getItems());
+        $this->assertCount(14, $dsm->getItems());
         $this->assertCount(1, $dsm->getLayouts());
         $this->assertCount(1, $dsm->getIncludes());
     }
@@ -91,7 +91,7 @@ class DataSourceManagerTest extends TestCase
         $this->assertContains('filesystem_2', $dsm->getDataSourceNames());
         $this->assertNotContains('filesystem_1', $dsm->getDataSourceNames());
 
-        $this->assertCount(13, $dsm->getItems());
+        $this->assertCount(14, $dsm->getItems());
         $this->assertCount(1, $dsm->getLayouts());
         $this->assertCount(1, $dsm->getIncludes());
     }

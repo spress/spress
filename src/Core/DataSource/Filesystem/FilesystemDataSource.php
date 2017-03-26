@@ -145,27 +145,30 @@ class FilesystemDataSource extends AbstractDataSource
     {
         $includedFiles = [];
 
-        $finder = new Finder();
-        $finder->in($this->composeSubPath('content'))
+        $resultFinder = new Finder();
+        $resultFinder->append($this->getThemeAssetFiles());
+
+        $contentFinder = new Finder();
+        $contentFinder->in($this->composeSubPath('content'))
             ->notName('*.meta')
             ->files();
 
         foreach ($this->params['include'] as $item) {
             if (is_dir($item)) {
-                $finder->in($item);
+                $contentFinder->in($item);
             } elseif (is_file($item)) {
                 $includedFiles[] = new SplFileInfo($item, '', pathinfo($item, PATHINFO_BASENAME));
             }
         }
 
-        $finder->append($includedFiles);
+        $contentFinder->append($includedFiles);
 
         foreach ($this->params['exclude'] as $item) {
-            $finder->notPath($item);
+            $contentFinder->notPath($item);
         }
 
-        $finder->append($this->getThemeAssetFiles());
-        $this->processItems($finder, Item::TYPE_ITEM);
+        $resultFinder->append($contentFinder);
+        $this->processItems($resultFinder, Item::TYPE_ITEM);
     }
 
     private function processLayoutFiles()

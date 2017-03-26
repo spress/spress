@@ -6,6 +6,7 @@ CHANGELOG for 2.x
 from extra->spress_class attribute of a plugin's `composer.json` file.
 * [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.
 * [Fixed] Fixed an issue when loading layouts and includes of the current theme.
+* [Fixed] Fixed an issue related with the presedence between the theme's assets and the site's assets.
 * [Improved] Renamed some tests with a more descritive name.
 * [Improved] Fixed some descriptions in commands.
 * [Improved] Replaced the use of PHPUnit_Framework_TestCase class by TestCase.

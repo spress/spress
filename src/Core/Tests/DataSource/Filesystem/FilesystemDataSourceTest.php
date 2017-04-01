@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
 
 use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
+use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
 class FilesystemDataSourceTest extends TestCase
 {
@@ -40,28 +41,6 @@ class FilesystemDataSourceTest extends TestCase
         $layouts = $fsDataSource->getLayouts();
         $includes = $fsDataSource->getIncludes();
 
-        $this->assertTrue(is_array($items));
-        $this->assertTrue(is_array($layouts));
-        $this->assertTrue(is_array($includes));
-
-        $this->assertCount(14, $items);
-        $this->assertCount(1, $layouts);
-        $this->assertCount(1, $includes);
-
-        $this->assertArrayHasKey('about/index.html', $items);
-        $this->assertArrayHasKey('about/me/index.html', $items);
-        $this->assertArrayHasKey('index.html', $items);
-        $this->assertArrayHasKey('LICENSE', $items);
-        $this->assertArrayHasKey('pages/index.html', $items);
-        $this->assertArrayHasKey('projects/index.md', $items);
-        $this->assertArrayHasKey('robots.txt', $items);
-        $this->assertArrayHasKey('sitemap.xml', $items);
-        $this->assertArrayHasKey('posts/2013-08-12-post-example-1.md', $items);
-        $this->assertArrayHasKey('posts/2013-08-12-post-example-2.mkd', $items);
-        $this->assertArrayHasKey('posts/2016-02-02-spress-2.1.1-released.md', $items);
-        $this->assertArrayHasKey('posts/books/2013-08-11-best-book.md', $items);
-        $this->assertArrayHasKey('posts/books/2013-09-19-new-book.md', $items);
-
         $itemAttributes = $items['about/index.html']->getAttributes();
         $this->assertCount(4, $itemAttributes);
         $this->assertEquals('default', $itemAttributes['layout']);
@@ -88,24 +67,290 @@ class FilesystemDataSourceTest extends TestCase
 
         $itemAttributes = $items['sitemap.xml']->getAttributes();
         $this->assertEquals('sitemap', $itemAttributes['name']);
+    }
 
+    public function testGetItemsMustReturnTheItemsOfASite()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertCount(14, $items);
+        $this->assertArrayHasKey('index.html', $items);
+        $this->assertArrayHasKey('LICENSE', $items);
+        $this->assertArrayHasKey('about/index.html', $items);
+        $this->assertArrayHasKey('about/me/index.html', $items);
+        $this->assertArrayHasKey('pages/index.html', $items);
+        $this->assertArrayHasKey('projects/index.md', $items);
+        $this->assertArrayHasKey('robots.txt', $items);
+        $this->assertArrayHasKey('sitemap.xml', $items);
+        $this->assertArrayHasKey('posts/2013-08-12-post-example-1.md', $items);
+        $this->assertArrayHasKey('posts/2013-08-12-post-example-2.mkd', $items);
+        $this->assertArrayHasKey('posts/2016-02-02-spress-2.1.1-released.md', $items);
+        $this->assertArrayHasKey('posts/books/2013-08-11-best-book.md', $items);
+        $this->assertArrayHasKey('posts/books/2013-09-19-new-book.md', $items);
+        $this->assertArrayHasKey('assets/style.css', $items);
+    }
+
+    public function testGetLayoutsMustReturnTheLayoutsOfASite()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
+
+        $this->assertCount(1, $layouts);
         $this->assertArrayHasKey('default.html', $layouts);
+    }
 
+    public function testGetIncludesMustReturnTheLayoutsOfASite()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertCount(1, $includes);
         $this->assertArrayHasKey('test.html', $includes);
+    }
 
-        $this->assertFalse($items['posts/2013-08-12-post-example-1.md']->isBinary());
+    public function testGetLayoutsMustReturnsAnArrayOfItemInterface()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
 
-        $this->assertEquals('layout', $layouts['default.html']->getType());
-        $this->assertRegExp('/Welcome to my site/', $layouts['default.html']->getContent());
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
 
-        $include = $includes['test.html'];
+        $this->assertTrue(is_array($layouts), 'getLayouts must return an array');
+        $this->assertContainsOnlyInstancesOf(
+            ItemInterface::class,
+            $layouts,
+            'getLayouts can only returns elements of ItemInterface type'
+        );
+    }
 
-        $this->assertEquals('include', $include->getType());
-        $this->assertRegExp('/Include test/', $includes['test.html']->getContent());
+    public function testGetIncludesMustReturnsAnArrayOfItemInterface()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
 
-        $this->assertTrue($items['LICENSE']->isBinary());
-        $this->assertTrue(strlen($items['LICENSE']->getPath('source')) > 0);
-        $this->assertTrue(strlen($items['LICENSE']->getPath('relative')) > 0);
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertTrue(is_array($includes), 'getIncludes must return an array');
+        $this->assertContainsOnlyInstancesOf(
+            ItemInterface::class,
+            $includes,
+            'getIncludes can only returns elements of ItemInterface type'
+        );
+    }
+
+    public function testGetItemsMustReturnsAnArrayOfItemInterface()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertTrue(is_array($items), 'getItems must return an array');
+        $this->assertContainsOnlyInstancesOf(
+            ItemInterface::class,
+            $items,
+            'getItems can only returns elements of ItemInterface type'
+        );
+    }
+
+    public function testGetTypeOfAnIncludeItemMustBeInclude()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertEquals(
+            'include',
+            $includes['test.html']->getType(),
+            'The type of an include item must be "include"'
+        );
+    }
+
+    public function testGetContentOfAnIncludeItemMustBeRight()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $includes = $fsDataSource->getIncludes();
+
+        $this->assertRegExp(
+            '/Include test/',
+            $includes['test.html']->getContent(),
+            'The content of the include item must contains the text "Include test"'
+        );
+    }
+
+    public function testGetTypeOfAnLayoutItemMustBeLayout()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
+
+        $this->assertEquals(
+            'layout',
+            $layouts['default.html']->getType(),
+            'The type of a layout item must be "layout"'
+        );
+    }
+
+    public function testGetContentOfALayoutItemMustBeRight()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
+
+        $this->assertRegExp(
+            '/Welcome to my site/',
+            $layouts['default.html']->getContent(),
+            'The content of the layout item must contains the text "Welcome to my site"'
+        );
+    }
+
+    public function testGetBinaryOfAnItemMustReturnTrueIfThereIsNotFilenameExtension()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertTrue(
+            $items['LICENSE']->isBinary(),
+            'An item without a filename extension must be treated as a binary item'
+        );
+    }
+
+    public function testGetBinaryOfAnItemMustReturnFalseIfTheFilenameExtensionBelongsToTextExtensions()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertFalse(
+            $items['posts/2013-08-12-post-example-1.md']->isBinary(),
+            'An item with a filename extension included in the text extension list must be treated as a text item'
+        );
+    }
+
+    public function testGetBinaryOfAnItemMustReturnTrueIfTheFilenameExtensionDoesNotBelongsToTextExtensions()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => ['html'],
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertTrue(
+            $items['posts/2013-08-12-post-example-1.md']->isBinary(),
+            'An item with a filename extension not included in the text extension list must be treated as a binary item'
+        );
+    }
+
+    public function testGetPathOfABinaryItemMustHasSourceAndRelativePaths()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+        $item = $items['LICENSE'];
+
+        $this->assertTrue(
+            strlen($item->getPath('source')) > 0,
+            'A binary item must have a source path'
+        );
+        $this->assertTrue(
+            strlen($item->getPath('relative')) > 0,
+            'A binary item must have a relative path'
+        );
+    }
+
+    public function testGetPathOfATextItemMustHasOnlyARelativePaths()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+        $item = $items['index.html'];
+
+        $this->assertTrue(
+            strlen($item->getPath('relative')) > 0,
+            'A text item must have a relative path'
+        );
+        $this->assertFalse(
+            strlen($item->getPath('source')) > 0,
+            'A text item must not have a source path'
+        );
+    }
+
+    public function testGetAttributesMustReturnsTheBasicAttributes()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+        $item = $items['index.html'];
+        $itemAttributes = $item->getAttributes();
+
+        $this->assertArrayHasKey('mtime', $itemAttributes);
+        $this->assertArrayHasKey('filename', $itemAttributes);
+        $this->assertArrayHasKey('extension', $itemAttributes);
     }
 
     public function testGetLayoutsMustGivesPreferenceSiteLayoutsOverThemeLayoutsWhenThereIsAEnabledTheme()

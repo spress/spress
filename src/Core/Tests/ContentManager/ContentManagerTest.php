@@ -69,7 +69,7 @@ class ContentManagerTest extends TestCase
         $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw, [$testPlugin]);
         $cm->parseSite($attributes, $spressAttributes);
 
-        $this->assertCount(16, $dw->getItems());
+        $this->assertCount(17, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('about/index.html'));
         $this->assertTrue($dw->hasItem('about/me/index.html'));
@@ -104,7 +104,7 @@ class ContentManagerTest extends TestCase
         $cm = $this->getContentManager($this->getFilesystemDataSourceManager(), $dw);
         $cm->parseSite([], [], true);
 
-        $this->assertCount(18, $dw->getItems());
+        $this->assertCount(19, $dw->getItems());
 
         $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
 

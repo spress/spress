@@ -52,7 +52,7 @@ class SiteBuildCommandTest extends TestCase
         $this->assertRegExp('/Environment: dev/', $output);
         $this->assertNotRegExp('/Posts drafts enabled/', $output);
         $this->assertRegExp('/Debug mode: enabled/', $output);
-        $this->assertRegExp('/Total items: 18/', $output);
+        $this->assertRegExp('/Total items: 19/', $output);
     }
 
     public function testBuildCommandDraft()
@@ -69,7 +69,7 @@ class SiteBuildCommandTest extends TestCase
         $this->assertRegExp('/Starting.../', $output);
         $this->assertRegExp('/Environment: dev/', $output);
         $this->assertRegExp('/Draft posts: enabled/', $output);
-        $this->assertRegExp('/Total items: 19/', $output);
+        $this->assertRegExp('/Total items: 20/', $output);
     }
 
     public function testBuildCommandSafe()

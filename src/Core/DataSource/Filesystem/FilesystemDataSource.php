@@ -151,6 +151,7 @@ class FilesystemDataSource extends AbstractDataSource
         $contentFinder = new Finder();
         $contentFinder->in($this->composeSubPath('content'))
             ->notName('*.meta')
+            ->ignoreDotFiles(false)
             ->files();
 
         foreach ($this->params['include'] as $item) {

@@ -12,6 +12,7 @@
 namespace Yosymfony\Spress\Core\Tests\DataSource\Filesystem;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
 
@@ -23,9 +24,19 @@ class FilesystemDataSourceTest extends TestCase
 
     public function setUp()
     {
-        $this->sourcePath = __dir__.'/../../fixtures/project/src';
+        $this->sourcePath = sys_get_temp_dir().'/spress-tests';
+
+        $fs = new FileSystem();
+        $fs->mirror(__dir__.'/../../fixtures/project/src', $this->sourcePath);
+
         $this->extraPagesPath = __dir__.'/../../fixtures/extra_pages';
         $this->textExtensions = ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml'];
+    }
+
+    public function tearDown()
+    {
+        $fs = new FileSystem();
+        $fs->remove($this->sourcePath);
     }
 
     public function testProcessItems()
@@ -79,7 +90,7 @@ class FilesystemDataSourceTest extends TestCase
         $fsDataSource->load();
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(14, $items);
+        $this->assertCount(15, $items);
         $this->assertArrayHasKey('index.html', $items);
         $this->assertArrayHasKey('LICENSE', $items);
         $this->assertArrayHasKey('about/index.html', $items);
@@ -94,6 +105,7 @@ class FilesystemDataSourceTest extends TestCase
         $this->assertArrayHasKey('posts/books/2013-08-11-best-book.md', $items);
         $this->assertArrayHasKey('posts/books/2013-09-19-new-book.md', $items);
         $this->assertArrayHasKey('assets/style.css', $items);
+        $this->assertArrayHasKey('.htaccess', $items);
     }
 
     public function testGetLayoutsMustReturnTheLayoutsOfASite()
@@ -441,7 +453,7 @@ class FilesystemDataSourceTest extends TestCase
         $this->assertRegExp('/Theme 01 layout/', $layouts['page.html']->getContent());
     }
 
-    public function testGetItemsMustReturnAnExtraItemWhenIncludeOptionIsUsedWithAFile()
+    public function testGetItemsMustReturnAnExtraItemWhenIncludeOptionIsSetWithAFile()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -451,8 +463,35 @@ class FilesystemDataSourceTest extends TestCase
         $fsDataSource->load();
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(15, $items);
+        $this->assertCount(16, $items);
         $this->assertArrayHasKey('extra-page1.html', $items);
+    }
+
+    public function testGetItemsMustReturnDotItemsWhenThereAreDotFiles()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertArrayHasKey('.htaccess', $items);
+    }
+
+    public function testGetItemsMustNotReturnItemsInVCSFolders()
+    {
+        $gitDir = $this->sourcePath.'/.git';
+        $fs = new FileSystem();
+        $fs->dumpFile($gitDir.'/HEAD', '');
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
+
+        $this->assertArrayNotHasKey('HEAD', $items);
     }
 
     public function testGetItemsMustReturnItemsOfIncludedFolderWhenIncludeOptionIsUsedWithAFolder()
@@ -464,10 +503,10 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(16, $fsDataSource->getItems());
+        $this->assertCount(17, $fsDataSource->getItems());
     }
 
-    public function testGetItemMustExcludeTheFileInExcludeOptionWhenExcludeOptionIsSetWithAFile()
+    public function testGetItemMustNotContainExcludedItemWhenExcludeOptionIsSetWithAFile()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -476,7 +515,7 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(13, $fsDataSource->getItems());
+        $this->assertCount(14, $fsDataSource->getItems());
     }
 
     public function testExcludeFolder()
@@ -488,7 +527,7 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(12, $fsDataSource->getItems());
+        $this->assertCount(13, $fsDataSource->getItems());
     }
 
     public function testAvoidRenderizerPath()
@@ -503,7 +542,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(14, $items);
+        $this->assertCount(15, $items);
 
         $itemAttributes = $items['projects/index.md']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
@@ -524,7 +563,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $items = $fsDataSource->getItems();
 
-        $this->assertCount(14, $items);
+        $this->assertCount(15, $items);
 
         $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
@@ -534,7 +573,7 @@ class FilesystemDataSourceTest extends TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
     public function testConfigNoParams()
     {
@@ -554,7 +593,7 @@ class FilesystemDataSourceTest extends TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamSourceRoot()
     {
@@ -566,7 +605,7 @@ class FilesystemDataSourceTest extends TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamInclude()
     {
@@ -579,7 +618,7 @@ class FilesystemDataSourceTest extends TestCase
     }
 
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
     public function testBadParamExclude()
     {

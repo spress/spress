@@ -2,12 +2,13 @@ CHANGELOG for 2.x
 =================
 ## 2.2.0
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.
-* [Improved] Updated `PluginManagerBuilder` class with support for loading several plugins
-from extra->spress_class attribute of a plugin's `composer.json` file.
 * [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.
 * [Fixed] Fixed an issue when loading layouts and includes of the current theme.
 * [Fixed] Fixed an issue related with the presedence between the theme's assets and the site's assets.
 * [Fixed] Bug #107 fixed: ".htaccess not being included in build".
+* [Fixed] Fixed an issue related to the convertion to array of a `Finder` class in `FilesystemDataSource` class.
+* [Improved] Updated `PluginManagerBuilder` class with support for loading several plugins
+from extra->spress_class attribute of a plugin's `composer.json` file.
 * [Improved] Renamed some tests with a more descritive name.
 * [Improved] Fixed some descriptions in commands.
 * [Improved] Replaced the use of PHPUnit_Framework_TestCase class by TestCase.

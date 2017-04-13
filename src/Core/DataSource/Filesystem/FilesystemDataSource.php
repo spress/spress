@@ -244,9 +244,7 @@ class FilesystemDataSource extends AbstractDataSource
 
     private function processItems(Finder $finder, $type)
     {
-        $files = iterator_to_array($finder);
-
-        foreach ($files as $key => $file) {
+        foreach ($finder as $file) {
             $id = $this->normalizeDirSeparator($file->getRelativePathname());
             $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();

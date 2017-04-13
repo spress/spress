@@ -14,7 +14,7 @@ map_converter_extension:
   'twig': 'html'
 
 # Outputting
-include: ['.htaccess']
+include: []
 exclude: []
 timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false

@@ -17,7 +17,7 @@ markdown_ext: ['markdown', 'mkd', 'mkdn', 'md']
 parsedown_activated: false
 
 # Outputting
-include: ['.htaccess']
+include: []
 exclude: []
 timezone: 'UTC'                          # e.g. Europe/Madrid
 safe: false

@@ -12,6 +12,7 @@ from extra->spress_class attribute of a plugin's `composer.json` file.
 * [Improved] Renamed some tests with a more descritive name.
 * [Improved] Fixed some descriptions in commands.
 * [Improved] Replaced the use of PHPUnit_Framework_TestCase class by TestCase.
+* [Improved] Deleted the `.htaccess` value from `include` key of configuration files due to the fix #107.
 
 ## 2.2.0-rc (2017-01-15)
 * [New] Support for themes. See the new feature #98.

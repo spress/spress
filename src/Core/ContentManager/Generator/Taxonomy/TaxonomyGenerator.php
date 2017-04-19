@@ -50,6 +50,8 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * taxonomy_attribute: 'categories'
  * permalink: '/:name'
  * pagination_permalink: '/page:num'
+ * sort_by: "date"
+ * sort_type: "descending"
  * ---
  *
  * @author Victor Puertas <vpgugr@gmail.com>
@@ -75,6 +77,7 @@ class TaxonomyGenerator implements GeneratorInterface
         $templatePath = dirname($templateItem->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE));
 
         $items = (new ArrayWrapper($collections))->flatten();
+        $items = $this->sortItemsByAttribute($items, $options['sort_by'], $options['sort_type']);
 
         foreach ($items as $item) {
             $attributes = $item->getAttributes();
@@ -232,10 +235,25 @@ class TaxonomyGenerator implements GeneratorInterface
         $resolver = new AttributesResolver();
         $resolver->setDefault('taxonomy_attribute', 'categories', 'string')
             ->setDefault('permalink', '/:name')
-            ->setDefault('pagination_permalink', '/page:num', 'string');
+            ->setDefault('pagination_permalink', '/page:num', 'string')
+            ->setDefault('sort_by', 'date')
+            ->setDefault('sort_type', 'descending');
 
         $attributes = $templateItem->getAttributes();
 
         return $resolver->resolve($attributes);
+    }
+
+    protected function sortItemsByAttribute(array $items, $attribute, $sortType)
+    {
+        $arr = new ArrayWrapper($items);
+
+        $callback = function ($key, ItemInterface $item) use ($attribute) {
+            $attributes = $item->getAttributes();
+
+            return isset($attributes[$attribute]) === true ? $attributes[$attribute] : null;
+        };
+
+        return $arr->sortBy($callback, null, SORT_REGULAR, $sortType === 'descending');
     }
 }

@@ -38,7 +38,7 @@ use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
  * provider: "site.posts"
  * permalink: "/page:num"
  * sort_by: "date"
- * sort_type: "descendant"
+ * sort_type: "descending"
  * ---
  *```
  *

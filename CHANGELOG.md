@@ -1,6 +1,6 @@
 CHANGELOG for 2.x
 =================
-## 2.2.0
+## 2.2.0 (2017-05-07)
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.
 * [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.
 * [Fixed] Fixed an issue when loading layouts and includes of the current theme.

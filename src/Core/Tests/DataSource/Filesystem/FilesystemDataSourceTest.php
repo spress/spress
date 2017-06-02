@@ -515,10 +515,10 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(14, $fsDataSource->getItems());
+        $this->assertCount(14, $fsDataSource->getItems(), 'Failed to exclude the file.');
     }
 
-    public function testExcludeFolder()
+    public function testGetItemMustNotContainTheItemsOfAExcludedFolderWhenExcludeOptionIsSetWithAFolder()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -527,10 +527,10 @@ class FilesystemDataSourceTest extends TestCase
         ]);
         $fsDataSource->load();
 
-        $this->assertCount(13, $fsDataSource->getItems());
+        $this->assertCount(13, $fsDataSource->getItems(), 'Failed to exclude the elements of about folder.');
     }
 
-    public function testAvoidRenderizerPath()
+    public function testGetItemMustReturnItemsWithAvoidRenderizerAttributeWhenTheybelongToAFolderDeclaredAtAvoidRenderizerPathOption()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -539,34 +539,50 @@ class FilesystemDataSourceTest extends TestCase
         ]);
 
         $fsDataSource->load();
-
         $items = $fsDataSource->getItems();
-
-        $this->assertCount(15, $items);
 
         $itemAttributes = $items['projects/index.md']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
+    }
+
+    public function testGetItemMustReturnItemsWithoutAvoidRenderizerAttributeWhenTheyDoesNotbelongToAFolderDeclaredAtAvoidRenderizerPathOption()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'avoid_renderizer_path' => ['projects'],
+        ]);
+
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
 
         $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
         $this->assertArrayNotHasKey('avoid_renderizer', $itemAttributes);
     }
 
-    public function testAvoidRenderizerFilenameExtension()
+    public function testGetItemMustReturnItemsWithAvoidRenderizerAttributeWhenTheyHaveAnFilenameExtensionDeclaredAtAvoidRenderizerExtensionOption()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
             'text_extensions' => $this->textExtensions,
             'avoid_renderizer_extension' => ['mkd'],
         ]);
-
         $fsDataSource->load();
-
         $items = $fsDataSource->getItems();
-
-        $this->assertCount(15, $items);
 
         $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
         $this->assertArrayHasKey('avoid_renderizer', $itemAttributes);
+    }
+
+    public function testGetItemMustReturnItemsWithoutAvoidRenderizerAttributeWhenTheyHaveAnFilenameExtensionNotDeclaredAtAvoidRenderizerExtensionOption()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+            'avoid_renderizer_extension' => ['mkd'],
+        ]);
+        $fsDataSource->load();
+        $items = $fsDataSource->getItems();
 
         $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
         $this->assertArrayNotHasKey('avoid_renderizer', $itemAttributes);
@@ -575,7 +591,7 @@ class FilesystemDataSourceTest extends TestCase
     /**
      * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
-    public function testConfigNoParams()
+    public function testLoadMethodMustThrowAMissingAttributeExceptionWhenTheClassDoesNotHaveConfigParams()
     {
         $fsDataSource = new FilesystemDataSource([]);
         $fsDataSource->load();
@@ -584,7 +600,7 @@ class FilesystemDataSourceTest extends TestCase
     /**
      * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException
      */
-    public function testNoParamTextExtensions()
+    public function testLoadMethodMustThrowAMissingAttributeExceptionWhenTheClassDoesNotHaveSetTextExtensionsOption()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -595,7 +611,7 @@ class FilesystemDataSourceTest extends TestCase
     /**
      * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
-    public function testBadParamSourceRoot()
+    public function testLoadMethodMustThrowAnAttributeValueExceptionWhenTheClassHasAnInvalidSourceRootParam()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => [],
@@ -607,7 +623,7 @@ class FilesystemDataSourceTest extends TestCase
     /**
      * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
-    public function testBadParamInclude()
+    public function testLoadMethodMustThrowAnAttributeValueExceptionWhenTheClassHasAnInvalidIncludeParam()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -620,7 +636,7 @@ class FilesystemDataSourceTest extends TestCase
     /**
      * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
      */
-    public function testBadParamExclude()
+    public function testLoadMethodMustThrowAnAttributeValueExceptionWhenTheClassHasAnInvalidExcludeParam()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,

@@ -63,9 +63,10 @@ $ box build
 Unit tests
 ----------
 
-You can run the unit tests with the following command:
+Spress uses [PHPUnit](https://phpunit.de) >= 5.7. You can run the unit tests with
+the following command:
+
 ```bash
 $ cd your-path
-$ composer.phar install
 $ phpunit
 ```

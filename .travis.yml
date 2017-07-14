@@ -1,11 +1,17 @@
 language: php
 
-php:
-  - 5.6
-  - 7.0
-  - 7.1
-  - hhvm
-  - nightly
+matrix:
+  include:
+    - os: linux
+      php:
+        - 5.6
+        - 7.0
+        - 7.1
+        - nightly
+    - os: linux
+      dist: trusty
+      php:
+        - hhvm
 
 before_script:
   - composer self-update

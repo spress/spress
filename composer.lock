@@ -1826,12 +1826,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "cd06d3c69619dcf5bfdbfe5d1f18923389a5bd43"
+                "reference": "e7944a1f67499a230463f463d7cecc3336b87ea1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/cd06d3c69619dcf5bfdbfe5d1f18923389a5bd43",
-                "reference": "cd06d3c69619dcf5bfdbfe5d1f18923389a5bd43",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e7944a1f67499a230463f463d7cecc3336b87ea1",
+                "reference": "e7944a1f67499a230463f463d7cecc3336b87ea1",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-08-19 17:37:14"
+            "time": "2017-09-27 18:07:18"
         },
         {
             "name": "yosymfony/config-loader",

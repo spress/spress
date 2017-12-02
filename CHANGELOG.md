@@ -1,5 +1,9 @@
 CHANGELOG for 2.x
 =================
+## 2.3.0
+* [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
+* [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
+
 ## 2.2.0 (2017-05-07)
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.
 * [Fixed] The `Spress-installer` plugin is included in the `composer.json` file when a new blank theme is created.

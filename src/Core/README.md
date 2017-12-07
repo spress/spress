@@ -21,7 +21,7 @@ How to use?
 The entry-point class is `Yosymfony\Spress\Core\Spress`. The below example
 point out how to use:
 
-```
+```php
 use Yosymfony\Spress\Core\Spress;
 
 class MyClass

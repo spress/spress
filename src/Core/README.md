@@ -36,7 +36,7 @@ class MyClass
 ```
 
 ### Including draft posts
-```
+```php
 use Yosymfony\Spress\Core\Spress;
 
 class MyClass

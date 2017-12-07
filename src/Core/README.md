@@ -8,8 +8,6 @@ Spress Core - PHP Static site generator
 Spress is a static site generator built with Symfony components and Twig as
 default template engine. This repository is the core of Spress application.
 
-License: [MIT](https://github.com/spress/spress/blob/master/LICENSE).
-
 Installation
 ------------
 Go to your app folder and input the following command:
@@ -60,3 +58,20 @@ class MyClass
 * `$spress['spress.config.drafts']`: Include draft posts in the transformation. `false` by default.
 * `$spress['spress.config.url']`: Sets the URL base.
 * `$spress['spress.config.timezone']`: Sets the timezone. E.g: "Europe/Madrid".
+
+Unit tests
+----------
+
+Spress core uses [PHPUnit](https://phpunit.de) >= 5.7. You can run the unit tests with
+the following command:
+
+```bash
+$ cd your-path
+$ phpunit
+```
+
+License
+-------
+
+This library is available as open source under the terms of the
+[MIT License](http://opensource.org/licenses/MIT).

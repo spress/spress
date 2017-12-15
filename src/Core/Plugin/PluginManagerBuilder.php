@@ -41,8 +41,8 @@ class PluginManagerBuilder
     public function __construct(
         $path,
         EventDispatcher $eventDispatcher,
-        $excludeDirs = [])
-    {
+        $excludeDirs = []
+    ) {
         $this->path = $path;
         $this->excludeDirs = $excludeDirs;
         $this->eventDispatcher = $eventDispatcher;

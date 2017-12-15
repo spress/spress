@@ -171,7 +171,8 @@ class PaginationGenerator implements GeneratorInterface
             throw new AttributeValueException(
                 sprintf('Provider: "%s" for pagination not found.', $providerName),
                 'provider',
-                $templateItemPath);
+                $templateItemPath
+            );
         }
 
         $providerItemsArr = new ArrayWrapper($provider);

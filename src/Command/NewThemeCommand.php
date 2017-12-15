@@ -42,7 +42,8 @@ class NewThemeCommand extends BaseCommand
         ))
             ->setName('new:theme')
             ->setDescription('Create a new theme')
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command create a new blank theme or a new
 theme based on another.
 EOT

@@ -25,42 +25,42 @@ class BufferIO extends ConsoleIO
     /** @var OutputInterface */
     protected $ouput;
 
-   /**
-    * Constructor.
-    *
-    * @param string                        $input
-    * @param int                           $verbosity
-    */
-   public function __construct($input = '', $verbosity = StreamOutput::VERBOSITY_NORMAL)
-   {
-       $input = new StringInput($input);
-       $input->setInteractive(false);
-       $this->output = new StreamOutput(fopen('php://memory', 'rw'), $verbosity);
+    /**
+     * Constructor.
+     *
+     * @param string                        $input
+     * @param int                           $verbosity
+     */
+    public function __construct($input = '', $verbosity = StreamOutput::VERBOSITY_NORMAL)
+    {
+        $input = new StringInput($input);
+        $input->setInteractive(false);
+        $this->output = new StreamOutput(fopen('php://memory', 'rw'), $verbosity);
 
-       parent::__construct($input, $this->output);
-   }
+        parent::__construct($input, $this->output);
+    }
 
-   /**
-    * Returns the output.
-    *
-    * @return string
-    */
-   public function getOutput()
-   {
-       fseek($this->output->getStream(), 0);
+    /**
+     * Returns the output.
+     *
+     * @return string
+     */
+    public function getOutput()
+    {
+        fseek($this->output->getStream(), 0);
 
-       $output = stream_get_contents($this->output->getStream());
+        $output = stream_get_contents($this->output->getStream());
 
-       $output = preg_replace_callback("{(?<=^|\n|\x08)(.+?)(\x08+)}", function ($matches) {
-           $pre = strip_tags($matches[1]);
+        $output = preg_replace_callback("{(?<=^|\n|\x08)(.+?)(\x08+)}", function ($matches) {
+            $pre = strip_tags($matches[1]);
 
-           if (strlen($pre) === strlen($matches[2])) {
-               return '';
-           }
+            if (strlen($pre) === strlen($matches[2])) {
+                return '';
+            }
 
-           return rtrim($matches[1])."\n";
-       }, $output);
+            return rtrim($matches[1])."\n";
+        }, $output);
 
-       return $output;
-   }
+        return $output;
+    }
 }

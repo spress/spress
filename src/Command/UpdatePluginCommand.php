@@ -39,7 +39,8 @@ class UpdatePluginCommand extends BaseCommand
            ))
             ->setName('update:plugin')
             ->setDescription('Update plugins and themes by the latest version')
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command update the dependencies of your site by the
 latest version.
 EOT

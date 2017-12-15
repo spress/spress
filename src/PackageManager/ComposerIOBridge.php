@@ -157,6 +157,7 @@ class ComposerIOBridge extends BaseIO
             $default,
             $attempts,
             $errorMessage,
-            $multiselect);
+            $multiselect
+        );
     }
 }

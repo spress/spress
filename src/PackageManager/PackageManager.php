@@ -262,7 +262,8 @@ class PackageManager
                 $packagePair->getName(),
                 $packagePair->getVersion(),
                 null,
-                $packagePair->getStability());
+                $packagePair->getStability()
+            );
 
             if ($phpVersion && $versionWithoutPHP) {
                 throw new \InvalidArgumentException(

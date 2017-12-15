@@ -262,7 +262,8 @@ class ConsoleIOTest extends TestCase
                     return $value === 'Yo! Symfony';
                 },
                 false,
-                'Yo! Symfony');
+                'Yo! Symfony'
+            );
 
             $this->assertEquals('Yo! Symfony', $result);
         });

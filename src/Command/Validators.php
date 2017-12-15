@@ -48,7 +48,9 @@ class Validators
         if (!preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}', $name)) {
             throw new \InvalidArgumentException(sprintf(
                 'The plugin name "%s" is invalid, it should be lowercase '.
-                'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.', $name));
+                'and have a vendor name, a forward slash, and a package name. e.g: yosymfony/myplugin.',
+                $name
+            ));
         }
 
         return $name;

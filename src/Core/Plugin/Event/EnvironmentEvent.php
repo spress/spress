@@ -57,8 +57,8 @@ class EnvironmentEvent extends Event
         GeneratorManager $generatorManager,
         RenderizerInterface $renderizer,
         IOInterface $io,
-        array &$configValues)
-    {
+        array &$configValues
+    ) {
         $this->dataSourceManager = $dataSourceManager;
         $this->converterManager = $converterManager;
         $this->generatorManager = $generatorManager;

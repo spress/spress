@@ -318,7 +318,8 @@ class Spress extends Container
             $spressAttributes,
             $attributes['drafts'],
             $attributes['safe'],
-            $attributes['timezone']);
+            $attributes['timezone']
+        );
 
         return $result;
     }

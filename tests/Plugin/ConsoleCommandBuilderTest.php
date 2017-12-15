@@ -61,7 +61,8 @@ class ConsoleCommandBuilderTest extends TestCase
         $this->assertEquals('Update spress.phar to the latest version.', $symfonyConsoleCommand->getDescription());
         $this->assertEquals(
             'The self-update command replace your spress.phar by the latest version.',
-            $symfonyConsoleCommand->getHelp());
+            $symfonyConsoleCommand->getHelp()
+        );
 
         $symfonyConsoleCommand->run($input, $output);
     }

@@ -88,8 +88,8 @@ class ContentManager
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,
         EventDispatcher $eventDispatcher,
-        IOInterface $io)
-    {
+        IOInterface $io
+    ) {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
         $this->generatorManager = $generatorManager;
@@ -167,7 +167,8 @@ class ContentManager
             $this->generatorManager,
             $this->renderizer,
             $this->io,
-            $this->attributes));
+            $this->attributes
+        ));
 
         $this->dataWriter = $event->getDataWriter();
         $this->dataWriter->setUp();
@@ -325,9 +326,12 @@ class ContentManager
         foreach ($items as $item) {
             if ($this->itemCollection->has($item->getId()) === true) {
                 throw new \RuntimeException(
-                    sprintf('A previous item exists with the same id: "%s". Generator: "%s".',
+                    sprintf(
+                        'A previous item exists with the same id: "%s". Generator: "%s".',
                         $item->getId(),
-                        $attributes['generator']));
+                        $attributes['generator']
+                    )
+                );
             }
 
             $this->processCollection($item);

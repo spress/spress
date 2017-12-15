@@ -179,14 +179,18 @@ class SiteAttributeTest extends TestCase
         $this->assertEquals('posts', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['collection']);
         $this->assertEquals('Welcome', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['title']);
         $this->assertEquals('posts/2015-06-22-hi.md', $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['id']);
-        $this->assertEquals('2015/06/22/welcome/index.html',
-            $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['path']);
+        $this->assertEquals(
+            '2015/06/22/welcome/index.html',
+            $arr['site']['categories']['news']['posts/2015-06-22-hi.md']['path']
+        );
 
         $this->assertEquals('posts', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['collection']);
         $this->assertEquals('Welcome', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['title']);
         $this->assertEquals('posts/2015-06-22-hi.md', $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['id']);
-        $this->assertEquals('2015/06/22/welcome/index.html',
-            $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['path']);
+        $this->assertEquals(
+            '2015/06/22/welcome/index.html',
+            $arr['site']['tags']['release']['posts/2015-06-22-hi.md']['path']
+        );
 
         $this->assertEquals('posts', $arr['page']['collection']);
         $this->assertEquals('Welcome', $arr['page']['title']);

@@ -425,7 +425,8 @@ class FilesystemDataSource extends AbstractDataSource
      */
     private function composeThemeSubPath($path)
     {
-        return sprintf('%s/themes/%s/src/%s',
+        return sprintf(
+            '%s/themes/%s/src/%s',
             $this->params['source_root'],
             $this->params['theme_name'],
             $path

@@ -38,7 +38,8 @@ class AddPluginCommand extends BaseCommand
            ))
             ->setName('add:plugin')
             ->setDescription('Adds plugins and themes to the composer.json file of the current directory and installs them')
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command update the dependencies of your site by the
 latest version.
 EOT

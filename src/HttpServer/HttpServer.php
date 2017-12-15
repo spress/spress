@@ -165,11 +165,13 @@ class HttpServer
     private function logRequest($ip, $path, $statusCode)
     {
         $date = new \Datetime();
-        $data = sprintf('[%s] %s [%s] %s',
+        $data = sprintf(
+            '[%s] %s [%s] %s',
             $date->format('Y-m-d h:i:s'),
             $ip,
             $statusCode,
-            $path);
+            $path
+        );
 
         if ($statusCode >= 400) {
             $data = '<error>'.$data.'</error>';
@@ -220,7 +222,8 @@ class HttpServer
             '<comment>Port: %s Host: %s Document root: %s</comment>',
             $this->port,
             $this->host,
-            $this->documentroot));
+            $this->documentroot
+        ));
         $this->io->newLine();
     }
 }

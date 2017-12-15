@@ -77,7 +77,8 @@ class SiteGenerator extends Generator
                 $themeName,
                 $options['prefer-lock'],
                 $options['prefer-source'],
-                $options['no-scripts']);
+                $options['no-scripts']
+            );
         } catch (\Exception $e) {
             $this->fs->remove($path);
 

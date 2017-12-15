@@ -78,9 +78,11 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
      * @param bool $defaultPreservePathTitle Default value for Preserve-path-title
      * @param bool $defaultNoHtmlExtension   Default value for no-html-extension
      */
-    public function __construct($defaultPermalink = 'pretty',
-        $defaultPreservePathTitle = false, $defaultNoHtmlExtension = false)
-    {
+    public function __construct(
+        $defaultPermalink = 'pretty',
+        $defaultPreservePathTitle = false,
+        $defaultNoHtmlExtension = false
+    ) {
         $this->defaultPermalink = $defaultPermalink;
         $this->defaultPreservePathTitle = $defaultPreservePathTitle;
         $this->defaultNoHtmlExtension = $defaultNoHtmlExtension;
@@ -139,6 +141,7 @@ class PermalinkGenerator implements PermalinkGeneratorInterface
                 break;
             case 'pretty':
                 $noHtmlExtension = true;
+                // no break
             case 'date':
                 if ($this->isItemWithDate($item) === true) {
                     $urlTemplate = $this::PERMALINK_DATE;

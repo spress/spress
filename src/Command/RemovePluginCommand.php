@@ -36,7 +36,8 @@ class RemovePluginCommand extends BaseCommand
            ))
             ->setName('remove:plugin')
             ->setDescription('Removes plugins and themes from the composer.json file of the current directory')
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command removes a plugin or theme from the list
 of installed packages.
 EOT

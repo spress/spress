@@ -43,7 +43,8 @@ class EnvironmentEventTest extends TestCase
             $gm,
             $renderizer,
             $io,
-            $this->configValues);
+            $this->configValues
+        );
     }
 
     public function testGetObjects()

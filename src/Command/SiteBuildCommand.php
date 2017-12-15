@@ -313,7 +313,8 @@ class SiteBuildCommand extends BaseCommand
             '<comment>Rebuilding site... (%s new, %s updated and %s deleted resources)</comment>',
             count($newResources),
             count($updatedResources),
-            count($deletedResources)));
+            count($deletedResources)
+        ));
         $io->newLine();
     }
 }

@@ -32,9 +32,9 @@ Discuss and share your opinions in Gitter chat:
 When Contributing code to Spress, you must follow its coding standards. Spress follows
 [PSR-2 coding style](http://www.php-fig.org/psr/psr-2/).
 
-Keep in mind a golden rule: **Imitate the existing Spress code**.
+Keep in mind the golden rule: **Imitate the existing Spress code**.
 
-#### Pull Resquests
+#### Pull Requests
 * Fork the Spress repository.
 * Create a new branch for each feature or improvement.
 * New features: Send a pull request from each feature branch to master branch.

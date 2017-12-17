@@ -28,7 +28,7 @@ class Filesystem extends FilesystemBase
      * @return string The content of the filename.
      *
      * @throws FileNotFoundException When the filename does not exist.
-     * @throws IOException           When the filename cannot be read.
+     * @throws IOException           When the filename cannot be read or there is another problem.
      */
     public function readFile($filename)
     {
@@ -39,6 +39,12 @@ class Filesystem extends FilesystemBase
             throw new IOException(sprintf('File "%s" cannot be read.', $filename));
         }
 
-        return file_get_contents($filename);
+        $content = file_get_contents($filename);
+
+        if ($content === false) {
+            throw new IOException(sprintf('Error reading the content of the file "%s".', $filename));
+        }
+
+        return $content;
     }
 }

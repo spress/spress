@@ -37,4 +37,14 @@ class FilesystemTest extends TestCase
 
         $this->assertEquals('ACME', $this->fs->readFile($filename));
     }
+
+    /**
+     * @expectedException Symfony\Component\Filesystem\Exception\FileNotFoundException
+     */
+    public function testReadFileMustFailWhenTheArgumentIsADirectory()
+    {
+        $filename = $this->tmpDir;
+
+        $this->fs->readFile($filename);
+    }
 }

@@ -2,3 +2,4 @@ vendor/
 build/
 app/templates/
 phpunit.xml
+.php_cs.cache

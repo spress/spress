@@ -30,11 +30,12 @@ use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
+use Yosymfony\Spress\Core\SiteMetadata\FileMetadata;
 
 /**
  * The Spress application.
  *
- * Namespaces:
+ * Highlighted namespaces:
  *  - "spress.config.site_dir": (string) The path to the site. "./" by defatul.
  *
  *  - "spress.externals": (array) Externals attributes. e.g: CLI command arguments.
@@ -88,6 +89,7 @@ class Spress extends Container
         };
 
         $this['spress.config.composer_filename'] = 'composer.json';
+        $this['spress.config.site_metadata_filename'] = '.spress.metadata';
         $this['spress.config.env'] = null;
         $this['spress.config.safe'] = null;
         $this['spress.config.drafts'] = null;
@@ -218,6 +220,13 @@ class Spress extends Container
             return $builder->buildFromConfigArray($dataSources);
         };
 
+        $this['spress.siteMetadata'] = function ($c) {
+            $fs = new \Yosymfony\Spress\Core\Support\Filesystem();
+            $siteMetadataFilename = $c['spress.config.site_dir'].'/'.$c['spress.config.site_metadata_filename'];
+
+            return new FileMetadata($siteMetadataFilename, $fs);
+        };
+
         $this['spress.cms.generatorManager'] = function ($c) {
             $pagination = new \Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator();
             $taxonomy = new \Yosymfony\Spress\Core\ContentManager\Generator\Taxonomy\TaxonomyGenerator();
@@ -306,12 +315,16 @@ class Spress extends Container
      *
      *   $spress->parse();
      *
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site
+     * @return Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site
      */
     public function parse()
     {
         $attributes = $this['spress.config.values'];
         $spressAttributes = $this->getSpressAttributes();
+
+        $siteMetadata = $this['spress.siteMetadata'];
+        $siteMetadata->load();
+        $siteMetadata->set('generator', 'version', self::VERSION);
 
         $result = $this['spress.cms.contentManager']->parseSite(
             $attributes,
@@ -320,6 +333,8 @@ class Spress extends Container
             $attributes['safe'],
             $attributes['timezone']
         );
+
+        $siteMetadata->save();
 
         return $result;
     }

@@ -13,6 +13,7 @@ namespace Yosymfony\Spress\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
+use Yosymfony\Spress\Core\SiteMetadata\MemoryMetadata;
 use Yosymfony\Spress\Core\Spress;
 
 class SpressTest extends TestCase
@@ -20,10 +21,12 @@ class SpressTest extends TestCase
     public function testParseSite()
     {
         $dw = new MemoryDataWriter();
+        $memorySiteMetadata = new MemoryMetadata();
 
         $spress = new Spress();
         $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
         $spress['spress.dataWriter'] = $dw;
+        $spress['spress.siteMetadata'] = $memorySiteMetadata;
         $spress->parse();
 
         $this->assertCount(18, $dw->getItems());
@@ -40,11 +43,13 @@ class SpressTest extends TestCase
     public function testParseWithDrafts()
     {
         $dw = new MemoryDataWriter();
+        $memorySiteMetadata = new MemoryMetadata();
 
         $spress = new Spress();
         $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
         $spress['spress.config.drafts'] = true;
         $spress['spress.dataWriter'] = $dw;
+        $spress['spress.siteMetadata'] = $memorySiteMetadata;
         $spress->parse();
 
         $this->assertCount(20, $dw->getItems());
@@ -57,11 +62,13 @@ class SpressTest extends TestCase
     public function testParseSafe()
     {
         $dw = new MemoryDataWriter();
+        $memorySiteMetadata = new MemoryMetadata();
 
         $spress = new Spress();
         $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
         $spress['spress.config.safe'] = true;
         $spress['spress.dataWriter'] = $dw;
+        $spress['spress.siteMetadata'] = $memorySiteMetadata;
         $spress->parse();
 
         $this->assertCount(17, $dw->getItems());
@@ -70,10 +77,12 @@ class SpressTest extends TestCase
     public function testReParseSite()
     {
         $dw = new MemoryDataWriter();
+        $memorySiteMetadata = new MemoryMetadata();
 
         $spress = new Spress();
         $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
         $spress['spress.dataWriter'] = $dw;
+        $spress['spress.siteMetadata'] = $memorySiteMetadata;
 
         $spress->parse();
 

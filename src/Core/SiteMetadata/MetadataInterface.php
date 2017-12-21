@@ -27,7 +27,7 @@ interface MetadataInterface
      * @param string $key The unique key in the section.
      * @param null|string|int|float|bool|array  $default Default value to return if the key does not exist.
      *
-     * @return null|string|int|bool|array The value of the key from the site metadata,
+     * @return null|string|int|float|bool|array The value of the key from the site metadata,
      * or $default in case of key miss.
      *
      * @throws \InvalidArgumentException Must be throw if the default value is not a legal value.
@@ -39,7 +39,7 @@ interface MetadataInterface
      *
      * @param string $section The name of the section.
      * @param string $key The unique key in the section.
-     * @param  null|string|int|float|bool|array The value of the key to store.
+     * @param null|string|int|float|bool|array The value of the key to store.
      *
      * @throws \InvalidArgumentException Must be thrown if the value is not a legal value.
      */

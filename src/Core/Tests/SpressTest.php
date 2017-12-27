@@ -12,84 +12,93 @@
 namespace Yosymfony\Spress\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
 use Yosymfony\Spress\Core\SiteMetadata\MemoryMetadata;
 use Yosymfony\Spress\Core\Spress;
 
 class SpressTest extends TestCase
 {
-    public function testParseSite()
+    private $spress;
+    private $contentManagerMock;
+
+    public function setUp()
     {
-        $dw = new MemoryDataWriter();
-        $memorySiteMetadata = new MemoryMetadata();
+        $this->contentManagerMock = $this->getMockBuilder(ContentManager::class)
+            ->setMethods(['parseSite'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $spress = new Spress();
-        $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
-        $spress['spress.dataWriter'] = $dw;
-        $spress['spress.siteMetadata'] = $memorySiteMetadata;
-        $spress->parse();
-
-        $this->assertCount(18, $dw->getItems());
-
-        $this->assertTrue($dw->hasItem('about/index.html'));
-        $this->assertTrue($dw->hasItem('pages/index.html'));
-        $this->assertTrue($dw->hasItem('pages/page2/index.html'));
-
-        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('about/index.html')->getContent());
-        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/index.html')->getContent());
-        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('pages/page2/index.html')->getContent());
+        $this->spress = new Spress();
+        $this->spress['spress.config.values'] = [
+            'drafts' => false,
+            'safe' => false,
+            'timezone' => 'UTC'
+        ];
+        $this->spress['spress.siteMetadata'] =  new MemoryMetadata();
+        $this->spress['spress.cms.contentManager'] = $this->contentManagerMock;
     }
 
-    public function testParseWithDrafts()
+    public function testParseMustParseASite()
     {
-        $dw = new MemoryDataWriter();
-        $memorySiteMetadata = new MemoryMetadata();
+        $this->contentManagerMock->expects($this->once())
+            ->method('parseSite');
 
-        $spress = new Spress();
-        $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
-        $spress['spress.config.drafts'] = true;
-        $spress['spress.dataWriter'] = $dw;
-        $spress['spress.siteMetadata'] = $memorySiteMetadata;
-        $spress->parse();
-
-        $this->assertCount(20, $dw->getItems());
-
-        $this->assertTrue($dw->hasItem('books/2013/09/19/new-book/index.html'));
-
-        $this->assertContains('<!DOCTYPE HTML>', $dw->getItem('books/2013/09/19/new-book/index.html')->getContent());
+        $this->spress->parse();
     }
 
-    public function testParseSafe()
+    public function testParseMustParseASiteWithoutInvokePluginsWhenSafeModeIsEnabled()
     {
-        $dw = new MemoryDataWriter();
-        $memorySiteMetadata = new MemoryMetadata();
+        $this->contentManagerMock->expects($this->once())
+            ->method('parseSite')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                true,
+                $this->anything()
+            );
+        $configValues = $this->spress['spress.config.values'];
+        $configValues['safe'] = true;
+        $this->spress['spress.config.values'] = $configValues;
 
-        $spress = new Spress();
-        $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
-        $spress['spress.config.safe'] = true;
-        $spress['spress.dataWriter'] = $dw;
-        $spress['spress.siteMetadata'] = $memorySiteMetadata;
-        $spress->parse();
-
-        $this->assertCount(17, $dw->getItems());
+        $this->spress->parse();
     }
 
-    public function testReParseSite()
+    public function testParseMustParseASiteWithDrafts()
     {
-        $dw = new MemoryDataWriter();
-        $memorySiteMetadata = new MemoryMetadata();
+        $this->contentManagerMock->expects($this->once())
+            ->method('parseSite')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                true,
+                $this->anything(),
+                $this->anything()
+            );
+        $configValues = $this->spress['spress.config.values'];
+        $configValues['drafts'] = true;
+        $this->spress['spress.config.values'] = $configValues;
 
-        $spress = new Spress();
-        $spress['spress.config.site_dir'] = __dir__.'/fixtures/project';
-        $spress['spress.dataWriter'] = $dw;
-        $spress['spress.siteMetadata'] = $memorySiteMetadata;
+        $this->spress->parse();
+    }
 
-        $spress->parse();
+    public function testParseMustParseASiteConsideringTimezone()
+    {
+        $expectedTimezone = 'Europe/Madrid';
+        $this->contentManagerMock->expects($this->once())
+            ->method('parseSite')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $expectedTimezone
+            );
+        $configValues = $this->spress['spress.config.values'];
+        $configValues['timezone'] = $expectedTimezone;
+        $this->spress['spress.config.values'] = $configValues;
 
-        $this->assertCount(18, $dw->getItems());
-
-        $spress->parse();
-
-        $this->assertCount(18, $dw->getItems());
+        $this->spress->parse();
     }
 }

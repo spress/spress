@@ -156,6 +156,7 @@ class SiteBuildCommand extends BaseCommand
         if ($spress['spress.config.values']['parsedown_activated'] === true) {
             $this->enableParsedown($spress);
 
+
             $io->labelValue('Parsedown converter', 'enabled');
         }
 

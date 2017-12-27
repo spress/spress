@@ -13,110 +13,126 @@ namespace Yosymfony\Spress\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\Spress\Console\Application;
+use Yosymfony\Spress\Core\Spress;
 
 class SiteBuildCommandTest extends TestCase
 {
-    protected $app;
-    protected $sourceDir;
+    protected $spressMock;
+    protected $appMock;
 
     public function setUp()
     {
-        $autoloaders = spl_autoload_functions();
+        $this->spressMock = $this->getMockBuilder(Spress::class)
+            ->setMethods(['parse'])
+            ->getMock();
+        $this->spressMock->method('parse')
+            ->willReturn([]);
+        $this->spressMock['spress.config.values'] = [
+            'host' => '0.0.0.0',
+            'port' => 4000,
+            'server_watch_ext' => [],
+            'parsedown_activated' => true,
+            'map_converter_extension' => [],
+            'markdown_ext' => [],
+            'env' => 'dev',
+            'drafts' => false,
+            'safe' => false,
+            'timezone' => 'UTC',
+            'debug' => false,
+        ];
 
-        $this->app = new Application($autoloaders[0][0]);
-        $this->app->registerStandardCommands();
-
-        $this->sourceDir = __DIR__.'/../../src/Core/Tests/fixtures/project';
+        $this->appMock = $this->getMockBuilder(Application::class)
+            ->setMethods(['getSpress'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->appMock->method('getSpress')
+            ->willReturn($this->spressMock);
+        $this->appMock->registerStandardCommands();
     }
 
-    public function tearDown()
+    public function testExecuteMustParseASite()
     {
-        $fs = new Filesystem();
-        $fs->remove($this->sourceDir.'/build');
-        $fs->remove($this->sourceDir.'/config_test.yml');
+        $this->spressMock->expects($this->once())
+            ->method('parse');
+
+        $command = $this->appMock->find('site:build');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([], ['decorated' => false]);
     }
 
-    public function testBuildCommand()
+    public function testExecuteMustParseASiteLocatedBySourceParam()
     {
-        $command = $this->app->find('site:build');
+        $expectedDir = realpath(__DIR__.'/../../src/Core/Tests/fixtures/project');
+
+        $this->appMock->expects($this->once())
+            ->method('getSpress')
+            ->with($expectedDir);
+        $this->spressMock->expects($this->once())
+            ->method('parse');
+
+        $command = $this->appMock->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            '--source' => $this->sourceDir,
+            '--source' => $expectedDir,
         ], ['decorated' => false]);
-
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Starting.../', $output);
-        $this->assertRegExp('/Environment: dev/', $output);
-        $this->assertNotRegExp('/Posts drafts enabled/', $output);
-        $this->assertRegExp('/Debug mode: enabled/', $output);
-        $this->assertRegExp('/Total items: 19/', $output);
     }
 
-    public function testBuildCommandDraft()
+    public function testExecuteMustParseASiteWithDraftsWhenDraftsOptionIsPassed()
     {
-        $command = $this->app->find('site:build');
+        $this->spressMock->expects($this->once())
+            ->method('parse');
+
+        $command = $this->appMock->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            '--source' => $this->sourceDir,
             '--drafts' => true,
         ], ['decorated' => false]);
 
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Starting.../', $output);
-        $this->assertRegExp('/Environment: dev/', $output);
-        $this->assertRegExp('/Draft posts: enabled/', $output);
-        $this->assertRegExp('/Total items: 20/', $output);
+        $this->assertTrue($this->spressMock['spress.config.drafts']);
     }
 
-    public function testBuildCommandSafe()
+    public function testCommandMustParseASiteWithPluginsDisabledWhenSafeOptionIsPassed()
     {
-        $command = $this->app->find('site:build');
+        $this->spressMock->expects($this->once())
+            ->method('parse');
+
+        $command = $this->appMock->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            '--source' => $this->sourceDir,
             '--safe' => true,
         ], ['decorated' => false]);
 
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Starting.../', $output);
-        $this->assertRegExp('/Environment: dev/', $output);
-        $this->assertRegExp('/Plugins: disabled/', $output);
+        $this->assertTrue($this->spressMock['spress.config.safe']);
     }
 
-    public function testBuildCommandEnv()
+    public function testExecuteMustParseASiteUsingEnvironmentParamsWhenEnvOptionIsPassed()
     {
-        $command = $this->app->find('site:build');
+        $this->spressMock->expects($this->once())
+            ->method('parse');
+
+        $command = $this->appMock->find('site:build');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            '--source' => $this->sourceDir,
             '--env' => 'prod',
         ], ['decorated' => false]);
 
-        $output = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Starting.../', $output);
-        $this->assertRegExp('/Environment: prod/', $output);
+        $this->assertEquals('prod', $this->spressMock['spress.config.env']);
     }
 
-    public function testParsedownActived()
+    public function testExecuteMustParseASiteUsingParsedownWhenFeatureIsEnabled()
     {
-        $fs = new Filesystem();
-        $fs->dumpFile($this->sourceDir.'/config_test.yml', 'parsedown_activated: true');
+        $configValues = $this->spressMock['spress.config.values'];
+        $configValues['parsedown_activated'] = true;
+        $this->spressMock['spress.config.values'] = $configValues;
 
-        $command = $this->app->find('site:build');
+        $command = $this->appMock->find('site:build');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            '--source' => $this->sourceDir,
-            '--env' => 'test',
-        ], ['decorated' => false]);
+        $commandTester->execute([], ['decorated' => false]);
 
-        $output = $commandTester->getDisplay();
+        $predefinedConverters = $this->spressMock['spress.cms.converterManager.converters'];
 
-        $this->assertRegExp('/Parsedown converter: enabled/', $output);
+        $this->assertArrayHasKey('ParsedownConverter', $predefinedConverters);
+        $this->assertArrayNotHasKey('MichelfMarkdownConverter', $predefinedConverters);
     }
 }

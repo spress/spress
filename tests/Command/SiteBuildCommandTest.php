@@ -56,9 +56,7 @@ class SiteBuildCommandTest extends TestCase
         $this->spressMock->expects($this->once())
             ->method('parse');
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([], ['decorated' => false]);
+        $this->executeSiteBuildCommand();
     }
 
     public function testExecuteMustParseASiteLocatedBySourceParam()
@@ -71,11 +69,9 @@ class SiteBuildCommandTest extends TestCase
         $this->spressMock->expects($this->once())
             ->method('parse');
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
+        $this->executeSiteBuildCommand([
             '--source' => $expectedDir,
-        ], ['decorated' => false]);
+        ]);
     }
 
     public function testExecuteMustParseASiteWithDraftsWhenDraftsOptionIsPassed()
@@ -83,11 +79,9 @@ class SiteBuildCommandTest extends TestCase
         $this->spressMock->expects($this->once())
             ->method('parse');
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
+        $this->executeSiteBuildCommand([
             '--drafts' => true,
-        ], ['decorated' => false]);
+        ]);
 
         $this->assertTrue($this->spressMock['spress.config.drafts']);
     }
@@ -97,11 +91,9 @@ class SiteBuildCommandTest extends TestCase
         $this->spressMock->expects($this->once())
             ->method('parse');
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
+        $this->executeSiteBuildCommand([
             '--safe' => true,
-        ], ['decorated' => false]);
+        ]);
 
         $this->assertTrue($this->spressMock['spress.config.safe']);
     }
@@ -111,11 +103,9 @@ class SiteBuildCommandTest extends TestCase
         $this->spressMock->expects($this->once())
             ->method('parse');
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
+        $this->executeSiteBuildCommand([
             '--env' => 'prod',
-        ], ['decorated' => false]);
+        ]);
 
         $this->assertEquals('prod', $this->spressMock['spress.config.env']);
     }
@@ -126,13 +116,18 @@ class SiteBuildCommandTest extends TestCase
         $configValues['parsedown_activated'] = true;
         $this->spressMock['spress.config.values'] = $configValues;
 
-        $command = $this->appMock->find('site:build');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([], ['decorated' => false]);
+        $this->executeSiteBuildCommand();
 
         $predefinedConverters = $this->spressMock['spress.cms.converterManager.converters'];
 
         $this->assertArrayHasKey('ParsedownConverter', $predefinedConverters);
         $this->assertArrayNotHasKey('MichelfMarkdownConverter', $predefinedConverters);
+    }
+
+    private function executeSiteBuildCommand(array $params = [])
+    {
+        $command = $this->appMock->find('site:build');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute($params, ['decorated' => false]);
     }
 }

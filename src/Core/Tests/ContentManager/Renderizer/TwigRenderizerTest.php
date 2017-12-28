@@ -21,32 +21,24 @@ class TwigRenderizerTest extends TestCase
         \Twig_Autoloader::register();
     }
 
-    public function testRenderTemplate()
+    public function testRenderBlocksMustRenderATemplate()
     {
         $renderizer = $this->getRenderizer();
-
         $rendered = $renderizer->renderBlocks('index.html', 'Hi {{ name }}.', ['name' => 'Yo! Symfony']);
 
         $this->assertEquals('Hi Yo! Symfony.', $rendered);
-
-        $rendered = $renderizer->renderBlocks('2015/05/04/hello.html', 'This is a new post called "{{ name }}".', ['name' => 'hello']);
-
-        $this->assertEquals('This is a new post called "hello".', $rendered);
-
-        $renderizer->clear();
     }
 
-    public function testRenderTemplateWithInclude()
+    public function testRenderBlocksMustRenderATemplateWithIncludes()
     {
         $renderizer = $this->getRenderizer();
         $renderizer->addInclude('message', 'This is a message.');
-
         $rendered = $renderizer->renderBlocks('index.html', "What's it?: {% include 'message' %}", []);
 
         $this->assertEquals("What's it?: This is a message.", $rendered);
     }
 
-    public function testRenderTemplateWithLayout()
+    public function testRenderPageMustRenderAPageWithLayout()
     {
         $renderizer = $this->getRenderizer();
         $renderizer->addLayout('default.twig', '<h1>Hi</h1>{% block content %}{{ page.content }}{% endblock %}');
@@ -55,7 +47,7 @@ class TwigRenderizerTest extends TestCase
         $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
     }
 
-    public function testRenderTemplateWithStackOfLayouts()
+    public function testRenderPageMustRenderAPageWithAHierachyOfLayouts()
     {
         $renderizer = $this->getRenderizer();
         $renderizer->addLayout('default', '<html></body>{% block page %}{{ page.content }}{% endblock %}</body></html>');
@@ -65,56 +57,11 @@ class TwigRenderizerTest extends TestCase
         $this->assertEquals('<html></body><h1>Hi</h1>Yo! Symfony</body></html>', $rendered);
     }
 
-    public function testAddTwigFunction()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFunction('fuTest1', function ($param) {
-            return $param;
-        });
-    }
-
-    public function testAddTwigFunctionWithOptions()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFunction('fuTest2', function (\Twig_Environment $env, $context, $param) {
-            return $param;
-        }, ['needs_context' => true, 'needs_environment' => true]);
-    }
-
-    public function testAddTwigFilter()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFilter('fTest', function ($param) {
-            return $param;
-        });
-    }
-
-    public function testAddTwigFilterWithOptions()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFilter('fTest', function (\Twig_Environment $env, $context, $param) {
-            return $param;
-        }, ['needs_context' => true, 'needs_environment' => true]);
-    }
-
-    public function testAddTwigTest()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigFilter('tTest', function ($param) {
-            return true;
-        });
-    }
-
-    public function testAddTwigTag()
-    {
-        $renderizer = $this->getRenderizer();
-        $renderizer->addTwigTag(new TwigTag());
-    }
-
     /**
-     * @expectedException \Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
+     * @expectedExceptionMessage Layout "@layout/default" not found in "index.html" at key "layout".
      */
-    public function testRenderTemplateLayoutNotFound()
+    public function testRenderPageMustFailWhenLayoutNotFound()
     {
         $renderizer = $this->getRenderizer();
         $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'default', []);
@@ -128,18 +75,5 @@ class TwigRenderizerTest extends TestCase
         $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
 
         return new TwigRenderizer($twig, $twigLoader, ['twig']);
-    }
-}
-
-class TwigTag extends \Twig_TokenParser
-{
-    public function parse(\Twig_Token $token)
-    {
-        return new \Twig_Node_Text('test', $token->getLine());
-    }
-
-    public function getTag()
-    {
-        return 'test';
     }
 }

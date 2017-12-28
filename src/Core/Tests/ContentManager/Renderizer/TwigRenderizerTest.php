@@ -16,11 +16,6 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 
 class TwigRenderizerTest extends TestCase
 {
-    public function setUp()
-    {
-        \Twig_Autoloader::register();
-    }
-
     public function testRenderBlocksMustRenderATemplate()
     {
         $renderizer = $this->getRenderizer();

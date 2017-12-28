@@ -4,6 +4,7 @@ CHANGELOG for 2.x
 * [New] Added the supporting class `Filesystem`. It is an extension of Symfony Filesystem component with a method for reading the content of files.
 * [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
 * [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
+* [Improved] Removed the use of the class `Twig_Autoloader`. This one is deprecated since version 1.21.
 
 ## 2.2.0 (2017-05-07)
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.

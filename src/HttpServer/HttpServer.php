@@ -45,8 +45,6 @@ class HttpServer
      */
     public function __construct(IOInterface $io, $serverroot, $documentroot, $port, $host)
     {
-        \Twig_Autoloader::register();
-
         $this->io = $io;
         $this->port = $port;
         $this->host = $host;

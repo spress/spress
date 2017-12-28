@@ -32,11 +32,6 @@ use Yosymfony\Spress\Core\Tester\PluginTester;
 
 class ContentManagerTest extends TestCase
 {
-    public function setUp()
-    {
-        \Twig_Autoloader::register();
-    }
-
     public function testParseSite()
     {
         $attributes = [

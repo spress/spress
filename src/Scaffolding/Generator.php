@@ -23,14 +23,6 @@ class Generator
     private $skeletonDirs;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        \Twig_Autoloader::register();
-    }
-
-    /**
      * Sets a list of directories in which templates are located.
      *
      * @param array $value

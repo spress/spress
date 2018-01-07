@@ -5,6 +5,7 @@ CHANGELOG for 2.x
 * [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
 * [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
 * [Improved] Removed the use of the class `Twig_Autoloader`. This one is deprecated since version 1.21.
+* [Improved] Improved the performance of the method `getLayoutWithExtension` of class `TwigRenderizer`: When the full name of a layout is resolved, it is stored in an array for future references.
 
 ## 2.2.0 (2017-05-07)
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.

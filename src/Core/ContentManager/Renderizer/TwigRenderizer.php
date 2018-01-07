@@ -15,7 +15,7 @@ use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
 
 /**
- * Twig renderizer.
+ * Renderizer for Twig template engine.
  *
  * @api
  *
@@ -26,6 +26,7 @@ class TwigRenderizer implements RenderizerInterface
     protected $twig;
     protected $arrayLoader;
     protected $layouts = [];
+    protected $fullnameLayoutResolved = [];
     protected $layoutExtension;
     protected $isLayoutsProcessed;
 
@@ -237,15 +238,23 @@ class TwigRenderizer implements RenderizerInterface
 
     protected function getLayoutWithExtension($layoutName, $contentName)
     {
+        if (isset($this->fullnameLayoutResolved[$layoutName]) === true) {
+            return $this->fullnameLayoutResolved[$layoutName];
+        }
+
         foreach ($this->layoutExtension as $extension) {
             $fullname = $layoutName.'.'.$extension;
 
             if (isset($this->layouts[$fullname]) === true) {
+                $this->fullnameLayoutResolved[$layoutName] = $fullname;
+
                 return $fullname;
             }
         }
 
         if (isset($this->layouts[$layoutName]) === true) {
+            $this->fullnameLayoutResolved[$layoutName] = $fullname;
+
             return $layoutName;
         }
 

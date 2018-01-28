@@ -2,6 +2,8 @@ CHANGELOG for 2.x
 =================
 ## 2.3.0
 * [New] Added the supporting class `Filesystem`. It is an extension of Symfony Filesystem component with a method for reading the content of files.
+* [New] Added class `DependencyResolver`, a simple dependency resolver. It is useful for keeping tracks of
+* inter-document dependencies.
 * [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
 * [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
 * [Improved] Removed the use of the class `Twig_Autoloader`. This one is deprecated since version 1.21.

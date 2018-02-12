@@ -14,7 +14,6 @@ namespace Yosymfony\Spress\Core;
 use Pimple\Container;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Filesystem\Filesystem;
 use Yosymfony\ConfigLoader\Config;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Yosymfony\Spress\Core\Configuration\Configuration;
@@ -31,6 +30,7 @@ use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 use Yosymfony\Spress\Core\SiteMetadata\FileMetadata;
+use Yosymfony\Spress\Core\Support\Filesystem;
 
 /**
  * The Spress application.
@@ -221,7 +221,7 @@ class Spress extends Container
         };
 
         $this['spress.siteMetadata'] = function ($c) {
-            $fs = new \Yosymfony\Spress\Core\Support\Filesystem();
+            $fs = new Filesystem();
             $siteMetadataFilename = $c['spress.config.site_dir'].'/'.$c['spress.config.site_metadata_filename'];
 
             return new FileMetadata($siteMetadataFilename, $fs);

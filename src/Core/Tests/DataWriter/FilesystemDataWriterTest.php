@@ -14,7 +14,7 @@ namespace Yosymfony\Spress\Core\Tests\DataSource;
 use PHPUnit\Framework\TestCase;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
-use Symfony\Component\Filesystem\Filesystem;
+use Yosymfony\Spress\Core\Support\Filesystem;
 
 class FilesystemDataWriterTest extends TestCase
 {

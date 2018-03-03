@@ -170,7 +170,7 @@ class Item implements ItemInterface
     }
 
     /**
-     * Sets id.
+     * Sets the identifier.
      *
      * @param string $id The item identifier
      */

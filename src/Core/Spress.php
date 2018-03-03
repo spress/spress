@@ -26,6 +26,7 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
+use Yosymfony\Spress\Core\DependencyResolver\DependencyResolver;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
@@ -224,7 +225,17 @@ class Spress extends Container
             $fs = new Filesystem();
             $siteMetadataFilename = $c['spress.config.site_dir'].'/'.$c['spress.config.site_metadata_filename'];
 
-            return new FileMetadata($siteMetadataFilename, $fs);
+            $siteMetadata = new FileMetadata($siteMetadataFilename, $fs);
+            $siteMetadata->load();
+
+            return $siteMetadata;
+        };
+
+        $this['spress.DependencyResolver'] = function ($c) {
+            $siteMetadata = $c['spress.siteMetadata'];
+            $initialDependencies = $siteMetadata->get('site', 'dependencies', []);
+
+            return new DependencyResolver($initialDependencies);
         };
 
         $this['spress.cms.generatorManager'] = function ($c) {
@@ -286,7 +297,7 @@ class Spress extends Container
         };
 
         $this['spress.cms.contentManager'] = $this->factory(function ($c) {
-            return new ContentManager(
+            $contentManager = new ContentManager(
                 $c['spress.dataSourceManager'],
                 $c['spress.dataWriter'],
                 $c['spress.cms.generatorManager'],
@@ -296,9 +307,12 @@ class Spress extends Container
                 $c['spress.cms.renderizer'],
                 $c['spress.cms.siteAttribute'],
                 $c['spress.plugin.pluginManager'],
-                $c['lib.eventDispatcher'],
-                $c['spress.io']
+                $c['lib.eventDispatcher']
             );
+            $contentManager->setDependencyResolver($c['spress.DependencyResolver']);
+            $contentManager->setIO($c['spress.io']);
+
+            return $contentManager;
         });
     }
 
@@ -323,7 +337,6 @@ class Spress extends Container
         $spressAttributes = $this->getSpressAttributes();
 
         $siteMetadata = $this['spress.siteMetadata'];
-        $siteMetadata->load();
         $siteMetadata->set('generator', 'version', self::VERSION);
 
         $result = $this['spress.cms.contentManager']->parseSite(
@@ -334,6 +347,8 @@ class Spress extends Container
             $attributes['timezone']
         );
 
+        $dependencyResolver = $this['spress.DependencyResolver'];
+        $siteMetadata->set('site', 'dependencies', $dependencyResolver->getAllDependencies());
         $siteMetadata->save();
 
         return $result;

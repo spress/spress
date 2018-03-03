@@ -22,9 +22,11 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface;
 use Yosymfony\Spress\Core\DataSource\DataSourceManager;
 use Yosymfony\Spress\Core\DataWriter\DataWriterInterface;
 use Yosymfony\Spress\Core\DataSource\ItemInterface;
+use Yosymfony\Spress\Core\DependencyResolver\DependencyResolver;
 use Yosymfony\Spress\Core\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\Plugin\Event;
 use Yosymfony\Spress\Core\IO\IOInterface;
+use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 use Yosymfony\Spress\Core\Support\ItemCollection;
@@ -53,29 +55,28 @@ class ContentManager
     private $siteAttribute;
     private $renderizer;
     private $pluginManager;
+    private $dependencyResolver;
     private $eventDispatcher;
     private $io;
     private $timezone;
     private $safe;
     private $processDraft;
-
     private $attributes;
     private $spressAttributes;
-
     private $itemCollection;
 
     /**
      * Constructor.
      *
-     * @param Yosymfony\Spress\Core\DataSource\DataSourceManager                         $dataSourceManager
-     * @param Yosymfony\Spress\Core\DataWriter\DataWriterInterface                       $dataWriter
-     * @param Yosymfony\Spress\Core\ContentManager\Converter\ConverterManager            $converterManager
-     * @param Yosymfony\Spress\Core\ContentManager\Collection\CollectionManager          $CollectionManager
-     * @param Yosymfony\Spress\Core\ContentManager\Permalink\PermalinkGeneratorInterface $permalinkGenerator
-     * @param Yosymfony\Spress\Core\ContentManager\Renderizer\RenderizerInterface        $renderizer
-     * @param Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttributeInterface  $siteAttribute
-     * @param Yosymfony\Spress\Core\Plugin\PluginManager                                 $pluginManager
-     * @param Symfony\Component\EventDispatcher\EventDispatcher                          $eventDispatcher
+     * @param DataSourceManager           $dataSourceManager
+     * @param DataWriterInterface         $dataWriter
+     * @param ConverterManager            $converterManager
+     * @param CollectionManager           $CollectionManager
+     * @param PermalinkGeneratorInterface $permalinkGenerator
+     * @param RenderizerInterface         $renderizer
+     * @param SiteAttributeInterface      $siteAttribute
+     * @param PluginManager               $pluginManager
+     * @param EventDispatcher             $eventDispatcher
      */
     public function __construct(
         DataSourceManager $dataSourceManager,
@@ -87,8 +88,7 @@ class ContentManager
         RenderizerInterface $renderizer,
         SiteAttributeInterface $siteAttribute,
         PluginManager $pluginManager,
-        EventDispatcher $eventDispatcher,
-        IOInterface $io
+        EventDispatcher $eventDispatcher
     ) {
         $this->dataSourceManager = $dataSourceManager;
         $this->dataWriter = $dataWriter;
@@ -100,16 +100,16 @@ class ContentManager
         $this->siteAttribute = $siteAttribute;
         $this->pluginManager = $pluginManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->io = $io;
 
         $this->attributes = [];
         $this->spressAttributes = [];
-
         $this->itemCollection = new ItemCollection();
+
+        $this->setIO(new NullIO());
     }
 
     /**
-     * Parse a site.
+     * Parses a site.
      *
      * @param array  $attributes       The site attributes
      * @param array  $spressAttributes
@@ -117,7 +117,7 @@ class ContentManager
      * @param bool   $safe             True for disabling custom plugins
      * @param string $timezone         Sets the time zone. @see http://php.net/manual/en/timezones.php More time zones
      *
-     * @return \Yosymfony\Spress\Core\DataSource\ItemInterface[] Items of the site
+     * @return ItemInterface[] Items of the site
      */
     public function parseSite(array $attributes, array $spressAttributes, $draft = false, $safe = false, $timezone = 'UTC')
     {
@@ -134,6 +134,32 @@ class ContentManager
         $this->finish();
 
         return $this->itemCollection->all();
+    }
+
+    /**
+     * Sets the dependency resolver.
+     *
+     * @param DependencyResolver $dependencyResolver
+     *
+     * @throws LogicException If there is a previous instance the dependency resolver.
+     */
+    public function setDependencyResolver(DependencyResolver $dependencyResolver)
+    {
+        if ($this->dependencyResolver != null) {
+            throw new \LogicException('There is an instance of DependencyManager class in class ContentManager.');
+        }
+
+        $this->dependencyResolver = $dependencyResolver;
+    }
+
+    /**
+     * Sets the IO.
+     *
+     * @param IOInterface $io
+     */
+    public function setIO(IOInterface $io)
+    {
+        $this->io = $io;
     }
 
     private function reset()

@@ -26,6 +26,7 @@ use Yosymfony\Spress\Core\ContentManager\SiteAttribute\SiteAttribute;
 use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\DataWriter\MemoryDataWriter;
+use Yosymfony\Spress\Core\DependencyResolver\DependencyResolver;
 use Yosymfony\Spress\Core\IO\NullIO;
 use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Tester\PluginTester;
@@ -214,9 +215,12 @@ class ContentManagerTest extends TestCase
         $siteAttribute = new SiteAttribute();
         $dispatcher = new EventDispatcher();
         $pm = $this->getPluginManager($dispatcher, $plugins);
-        $io = new NullIO();
 
-        return new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher, $io);
+        $contenManager = new ContentManager($dsm, $dataWriter, $gm, $cm, $com, $pg, $renderizer, $siteAttribute, $pm, $dispatcher);
+        $contenManager->setDependencyResolver(new DependencyResolver());
+        $contenManager->setIO(new NullIO());
+
+        return $contenManager;
     }
 
     protected function getCollectionManager()

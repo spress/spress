@@ -86,8 +86,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string The block rendered
      *
-     * @throws RenderException If an error occurred during
-     *                                                                                   rendering the content
+     * @throws RenderException If an error occurred during rendering the content
      */
     public function renderBlocks($id, $content, array $attributes)
     {
@@ -96,7 +95,7 @@ class TwigRenderizer implements RenderizerInterface
 
             return $this->twig->render('@dynamic/content', $attributes);
         } catch (\Twig_Error_Syntax $e) {
-            throw new RenderException('Error during lexing or parsing of a template.', $id, $e);
+            throw new RenderException('Error during lexing or parsing a template.', $id, $e);
         }
     }
 

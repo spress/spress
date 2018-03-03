@@ -20,8 +20,8 @@ use Yosymfony\Spress\Core\Support\FileInfo;
 use Yosymfony\Spress\Core\Support\StringWrapper;
 
 /**
- * Filesystem data source. Binary items don’t have their content
- * loaded in-memory. getPath method returns the path to the binary filename.
+ * Filesystem data source. Binary items do not have their content
+ * loaded in-memory. "getPath" method returns the path to the binary filename.
  *
  * The directory separator is '/' in any case.
  *
@@ -37,7 +37,7 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  * | |- index.html
  * | |- ...
  *
- * The item's attributes (metas) will be loaded from a block located at
+ * The item attributes (metas) will be loaded from a block located at
  * the top of the each file (frontmatter) or from a separated metadata file.
  * e.g:
  *  - index.html
@@ -48,13 +48,13 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  *  - filename          : the name of the file.
  *  - extension         : the extension of item's filename.
  *
- * If the filename is a date filename, a filename that matched a patter yyyy-mm-dd-title.extension,
+ * If a filename is a date filename, a filename that matched a patter yyyy-mm-dd-title.extension,
  * receive some extra attributes:
  *  - title
  *  - title_path
  *  - date
  *
- * If the filename is located in a subfolder of "posts/" receive an extra attribute "categories".
+ * If a filename is located in a subfolder of "posts/" receive an extra attribute "categories".
  *
  * Params:
  *  - source_root      (string): the root directory.
@@ -109,8 +109,8 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * {@inheritdoc}
      *
-     * @throws Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException   If the attributes don't validate the rules
-     * @throws Yosymfony\Spress\Core\ContentManager\Exception\MissingAttributeException If missing attribute
+     * @throws AttributeValueException   If attributes do not validate all the rules.
+     * @throws MissingAttributeException If missing attribute.
      */
     public function configure()
     {

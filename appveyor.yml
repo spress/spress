@@ -3,9 +3,6 @@ shallow_clone: true
 platform: x86
 clone_folder: c:\projects\spress
 
-environment:
-  APPVEYOR_CACHE_ENTRY_ZIP_ARGS: "-t7z -m0=lzma -mx=9"
-
 cache:
     - c:\php -> appveyor.yml
 

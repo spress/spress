@@ -3,9 +3,6 @@ shallow_clone: true
 platform: x86
 clone_folder: c:\projects\spress
 
-cache:
-    - c:\php -> appveyor.yml
-
 init:
     - SET PATH=c:\php;%PATH%
     - SET PHP=1

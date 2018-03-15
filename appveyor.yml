@@ -29,5 +29,4 @@ install:
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - bin\spress.bat --version
     - phpunit

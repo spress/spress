@@ -8,7 +8,7 @@ environment:
   PHP_CACHE_DIR: C:\php
 
 cache:
-    - '%PHP_CACHE_DIR% -> appveyor.yml
+    - '%PHP_CACHE_DIR% -> appveyor.yml'
 
 init:
     - SET PATH=c:\php;%PATH%

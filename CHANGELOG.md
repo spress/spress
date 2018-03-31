@@ -4,10 +4,13 @@ CHANGELOG for 2.x
 * [New] Added the supporting class `Filesystem`. It is an extension of Symfony Filesystem component with a method for reading the content of files.
 * [New] Added class `DependencyResolver`, a simple dependency resolver. It is useful for keeping tracks of
 * inter-document dependencies.
+* [Deleted] The configuration option `layout_ext` is not necessary anymore. Now, the option `text_extensions` is used to recognize layouts files.
 * [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
 * [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
 * [Improved] Removed the use of the class `Twig_Autoloader`. This one is deprecated since version 1.21.
-* [Improved] Improved the performance of the method `getLayoutWithExtension` of class `TwigRenderizer`: When the full name of a layout is resolved, it is stored in an array for future references.
+* [Improved] Now, the class `TwigRenderizer` class works with layouts ids instead of file path.
+* [Improved] The class `FilesystemDataSource` returns layout item identifiers without file extensions when they are unique. In case of name collision, the filename extension will be added.
+* [Fixed] Now, Appveyor CI installs PHP and Composer using Chocolatey package system.
 
 ## 2.2.0 (2017-05-07)
 * [New] Dropped the support for PHP 5.5. The minimum version is 5.6.

@@ -41,21 +41,21 @@ abstract class AbstractDataSource
     /**
      * Returns the list of items.
      *
-     * @return array
+     * @return array Key-value array with Item's id as a key and the Item as value.
      */
     abstract public function getItems();
 
     /**
      * Returns the list of items with type "layout".
      *
-     * @return array
+     * @return array Key-value array with Item's id as a key and the Item as value.
      */
     abstract public function getLayouts();
 
     /**
      * Returns the list of items with type "include".
      *
-     * @return array
+     * @return array Key-value array with Item's id as a key and the Item as value.
      */
     abstract public function getIncludes();
 

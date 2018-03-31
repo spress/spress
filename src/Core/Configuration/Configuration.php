@@ -152,7 +152,6 @@ class Configuration implements ConfigurationInterface
             ->setDefault('timezone', 'UTC', 'string', true)
             ->setDefault('url', '', 'string', true)
             ->setDefault('safe', false, 'bool', true)
-            ->setDefault('layout_ext', [], 'array', true)
             ->setDefault('data_sources', [], 'array', true)
             ->setDefault('collections', [], 'array')
             ->setDefault('permalink', 'pretty', 'string', true)

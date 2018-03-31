@@ -12,7 +12,7 @@
 namespace Yosymfony\Spress\Core\DataSource\Filesystem;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo as FinderSplFileInfo;
 use Yosymfony\Spress\Core\DataSource\AbstractDataSource;
 use Yosymfony\Spress\Core\DataSource\Item;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
@@ -70,17 +70,11 @@ use Yosymfony\Spress\Core\Support\StringWrapper;
  */
 class FilesystemDataSource extends AbstractDataSource
 {
-    /** @var Item[] */
     private $items;
-
-    /** @var Item[] */
     private $layouts;
-
-    /** @var Item[] */
     private $includes;
-
-    /** @var AttributeParser */
     private $attributeParser;
+    private $layoutIds = [];
 
     /**
      * {@inheritdoc}
@@ -158,7 +152,7 @@ class FilesystemDataSource extends AbstractDataSource
             if (is_dir($item)) {
                 $contentFinder->in($item);
             } elseif (is_file($item)) {
-                $includedFiles[] = new SplFileInfo($item, '', pathinfo($item, PATHINFO_BASENAME));
+                $includedFiles[] = new FinderSplFileInfo($item, '', pathinfo($item, PATHINFO_BASENAME));
             }
         }
 
@@ -213,7 +207,7 @@ class FilesystemDataSource extends AbstractDataSource
     }
 
     /**
-     * @return SplFileInfo[]
+     * @return FinderSplFileInfo[]
      */
     private function getThemeAssetFiles()
     {
@@ -230,7 +224,7 @@ class FilesystemDataSource extends AbstractDataSource
             ->files();
 
         foreach ($finder as $file) {
-            $fileInfo = new SplFileInfo(
+            $fileInfo = new FinderSplFileInfo(
                 $file->getPathname(),
                 'assets/'.$file->getRelativePath(),
                 'assets/'.$file->getRelativePathname()
@@ -245,7 +239,7 @@ class FilesystemDataSource extends AbstractDataSource
     private function processItems(Finder $finder, $type)
     {
         foreach ($finder as $file) {
-            $id = $this->normalizeDirSeparator($file->getRelativePathname());
+            $id = $this->generateIdFromRelativePath($file, $type);
             $isBinary = $this->isBinary($file);
             $contentRaw = $isBinary ? '' : $file->getContents();
 
@@ -272,7 +266,34 @@ class FilesystemDataSource extends AbstractDataSource
         }
     }
 
-    private function processAttributes(Item $item, SplFileInfo $file)
+    /**
+     * @param FinderSplFileInfo $file
+     * @param string $type
+     */
+    private function generateIdFromRelativePath(FinderSplFileInfo $file, $type)
+    {
+        if ($type !== Item::TYPE_LAYOUT) {
+            return $this->normalizeDirSeparator($file->getRelativePathname());
+        }
+
+        $id = $normalizedRelativePath = $this->normalizeDirSeparator($file->getRelativePathname());
+        $fileInfo = new FileInfo($id, $this->params['text_extensions']);
+        $shortId = ltrim($fileInfo->getPath().'/'.$fileInfo->getFilename(), '/');
+
+        if (isset($this->layoutIds[$normalizedRelativePath]) === true) {
+            return $this->layoutIds[$normalizedRelativePath];
+        }
+
+        if (in_array($shortId, $this->layoutIds) === false) {
+            $id = $shortId;
+        }
+
+        $this->layoutIds[$normalizedRelativePath] = $id;
+
+        return $id;
+    }
+
+    private function processAttributes(Item $item, FinderSplFileInfo $file)
     {
         $attributes = [];
         $attributesFile = $this->getAttributesFilename($file);
@@ -345,7 +366,7 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * @return bool
      */
-    private function isBinary(SplFileInfo $file)
+    private function isBinary(FinderSplFileInfo $file)
     {
         $fileInfo = new FileInfo($file->getPathname(), $this->params['text_extensions']);
 
@@ -365,7 +386,7 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * @return string Date in ISO 8601 format
      */
-    private function getModifiedTime(SplFileInfo $file)
+    private function getModifiedTime(FinderSplFileInfo $file)
     {
         $dt = new \DateTime();
         $dt->setTimestamp($file->getMTime());
@@ -376,7 +397,7 @@ class FilesystemDataSource extends AbstractDataSource
     /**
      * @return string
      */
-    private function getAttributesFilename(splfileinfo $file)
+    private function getAttributesFilename(FinderSplFileInfo $file)
     {
         $relativePathname = $this->normalizeDirSeparator($file->getRelativePathname());
 

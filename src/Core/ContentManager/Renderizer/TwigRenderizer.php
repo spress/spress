@@ -26,8 +26,6 @@ class TwigRenderizer implements RenderizerInterface
     protected $twig;
     protected $arrayLoader;
     protected $layouts = [];
-    protected $fullnameLayoutResolved = [];
-    protected $layoutExtension;
     protected $isLayoutsProcessed;
 
     /**
@@ -35,12 +33,10 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @param Twig_Environment  $twig            The Twig instance
      * @param Twig_Loader_Array $arrayLoader     The loader
-     * @param array             $layoutExtension Extension availables for layouts. e.g: "html", "html.twig", "twig"
      */
-    public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader, array $layoutExtension)
+    public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader)
     {
         $this->twig = $twig;
-        $this->layoutExtension = $layoutExtension;
         $this->arrayLoader = $arrayLoader;
         $this->isLayoutsProcessed = false;
     }
@@ -48,15 +44,15 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Adds a new layout.
      *
-     * @param string $id         The identifier of the layout. e.g: path
+     * @param string $id         The identifier of the layout. e.g: default
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout.
-     *                           "layout" attribute has a special meaning
+     *                           "layout" attribute has a special meaning.
      */
     public function addLayout($id, $content, array $attributes = [])
     {
-        $key = $this->getLayoutNameWithNamespace($id);
-        $this->layouts[$key] = [$id, $content, $attributes];
+        $namespaceLayoutId = $this->getLayoutNameWithNamespace($id);
+        $this->layouts[$namespaceLayoutId] = [$id, $content, $attributes];
     }
 
     /**
@@ -80,13 +76,13 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * Renders the content blocks (layout NOT included).
      *
-     * @param string $id         The path of the item
-     * @param string $content    The content
-     * @param array  $attributes The attributes for using inside the content
+     * @param string $id         The identifier of the item.
+     * @param string $content    The content.
+     * @param array  $attributes The attributes for using inside the content.
      *
-     * @return string The block rendered
+     * @return string The block rendered.
      *
-     * @throws RenderException If an error occurred during rendering the content
+     * @throws RenderException If an error occurred during rendering the content.
      */
     public function renderBlocks($id, $content, array $attributes)
     {
@@ -103,18 +99,17 @@ class TwigRenderizer implements RenderizerInterface
      * Renders a page completely (layout included). The value of param $content
      * will be placed at "page.content" attribute.
      *
-     * @param string $id             The path of the item
-     * @param string $content        The page content
-     * @param string $layoutName     The layout name
+     * @param string $id             The identifier of the item.
+     * @param string $content        The page content.
+     * @param string $layoutName     The layout name.
      * @param array  $siteAttributes The attributes for using inside the content.
-     *                               "layout" attribute has a special meaning
+     *                               "layout" attribute has a special meaning.
      *
      * @return string The page rendered
      *
      * @throws AttributeValueException   If "layout" attribute has an invalid value
-     *                                                                                   or layout not found
-     * @throws RenderException If an error occurred during
-     *                                                                                   rendering the content
+     *                                   or layout not found.
+     * @throws RenderException If an error occurred during rendering the content.
      */
     public function renderPage($id, $content, $layoutName, array $siteAttributes)
     {
@@ -123,16 +118,18 @@ class TwigRenderizer implements RenderizerInterface
         }
 
         if ($layoutName) {
-            $layout = $this->getLayoutNameWithNamespace($layoutName);
-            $fullLayout = $this->getLayoutWithExtension($layout, $id);
+            $namespaceLayoutId = $this->getLayoutNameWithNamespace($layoutName);
+
+            if (isset($this->layouts[$namespaceLayoutId]) === false) {
+                throw new AttributeValueException(sprintf('Layout "%s" not found.', $layoutName), 'layout', $id);
+            }
 
             if (isset($siteAttributes['page']) === false) {
                 $siteAttributes['page'] = [];
             }
 
             $siteAttributes['page']['content'] = $content;
-
-            $content = sprintf('{%% extends "%s" %%}', $fullLayout);
+            $content = sprintf('{%% extends "%s" %%}', $namespaceLayoutId);
         }
 
         return $this->renderBlocks($id, $content, $siteAttributes);
@@ -206,7 +203,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string
      */
-    protected function getLayoutAttribute(array $attributes, $contentName)
+    protected function getLayoutAttributeWithNamespace(array $attributes, $contentName)
     {
         if (isset($attributes['layout']) === false) {
             return '';
@@ -224,56 +221,27 @@ class TwigRenderizer implements RenderizerInterface
     }
 
     /**
-     * Returns the layout name with the namespace prefix.
+     * Returns the layout name with the namespace prefix: "@layout/".
      *
-     * @param string $name The layout name
+     * @param string $name The layout name.
      *
-     * @return string The layout name with namespace
+     * @return string The layout name with namespace.
      */
     protected function getLayoutNameWithNamespace($name)
     {
         return '@layout/'.$name;
     }
 
-    protected function getLayoutWithExtension($layoutName, $contentName)
-    {
-        if (isset($this->fullnameLayoutResolved[$layoutName]) === true) {
-            return $this->fullnameLayoutResolved[$layoutName];
-        }
-
-        foreach ($this->layoutExtension as $extension) {
-            $fullname = $layoutName.'.'.$extension;
-
-            if (isset($this->layouts[$fullname]) === true) {
-                $this->fullnameLayoutResolved[$layoutName] = $fullname;
-
-                return $fullname;
-            }
-        }
-
-        if (isset($this->layouts[$layoutName]) === true) {
-            $this->fullnameLayoutResolved[$layoutName] = $fullname;
-
-            return $layoutName;
-        }
-
-        throw new AttributeValueException(sprintf('Layout "%s" not found.', $layoutName), 'layout', $contentName);
-    }
-
     protected function processLayouts()
     {
-        foreach ($this->layouts as list($name, $content, $attributes)) {
-            $fullname = $this->getLayoutNameWithNamespace($name);
+        foreach ($this->layouts as $namespaceLayoutId => list($id, $content, $attributes)) {
+            $parentNamespaceLayoutId = $this->getLayoutAttributeWithNamespace($attributes, $id);
 
-            $layout = $this->getLayoutAttribute($attributes, $name);
-
-            if ($layout !== '') {
-                $fullLayout = $this->getLayoutWithExtension($layout, $name);
-
-                $content = sprintf('{%% extends "%s" %%}%s', $fullLayout, $content);
+            if ($parentNamespaceLayoutId !== '') {
+                $content = sprintf('{%% extends "%s" %%}%s', $parentNamespaceLayoutId, $content);
             }
 
-            $this->arrayLoader->setTemplate($fullname, $content);
+            $this->arrayLoader->setTemplate($namespaceLayoutId, $content);
         }
 
         $this->isLayoutsProcessed = true;

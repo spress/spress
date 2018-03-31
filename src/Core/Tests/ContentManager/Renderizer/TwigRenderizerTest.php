@@ -36,7 +36,7 @@ class TwigRenderizerTest extends TestCase
     public function testRenderPageMustRenderAPageWithLayout()
     {
         $renderizer = $this->getRenderizer();
-        $renderizer->addLayout('default.twig', '<h1>Hi</h1>{% block content %}{{ page.content }}{% endblock %}');
+        $renderizer->addLayout('default', '<h1>Hi</h1>{% block content %}{{ page.content }}{% endblock %}');
         $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'default', []);
 
         $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
@@ -54,14 +54,12 @@ class TwigRenderizerTest extends TestCase
 
     /**
      * @expectedException Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException
-     * @expectedExceptionMessage Layout "@layout/default" not found in "index.html" at key "layout".
+     * @expectedExceptionMessage Layout "madeUpLayout" not found in "index.html" at key "layout".
      */
     public function testRenderPageMustFailWhenLayoutNotFound()
     {
         $renderizer = $this->getRenderizer();
-        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'default', []);
-
-        $this->assertEquals('<h1>Hi</h1>Yo! Symfony', $rendered);
+        $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'madeUpLayout', []);
     }
 
     private function getRenderizer()

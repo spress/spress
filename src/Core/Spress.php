@@ -287,9 +287,8 @@ class Spress extends Container
         $this['spress.cms.renderizer'] = function ($c) {
             $twig = $c['lib.twig'];
             $loader = $c['lib.twig.loader_array'];
-            $layoutExts = $c['spress.config.values']['layout_ext'];
 
-            return new TwigRenderizer($twig, $loader, $layoutExts);
+            return new TwigRenderizer($twig, $loader);
         };
 
         $this['spress.cms.siteAttribute'] = function ($c) {

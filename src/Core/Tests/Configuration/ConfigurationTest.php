@@ -44,9 +44,6 @@ class ConfigurationTest extends TestCase
         $this->assertFalse($values['preserve_path_title']);
         $this->assertFalse($values['no_html_extension']);
 
-        $this->assertTrue(is_array($values['layout_ext']));
-        $this->assertCount(3, $values['layout_ext']);
-
         $this->assertTrue(is_array($values['collections']));
         $this->assertArrayHasKey('posts', $values['collections']);
 
@@ -76,9 +73,6 @@ class ConfigurationTest extends TestCase
         $this->assertEquals('pretty', $values['permalink']);
         $this->assertFalse($values['preserve_path_title']);
         $this->assertFalse($values['no_html_extension']);
-
-        $this->assertTrue(is_array($values['layout_ext']));
-        $this->assertCount(3, $values['layout_ext']);
 
         $this->assertTrue(is_array($values['collections']));
         $this->assertArrayHasKey('posts', $values['collections']);

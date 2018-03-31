@@ -19,7 +19,6 @@ install:
     - IF EXIST %PHP_CACHE_DIR% (SET PHP=0)
     - IF %PHP%==1 cinst php -y --version %PHP_CHOCO_VERSION%  --params "/InstallDir:%PHP_CACHE_DIR%"
     - IF %PHP%==1 cinst composer -y --ia "/DEV=%PHP_CACHE_DIR%"
-    - IF %PHP%==1 cinst composer -y --ia "/DEV=%PHP_CACHE_DIR%"
     - IF %PHP%==1 echo @php %%~dp0phpunit.phar %%* > phpunit.bat
     - php -v
     - appveyor DownloadFile https://phar.phpunit.de/phpunit-5.7.phar -FileName phpunit.phar

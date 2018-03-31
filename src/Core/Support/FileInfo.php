@@ -18,16 +18,16 @@ namespace Yosymfony\Spress\Core\Support;
  */
 class FileInfo extends \SplFileInfo
 {
-    private $hasPredefinedExt = false;
     private $filename;
     private $extension;
+    private $hasPredefinedExt = false;
     private $predefinedExtensions;
 
     /**
      * Constructor.
      *
-     * @param string $file                 The file name
-     * @param array  $predefinedExtensions Predefined extensions
+     * @param string $file                 The file name.
+     * @param array  $predefinedExtensions Predefined extensions.
      */
     public function __construct($file, array $predefinedExtensions = [])
     {
@@ -37,7 +37,7 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * Gets the filename.
+     * Gets the filename without extension.
      *
      * @return string
      */

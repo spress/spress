@@ -30,7 +30,7 @@ class FilesystemDataSourceTest extends TestCase
         $fs->mirror(__dir__.'/../../fixtures/project/src', $this->sourcePath);
 
         $this->extraPagesPath = __dir__.'/../../fixtures/extra_pages';
-        $this->textExtensions = ['htm', 'html', 'html.twig', 'twig,html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'ms', 'mustache', 'php', 'rb', 'sass', 'scss', 'slim', 'txt', 'xhtml', 'xml'];
+        $this->textExtensions = ['html', 'html.twig', 'md', 'css'];
     }
 
     public function tearDown()
@@ -39,7 +39,7 @@ class FilesystemDataSourceTest extends TestCase
         $fs->remove($this->sourcePath);
     }
 
-    public function testProcessItems()
+    public function testGetItemsMustReturnAnArrayWithTheItemIdAsKey()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -47,37 +47,47 @@ class FilesystemDataSourceTest extends TestCase
         ]);
 
         $fsDataSource->load();
-
         $items = $fsDataSource->getItems();
+
+        $this->assertTrue(count($items) > 0);
+
+        foreach ($items as $key => $item) {
+            $this->assertEquals($item->getId(), $key);
+        }
+    }
+
+    public function testGetLayoutsMustReturnAnArrayWithTheItemIdAsKey()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
         $layouts = $fsDataSource->getLayouts();
+
+        $this->assertTrue(count($layouts) > 0);
+
+        foreach ($layouts as $key => $layout) {
+            $this->assertEquals($layout->getId(), $key);
+        }
+    }
+
+    public function testGetIncludesMustReturnAnArrayWithTheItemIdAsKey()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
         $includes = $fsDataSource->getIncludes();
 
-        $itemAttributes = $items['about/index.html']->getAttributes();
-        $this->assertCount(4, $itemAttributes);
-        $this->assertEquals('default', $itemAttributes['layout']);
+        $this->assertTrue(count($includes) > 0);
 
-        $itemAttributes = $items['posts/2016-02-02-spress-2.1.1-released.md']->getAttributes();
-        $this->assertArrayHasKey('title_path', $itemAttributes);
-        $this->assertEquals('spress-2.1.1-released', $itemAttributes['title_path']);
-
-        $itemAttributes = $items['posts/2013-08-12-post-example-1.md']->getAttributes();
-        $this->assertCount(10, $itemAttributes);
-        $this->assertArrayNotHasKey('meta_filename', $itemAttributes);
-        $this->assertStringStartsWith('Post example 1', $items['posts/2013-08-12-post-example-1.md']->getContent());
-
-        $itemAttributes = $items['posts/books/2013-08-11-best-book.md']->getAttributes();
-        $this->assertArrayHasKey('categories', $itemAttributes);
-        $this->assertCount(1, $itemAttributes['categories']);
-
-        $itemAttributes = $items['posts/2013-08-12-post-example-2.mkd']->getAttributes();
-        $this->assertArrayHasKey('title', $itemAttributes);
-        $this->assertArrayHasKey('title_path', $itemAttributes);
-        $this->assertArrayHasKey('date', $itemAttributes);
-        $this->assertEquals('post example 2', $itemAttributes['title']);
-        $this->assertEquals('2013-08-12', $itemAttributes['date']);
-
-        $itemAttributes = $items['sitemap.xml']->getAttributes();
-        $this->assertEquals('sitemap', $itemAttributes['name']);
+        foreach ($includes as $key => $include) {
+            $this->assertEquals($include->getId(), $key);
+        }
     }
 
     public function testGetItemsMustReturnTheItemsOfASite()
@@ -119,10 +129,41 @@ class FilesystemDataSourceTest extends TestCase
         $layouts = $fsDataSource->getLayouts();
 
         $this->assertCount(1, $layouts);
+        $this->assertArrayHasKey('default', $layouts);
+    }
+
+    public function testGetLayoutsMustReturnALayoutItemWithPathFilenameAsIdWhenFilenameOneIsUnique()
+    {
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $layout = $fsDataSource->getLayouts()['default'];
+
+        $this->assertEquals('default', $layout->getId());
+    }
+
+    public function testGetLayoutsMustReturnALayoutItemWithPathFilenameExtensionAsIdWhenFilenameIsNotUnique()
+    {
+        $fs = new FileSystem();
+        $fs->dumpFile($this->sourcePath.'/layouts/default.html.twig', '');
+
+        $fsDataSource = new FilesystemDataSource([
+            'source_root' => $this->sourcePath,
+            'text_extensions' => $this->textExtensions,
+        ]);
+
+        $fsDataSource->load();
+        $layouts = $fsDataSource->getLayouts();
+
+        $this->assertCount(2, $layouts);
+        $this->assertArrayHasKey('default', $layouts);
         $this->assertArrayHasKey('default.html', $layouts);
     }
 
-    public function testGetIncludesMustReturnTheLayoutsOfASite()
+    public function testGetIncludesMustReturnTheIncludesOfASite()
     {
         $fsDataSource = new FilesystemDataSource([
             'source_root' => $this->sourcePath,
@@ -236,7 +277,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $this->assertEquals(
             'layout',
-            $layouts['default.html']->getType(),
+            $layouts['default']->getType(),
             'The type of a layout item must be "layout"'
         );
     }
@@ -253,7 +294,7 @@ class FilesystemDataSourceTest extends TestCase
 
         $this->assertRegExp(
             '/Welcome to my site/',
-            $layouts['default.html']->getContent(),
+            $layouts['default']->getContent(),
             'The content of the layout item must contains the text "Welcome to my site"'
         );
     }
@@ -377,7 +418,7 @@ class FilesystemDataSourceTest extends TestCase
         $layouts = $fsDataSource->getLayouts();
 
         $this->assertCount(2, $layouts);
-        $this->assertRegExp('/Welcome to my site/', $layouts['default.html']->getContent());
+        $this->assertRegExp('/Welcome to my site/', $layouts['default']->getContent());
     }
 
     public function testGetIncludesMustGivesPreferenceSiteIncludesOverThemeIncludesWhenThereIsAEnabledTheme()
@@ -450,7 +491,7 @@ class FilesystemDataSourceTest extends TestCase
         $layouts = $fsDataSource->getLayouts();
 
         $this->assertCount(2, $layouts);
-        $this->assertRegExp('/Theme 01 layout/', $layouts['page.html']->getContent());
+        $this->assertRegExp('/Theme 01 layout/', $layouts['page']->getContent());
     }
 
     public function testGetItemsMustReturnAnExtraItemWhenIncludeOptionIsSetWithAFile()

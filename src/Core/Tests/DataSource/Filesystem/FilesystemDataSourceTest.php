@@ -30,7 +30,7 @@ class FilesystemDataSourceTest extends TestCase
         $fs->mirror(__dir__.'/../../fixtures/project/src', $this->sourcePath);
 
         $this->extraPagesPath = __dir__.'/../../fixtures/extra_pages';
-        $this->textExtensions = ['html', 'html.twig', 'md', 'css'];
+        $this->textExtensions = ['html.twig', 'html', 'md', 'css'];
     }
 
     public function tearDown()

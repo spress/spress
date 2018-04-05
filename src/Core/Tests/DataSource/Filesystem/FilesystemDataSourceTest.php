@@ -160,7 +160,6 @@ class FilesystemDataSourceTest extends TestCase
 
         $this->assertCount(2, $layouts);
         $this->assertArrayHasKey('default', $layouts);
-        $this->assertArrayHasKey('default.html', $layouts);
     }
 
     public function testGetIncludesMustReturnTheIncludesOfASite()

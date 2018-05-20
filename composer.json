@@ -28,6 +28,9 @@
         "erusev/parsedown-extra": "0.7.*",
         "symfony/lts": "3.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1"
+    },
     "replace": {
         "spress/spress-core": "self.version"
     },
@@ -38,6 +41,9 @@
         "psr-4": {
             "Yosymfony\\Spress\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "branch-alias": {

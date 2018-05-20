@@ -1,6 +1,5 @@
 build: false
 shallow_clone: true
-platform: x86
 clone_folder: c:\projects\spress
 
 environment:
@@ -11,20 +10,19 @@ cache:
     - '%PHP_CACHE_DIR% -> appveyor.yml'
 
 init:
-    - SET PATH=c:\php;%PATH%
-    - SET PHP=1
+    - SET PATH=%PHP_CACHE_DIR%;%PATH%
+    - SET PHP=0
     - SET ANSICON=121x90 (121x90)
 
 install:
-    - IF EXIST %PHP_CACHE_DIR% (SET PHP=0)
-    - IF %PHP%==1 cinst php -y --version %PHP_CHOCO_VERSION%  --params "/InstallDir:%PHP_CACHE_DIR%"
-    - IF %PHP%==1 cinst composer -y --ia "/DEV=%PHP_CACHE_DIR%"
-    - IF %PHP%==1 echo @php %%~dp0phpunit.phar %%* > phpunit.bat
+    - IF EXIST %PHP_CACHE_DIR% (SET PHP=1)
+    - IF %PHP%==0 cinst php -y --version %PHP_CHOCO_VERSION%  --params "/InstallDir:%PHP_CACHE_DIR%"
+    - IF %PHP%==0 cinst composer -y --ia "/DEV=%PHP_CACHE_DIR%"
     - php -v
-    - IF %PHP%==1 (composer --version) ELSE (composer self-update)
+    - IF %PHP%==0 (composer --version) ELSE (composer self-update)
     - cd %APPVEYOR_BUILD_FOLDER%
-    - composer install --no-interaction --no-dev --no-progress --ansi
+    - composer install --no-interaction --no-progress
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - composer test
+    - vendor\bin\phpunit --colors=always

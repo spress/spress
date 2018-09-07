@@ -11,8 +11,8 @@
 
 namespace Yosymfony\Spress\Core\DataSource\Filesystem;
 
-use Symfony\Component\Config\FileLocator;
-use Yosymfony\ConfigLoader\Config;
+use Yosymfony\ConfigLoader\FileLocator;
+use Yosymfony\ConfigLoader\ConfigLoader;
 use Yosymfony\ConfigLoader\Loaders\YamlLoader;
 use Yosymfony\ConfigLoader\Loaders\JsonLoader;
 
@@ -41,17 +41,17 @@ class AttributeParser
     public function __construct($type = self::PARSER_YAML)
     {
         $locator = new FileLocator([]);
-        $this->config = new Config([
+        $this->config = new ConfigLoader([
             new YamlLoader($locator),
             new JsonLoader($locator),
         ]);
 
         switch ($type) {
             case self::PARSER_YAML:
-                $this->type = Config::TYPE_YAML;
+                $this->type = YamlLoader::TYPE;
                 break;
             case self::PARSER_JSON:
-                $this->type = Config::TYPE_JSON;
+                $this->type = JsonLoader::TYPE;
                 break;
             default:
                 throw new \RuntimeException(sprintf('Invalid attributte parser type: "%s".', $type));

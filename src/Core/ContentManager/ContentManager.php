@@ -208,6 +208,7 @@ class ContentManager
         $this->writeVMessage('Data sources loaded');
 
         $items = $this->dataSourceManager->getItems();
+        $layoutItems = $this->dataSourceManager->getLayouts();
 
         foreach ($items as $item) {
             if ($this->isGenerator($item)) {
@@ -255,7 +256,7 @@ class ContentManager
         $this->writeVMessage('Render over blocks has been applied');
 
         foreach ($this->itemCollection as $item) {
-            $this->renderPage($item);
+            $this->renderPage($item, $layoutItems);
             $this->dataWriter->write($item);
         }
 
@@ -520,7 +521,7 @@ class ContentManager
         ));
     }
 
-    private function renderPage(ItemInterface $item)
+    private function renderPage(ItemInterface $item, array $layoutItems)
     {
         if ($this->isRenderizerExcluded($item) === true) {
             return;
@@ -539,10 +540,8 @@ class ContentManager
 
         $this->siteAttribute->setItem($item);
 
-        $layout = $this->getLayoutAttribute($item);
-
-        $snapshotPage = $this->renderizer->renderPage($item->getId(), $item->getContent(), $layout, $this->siteAttribute->getAttributes());
-
+        $layoutId = $this->getLayoutAttribute($item);
+        $snapshotPage = $this->renderizer->renderPage($item->getId(), $item->getContent(), $layoutId, $this->siteAttribute->getAttributes());
         $item->setContent($snapshotPage, ItemInterface::SNAPSHOT_AFTER_RENDER_PAGE);
 
         $this->eventDispatcher->dispatch('spress.after_render_page', new Event\RenderEvent(
@@ -550,6 +549,13 @@ class ContentManager
             ItemInterface::SNAPSHOT_AFTER_RENDER_PAGE,
             ItemInterface::SNAPSHOT_PATH_RELATIVE_AFTER_CONVERT
         ));
+
+        if ($this->dependencyResolver != null && $layoutId !== null) {
+            $layoutPath = ($layoutItems[$layoutId])->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+            $itemPath = $item->getPath(ItemInterface::SNAPSHOT_PATH_RELATIVE);
+
+            $this->dependencyResolver->registerDependency($layoutPath, $itemPath);
+        }
     }
 
     private function getCollectionAttributes(CollectionInterface $collection)

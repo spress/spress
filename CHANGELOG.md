@@ -1,6 +1,7 @@
 CHANGELOG for 2.x
 =================
-## 2.3.0
+## 3.0.0
+* [New] Updated Symfony components to 4.1.
 * [New] Added the supporting class `Filesystem`. It is an extension of Symfony Filesystem component with a method for reading the content of files.
 * [New] Added class `DependencyResolver`, a simple dependency resolver. It is useful for keeping tracks of
 * inter-document dependencies.

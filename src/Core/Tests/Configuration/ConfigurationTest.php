@@ -12,8 +12,8 @@
 namespace Yosymfony\Spress\Core\Tests\Configuration;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Config\FileLocator;
-use Yosymfony\ConfigLoader\Config;
+use Yosymfony\ConfigLoader\FileLocator;
+use Yosymfony\ConfigLoader\ConfigLoader;
 use Yosymfony\ConfigLoader\Loaders\YamlLoader;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 
@@ -29,7 +29,7 @@ class ConfigurationTest extends TestCase
     public function testLoadConfiguration()
     {
         $locator = new FileLocator([]);
-        $configLoader = new Config([new YamlLoader($locator)]);
+        $configLoader = new ConfigLoader([new YamlLoader($locator)]);
 
         $config = new Configuration($configLoader, $this->defaulConfiguration);
         $values = $config->loadConfiguration(__DIR__.'/../fixtures/project');
@@ -59,7 +59,7 @@ class ConfigurationTest extends TestCase
     public function testLoadConfigurationWithEnvironmentName()
     {
         $locator = new FileLocator([]);
-        $configLoader = new Config([new YamlLoader($locator)]);
+        $configLoader = new ConfigLoader([new YamlLoader($locator)]);
 
         $config = new Configuration($configLoader, $this->defaulConfiguration);
         $values = $config->loadConfiguration(__DIR__.'/../fixtures/project', 'prod');
@@ -93,7 +93,7 @@ class ConfigurationTest extends TestCase
     public function testNotASpressSite()
     {
         $locator = new FileLocator([]);
-        $configLoader = new Config([new YamlLoader($locator)]);
+        $configLoader = new ConfigLoader([new YamlLoader($locator)]);
 
         $config = new Configuration($configLoader, $this->defaulConfiguration);
         $config->loadConfiguration(__DIR__.'/../fixtures', '');
@@ -106,7 +106,7 @@ class ConfigurationTest extends TestCase
     public function testEnvironmentEmpty()
     {
         $locator = new FileLocator([]);
-        $configLoader = new Config([new YamlLoader($locator)]);
+        $configLoader = new ConfigLoader([new YamlLoader($locator)]);
 
         $config = new Configuration($configLoader, $this->defaulConfiguration);
         $config->loadConfiguration(__DIR__.'/../fixtures/project', '');

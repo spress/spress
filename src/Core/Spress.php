@@ -12,9 +12,10 @@
 namespace Yosymfony\Spress\Core;
 
 use Pimple\Container;
-use Symfony\Component\Config\FileLocator;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Yosymfony\ConfigLoader\Config;
+use Yosymfony\ConfigLoader\ConfigLoader;
+use Yosymfony\ConfigLoader\FileLocator;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
 use Yosymfony\Spress\Core\Configuration\Configuration;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
@@ -127,7 +128,7 @@ class Spress extends Container
         $this['lib.configLoader'] = function ($c) {
             $locator = new FileLocator([]);
 
-            return new Config([
+            return new ConfigLoader([
                 new \Yosymfony\ConfigLoader\Loaders\YamlLoader($locator),
                 new \Yosymfony\ConfigLoader\Loaders\JsonLoader($locator),
             ]);

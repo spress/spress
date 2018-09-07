@@ -11,7 +11,7 @@
 
 namespace Yosymfony\Spress\Core\Configuration;
 
-use Yosymfony\ConfigLoader\Config;
+use Yosymfony\ConfigLoader\ConfigLoader;
 use Yosymfony\Spress\Core\Support\AttributesResolver;
 
 /**
@@ -24,6 +24,7 @@ use Yosymfony\Spress\Core\Support\AttributesResolver;
  */
 class Configuration implements ConfigurationInterface
 {
+    /** @var ConfigLoader */
     private $configLoader;
     private $configFilename;
     private $templateEnvFilename;
@@ -36,10 +37,10 @@ class Configuration implements ConfigurationInterface
      * Constructor. By default the configuration filename is "config.yml"
      * and the template for environment filename is "config_:env.yml".
      *
-     * @param \Yosymfony\ConfigLoader\Config $configLoader
+     * @param ConfigLoader $configLoader
      * @param string                         $defaultConfigFilename Path to filename with defatul configuration
      */
-    public function __construct(Config $configLoader, $defaultConfigFilename)
+    public function __construct(ConfigLoader $configLoader, $defaultConfigFilename)
     {
         $this->configLoader = $configLoader;
         $this->defaultConfigFilename = $defaultConfigFilename;

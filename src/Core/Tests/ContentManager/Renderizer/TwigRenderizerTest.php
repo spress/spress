@@ -12,6 +12,8 @@
 namespace Yosymfony\Spress\Core\Tests\ContentManager\Renderizer;
 
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\TwigRenderizer;
 
 class TwigRenderizerTest extends TestCase
@@ -62,10 +64,10 @@ class TwigRenderizerTest extends TestCase
         $rendered = $renderizer->renderPage('index.html', 'Yo! Symfony', 'madeUpLayout', []);
     }
 
-    private function getRenderizer()
+    private function getRenderizer(): TwigRenderizer
     {
-        $twigLoader = new \Twig_Loader_Array([]);
-        $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
+        $twigLoader = new ArrayLoader([]);
+        $twig = new Environment($twigLoader, ['autoescape' => false]);
 
         return new TwigRenderizer($twig, $twigLoader, ['twig']);
     }

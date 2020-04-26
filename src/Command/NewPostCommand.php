@@ -45,7 +45,7 @@ By default, the command interacts with the user to tweak the generation.
 Any passed option will be used as a default value for the interaction.
 If you want to disable any user interaction, use <comment>--no-interaction</comment>.
 EOT
-            );
+        );
     }
 
     /**

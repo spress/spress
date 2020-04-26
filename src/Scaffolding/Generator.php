@@ -11,6 +11,9 @@
 
 namespace Yosymfony\Spress\Scaffolding;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 /**
  * Base class for generators.
  * Inspired by {@link https://github.com/sensiolabs/SensioGeneratorBundle/blob/master/Generator/Generator.php Symfony Generator}.
@@ -50,19 +53,19 @@ class Generator
     /**
      * Return an instance of Twig.
      *
-     * @return Twig_Environment The Twig instance
+     * @return Environment The Twig instance
      */
-    protected function getTwig()
+    protected function getTwig(): Environment
     {
         $options = [
             'cache' => false,
             'strict_variables' => true,
         ];
 
-        $loader = new \Twig_Loader_Filesystem();
+        $loader = new FilesystemLoader();
         $loader->setPaths($this->skeletonDirs);
 
-        return new \Twig_Environment($loader, $options);
+        return new Environment($loader, $options);
     }
 
     /**

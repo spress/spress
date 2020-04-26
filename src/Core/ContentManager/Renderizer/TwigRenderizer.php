@@ -11,6 +11,13 @@
 
 namespace Yosymfony\Spress\Core\ContentManager\Renderizer;
 
+use Twig\Environment;
+use Twig\Error\SyntaxError;
+use Twig\Loader\ArrayLoader;
+use Twig\TokenParser\TokenParserInterface;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
 use Yosymfony\Spress\Core\ContentManager\Exception\AttributeValueException;
 use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
 
@@ -23,18 +30,18 @@ use Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException;
  */
 class TwigRenderizer implements RenderizerInterface
 {
-    protected $twig;
-    protected $arrayLoader;
-    protected $layouts = [];
+    protected Environment $twig;
+    protected ArrayLoader $arrayLoader;
+    protected array $layouts = [];
     protected $isLayoutsProcessed;
 
     /**
      * Construct.
      *
-     * @param Twig_Environment  $twig            The Twig instance
-     * @param Twig_Loader_Array $arrayLoader     The loader
+     * @param Environment  $twig            The Twig instance
+     * @param ArrayLoader  $arrayLoader     The template loader
      */
-    public function __construct(\Twig_Environment $twig, \Twig_Loader_Array $arrayLoader)
+    public function __construct(Environment $twig, ArrayLoader $arrayLoader)
     {
         $this->twig = $twig;
         $this->arrayLoader = $arrayLoader;
@@ -68,7 +75,6 @@ class TwigRenderizer implements RenderizerInterface
      */
     public function clear()
     {
-        $this->twig->clearCacheFiles();
         $this->layouts = [];
         $this->isLayoutsProcessed = false;
     }
@@ -90,7 +96,7 @@ class TwigRenderizer implements RenderizerInterface
             $this->arrayLoader->setTemplate('@dynamic/content', $content);
 
             return $this->twig->render('@dynamic/content', $attributes);
-        } catch (\Twig_Error_Syntax $e) {
+        } catch (SyntaxError $e) {
             throw new RenderException('Error during lexing or parsing a template.', $id, $e);
         }
     }
@@ -144,9 +150,9 @@ class TwigRenderizer implements RenderizerInterface
      * @param callable $filter  Filter implementation
      * @param array    $options
      */
-    public function addTwigFilter($name, callable $filter, array $options = [])
+    public function addTwigFilter(string $name, callable $filter, array $options = []): void
     {
-        $twigFilter = new \Twig_SimpleFilter($name, $filter, $options);
+        $twigFilter = new TwigFilter($name, $filter, $options);
 
         $this->twig->addFilter($twigFilter);
     }
@@ -160,9 +166,9 @@ class TwigRenderizer implements RenderizerInterface
      * @param callable $function Filter implementation
      * @param array    $options
      */
-    public function addTwigFunction($name, callable $function, array $options = [])
+    public function addTwigFunction(string $name, callable $function, array $options = []): void
     {
-        $twigfunction = new \Twig_SimpleFunction($name, $function, $options);
+        $twigfunction = new TwigFunction($name, $function, $options);
 
         $this->twig->addFunction($twigfunction);
     }
@@ -176,9 +182,9 @@ class TwigRenderizer implements RenderizerInterface
      * @param callable $function Test implementation
      * @param array    $options
      */
-    public function addTwigTest($name, callable $test, array $options = [])
+    public function addTwigTest(string $name, callable $test, array $options = []): void
     {
-        $twigTest = new \Twig_SimpleTest($name, $test, $options);
+        $twigTest = new TwigTest($name, $test, $options);
 
         $this->twig->addTest($twigTest);
     }
@@ -190,7 +196,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @param Twig_TokenParser $tokenParser Twig Token parser
      */
-    public function addTwigTag(\Twig_TokenParser $tokenParser)
+    public function addTwigTag(TokenParserInterface $tokenParser): void
     {
         $this->twig->addTokenParser($tokenParser);
     }
@@ -203,7 +209,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string
      */
-    protected function getLayoutAttributeWithNamespace(array $attributes, $contentName)
+    protected function getLayoutAttributeWithNamespace(array $attributes, string $contentName): string
     {
         if (isset($attributes['layout']) === false) {
             return '';
@@ -227,12 +233,12 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @return string The layout name with namespace.
      */
-    protected function getLayoutNameWithNamespace($name)
+    protected function getLayoutNameWithNamespace(string $name): string
     {
         return '@layout/'.$name;
     }
 
-    protected function processLayouts()
+    protected function processLayouts(): void
     {
         foreach ($this->layouts as $namespaceLayoutId => list($id, $content, $attributes)) {
             $parentNamespaceLayoutId = $this->getLayoutAttributeWithNamespace($attributes, $id);

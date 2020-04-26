@@ -204,8 +204,8 @@ class PackageManager
             }
 
             $this->io->writeError(sprintf(
-               'Package: "%s" is not required and has not been removed.',
-               $name
+                'Package: "%s" is not required and has not been removed.',
+                $name
             ));
         }
 
@@ -529,8 +529,8 @@ class PackageManager
             }
         } catch (\Exception $e) {
             $this->io->writeError(sprintf(
-               'An error occurred while removing the VCS metadata: %s.',
-               $e->getMessage()
+                'An error occurred while removing the VCS metadata: %s.',
+                $e->getMessage()
             ));
         }
     }

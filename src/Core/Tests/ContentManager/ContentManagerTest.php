@@ -13,6 +13,8 @@ namespace Yosymfony\Spress\Core\Tests\ContentManager;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Yosymfony\Spress\Core\ContentManager\ContentManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\GeneratorManager;
 use Yosymfony\Spress\Core\ContentManager\Generator\Pagination\PaginationGenerator;
@@ -265,7 +267,7 @@ class ContentManagerTest extends TestCase
             'filesystem' => [
                 'class' => 'Yosymfony\Spress\Core\DataSource\Filesystem\FilesystemDataSource',
                 'arguments' => [
-                    'source_root' => __dir__.'/../fixtures/project/src',
+                    'source_root' => __DIR__.'/../fixtures/project/src',
                     'text_extensions' => ['htm', 'html', 'html.twig', 'twig.html', 'js', 'less', 'markdown', 'md', 'mkd', 'mkdn', 'coffee', 'css', 'txt', 'xhtml', 'xml'],
                 ],
             ],
@@ -291,8 +293,8 @@ class ContentManagerTest extends TestCase
 
     protected function getRenderizer()
     {
-        $twigLoader = new \Twig_Loader_Array([]);
-        $twig = new \Twig_Environment($twigLoader, ['autoescape' => false]);
+        $twigLoader = new ArrayLoader([]);
+        $twig = new Environment($twigLoader, ['autoescape' => false]);
 
         return new TwigRenderizer($twig, $twigLoader, ['twig', 'html.twig', 'twig.html', 'html']);
     }

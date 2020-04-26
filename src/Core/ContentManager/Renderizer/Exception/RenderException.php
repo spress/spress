@@ -29,7 +29,7 @@ class RenderException extends \RuntimeException
      * @param string    $id       The identifier of the content where the exception was created
      * @param Exception $previous The previous exception
      */
-    public function __construct($message, $id = null, \Exception $previous = null)
+    public function __construct(string $message, string $id = null, \Exception $previous = null)
     {
         $this->rawMessage = $message;
         $this->id = $id;

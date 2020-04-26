@@ -12,6 +12,8 @@
 namespace Yosymfony\Spress\HttpServer;
 
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Yosymfony\Spress\Core\IO\IOInterface;
 use Yosymfony\HttpServer\RequestHandler;
 
@@ -185,10 +187,10 @@ class HttpServer
             'autoescape' => false,
         ];
 
-        $loader = new \Twig_Loader_Filesystem();
+        $loader = new FilesystemLoader();
         $loader->addPath($templateDir);
 
-        $this->twig = new \Twig_Environment($loader, $options);
+        $this->twig = new Environment($loader, $options);
     }
 
     private function getErrorModel($statusCode, $data)

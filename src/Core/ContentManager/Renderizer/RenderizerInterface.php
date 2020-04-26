@@ -37,7 +37,7 @@ interface RenderizerInterface
      * @param string $content    The content of the include
      * @param array  $attributes The attributes of the include
      */
-    public function addInclude($id, $content, array $attributes = []);
+    public function addInclude(string $id, string $content, array $attributes = []);
 
     /**
      * Clears all templates registered.

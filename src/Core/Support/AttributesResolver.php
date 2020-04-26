@@ -131,9 +131,9 @@ class AttributesResolver
         foreach ($clone->validators as $attribute => $validator) {
             if (is_null($clone->resolved[$attribute]) === false && $validator($clone->resolved[$attribute]) === false) {
                 throw new AttributeValueException(
-                        sprintf('Invalid value.', $attribute),
-                        $attribute
-                    );
+                    sprintf('Invalid value.', $attribute),
+                    $attribute
+                );
             }
         }
 

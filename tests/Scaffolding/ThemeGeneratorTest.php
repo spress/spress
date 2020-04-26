@@ -90,7 +90,7 @@ class ThemeGeneratorTest extends TestCase
                 $this->anything(),
                 $this->anything(),
                 $this->equalTo('http://repository.foo.com')
-        );
+            );
 
         $generator = new ThemeGenerator($packageManagerMock);
         $generator->setSkeletonDirs($this->skeletonDir);

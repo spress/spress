@@ -21,8 +21,8 @@ use Yosymfony\Spress\IO\ConsoleIO;
 
 class ConsoleIOTest extends TestCase
 {
-    protected $command;
-    protected $tester;
+    protected Command $command;
+    protected CommandTester $tester;
 
     protected function setUp()
     {
@@ -30,11 +30,7 @@ class ConsoleIOTest extends TestCase
         $this->tester = new CommandTester($this->command);
     }
 
-    protected function tearDown()
-    {
-        $this->command = null;
-        $this->tester = null;
-    }
+    
 
     public function testIsInteractive()
     {
@@ -254,7 +250,8 @@ class ConsoleIOTest extends TestCase
 
     public function testAskAndValidate()
     {
-        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+        $result = false;
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$result) {
             $io = new ConsoleIO($input, $output);
             $result = $io->askAndValidate(
                 'what is your name?',
@@ -264,25 +261,22 @@ class ConsoleIOTest extends TestCase
                 false,
                 'Yo! Symfony'
             );
-
-            $this->assertEquals('Yo! Symfony', $result);
         });
 
         $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+        $this->assertTrue($result);
     }
 
     public function testAskChoice()
     {
-        $this->markTestSkipped('Skipped untin get Symfony 4.1.');
-        
-        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$isDecorated) {
+        $result = '';
+        $this->command->setCode(function (InputInterface $input, OutputInterface $output) use (&$result) {
             $io = new ConsoleIO($input, $output);
             $result = $io->askChoice('Select a color', ['blue', 'green'], 'green');
-
-            $this->assertEquals('green', $result);
         });
 
         $this->tester->execute([], ['interactive' => false, 'decorated' => false]);
+        $this->assertEquals('green', $result);
     }
 
     public function testSuccess()

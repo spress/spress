@@ -14,6 +14,8 @@ namespace Yosymfony\Spress\Core;
 use Pimple\Container;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Yosymfony\ConfigLoader\ConfigLoader;
 use Yosymfony\ConfigLoader\FileLocator;
 use Yosymfony\EmbeddedComposer\EmbeddedComposerBuilder;
@@ -29,7 +31,6 @@ use Yosymfony\Spress\Core\DataSource\DataSourceManagerBuilder;
 use Yosymfony\Spress\Core\DataWriter\FilesystemDataWriter;
 use Yosymfony\Spress\Core\DependencyResolver\DependencyResolver;
 use Yosymfony\Spress\Core\IO\NullIO;
-use Yosymfony\Spress\Core\Plugin\PluginManager;
 use Yosymfony\Spress\Core\Plugin\PluginManagerBuilder;
 use Yosymfony\Spress\Core\SiteMetadata\FileMetadata;
 use Yosymfony\Spress\Core\Support\Filesystem;
@@ -54,10 +55,10 @@ use Yosymfony\Spress\Core\Support\Filesystem;
  */
 class Spress extends Container
 {
-    const VERSION = '2.3.0-dev';
-    const VERSION_ID = '20300';
-    const MAJOR_VERSION = '2';
-    const MINOR_VERSION = '3';
+    const VERSION = '3.0.0-dev';
+    const VERSION_ID = '30000';
+    const MAJOR_VERSION = '3';
+    const MINOR_VERSION = '0';
     const RELEASE_VERSION = '0';
     const EXTRA_VERSION = 'dev';
 
@@ -139,7 +140,7 @@ class Spress extends Container
         };
 
         $this['lib.twig.loader_array'] = function ($c) {
-            return new \Twig_Loader_Array([]);
+            return new \Twig\Loader\ArrayLoader([]);
         };
 
         $this['lib.twig.options'] = function ($c) {
@@ -152,10 +153,10 @@ class Spress extends Container
         $this['lib.twig'] = function ($c) {
             $options = $c['lib.twig.options'];
 
-            $twig = new \Twig_Environment($c['lib.twig.loader_array'], $options);
+            $twig = new Environment($c['lib.twig.loader_array'], $options);
 
             if ($options['debug'] === true) {
-                $twig->addExtension(new \Twig_Extension_Debug());
+                $twig->addExtension(new DebugExtension());
             }
 
             return $twig;

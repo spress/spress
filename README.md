@@ -14,7 +14,7 @@ Requirements
 ------------
 
 * Linux, Unix, Mac OS X or Windows.
-* PHP +7.2.
+* PHP +7.4.
 * [Composer](http://getcomposer.org/).
 
 Community
@@ -63,10 +63,9 @@ $ box build
 Unit tests
 ----------
 
-Spress uses [PHPUnit](https://phpunit.de) >= 5.7. You can run the unit tests with
-the following command:
+You can run the unit tests with the following command:
 
-```bash
-$ cd your-path
-$ phpunit
+```
+$ cd spress
+$ composer test
 ```

@@ -10,7 +10,7 @@ before_script:
   - curl -LSs https://box-project.github.io/box2/installer.php | php
 
 script:
-  - vendor\bin\phpunit --colors=always
+  - ./vendor/bin/phpunit --colors=always
   - php box.phar build; rm -rf vendor; php spress.phar --version
 
 matrix:

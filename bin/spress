@@ -15,9 +15,9 @@ if ((!$classloader = @include_once __DIR__.'/../vendor/autoload.php') &&
     exit(1);
 }
 
-if (PHP_VERSION_ID < 50600) {
+if (PHP_VERSION_ID < 70400) {
     file_put_contents('php://stderr', sprintf(
-        "Spress requires PHP 5.6 version or higher and your system has\n".
+        "Spress requires PHP 7.4 version or higher and your system has\n".
         "PHP %s version installed.\n\n",
         PHP_VERSION
     ));
@@ -48,8 +48,8 @@ if (function_exists('ini_set')) {
     $memoryLimit = trim(ini_get('memory_limit'));
 
     // Increase memory_limit if it is lower than 1GB
-    if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1024) {
-        @ini_set('memory_limit', '1G');
+    if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1536) {
+        @ini_set('memory_limit', '1536M');
     }
 
     unset($memoryInBytes, $memoryLimit);

@@ -1,15 +1,14 @@
-CHANGELOG for 2.x
-=================
-## 3.0.0
-* [New] Updated Symfony components to 4.1.
+CHANGELOG
+=========
+## 3.0.0 (2020-05-01)
+* [New] Fixed the PHP minimum version to 7.4 in `composer.json` file.
 * [New] Added the supporting class `Filesystem`. It is an extension of Symfony Filesystem component with a method for reading the content of files.
+* [Improved] Updated Symfony components to 4.4.
+* [Improved] Updated Twig to 3.0.
+* [Improved] Updated "michelf/php-markdown" to 1.9.
 * [New] Added class `DependencyResolver`, a simple dependency resolver. It is useful for keeping tracks of
 * inter-document dependencies.
 * [Deleted] The configuration option `layout_ext` is not necessary anymore. Now, the option `text_extensions` is used to recognize layouts files.
-* [Fixed] Fixed the PHP minimum version to 5.6 in `composer.json` file.
-* [Improved] Updated Symfony components from 3.2 to 3.4 (this is a long-term support version).
-* [Improved] Removed the use of the class `Twig_Autoloader`. This one is deprecated since version 1.21.
-* [Improved] Now, the class `TwigRenderizer` class works with layouts ids instead of file path.
 * [Improved] The class `FilesystemDataSource` returns layout item identifiers without file extensions when they are unique. In case of name collision, the filename extension will be added.
 * [Fixed] Now, Appveyor CI installs PHP and Composer using Chocolatey package system.
 

@@ -27,7 +27,7 @@ interface RenderizerInterface
      * @param string $id         The identifier of the layout. e.g: path
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout
-     * 
+     *
      * @return void
      */
     public function addLayout(string $id, string $content, array $attributes = []): void;

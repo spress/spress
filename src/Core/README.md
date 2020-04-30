@@ -2,7 +2,6 @@ Spress Core - PHP Static site generator
 =======================================
 
 [![Build Status](https://travis-ci.org/spress/spress.png?branch=master)](https://travis-ci.org/spress/spress)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
 Spress is a static site generator built with Symfony components and Twig as
@@ -61,13 +60,11 @@ class MyClass
 
 Unit tests
 ----------
-
-Spress core uses [PHPUnit](https://phpunit.de) >= 5.7. You can run the unit tests with
-the following command:
+You can run the unit tests with the following command:
 
 ```bash
-$ cd your-path
-$ phpunit
+$ cd spress-core
+$ composer test
 ```
 
 License

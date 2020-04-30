@@ -56,7 +56,7 @@ class TwigRenderizer implements RenderizerInterface
      * @param array  $attributes The attributes of the layout.
      *                           "layout" attribute has a special meaning.
      */
-    public function addLayout($id, $content, array $attributes = [])
+    public function addLayout(string $id, string $content, array $attributes = []): void
     {
         $namespaceLayoutId = $this->getLayoutNameWithNamespace($id);
         $this->layouts[$namespaceLayoutId] = [$id, $content, $attributes];
@@ -65,7 +65,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * {@inheritdoc}
      */
-    public function addInclude($id, $content, array $attributes = [])
+    public function addInclude(string $id, string $content, array $attributes = []): void
     {
         $this->arrayLoader->setTemplate($id, $content);
     }
@@ -73,7 +73,7 @@ class TwigRenderizer implements RenderizerInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
         $this->layouts = [];
         $this->isLayoutsProcessed = false;
@@ -90,7 +90,7 @@ class TwigRenderizer implements RenderizerInterface
      *
      * @throws RenderException If an error occurred during rendering the content.
      */
-    public function renderBlocks($id, $content, array $attributes)
+    public function renderBlocks(string $id, string $content, array $attributes): string
     {
         try {
             $this->arrayLoader->setTemplate('@dynamic/content', $content);
@@ -117,7 +117,7 @@ class TwigRenderizer implements RenderizerInterface
      *                                   or layout not found.
      * @throws RenderException If an error occurred during rendering the content.
      */
-    public function renderPage($id, $content, $layoutName, array $siteAttributes)
+    public function renderPage(string $id, string $content, ?string $layoutName, array $siteAttributes): string
     {
         if ($this->isLayoutsProcessed === false) {
             $this->processLayouts();

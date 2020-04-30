@@ -1,9 +1,7 @@
 Spress - PHP Static site generator
-==============================
+=================================
 [![Build Status](https://travis-ci.org/spress/spress.svg?branch=master)](https://travis-ci.org/spress/spress)
 [![Build status](https://ci.appveyor.com/api/projects/status/mjsjdgauj7ks3ogn/branch/master?svg=true)](https://ci.appveyor.com/project/yosymfony/spress/branch/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spress/Spress/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spress/Spress/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/spress/spress/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spress/spress/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77/mini.png)](https://insight.sensiolabs.com/projects/1ea79d8e-894d-4cf5-8f64-c941376b3f77)
 
 Spress is a static site generator built with Symfony components.
@@ -46,17 +44,10 @@ All pull requests must be accompanied by passing unit tests. Spress uses [phpuni
 
 How to make spress.phar
 -----------------------
-We are using [Box Project](http://box-project.github.io/box2/) for generating the `.phar` file.
-
-You may download Box:
+We are using [Box Project](https://github.com/humbug/box) for generating the `.phar` file.
 
 ```bash
-$ curl -LSs https://box-project.github.io/box2/installer.php | php
-```
-Next:
-
-```bash
-$ cd spress-folder
+$ cd spress
 $ box build
 ```
 
@@ -65,7 +56,7 @@ Unit tests
 
 You can run the unit tests with the following command:
 
-```
+```bash
 $ cd spress
 $ composer test
 ```

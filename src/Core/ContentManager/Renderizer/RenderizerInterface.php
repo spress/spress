@@ -27,8 +27,10 @@ interface RenderizerInterface
      * @param string $id         The identifier of the layout. e.g: path
      * @param string $content    The content of the layout
      * @param array  $attributes The attributes of the layout
+     * 
+     * @return void
      */
-    public function addLayout($id, $content, array $attributes = []);
+    public function addLayout(string $id, string $content, array $attributes = []): void;
 
     /**
      * Add a new include.
@@ -37,12 +39,12 @@ interface RenderizerInterface
      * @param string $content    The content of the include
      * @param array  $attributes The attributes of the include
      */
-    public function addInclude(string $id, string $content, array $attributes = []);
+    public function addInclude(string $id, string $content, array $attributes = []): void;
 
     /**
      * Clears all templates registered.
      */
-    public function clear();
+    public function clear(): void;
 
     /**
      * Render a blocks of content (layout NOT included).
@@ -56,7 +58,7 @@ interface RenderizerInterface
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
      *                                                                                   rendering the content
      */
-    public function renderBlocks($id, $content, array $attributes);
+    public function renderBlocks(string $id, string $content, array $attributes): string;
 
     /**
      * Render a page completely (layout included).
@@ -71,5 +73,5 @@ interface RenderizerInterface
      * @throws Yosymfony\Spress\Core\ContentManager\Renderizer\Exception\RenderException If an error occurred during
      *                                                                                   rendering the content
      */
-    public function renderPage($id, $content, $layoutName, array $siteAttributes);
+    public function renderPage(string $id, string $content, ?string $layoutName, array $siteAttributes): string;
 }
